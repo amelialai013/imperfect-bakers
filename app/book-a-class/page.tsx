@@ -3,43 +3,57 @@
 import { useState } from "react";
 import Link from "next/link";
 
+const filters = ["Browse by Class Type", "Browse by Date", "Browse by Age", "Class at My Home"];
+
+const classTypes = [
+  { label: "Sweet Food",               sub: "Cakes, cookies & pastries",     sessions: "1 session" },
+  { label: "Savoury Food",             sub: "Pasta, pizza & hearty meals",    sessions: "2 sessions" },
+  { label: "Knife Skills",             sub: "Ages 12+ · Precision techniques", sessions: null },
+  { label: "Dietary Requirement Food", sub: "Inclusive & allergen-aware",      sessions: null },
+  { label: "Kids Lead Parents",        sub: "Families · Role-reversal fun",    sessions: null },
+  { label: "Random Kitchen Fun",       sub: "All ages · Surprise challenges",  sessions: null },
+  { label: "Private Group Class",      sub: "Groups & special occasions",      sessions: null },
+];
+
 export default function BookAClassPage() {
   const [activeFilter, setActiveFilter] = useState("Browse by Class Type");
   const [activeClass, setActiveClass] = useState<string | null>(null);
 
-  const filters = ["Browse by Class Type", "Browse by Date", "Browse by Age", "Class at My Home"];
-
-  const classTypes = [
-    { label: "Sweet Food 🧁", sessions: "1 session" },
-    { label: "Savoury Food 🍝", sessions: "2 sessions" },
-    { label: "Knife Skills 🔪", sessions: null },
-    { label: "Dietary Requirement Food 🌿", sessions: null },
-    { label: "Kids Lead Parents 👨‍👩‍👧‍👦", sessions: null },
-    { label: "Random Kitchen Fun 🎲", sessions: null },
-    { label: "Private Group Class 🎉", sessions: null },
-  ];
-
   return (
     <>
-      <section className="bg-[#f7f5f0] py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">Book a Class</h1>
-          <p className="text-gray-500 text-lg">Browse upcoming sessions and secure your spot.</p>
+      {/* ── PAGE HEADER ──────────────────────────────────────── */}
+      <section className="bg-[#1a3228] px-8 pt-20 pb-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+          <div>
+            <span className="section-label">Reserve Your Spot</span>
+            <h1
+              className="text-5xl md:text-6xl text-white leading-tight"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            >
+              Book a Class
+            </h1>
+          </div>
+          <div className="flex items-end">
+            <p className="text-white/50 text-base leading-relaxed max-w-sm">
+              Browse upcoming sessions and secure your spot in the kitchen.
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="py-12 px-6">
+      <section className="py-20 px-8 bg-[#faf9f6]">
         <div className="max-w-4xl mx-auto">
-          {/* Filter buttons */}
-          <div className="flex flex-wrap gap-3 mb-10">
+
+          {/* Filter tabs */}
+          <div className="flex flex-wrap gap-3 mb-12">
             {filters.map((f) => (
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
-                className={`px-5 py-2.5 rounded-full text-sm font-medium border transition-colors ${
+                className={`px-5 py-2.5 text-xs tracking-[0.12em] uppercase border transition-colors ${
                   activeFilter === f
-                    ? "bg-[#2d5a3d] text-white border-[#2d5a3d]"
-                    : "bg-white text-gray-700 border-gray-200 hover:border-[#2d5a3d] hover:text-[#2d5a3d]"
+                    ? "bg-[#1a3228] text-white border-[#1a3228]"
+                    : "bg-white text-[#6b7280] border-[#e4dfd5] hover:border-[#1a3228] hover:text-[#1a3228]"
                 }`}
               >
                 {f}
@@ -48,46 +62,88 @@ export default function BookAClassPage() {
           </div>
 
           {/* Class list */}
-          <div className="space-y-3">
-            {classTypes.map((c) => (
+          <div className="divide-y divide-[#e4dfd5] border border-[#e4dfd5]">
+            {classTypes.map((c, i) => (
               <button
                 key={c.label}
                 onClick={() => setActiveClass(activeClass === c.label ? null : c.label)}
-                className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl border text-left transition-colors ${
+                className={`w-full flex items-center justify-between px-8 py-6 text-left transition-colors group ${
                   activeClass === c.label
-                    ? "bg-[#2d5a3d] text-white border-[#2d5a3d]"
-                    : "bg-white border-gray-200 hover:border-[#2d5a3d] text-gray-800"
+                    ? "bg-[#1a3228]"
+                    : "bg-white hover:bg-[#faf9f6]"
                 }`}
               >
-                <span className="font-medium">{c.label}</span>
-                {c.sessions && (
-                  <span
-                    className={`text-xs px-2.5 py-1 rounded-full ${
-                      activeClass === c.label
-                        ? "bg-white/20 text-white"
-                        : "bg-[#e8f0ea] text-[#2d5a3d]"
-                    }`}
-                  >
-                    {c.sessions}
+                <div className="flex items-center gap-6">
+                  <span className={`text-xs tracking-[0.2em] w-6 shrink-0 ${
+                    activeClass === c.label ? "text-[#c9a96e]" : "text-[#c9a96e]"
+                  }`}>
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                )}
+                  <div>
+                    <p className={`font-medium text-base transition-colors ${
+                      activeClass === c.label ? "text-white" : "text-[#1a3228]"
+                    }`}
+                      style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                    >
+                      {c.label}
+                    </p>
+                    <p className={`text-xs mt-0.5 tracking-wide ${
+                      activeClass === c.label ? "text-white/40" : "text-[#6b7280]"
+                    }`}>
+                      {c.sub}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 shrink-0">
+                  {c.sessions && (
+                    <span className={`text-xs tracking-widest uppercase px-3 py-1 ${
+                      activeClass === c.label
+                        ? "text-[#c9a96e] border border-[#c9a96e]/30"
+                        : "text-[#1a3228] border border-[#e4dfd5]"
+                    }`}>
+                      {c.sessions}
+                    </span>
+                  )}
+                  <svg
+                    className={`w-4 h-4 transition-all ${
+                      activeClass === c.label
+                        ? "text-[#c9a96e] rotate-45"
+                        : "text-[#1a3228] group-hover:translate-x-1"
+                    }`}
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
               </button>
             ))}
           </div>
 
           {/* Custom class CTA */}
-          <div className="mt-16 bg-[#f7f5f0] rounded-2xl p-8 text-center">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">
-              Don&apos;t see what you&apos;re looking for?
-            </h2>
-            <p className="text-gray-500 text-sm mb-6">
-              Request a private or custom class — at your place or ours.
-            </p>
-            <Link href="/interest">
-              <button className="px-6 py-3 bg-[#2d5a3d] text-white rounded-full text-sm font-medium hover:bg-[#3a7050] transition-colors">
-                Request a class
-              </button>
-            </Link>
+          <div className="mt-20 bg-[#1a3228] p-12">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+              <div>
+                <span className="section-label">Private Bookings</span>
+                <h2
+                  className="text-2xl md:text-3xl text-white mt-1 leading-snug"
+                  style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                >
+                  Don&apos;t see what you&apos;re looking for?
+                </h2>
+                <p className="text-white/50 text-sm mt-3 max-w-sm leading-relaxed">
+                  Request a private or custom class — at your place or ours. We&apos;ll tailor everything just for you.
+                </p>
+              </div>
+              <Link href="/interest" className="shrink-0">
+                <button className="btn-outline-white">
+                  Request a Class
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

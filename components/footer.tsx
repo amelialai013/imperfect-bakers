@@ -2,41 +2,72 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#2d5a3d] text-white mt-auto">
-      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div>
-          <div className="flex items-center gap-2.5 font-bold text-xl mb-3">
-            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white/20 text-base">
-              🍳
-            </span>
-            Imperfect Bakers
+    <footer className="bg-[#1a3228] text-white">
+      <div className="max-w-7xl mx-auto px-8 pt-16 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-white/10">
+
+          {/* Brand */}
+          <div className="md:col-span-5">
+            <div className="flex items-center gap-3 mb-5">
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 text-white text-sm font-bold"
+                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+                IB
+              </span>
+              <span className="font-serif text-lg tracking-wide"
+                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+                Imperfect Bakers
+              </span>
+            </div>
+            <p className="text-white/50 text-sm leading-relaxed max-w-xs">
+              Building confidence in the kitchen, one imperfect masterpiece at a time. Because the best food is made with love — and a little chaos.
+            </p>
+            <p className="mt-6 text-xs tracking-widest uppercase text-[#c9a96e]">@imperfectbakers</p>
           </div>
-          <p className="text-white/70 text-sm leading-relaxed">
-            Building confidence in the kitchen, one messy masterpiece at a time. Because the best food is made with love — and a little bit of chaos.
-          </p>
+
+          {/* Spacer */}
+          <div className="md:col-span-1" />
+
+          {/* Quick Links */}
+          <div className="md:col-span-3">
+            <h4 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-5">Navigate</h4>
+            <ul className="space-y-3 text-sm">
+              {[
+                { label: "Home",              href: "/" },
+                { label: "About",             href: "/about" },
+                { label: "Our Classes",       href: "/classes" },
+                { label: "Book a Class",      href: "/book-a-class" },
+                { label: "Register Interest", href: "/interest" },
+              ].map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-white/60 hover:text-white transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div className="md:col-span-3">
+            <h4 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-5">Get in Touch</h4>
+            <a
+              href="mailto:imperfectbakers@outlook.com"
+              className="text-sm text-white/60 hover:text-white transition-colors block mb-4"
+            >
+              imperfectbakers@outlook.com
+            </a>
+            <div className="w-8 h-px bg-[#c9a96e] mb-4" />
+            <p className="text-xs text-white/40 leading-relaxed">
+              Follow along on social for behind-the-scenes kitchen moments.
+            </p>
+          </div>
         </div>
 
-        <div>
-          <h3 className="font-semibold text-base mb-4">Quick Links</h3>
-          <ul className="space-y-2 text-sm text-white/80">
-            <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-            <li><Link href="/classes" className="hover:text-white transition-colors">Our Classes</Link></li>
-            <li><Link href="/book-a-class" className="hover:text-white transition-colors">Book a Class</Link></li>
-            <li><Link href="/interest" className="hover:text-white transition-colors">Register Interest</Link></li>
-          </ul>
+        {/* Bottom bar */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-white/30">© 2026 Imperfect Bakers. All rights reserved.</p>
+          <p className="text-xs text-white/20">Made with love in Melbourne</p>
         </div>
-
-        <div>
-          <h3 className="font-semibold text-base mb-4">Get in Touch</h3>
-          <p className="text-sm text-white/80 mb-2">imperfectbakers@outlook.com</p>
-          <p className="text-sm text-white/80">
-            Follow us on social media!{" "}
-            <span className="text-white font-medium">@imperfectbakers</span>
-          </p>
-        </div>
-      </div>
-      <div className="border-t border-white/20 py-4 text-center text-xs text-white/50">
-        Made with ❤️ by Imperfect Bakers © 2026
       </div>
     </footer>
   );

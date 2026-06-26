@@ -5,7 +5,7 @@ const testimonials = [
     role: "Parent",
   },
   {
-    quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real!",
+    quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real.",
     name: "James R.",
     role: "Adult Student",
   },
@@ -18,17 +18,55 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-white py-20 px-6">
+    <section className="bg-[#1a3228] py-24 px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">What Our Bakers Say</h2>
-        <p className="text-gray-500 mb-12">Real stories from real kitchens.</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((t) => (
-            <div key={t.name} className="bg-[#f7f5f0] rounded-2xl p-7">
-              <p className="text-gray-700 text-sm leading-relaxed mb-6">"{t.quote}"</p>
-              <div>
-                <p className="font-semibold text-gray-900 text-sm">{t.name}</p>
-                <p className="text-gray-400 text-xs">{t.role}</p>
+
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div>
+            <span className="block text-xs tracking-[0.2em] uppercase text-[#c9a96e] mb-4">
+              Testimonials
+            </span>
+            <h2
+              className="text-4xl md:text-5xl text-white leading-tight"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            >
+              What Our Bakers Say
+            </h2>
+          </div>
+          <p className="text-white/40 text-sm max-w-xs md:text-right leading-relaxed">
+            Real stories from real kitchens.
+          </p>
+        </div>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10">
+          {testimonials.map((t, i) => (
+            <div key={t.name} className="bg-[#1a3228] p-10 relative">
+              {/* Large quote mark */}
+              <span
+                className="absolute top-6 right-8 text-7xl text-white/5 leading-none select-none pointer-events-none"
+                style={{ fontFamily: "Georgia, serif" }}
+                aria-hidden
+              >
+                &ldquo;
+              </span>
+
+              {/* Number */}
+              <span className="text-xs tracking-[0.2em] text-[#c9a96e]/60 mb-6 block">
+                0{i + 1}
+              </span>
+
+              <p className="text-white/70 text-sm leading-relaxed mb-8 relative z-10">
+                &ldquo;{t.quote}&rdquo;
+              </p>
+
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-px bg-[#c9a96e]" />
+                <div>
+                  <p className="text-white text-sm font-medium">{t.name}</p>
+                  <p className="text-white/40 text-xs tracking-wide">{t.role}</p>
+                </div>
               </div>
             </div>
           ))}

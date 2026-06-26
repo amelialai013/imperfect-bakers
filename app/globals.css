@@ -1,30 +1,144 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f5f0;
-  --foreground: #1a1a1a;
-  --green: #2d5a3d;
-  --green-light: #3a7050;
-  --green-pale: #e8f0ea;
-  --cream: #f7f5f0;
+  --green-deep:  #1a3228;
+  --green-mid:   #2d5a3d;
+  --green-light: #3d7a55;
+  --gold:        #c9a96e;
+  --gold-light:  #e8d5b0;
+  --ivory:       #faf9f6;
+  --ivory-mid:   #f0ede6;
+  --ivory-dark:  #e4dfd5;
+  --charcoal:    #1a1a1a;
+  --muted:       #6b7280;
+  --border:      #e4dfd5;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-background: var(--ivory);
+  --color-foreground: var(--charcoal);
+  --font-sans:   var(--font-inter);
+  --font-serif:  var(--font-playfair);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, sans-serif;
+  background: var(--ivory);
+  color: var(--charcoal);
+  font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #f7f5f0;
-    --foreground: #1a1a1a;
-  }
+/* Utility classes */
+.font-serif  { font-family: var(--font-playfair), Georgia, serif; }
+.text-gold   { color: var(--gold); }
+.bg-deep     { background-color: var(--green-deep); }
+.bg-ivory    { background-color: var(--ivory); }
+.bg-ivory-mid{ background-color: var(--ivory-mid); }
+
+/* Thin gold divider */
+.divider-gold {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--gold);
+}
+
+/* Elegant button base */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--green-deep);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--green-deep);
+  transition: background 0.25s, color 0.25s;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: transparent;
+  color: var(--green-deep);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: transparent;
+  color: var(--green-deep);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--green-deep);
+  transition: background 0.25s, color 0.25s;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background: var(--green-deep);
+  color: #fff;
+}
+
+.btn-outline-white {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.5);
+  transition: background 0.25s, border-color 0.25s;
+  cursor: pointer;
+}
+.btn-outline-white:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.8);
+}
+
+/* Section label */
+.section-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+/* Input styling */
+.input-elegant {
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  font-size: 0.9375rem;
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+.input-elegant:focus {
+  border-color: var(--green-mid);
+}
+.input-elegant::placeholder {
+  color: #b0a898;
 }

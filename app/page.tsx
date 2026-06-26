@@ -3,94 +3,175 @@ import Testimonials from "@/components/testimonials";
 
 const features = [
   {
-    icon: "😊",
+    number: "01",
     title: "Fun First",
     desc: "Every class is built around laughter, creativity, and enjoying the moment together.",
   },
   {
-    icon: "🎯",
+    number: "02",
     title: "No Judgement Zone",
     desc: "Burnt edges? Wonky shapes? We celebrate every attempt — that's where the magic is.",
   },
   {
-    icon: "💪",
+    number: "03",
     title: "Build Confidence",
-    desc: "Leave each class knowing you can make something amazing, all by yourself.",
+    desc: "Leave each class knowing you can make something amazing, entirely by yourself.",
   },
   {
-    icon: "🔪",
+    number: "04",
     title: "Real Skills",
-    desc: "From knife techniques to flavour pairing — practical skills you'll use every day.",
+    desc: "From knife techniques to flavour pairing — practical skills you'll use every single day.",
   },
 ];
 
 export default function Home() {
   return (
     <>
-      {/* Hero */}
+      {/* ── HERO ─────────────────────────────────────────────── */}
       <section
-        className="relative h-[85vh] min-h-[500px] flex items-end"
+        className="relative h-screen min-h-[640px] flex flex-col justify-end"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&auto=format&fit=crop&q=80')",
+            "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1800&auto=format&fit=crop&q=85')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "center 40%",
         }}
       >
-        <div className="absolute inset-0 bg-black/45" />
-        <div className="relative z-10 px-8 pb-20 max-w-4xl">
-          <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight mb-8">
-            Messy hands,<br />delicious food
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0d1f17]/90 via-[#0d1f17]/30 to-transparent" />
+
+        {/* Top label */}
+        <div className="absolute top-8 left-8 z-10">
+          <span className="text-xs tracking-[0.25em] uppercase text-white/50">
+            Melbourne&apos;s Boutique Cooking School
+          </span>
+        </div>
+
+        {/* Hero content */}
+        <div className="relative z-10 px-8 pb-16 md:pb-24 max-w-5xl">
+          {/* Gold rule */}
+          <div className="w-12 h-px bg-[#c9a96e] mb-8" />
+
+          <h1
+            className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] mb-8 tracking-tight"
+            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+          >
+            Messy hands,<br />
+            <em className="not-italic text-[#c9a96e]">delicious</em> food
           </h1>
+
+          <p className="text-white/60 text-base md:text-lg max-w-md leading-relaxed mb-10">
+            A joyful, hands-on cooking school where kids and adults build real kitchen confidence — one imperfect dish at a time.
+          </p>
+
           <div className="flex flex-wrap gap-4">
             <Link href="/classes">
-              <button className="px-6 py-3 rounded-full border-2 border-white/70 text-white text-sm font-medium hover:bg-white/20 transition-colors">
+              <button className="btn-outline-white">
                 Explore Classes
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </button>
             </Link>
             <Link href="/interest">
-              <button className="px-6 py-3 rounded-full border-2 border-white/70 text-white text-sm font-medium hover:bg-white/20 transition-colors">
-                Register Interest
-              </button>
+              <button className="btn-outline-white">Register Interest</button>
             </Link>
           </div>
         </div>
+
+        {/* Scroll hint */}
+        <div className="absolute bottom-8 right-8 z-10 flex items-center gap-2 text-white/30">
+          <span className="text-xs tracking-widest uppercase">Scroll</span>
+          <div className="w-8 h-px bg-white/30" />
+        </div>
       </section>
 
-      {/* Why Imperfect Bakers */}
-      <section className="py-20 px-6 bg-[#f7f5f0]">
+      {/* ── WHY IMPERFECT BAKERS ──────────────────────────────── */}
+      <section className="py-28 px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">Why Imperfect Bakers?</h2>
-          <p className="text-gray-500 mb-12">
-            We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+          {/* Section header */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
+            <div>
+              <span className="section-label">Our Philosophy</span>
+              <h2
+                className="text-4xl md:text-5xl text-[#1a3228] leading-tight"
+                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              >
+                Why Imperfect Bakers?
+              </h2>
+            </div>
+            <div className="flex items-end">
+              <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
+                We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
+              </p>
+            </div>
+          </div>
+
+          {/* Feature grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#e4dfd5]">
             {features.map((f) => (
-              <div key={f.title} className="bg-white rounded-2xl p-7 shadow-sm">
-                <span className="text-3xl mb-4 block">{f.icon}</span>
-                <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
+              <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10 group hover:bg-white transition-colors">
+                <span className="text-xs tracking-[0.2em] text-[#c9a96e] mb-6 block">{f.number}</span>
+                <h3
+                  className="text-xl text-[#1a3228] mb-4 leading-snug"
+                  style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                >
+                  {f.title}
+                </h3>
+                <p className="text-[#6b7280] text-sm leading-relaxed">{f.desc}</p>
+                <div className="w-6 h-px bg-[#c9a96e] mt-8 transition-all group-hover:w-12" />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 px-6 bg-[#e8ede9]">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-8">
-            Ready to get messy?
-          </h2>
-          <Link href="/interest">
-            <button className="px-8 py-3 rounded-full border-2 border-gray-600 text-gray-700 font-medium hover:bg-white transition-colors">
-              Register Interest →
-            </button>
-          </Link>
+      {/* ── FULL-BLEED IMAGE BREAK ────────────────────────────── */}
+      <section
+        className="relative h-[50vh] min-h-[360px]"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=1800&auto=format&fit=crop&q=85')",
+          backgroundSize: "cover",
+          backgroundPosition: "center 60%",
+        }}
+      >
+        <div className="absolute inset-0 bg-[#1a3228]/40" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <p
+            className="text-2xl md:text-4xl text-white text-center max-w-xl px-8 leading-relaxed"
+            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+          >
+            <em>&ldquo;The kitchen is the heart of every home.&rdquo;</em>
+          </p>
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* ── CTA BAND ──────────────────────────────────────────── */}
+      <section className="py-24 px-8 bg-[#f0ede6]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+          <div>
+            <span className="section-label">Join Us</span>
+            <h2
+              className="text-4xl md:text-5xl text-[#1a3228] leading-tight max-w-lg"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            >
+              Ready to get messy?
+            </h2>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 shrink-0">
+            <Link href="/classes">
+              <button className="btn-primary">View All Classes</button>
+            </Link>
+            <Link href="/interest">
+              <button className="btn-outline">Register Interest</button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ──────────────────────────────────────── */}
       <Testimonials />
     </>
   );

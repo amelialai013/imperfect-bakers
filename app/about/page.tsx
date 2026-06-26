@@ -8,170 +8,208 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <>
-      {/* Header */}
-      <section className="bg-[#f7f5f0] py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
-            About Imperfect Bakers
-          </h1>
-          <p className="text-gray-500 text-lg">
-            Getting messy, learning heaps, and having a great time along the way.
-          </p>
+      {/* ── PAGE HEADER ──────────────────────────────────────── */}
+      <section className="bg-[#1a3228] px-8 pt-20 pb-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+          <div>
+            <span className="section-label">Our Story</span>
+            <h1
+              className="text-5xl md:text-6xl text-white leading-tight"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            >
+              About Imperfect Bakers
+            </h1>
+          </div>
+          <div className="flex items-end">
+            <p className="text-white/50 text-base leading-relaxed max-w-sm">
+              Getting messy, learning heaps, and having a great time along the way.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Team photo */}
-      <section className="px-6">
-        <div className="max-w-4xl mx-auto">
-          <div
-            className="w-full h-72 md:h-96 rounded-2xl object-cover"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&auto=format&fit=crop&q=80')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-        </div>
-      </section>
+      {/* ── HERO IMAGE ───────────────────────────────────────── */}
+      <section
+        className="w-full h-[55vh] min-h-[360px]"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&auto=format&fit=crop&q=85')",
+          backgroundSize: "cover",
+          backgroundPosition: "center 30%",
+        }}
+      />
 
-      {/* Our Vision */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-[#2d5a3d] font-semibold text-sm uppercase tracking-wider mb-3">
-            Our Vision
-          </p>
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">
-            Building confidence in the kitchen, one imperfect dish at a time.
-          </h2>
-          <p className="text-gray-600 leading-relaxed mb-4">
-            At Imperfect Bakers, we believe cooking should be fun, accessible, and a little bit chaotic. Our mission is to create a space where people of all ages feel welcome and empowered to try new things, make mistakes, and grow.
-          </p>
-          <p className="text-gray-600 leading-relaxed">
-            We celebrate the slightly overbaked biscuits and embrace the unexpected moments that happen along the way — because that&apos;s where the real learning (and laughter) lives.
-          </p>
-        </div>
-      </section>
-
-      {/* Meet the Chef */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-[#2d5a3d] font-semibold text-sm uppercase tracking-wider mb-3">
-            Meet the Chef
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-5">Chef Sarah</h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Sarah grew up in Williamstown, Melbourne. She has always loved the way food brings people together, and that passion is at the heart of everything she does at Imperfect Bakers.
+      {/* ── VISION ───────────────────────────────────────────── */}
+      <section className="py-24 px-8 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
+          <div className="md:col-span-4">
+            <span className="section-label">Our Vision</span>
+            <div className="w-8 h-px bg-[#e4dfd5] mt-2" />
+          </div>
+          <div className="md:col-span-8">
+            <h2
+              className="text-3xl md:text-4xl text-[#1a3228] mb-8 leading-snug"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            >
+              Building confidence in the kitchen, one imperfect dish at a time.
+            </h2>
+            <div className="space-y-5 text-[#6b7280] text-base leading-relaxed">
+              <p>
+                At Imperfect Bakers, we believe cooking should be fun, accessible, and a little bit chaotic. Our mission is to create a space where people of all ages feel welcome and empowered to try new things, make mistakes, and grow.
               </p>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                She holds a{" "}
-                <strong>Bachelor of Education (Honours)</strong> and a{" "}
-                <strong>Certificate III in Patisserie</strong> — the perfect combination for someone who loves teaching people how to make delicious food.
-              </p>
-              <p className="text-gray-600 leading-relaxed">
-                Outside the kitchen, Sarah enjoys an active and creative life. She is a keen tennis player, has achieved her black belt in karate, and loves to travel for food and inspiration.
+              <p>
+                We celebrate the slightly overbaked biscuits and embrace the unexpected moments that happen along the way — because that&apos;s where the real learning (and laughter) lives.
               </p>
             </div>
-            <div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MEET THE CHEF ────────────────────────────────────── */}
+      <section className="py-24 px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
+
+            {/* Text */}
+            <div className="md:col-span-6 order-2 md:order-1">
+              <span className="section-label">Meet the Chef</span>
+              <h2
+                className="text-4xl md:text-5xl text-[#1a3228] mb-8 leading-tight"
+                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              >
+                Chef Sarah
+              </h2>
+
+              <div className="space-y-5 text-[#6b7280] text-base leading-relaxed mb-10">
+                <p>
+                  Sarah grew up in Williamstown, Melbourne. She has always loved the way food brings people together, and that passion is at the heart of everything she does at Imperfect Bakers.
+                </p>
+                <p>
+                  She holds a <strong className="text-[#1a3228] font-medium">Bachelor of Education (Honours)</strong> and a <strong className="text-[#1a3228] font-medium">Certificate III in Patisserie</strong> — the perfect combination for someone who loves teaching people how to make delicious food.
+                </p>
+                <p>
+                  Outside the kitchen, Sarah is a keen tennis player, holds a black belt in karate, and loves to travel for food and inspiration.
+                </p>
+              </div>
+
+              {/* Pull quote */}
+              <blockquote className="border-l-2 border-[#c9a96e] pl-6">
+                <p
+                  className="text-xl text-[#1a3228] leading-relaxed italic mb-4"
+                  style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                >
+                  &ldquo;The kitchen is the best classroom — and every messy moment is a lesson worth learning.&rdquo;
+                </p>
+                <footer className="text-xs tracking-[0.15em] uppercase text-[#c9a96e]">— Chef Sarah</footer>
+              </blockquote>
+            </div>
+
+            {/* Image */}
+            <div className="md:col-span-6 order-1 md:order-2">
               <div
-                className="w-full h-72 rounded-2xl"
+                className="w-full aspect-[4/5] object-cover"
                 style={{
                   backgroundImage:
-                    "url('https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=800&auto=format&fit=crop&q=80')",
+                    "url('https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=900&auto=format&fit=crop&q=85')",
                   backgroundSize: "cover",
                   backgroundPosition: "center top",
                 }}
               />
-              <blockquote className="mt-6 bg-[#f7f5f0] rounded-xl p-5 text-gray-700 italic text-sm leading-relaxed">
-                &ldquo;I love teaching, whether it&apos;s a group of school kids, a bunch of friends around a kitchen bench, or a family trying something new together. The kitchen is the best classroom.&rdquo;
-                <footer className="mt-3 text-gray-500 not-italic font-medium">— Chef Sarah</footer>
-              </blockquote>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* ── TESTIMONIALS ──────────────────────────────────────── */}
       <Testimonials />
 
-      {/* Review form */}
-      <section className="py-16 px-6 bg-[#f7f5f0]">
-        <div className="max-w-2xl mx-auto">
-          <p className="text-[#2d5a3d] font-semibold text-sm uppercase tracking-wider mb-2">
-            Leave a Review
-          </p>
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Share Your Experience</h2>
-          <form className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Your Name <span className="text-red-400">*</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Jamie"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d5a3d] bg-white"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rating <span className="text-red-400">*</span>
-              </label>
-              <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    className="text-2xl text-gray-300 hover:text-yellow-400 transition-colors"
-                  >
-                    ★
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Your Review <span className="text-red-400">*</span>
-              </label>
-              <textarea
-                rows={4}
-                placeholder="Tell us about your experience..."
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d5a3d] bg-white resize-none"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-6 py-3 bg-[#2d5a3d] text-white rounded-full text-sm font-medium hover:bg-[#3a7050] transition-colors"
+      {/* ── REVIEW FORM ──────────────────────────────────────── */}
+      <section className="py-24 px-8 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16">
+          <div className="md:col-span-4">
+            <span className="section-label">Leave a Review</span>
+            <h2
+              className="text-3xl md:text-4xl text-[#1a3228] leading-tight mt-2"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
             >
-              Submit Review
-            </button>
-          </form>
+              Share Your Experience
+            </h2>
+            <div className="w-8 h-px bg-[#c9a96e] mt-6" />
+            <p className="text-[#6b7280] text-sm leading-relaxed mt-6">
+              Your feedback means the world to us and helps other families find their way to the kitchen.
+            </p>
+          </div>
 
-          <div className="mt-10">
-            <h3 className="font-semibold text-gray-900 mb-2">What Others Say</h3>
-            <p className="text-gray-400 text-sm">No reviews yet — be the first to leave one!</p>
+          <div className="md:col-span-8">
+            <form className="space-y-6">
+              <div>
+                <label className="block text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-2">
+                  Your Name <span className="text-[#c9a96e]">*</span>
+                </label>
+                <input type="text" placeholder="Jamie" className="input-elegant" />
+              </div>
+
+              <div>
+                <label className="block text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-3">
+                  Rating <span className="text-[#c9a96e]">*</span>
+                </label>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button key={star} type="button"
+                      className="text-2xl text-[#e4dfd5] hover:text-[#c9a96e] transition-colors leading-none">
+                      ★
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-2">
+                  Your Review <span className="text-[#c9a96e]">*</span>
+                </label>
+                <textarea
+                  rows={5}
+                  placeholder="Tell us about your experience..."
+                  className="input-elegant resize-none"
+                />
+              </div>
+
+              <button type="submit" className="btn-primary">
+                Submit Review
+              </button>
+            </form>
+
+            <div className="mt-10 pt-10 border-t border-[#e4dfd5]">
+              <p className="text-xs tracking-[0.15em] uppercase text-[#6b7280]">What Others Say</p>
+              <p className="text-[#b0a898] text-sm mt-3">No reviews yet — be the first to leave one!</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 px-6 bg-white text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Ready to cook with us?</h2>
-        <p className="text-gray-500 mb-8">
-          Browse upcoming classes or register your interest — we&apos;d love to have you.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href="/classes">
-            <button className="px-6 py-3 bg-[#2d5a3d] text-white rounded-full text-sm font-medium hover:bg-[#3a7050] transition-colors">
-              See Our Classes
-            </button>
-          </Link>
-          <Link href="/interest">
-            <button className="px-6 py-3 bg-[#2d5a3d] text-white rounded-full text-sm font-medium hover:bg-[#3a7050] transition-colors">
-              I&apos;m Interested!
-            </button>
-          </Link>
+      {/* ── CTA ──────────────────────────────────────────────── */}
+      <section className="py-24 px-8 bg-[#f0ede6]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+          <div>
+            <span className="section-label">Join Us</span>
+            <h2
+              className="text-3xl md:text-4xl text-[#1a3228] leading-tight"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            >
+              Ready to cook with us?
+            </h2>
+            <p className="text-[#6b7280] text-sm mt-3 max-w-sm">
+              Browse upcoming classes or register your interest — we&apos;d love to have you.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 shrink-0">
+            <Link href="/classes">
+              <button className="btn-primary">See Our Classes</button>
+            </Link>
+            <Link href="/interest">
+              <button className="btn-outline">I&apos;m Interested</button>
+            </Link>
+          </div>
         </div>
       </section>
     </>
