@@ -38,7 +38,7 @@ export default function Home() {
         }}
       >
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/20" />
 
 
         {/* Hero content */}
@@ -138,23 +138,26 @@ export default function Home() {
       </section>
 
       {/* ── CTA BAND ──────────────────────────────────────────── */}
-      <section className="py-24 px-8 bg-[#f0ede6]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-          <div>
-            <span className="section-label">Join Us</span>
+      <section className="py-16 px-8 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-[#006644] rounded-2xl px-12 py-16 flex flex-col items-center text-center relative overflow-hidden">
+            {/* Decorative circles */}
+            <div className="absolute -left-12 -bottom-12 w-48 h-48 rounded-full bg-white/5" />
+            <div className="absolute -right-8 -bottom-8 w-36 h-36 rounded-full bg-white/5" />
+
             <h2
-              className="text-4xl md:text-5xl text-[#006644] leading-tight max-w-lg"
+              className="text-4xl md:text-5xl text-white leading-tight mb-8 relative z-10"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Ready to get messy?
             </h2>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 shrink-0">
-            <Link href="/classes">
-              <button className="btn-primary">View All Classes</button>
-            </Link>
-            <Link href="/interest">
-              <button className="btn-outline">Register Interest</button>
+            <Link href="/interest" className="relative z-10">
+              <button className="bg-white text-[#006644] font-semibold px-8 py-3 rounded-full flex items-center gap-2 hover:bg-white/90 transition-colors">
+                Register Interest
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
             </Link>
           </div>
         </div>
