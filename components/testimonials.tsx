@@ -18,7 +18,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-[#00704d] py-24 px-8">
+    <section className="bg-[#faf9f6] py-24 px-8 border-t border-[#e4dfd5]">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
@@ -28,44 +28,38 @@ export default function Testimonials() {
               Testimonials
             </span>
             <h2
-              className="text-4xl md:text-5xl text-white leading-tight"
+              className="text-4xl md:text-5xl text-[#00704d] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               What Our Bakers Say
             </h2>
           </div>
-          <p className="text-white/40 text-sm max-w-xs md:text-right leading-relaxed">
+          <p className="text-[#6b7280] text-sm max-w-xs md:text-right leading-relaxed">
             Real stories from real kitchens.
           </p>
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
-            <div key={t.name} className="bg-[#00704d] p-10 relative">
-              {/* Large quote mark */}
-              <span
-                className="absolute top-6 right-8 text-7xl text-white/5 leading-none select-none pointer-events-none"
-                style={{ fontFamily: "Georgia, serif" }}
-                aria-hidden
-              >
-                &ldquo;
-              </span>
+            <div key={t.name} className="bg-white border border-[#e4dfd5] rounded-sm p-8 flex flex-col justify-between gap-8">
 
-              {/* Number */}
-              <span className="text-xs tracking-[0.2em] text-[#c9a96e]/60 mb-6 block">
-                0{i + 1}
-              </span>
+              {/* Quote mark + text */}
+              <div>
+                <span className="text-4xl text-[#c9a96e] leading-none block mb-4" aria-hidden>&ldquo;</span>
+                <p className="text-[#1a1a1a] text-base leading-relaxed">
+                  {t.quote}
+                </p>
+              </div>
 
-              <p className="text-white/70 text-sm leading-relaxed mb-8 relative z-10">
-                &ldquo;{t.quote}&rdquo;
-              </p>
-
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-px bg-[#c9a96e]" />
+              {/* Attribution */}
+              <div className="flex items-center gap-3 pt-6 border-t border-[#e4dfd5]">
+                <div className="w-8 h-8 rounded-full bg-[#00704d]/10 flex items-center justify-center text-[#00704d] text-xs font-bold shrink-0">
+                  {t.name[0]}
+                </div>
                 <div>
-                  <p className="text-white text-sm font-medium">{t.name}</p>
-                  <p className="text-white/40 text-xs tracking-wide">{t.role}</p>
+                  <p className="text-[#00704d] text-sm font-semibold">{t.name}</p>
+                  <p className="text-[#6b7280] text-xs tracking-wide">{t.role}</p>
                 </div>
               </div>
             </div>

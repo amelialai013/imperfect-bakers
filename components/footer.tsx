@@ -9,9 +9,14 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-5">
             <div className="flex items-center gap-3 mb-5">
-              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 text-white text-sm font-bold"
-                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                IB
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5" stroke="currentColor" strokeWidth="1.8">
+                  <line x1="12" y1="3" x2="12" y2="5" />
+                  <path d="M6 8 Q12 5 18 8" />
+                  <rect x="5" y="8" width="14" height="10" rx="2" />
+                  <line x1="5" y1="11" x2="3" y2="11" />
+                  <line x1="19" y1="11" x2="21" y2="11" />
+                </svg>
               </span>
               <span className="font-bold text-lg tracking-wide"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
