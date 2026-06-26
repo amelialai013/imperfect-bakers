@@ -52,7 +52,7 @@ export default function Footer() {
             <h4 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-5">Get in Touch</h4>
             <a
               href="mailto:imperfectbakers@outlook.com"
-              className="text-sm text-white/60 hover:text-white transition-colors block mb-4"
+              className="text-sm text-white/60 hover:text-white transition-colors block mb-4 break-all"
             >
               imperfectbakers@outlook.com
             </a>
