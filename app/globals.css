@@ -38,8 +38,10 @@ body {
 }
 
 /* Heading base weight — matches original site (DM Sans 700) */
-h1, h2, h3, h4 {
-  font-weight: 700;
+@layer base {
+  h1, h2, h3, h4 {
+    font-weight: 700;
+  }
 }
 
 /* Utility classes */
