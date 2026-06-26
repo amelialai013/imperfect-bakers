@@ -38,7 +38,7 @@ export default function Home() {
         }}
       >
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#003d2a]/90 via-[#003d2a]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
 
 
         {/* Hero content */}
