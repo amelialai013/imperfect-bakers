@@ -71,7 +71,6 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-white/30">© 2026 Imperfect Bakers. All rights reserved.</p>
-          <p className="text-xs text-white/20">Made with love in Melbourne</p>
         </div>
       </div>
     </footer>

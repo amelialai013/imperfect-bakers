@@ -36,8 +36,8 @@ export default function Nav() {
   }, [visible]);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#faf9f6]/95 backdrop-blur-sm border-b border-[#e4dfd5]">
-      <div className="max-w-7xl mx-auto px-8 h-[72px] flex items-center justify-between">
+    <nav className="sticky top-0 z-50 bg-white/98 backdrop-blur-md border-b border-[#e8e4dc]">
+      <div className="max-w-7xl mx-auto px-10 h-20 flex items-center justify-between">
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
@@ -51,7 +51,7 @@ export default function Nav() {
             </svg>
           </span>
           <span
-            className="text-[#006644] font-bold text-lg tracking-tight"
+            className="text-[#006644] font-bold text-base tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Imperfect Bakers
@@ -59,17 +59,17 @@ export default function Nav() {
         </Link>
 
         {/* Desktop links */}
-        <div className="hidden lg:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-8">
           {links.map((link) => {
             const active = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm tracking-wide transition-colors relative pb-0.5 whitespace-nowrap ${
+                className={`text-sm transition-colors whitespace-nowrap ${
                   active
-                    ? "text-[#006644] font-medium after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-[#006644]"
-                    : "text-[#6b7280] hover:text-[#006644]"
+                    ? "text-[#006644] font-semibold"
+                    : "text-[#555] hover:text-[#006644] font-normal"
                 }`}
               >
                 {link.label}
@@ -77,14 +77,16 @@ export default function Nav() {
             );
           })}
 
+          <div className="w-px h-5 bg-[#e4dfd5] mx-1" />
+
           <Link href="/book-a-class" className="shrink-0">
-            <button className="btn-primary text-xs px-5 py-2.5 whitespace-nowrap">
+            <button className="bg-[#006644] text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-[#005c3f] transition-colors whitespace-nowrap">
               Book a Class
             </button>
           </Link>
 
           <Link href="/interest" className="shrink-0">
-            <button className="btn-outline text-xs px-5 py-2.5 whitespace-nowrap">
+            <button className="border border-[#006644] text-[#006644] text-sm font-medium px-5 py-2 rounded-full hover:bg-[#006644] hover:text-white transition-colors whitespace-nowrap">
               I&apos;m Interested
             </button>
           </Link>

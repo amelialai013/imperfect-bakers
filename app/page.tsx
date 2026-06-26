@@ -109,7 +109,6 @@ export default function Home() {
                   {f.title}
                 </h3>
                 <p className="text-[#6b7280] text-sm leading-relaxed">{f.desc}</p>
-                <div className="w-6 h-px bg-[#006644] mt-8" />
               </div>
             ))}
           </div>
