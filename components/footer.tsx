@@ -9,7 +9,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-5">
             <div className="flex items-center gap-3 mb-5">
-              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white text-[#006644]">
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#006644] text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5" stroke="currentColor" strokeWidth="1.8">
                   <line x1="12" y1="3" x2="12" y2="5" />
                   <path d="M6 8 Q12 5 18 8" />
@@ -18,7 +18,7 @@ export default function Footer() {
                   <line x1="19" y1="11" x2="21" y2="11" />
                 </svg>
               </span>
-              <span className="font-bold text-lg tracking-wide"
+              <span className="font-bold text-lg tracking-tight"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 Imperfect Bakers
               </span>
@@ -26,7 +26,7 @@ export default function Footer() {
             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
               Building confidence in the kitchen, one imperfect masterpiece at a time. Because the best food is made with love — and a little chaos.
             </p>
-            <p className="mt-6 text-xs tracking-widest uppercase text-[#006644]">@imperfectbakers</p>
+            <p className="mt-6 text-xs tracking-widest uppercase text-white">@imperfectbakers</p>
           </div>
 
           {/* Spacer */}
@@ -61,7 +61,7 @@ export default function Footer() {
             >
               imperfectbakers@outlook.com
             </a>
-            <div className="w-8 h-px bg-[#006644] mb-4" />
+            <div className="w-8 h-px bg-white/30 mb-4" />
             <p className="text-xs text-white/40 leading-relaxed">
               Follow along on social for behind-the-scenes kitchen moments.
             </p>
