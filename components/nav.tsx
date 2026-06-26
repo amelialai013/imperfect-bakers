@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const links = [
   { label: "Home",        href: "/" },
@@ -13,6 +13,34 @@ const links = [
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+    } else {
+      const el = menuRef.current;
+      if (el) {
+        el.style.maxHeight = "0px";
+        el.style.opacity = "0";
+      }
+      const t = setTimeout(() => setVisible(false), 250);
+      return () => clearTimeout(t);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (visible && menuRef.current) {
+      const el = menuRef.current;
+      el.style.maxHeight = "0px";
+      el.style.opacity = "0";
+      requestAnimationFrame(() => {
+        el.style.maxHeight = el.scrollHeight + "px";
+        el.style.opacity = "1";
+      });
+    }
+  }, [visible]);
 
   return (
     <nav className="sticky top-0 z-50 bg-[#faf9f6]/95 backdrop-blur-sm border-b border-[#e4dfd5]">
@@ -84,8 +112,12 @@ export default function Nav() {
       </div>
 
       {/* Mobile menu */}
-      {open && (
-        <div className="lg:hidden border-t border-[#e4dfd5] bg-[#faf9f6] px-8 py-6 flex flex-col gap-4">
+      {visible && (
+        <div
+          ref={menuRef}
+          style={{ maxHeight: 0, opacity: 0, overflow: "hidden", transition: "max-height 0.25s ease, opacity 0.25s ease" }}
+          className="lg:hidden border-t border-[#e4dfd5] bg-[#faf9f6] px-8 py-6 flex flex-col gap-4"
+        >
           {links.map((link) => (
             <Link
               key={link.href}

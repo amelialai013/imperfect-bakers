@@ -51,7 +51,7 @@ export default function Home() {
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Messy hands,<br />
-            <em className="not-italic text-[#006644]">delicious</em> food
+            <em className="not-italic text-white">delicious</em> food
           </h1>
 
           <p className="text-white/60 text-base md:text-lg max-w-md leading-relaxed mb-10">
@@ -73,11 +73,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scroll hint */}
-        <div className="absolute bottom-8 right-8 z-10 flex items-center gap-2 text-white/30">
-          <span className="text-xs tracking-widest uppercase">Scroll</span>
-          <div className="w-8 h-px bg-white/30" />
-        </div>
       </section>
 
       {/* ── WHY IMPERFECT BAKERS ──────────────────────────────── */}
