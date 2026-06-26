@@ -32,14 +32,14 @@ export default function Nav() {
         </Link>
 
         {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden lg:flex items-center gap-6">
           {links.map((link) => {
             const active = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm tracking-wide transition-colors relative pb-0.5 ${
+                className={`text-sm tracking-wide transition-colors relative pb-0.5 whitespace-nowrap ${
                   active
                     ? "text-[#1a3228] font-medium after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-[#c9a96e]"
                     : "text-[#6b7280] hover:text-[#1a3228]"
@@ -50,14 +50,14 @@ export default function Nav() {
             );
           })}
 
-          <Link href="/book-a-class">
-            <button className="btn-primary text-xs px-6 py-3">
+          <Link href="/book-a-class" className="shrink-0">
+            <button className="btn-primary text-xs px-5 py-2.5 whitespace-nowrap">
               Book a Class
             </button>
           </Link>
 
-          <Link href="/interest">
-            <button className="btn-outline text-xs px-6 py-3">
+          <Link href="/interest" className="shrink-0">
+            <button className="btn-outline text-xs px-5 py-2.5 whitespace-nowrap">
               I&apos;m Interested
             </button>
           </Link>
@@ -65,7 +65,7 @@ export default function Nav() {
 
         {/* Mobile toggle */}
         <button
-          className="md:hidden p-2 text-[#1a3228]"
+          className="lg:hidden p-2 text-[#1a3228]"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
@@ -79,7 +79,7 @@ export default function Nav() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-[#e4dfd5] bg-[#faf9f6] px-8 py-6 flex flex-col gap-4">
+        <div className="lg:hidden border-t border-[#e4dfd5] bg-[#faf9f6] px-8 py-6 flex flex-col gap-4">
           {links.map((link) => (
             <Link
               key={link.href}
