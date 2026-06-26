@@ -10,11 +10,11 @@ export default function Footer() {
           <div className="md:col-span-5">
             <div className="flex items-center gap-3 mb-5">
               <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 text-white text-sm font-bold"
-                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 IB
               </span>
-              <span className="font-serif text-lg tracking-wide"
-                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+              <span className="font-bold text-lg tracking-wide"
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 Imperfect Bakers
               </span>
             </div>

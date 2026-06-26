@@ -29,7 +29,7 @@ export default function Testimonials() {
             </span>
             <h2
               className="text-4xl md:text-5xl text-white leading-tight"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               What Our Bakers Say
             </h2>

@@ -29,7 +29,7 @@ export default function InterestPage() {
             <span className="section-label">Get in Touch</span>
             <h1
               className="text-5xl md:text-6xl text-white leading-tight"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Register Your Interest
             </h1>

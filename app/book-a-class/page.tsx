@@ -28,7 +28,7 @@ export default function BookAClassPage() {
             <span className="section-label">Reserve Your Spot</span>
             <h1
               className="text-5xl md:text-6xl text-white leading-tight"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Book a Class
             </h1>
@@ -83,7 +83,7 @@ export default function BookAClassPage() {
                     <p className={`font-medium text-base transition-colors ${
                       activeClass === c.label ? "text-white" : "text-[#1a3228]"
                     }`}
-                      style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                      style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                     >
                       {c.label}
                     </p>
@@ -127,7 +127,7 @@ export default function BookAClassPage() {
                 <span className="section-label">Private Bookings</span>
                 <h2
                   className="text-2xl md:text-3xl text-white mt-1 leading-snug"
-                  style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                  style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                 >
                   Don&apos;t see what you&apos;re looking for?
                 </h2>

@@ -48,7 +48,7 @@ export default function Home() {
 
           <h1
             className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] mb-8 tracking-tight"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Messy hands,<br />
             <em className="not-italic text-[#c9a96e]">delicious</em> food
@@ -90,7 +90,7 @@ export default function Home() {
               <span className="section-label">Our Philosophy</span>
               <h2
                 className="text-4xl md:text-5xl text-[#1a3228] leading-tight"
-                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
                 Why Imperfect Bakers?
               </h2>
@@ -109,7 +109,7 @@ export default function Home() {
                 <span className="text-xs tracking-[0.2em] text-[#c9a96e] mb-6 block">{f.number}</span>
                 <h3
                   className="text-xl text-[#1a3228] mb-4 leading-snug"
-                  style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                  style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                 >
                   {f.title}
                 </h3>
@@ -135,7 +135,7 @@ export default function Home() {
         <div className="absolute inset-0 flex items-center justify-center">
           <p
             className="text-2xl md:text-4xl text-white text-center max-w-xl px-8 leading-relaxed"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             <em>&ldquo;The kitchen is the heart of every home.&rdquo;</em>
           </p>
@@ -149,7 +149,7 @@ export default function Home() {
             <span className="section-label">Join Us</span>
             <h2
               className="text-4xl md:text-5xl text-[#1a3228] leading-tight max-w-lg"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Ready to get messy?
             </h2>

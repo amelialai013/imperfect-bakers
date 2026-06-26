@@ -59,7 +59,7 @@ export default function ClassesPage() {
             <span className="section-label">What We Offer</span>
             <h1
               className="text-5xl md:text-6xl text-white leading-tight"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Our Classes
             </h1>
@@ -95,7 +95,7 @@ export default function ClassesPage() {
                   </span>
                   <h2
                     className="text-2xl text-[#1a3228] mb-3 leading-snug"
-                    style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                    style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                   >
                     {c.title}
                   </h2>
@@ -128,7 +128,7 @@ export default function ClassesPage() {
             <span className="section-label">Private Bookings</span>
             <h2
               className="text-3xl md:text-4xl text-[#1a3228] leading-tight"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Can&apos;t find the right class?
             </h2>

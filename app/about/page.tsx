@@ -15,7 +15,7 @@ export default function AboutPage() {
             <span className="section-label">Our Story</span>
             <h1
               className="text-5xl md:text-6xl text-white leading-tight"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               About Imperfect Bakers
             </h1>
@@ -49,7 +49,7 @@ export default function AboutPage() {
           <div className="md:col-span-8">
             <h2
               className="text-3xl md:text-4xl text-[#1a3228] mb-8 leading-snug"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Building confidence in the kitchen, one imperfect dish at a time.
             </h2>
@@ -75,7 +75,7 @@ export default function AboutPage() {
               <span className="section-label">Meet the Chef</span>
               <h2
                 className="text-4xl md:text-5xl text-[#1a3228] mb-8 leading-tight"
-                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
                 Chef Sarah
               </h2>
@@ -96,7 +96,7 @@ export default function AboutPage() {
               <blockquote className="border-l-2 border-[#c9a96e] pl-6">
                 <p
                   className="text-xl text-[#1a3228] leading-relaxed italic mb-4"
-                  style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+                  style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                 >
                   &ldquo;The kitchen is the best classroom — and every messy moment is a lesson worth learning.&rdquo;
                 </p>
@@ -130,7 +130,7 @@ export default function AboutPage() {
             <span className="section-label">Leave a Review</span>
             <h2
               className="text-3xl md:text-4xl text-[#1a3228] leading-tight mt-2"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Share Your Experience
             </h2>
@@ -194,7 +194,7 @@ export default function AboutPage() {
             <span className="section-label">Join Us</span>
             <h2
               className="text-3xl md:text-4xl text-[#1a3228] leading-tight"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Ready to cook with us?
             </h2>

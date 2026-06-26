@@ -20,12 +20,12 @@ export default function Nav() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#1a3228] text-white text-sm font-serif font-bold tracking-wide">
+          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#1a3228] text-white text-sm font-bold tracking-wide">
             IB
           </span>
           <span
-            className="text-[#1a3228] font-serif text-lg tracking-wide font-semibold"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+            className="text-[#1a3228] font-bold text-lg tracking-wide font-semibold"
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Imperfect Bakers
           </span>

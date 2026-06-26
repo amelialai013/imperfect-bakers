@@ -17,8 +17,8 @@
 @theme inline {
   --color-background: var(--ivory);
   --color-foreground: var(--charcoal);
-  --font-sans:   var(--font-inter);
-  --font-serif:  var(--font-playfair);
+  --font-sans:    var(--font-inter);
+  --font-heading: var(--font-dm-sans);
 }
 
 *, *::before, *::after {
@@ -38,7 +38,7 @@ body {
 }
 
 /* Utility classes */
-.font-serif  { font-family: var(--font-playfair), Georgia, serif; }
+.font-serif  { font-family: var(--font-dm-sans), system-ui, sans-serif; }
 .text-gold   { color: var(--gold); }
 .bg-deep     { background-color: var(--green-deep); }
 .bg-ivory    { background-color: var(--ivory); }
