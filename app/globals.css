@@ -47,17 +47,17 @@ body {
 
 /* Utility classes */
 .font-serif  { font-family: var(--font-dm-sans), system-ui, sans-serif; }
-.text-gold   { color: var(--gold); }
+.text-sage   { color: var(--sage); }
 .bg-deep     { background-color: var(--green-deep); }
 .bg-ivory    { background-color: var(--ivory); }
 .bg-ivory-mid{ background-color: var(--ivory-mid); }
 
-/* Thin gold divider */
-.divider-gold {
+/* Thin sage divider */
+.divider-sage {
   display: block;
   width: 48px;
   height: 2px;
-  background: var(--gold);
+  background: var(--sage);
 }
 
 /* Elegant button base */
@@ -128,7 +128,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--sage);
   margin-bottom: 1rem;
 }
 
