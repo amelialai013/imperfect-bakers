@@ -60,40 +60,38 @@ body {
   background: var(--sage);
 }
 
-/* Elegant button base */
+/* Button base — pill style */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 32px;
+  padding: 12px 28px;
   background: var(--green-deep);
   color: #fff;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  border-radius: 9999px;
   border: 1px solid var(--green-deep);
-  transition: background 0.25s, color 0.25s;
+  transition: background 0.2s, color 0.2s;
   cursor: pointer;
 }
 .btn-primary:hover {
-  background: transparent;
-  color: var(--green-deep);
+  background: var(--green-mid);
+  border-color: var(--green-mid);
 }
 
 .btn-outline {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 32px;
+  padding: 12px 28px;
   background: transparent;
   color: var(--green-deep);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  border-radius: 9999px;
   border: 1px solid var(--green-deep);
-  transition: background 0.25s, color 0.25s;
+  transition: background 0.2s, color 0.2s;
   cursor: pointer;
 }
 .btn-outline:hover {
@@ -105,20 +103,19 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 32px;
+  padding: 12px 28px;
   background: transparent;
   color: #fff;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: 1px solid rgba(255,255,255,0.5);
-  transition: background 0.25s, border-color 0.25s;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.6);
+  transition: background 0.2s, border-color 0.2s;
   cursor: pointer;
 }
 .btn-outline-white:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.9);
 }
 
 /* Section label */

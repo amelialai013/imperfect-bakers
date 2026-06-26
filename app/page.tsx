@@ -43,9 +43,6 @@ export default function Home() {
 
         {/* Hero content */}
         <div className="relative z-10 px-8 pb-16 md:pb-24 max-w-5xl">
-          {/* Gold rule */}
-          <div className="w-12 h-px bg-[#006644] mb-8" />
-
           <h1
             className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
