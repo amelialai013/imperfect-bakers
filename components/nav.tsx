@@ -24,7 +24,7 @@ export default function Nav() {
             IB
           </span>
           <span
-            className="text-[#1a3228] font-bold text-lg tracking-wide font-semibold"
+            className="text-[#1a3228] font-bold text-lg tracking-wide"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Imperfect Bakers
