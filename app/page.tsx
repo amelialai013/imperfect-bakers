@@ -40,12 +40,6 @@ export default function Home() {
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0d1f17]/90 via-[#0d1f17]/30 to-transparent" />
 
-        {/* Top label */}
-        <div className="absolute top-8 left-8 z-10">
-          <span className="text-xs tracking-[0.25em] uppercase text-white/50">
-            Melbourne&apos;s Boutique Cooking School
-          </span>
-        </div>
 
         {/* Hero content */}
         <div className="relative z-10 px-8 pb-16 md:pb-24 max-w-5xl">
