@@ -90,7 +90,7 @@ export default function ClassesPage() {
 
                 {/* Content */}
                 <div className="p-8 flex flex-col flex-1">
-                  <span className="text-xs tracking-[0.2em] text-[#c9a96e] mb-3 block">
+                  <span className="text-xs tracking-[0.2em] text-[#8bbfb0] mb-3 block">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h2
@@ -106,7 +106,7 @@ export default function ClassesPage() {
                       {c.age}
                     </span>
                     <Link href="/book-a-class">
-                      <button className="text-xs tracking-[0.12em] uppercase text-[#006644] hover:text-[#c9a96e] transition-colors flex items-center gap-2">
+                      <button className="text-xs tracking-[0.12em] uppercase text-[#006644] hover:text-[#8bbfb0] transition-colors flex items-center gap-2">
                         Book
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

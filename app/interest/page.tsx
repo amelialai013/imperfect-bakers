@@ -56,7 +56,7 @@ export default function InterestPage() {
                 { step: "03", text: "Confirm your booking and get ready to get messy!" },
               ].map((s) => (
                 <div key={s.step} className="flex gap-4">
-                  <span className="text-xs tracking-[0.2em] text-[#c9a96e] mt-0.5 shrink-0">{s.step}</span>
+                  <span className="text-xs tracking-[0.2em] text-[#8bbfb0] mt-0.5 shrink-0">{s.step}</span>
                   <p className="text-[#6b7280] text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: s.text }} />
                 </div>
               ))}
@@ -77,13 +77,13 @@ export default function InterestPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-xs tracking-[0.15em] uppercase text-[#006644] mb-2">
-                    Full Name <span className="text-[#c9a96e]">*</span>
+                    Full Name <span className="text-[#8bbfb0]">*</span>
                   </label>
                   <input type="text" placeholder="Jamie Oliver" className="input-elegant" />
                 </div>
                 <div>
                   <label className="block text-xs tracking-[0.15em] uppercase text-[#006644] mb-2">
-                    Email <span className="text-[#c9a96e]">*</span>
+                    Email <span className="text-[#8bbfb0]">*</span>
                   </label>
                   <input type="email" placeholder="jamie@email.com" className="input-elegant" />
                 </div>
@@ -113,7 +113,7 @@ export default function InterestPage() {
               {/* Class interests */}
               <div>
                 <p className="text-xs tracking-[0.15em] uppercase text-[#006644] mb-1">
-                  Classes of Interest <span className="text-[#c9a96e]">*</span>
+                  Classes of Interest <span className="text-[#8bbfb0]">*</span>
                 </p>
                 <p className="text-xs text-[#b0a898] mb-4 tracking-wide">Select as many as you like</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#e4dfd5]">
@@ -144,7 +144,7 @@ export default function InterestPage() {
                         </div>
                         <div className={`w-4 h-4 border flex items-center justify-center shrink-0 mt-0.5 ml-4 transition-colors ${
                           active
-                            ? "bg-[#c9a96e] border-[#c9a96e]"
+                            ? "bg-[#8bbfb0] border-[#8bbfb0]"
                             : "border-[#e4dfd5] group-hover:border-[#006644]"
                         }`}>
                           {active && (

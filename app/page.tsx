@@ -44,14 +44,14 @@ export default function Home() {
         {/* Hero content */}
         <div className="relative z-10 px-8 pb-16 md:pb-24 max-w-5xl">
           {/* Gold rule */}
-          <div className="w-12 h-px bg-[#c9a96e] mb-8" />
+          <div className="w-12 h-px bg-[#8bbfb0] mb-8" />
 
           <h1
             className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Messy hands,<br />
-            <em className="not-italic text-[#c9a96e]">delicious</em> food
+            <em className="not-italic text-[#8bbfb0]">delicious</em> food
           </h1>
 
           <p className="text-white/60 text-base md:text-lg max-w-md leading-relaxed mb-10">
@@ -106,7 +106,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#e4dfd5]">
             {features.map((f) => (
               <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10 group hover:bg-white transition-colors">
-                <span className="text-xs tracking-[0.2em] text-[#c9a96e] mb-6 block">{f.number}</span>
+                <span className="text-xs tracking-[0.2em] text-[#8bbfb0] mb-6 block">{f.number}</span>
                 <h3
                   className="text-xl text-[#006644] mb-4 leading-snug"
                   style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
@@ -114,7 +114,7 @@ export default function Home() {
                   {f.title}
                 </h3>
                 <p className="text-[#6b7280] text-sm leading-relaxed">{f.desc}</p>
-                <div className="w-6 h-px bg-[#c9a96e] mt-8 transition-all group-hover:w-12" />
+                <div className="w-6 h-px bg-[#8bbfb0] mt-8 transition-all group-hover:w-12" />
               </div>
             ))}
           </div>
