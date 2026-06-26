@@ -9,7 +9,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-5">
             <div className="flex items-center gap-3 mb-5">
-              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white text-[#006644]">
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5" stroke="currentColor" strokeWidth="1.8">
                   <line x1="12" y1="3" x2="12" y2="5" />
                   <path d="M6 8 Q12 5 18 8" />
