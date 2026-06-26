@@ -30,7 +30,7 @@ export default function Nav() {
             </svg>
           </span>
           <span
-            className="text-[#006644] font-bold text-lg tracking-wide"
+            className="text-[#006644] font-bold text-lg tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Imperfect Bakers
