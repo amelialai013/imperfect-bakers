@@ -18,7 +18,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-[#1a3228] py-24 px-8">
+    <section className="bg-[#00704d] py-24 px-8">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
@@ -42,7 +42,7 @@ export default function Testimonials() {
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10">
           {testimonials.map((t, i) => (
-            <div key={t.name} className="bg-[#1a3228] p-10 relative">
+            <div key={t.name} className="bg-[#00704d] p-10 relative">
               {/* Large quote mark */}
               <span
                 className="absolute top-6 right-8 text-7xl text-white/5 leading-none select-none pointer-events-none"

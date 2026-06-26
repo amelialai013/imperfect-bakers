@@ -53,7 +53,7 @@ export default function ClassesPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#1a3228] px-8 pt-20 pb-16">
+      <section className="bg-[#00704d] px-8 pt-20 pb-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
           <div>
             <span className="section-label">What We Offer</span>
@@ -94,7 +94,7 @@ export default function ClassesPage() {
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h2
-                    className="text-2xl text-[#1a3228] mb-3 leading-snug"
+                    className="text-2xl text-[#00704d] mb-3 leading-snug"
                     style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                   >
                     {c.title}
@@ -102,11 +102,11 @@ export default function ClassesPage() {
                   <p className="text-[#6b7280] text-sm leading-relaxed mb-6 flex-1">{c.desc}</p>
 
                   <div className="flex items-center justify-between pt-5 border-t border-[#e4dfd5]">
-                    <span className="text-xs tracking-[0.12em] uppercase text-[#1a3228]/60">
+                    <span className="text-xs tracking-[0.12em] uppercase text-[#00704d]/60">
                       {c.age}
                     </span>
                     <Link href="/book-a-class">
-                      <button className="text-xs tracking-[0.12em] uppercase text-[#1a3228] hover:text-[#c9a96e] transition-colors flex items-center gap-2">
+                      <button className="text-xs tracking-[0.12em] uppercase text-[#00704d] hover:text-[#c9a96e] transition-colors flex items-center gap-2">
                         Book
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -127,7 +127,7 @@ export default function ClassesPage() {
           <div>
             <span className="section-label">Private Bookings</span>
             <h2
-              className="text-3xl md:text-4xl text-[#1a3228] leading-tight"
+              className="text-3xl md:text-4xl text-[#00704d] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Can&apos;t find the right class?

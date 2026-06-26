@@ -23,7 +23,7 @@ export default function InterestPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#1a3228] px-8 pt-20 pb-16">
+      <section className="bg-[#00704d] px-8 pt-20 pb-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
           <div>
             <span className="section-label">Get in Touch</span>
@@ -62,9 +62,9 @@ export default function InterestPage() {
               ))}
             </div>
             <div className="mt-10 pt-10 border-t border-[#e4dfd5]">
-              <p className="text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-2">Contact us directly</p>
+              <p className="text-xs tracking-[0.15em] uppercase text-[#00704d] mb-2">Contact us directly</p>
               <a href="mailto:imperfectbakers@outlook.com"
-                className="text-sm text-[#6b7280] hover:text-[#1a3228] transition-colors">
+                className="text-sm text-[#6b7280] hover:text-[#00704d] transition-colors">
                 imperfectbakers@outlook.com
               </a>
             </div>
@@ -76,13 +76,13 @@ export default function InterestPage() {
               {/* Name + Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-2">
+                  <label className="block text-xs tracking-[0.15em] uppercase text-[#00704d] mb-2">
                     Full Name <span className="text-[#c9a96e]">*</span>
                   </label>
                   <input type="text" placeholder="Jamie Oliver" className="input-elegant" />
                 </div>
                 <div>
-                  <label className="block text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-2">
+                  <label className="block text-xs tracking-[0.15em] uppercase text-[#00704d] mb-2">
                     Email <span className="text-[#c9a96e]">*</span>
                   </label>
                   <input type="email" placeholder="jamie@email.com" className="input-elegant" />
@@ -92,13 +92,13 @@ export default function InterestPage() {
               {/* Phone + Level */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-2">
+                  <label className="block text-xs tracking-[0.15em] uppercase text-[#00704d] mb-2">
                     Phone <span className="text-[#b0a898]">(optional)</span>
                   </label>
                   <input type="tel" placeholder="07700 900000" className="input-elegant" />
                 </div>
                 <div>
-                  <label className="block text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-2">
+                  <label className="block text-xs tracking-[0.15em] uppercase text-[#00704d] mb-2">
                     Experience Level
                   </label>
                   <select className="input-elegant text-[#1a1a1a]">
@@ -112,7 +112,7 @@ export default function InterestPage() {
 
               {/* Class interests */}
               <div>
-                <p className="text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-1">
+                <p className="text-xs tracking-[0.15em] uppercase text-[#00704d] mb-1">
                   Classes of Interest <span className="text-[#c9a96e]">*</span>
                 </p>
                 <p className="text-xs text-[#b0a898] mb-4 tracking-wide">Select as many as you like</p>
@@ -126,13 +126,13 @@ export default function InterestPage() {
                         onClick={() => toggle(c.name)}
                         className={`flex items-start justify-between px-6 py-4 text-left transition-colors group ${
                           active
-                            ? "bg-[#1a3228]"
+                            ? "bg-[#00704d]"
                             : "bg-white hover:bg-[#faf9f6]"
                         }`}
                       >
                         <div>
                           <p className={`text-sm font-medium transition-colors ${
-                            active ? "text-white" : "text-[#1a3228]"
+                            active ? "text-white" : "text-[#00704d]"
                           }`}>
                             {c.name}
                           </p>
@@ -145,7 +145,7 @@ export default function InterestPage() {
                         <div className={`w-4 h-4 border flex items-center justify-center shrink-0 mt-0.5 ml-4 transition-colors ${
                           active
                             ? "bg-[#c9a96e] border-[#c9a96e]"
-                            : "border-[#e4dfd5] group-hover:border-[#1a3228]"
+                            : "border-[#e4dfd5] group-hover:border-[#00704d]"
                         }`}>
                           {active && (
                             <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +161,7 @@ export default function InterestPage() {
 
               {/* Notes */}
               <div>
-                <label className="block text-xs tracking-[0.15em] uppercase text-[#1a3228] mb-2">
+                <label className="block text-xs tracking-[0.15em] uppercase text-[#00704d] mb-2">
                   Anything else we should know?
                 </label>
                 <textarea

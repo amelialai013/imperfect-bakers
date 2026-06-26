@@ -38,7 +38,7 @@ export default function Home() {
         }}
       >
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0d1f17]/90 via-[#0d1f17]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#003d2a]/90 via-[#003d2a]/30 to-transparent" />
 
 
         {/* Hero content */}
@@ -89,7 +89,7 @@ export default function Home() {
             <div>
               <span className="section-label">Our Philosophy</span>
               <h2
-                className="text-4xl md:text-5xl text-[#1a3228] leading-tight"
+                className="text-4xl md:text-5xl text-[#00704d] leading-tight"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
                 Why Imperfect Bakers?
@@ -108,7 +108,7 @@ export default function Home() {
               <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10 group hover:bg-white transition-colors">
                 <span className="text-xs tracking-[0.2em] text-[#c9a96e] mb-6 block">{f.number}</span>
                 <h3
-                  className="text-xl text-[#1a3228] mb-4 leading-snug"
+                  className="text-xl text-[#00704d] mb-4 leading-snug"
                   style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                 >
                   {f.title}
@@ -131,7 +131,7 @@ export default function Home() {
           backgroundPosition: "center 60%",
         }}
       >
-        <div className="absolute inset-0 bg-[#1a3228]/40" />
+        <div className="absolute inset-0 bg-[#00704d]/40" />
         <div className="absolute inset-0 flex items-center justify-center">
           <p
             className="text-2xl md:text-4xl text-white text-center max-w-xl px-8 leading-relaxed"
@@ -148,7 +148,7 @@ export default function Home() {
           <div>
             <span className="section-label">Join Us</span>
             <h2
-              className="text-4xl md:text-5xl text-[#1a3228] leading-tight max-w-lg"
+              className="text-4xl md:text-5xl text-[#00704d] leading-tight max-w-lg"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Ready to get messy?
