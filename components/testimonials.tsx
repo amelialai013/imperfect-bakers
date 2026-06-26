@@ -24,7 +24,7 @@ export default function Testimonials() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
-            <span className="block text-xs tracking-[0.2em] uppercase text-[#8bbfb0] mb-4">
+            <span className="block text-xs tracking-[0.2em] uppercase text-[#006644] mb-4">
               Testimonials
             </span>
             <h2
@@ -46,7 +46,7 @@ export default function Testimonials() {
 
               {/* Quote mark + text */}
               <div>
-                <span className="text-4xl text-[#8bbfb0] leading-none block mb-4" aria-hidden>&ldquo;</span>
+                <span className="text-4xl text-[#006644] leading-none block mb-4" aria-hidden>&ldquo;</span>
                 <p className="text-[#1a1a1a] text-base leading-relaxed">
                   {t.quote}
                 </p>

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#2e241f] text-white border-t-2 border-[#8bbfb0]">
+    <footer className="bg-[#2e241f] text-white border-t-2 border-[#006644]">
       <div className="max-w-7xl mx-auto px-8 pt-16 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-white/10">
 
@@ -26,7 +26,7 @@ export default function Footer() {
             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
               Building confidence in the kitchen, one imperfect masterpiece at a time. Because the best food is made with love — and a little chaos.
             </p>
-            <p className="mt-6 text-xs tracking-widest uppercase text-[#8bbfb0]">@imperfectbakers</p>
+            <p className="mt-6 text-xs tracking-widest uppercase text-[#006644]">@imperfectbakers</p>
           </div>
 
           {/* Spacer */}
@@ -61,7 +61,7 @@ export default function Footer() {
             >
               imperfectbakers@outlook.com
             </a>
-            <div className="w-8 h-px bg-[#8bbfb0] mb-4" />
+            <div className="w-8 h-px bg-[#006644] mb-4" />
             <p className="text-xs text-white/40 leading-relaxed">
               Follow along on social for behind-the-scenes kitchen moments.
             </p>

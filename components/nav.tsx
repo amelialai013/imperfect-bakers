@@ -47,7 +47,7 @@ export default function Nav() {
                 href={link.href}
                 className={`text-sm tracking-wide transition-colors relative pb-0.5 whitespace-nowrap ${
                   active
-                    ? "text-[#006644] font-medium after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-[#8bbfb0]"
+                    ? "text-[#006644] font-medium after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-[#006644]"
                     : "text-[#6b7280] hover:text-[#006644]"
                 }`}
               >

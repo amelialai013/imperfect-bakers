@@ -75,7 +75,7 @@ export default function BookAClassPage() {
               >
                 <div className="flex items-center gap-6">
                   <span className={`text-xs tracking-[0.2em] w-6 shrink-0 ${
-                    activeClass === c.label ? "text-[#8bbfb0]" : "text-[#8bbfb0]"
+                    activeClass === c.label ? "text-[#006644]" : "text-[#006644]"
                   }`}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -99,7 +99,7 @@ export default function BookAClassPage() {
                   {c.sessions && (
                     <span className={`text-xs tracking-widest uppercase px-3 py-1 ${
                       activeClass === c.label
-                        ? "text-[#8bbfb0] border border-[#8bbfb0]/30"
+                        ? "text-[#006644] border border-[#006644]/30"
                         : "text-[#006644] border border-[#e4dfd5]"
                     }`}>
                       {c.sessions}
@@ -108,7 +108,7 @@ export default function BookAClassPage() {
                   <svg
                     className={`w-4 h-4 transition-all ${
                       activeClass === c.label
-                        ? "text-[#8bbfb0] rotate-45"
+                        ? "text-[#006644] rotate-45"
                         : "text-[#006644] group-hover:translate-x-1"
                     }`}
                     fill="none" stroke="currentColor" viewBox="0 0 24 24"

@@ -93,14 +93,14 @@ export default function AboutPage() {
               </div>
 
               {/* Pull quote */}
-              <blockquote className="border-l-2 border-[#8bbfb0] pl-6">
+              <blockquote className="border-l-2 border-[#006644] pl-6">
                 <p
                   className="text-xl text-[#006644] leading-relaxed italic mb-4"
                   style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                 >
                   &ldquo;The kitchen is the best classroom — and every messy moment is a lesson worth learning.&rdquo;
                 </p>
-                <footer className="text-xs tracking-[0.15em] uppercase text-[#8bbfb0]">— Chef Sarah</footer>
+                <footer className="text-xs tracking-[0.15em] uppercase text-[#006644]">— Chef Sarah</footer>
               </blockquote>
             </div>
 
@@ -134,7 +134,7 @@ export default function AboutPage() {
             >
               Share Your Experience
             </h2>
-            <div className="w-8 h-px bg-[#8bbfb0] mt-6" />
+            <div className="w-8 h-px bg-[#006644] mt-6" />
             <p className="text-[#6b7280] text-sm leading-relaxed mt-6">
               Your feedback means the world to us and helps other families find their way to the kitchen.
             </p>
@@ -144,19 +144,19 @@ export default function AboutPage() {
             <form className="space-y-6">
               <div>
                 <label className="block text-xs tracking-[0.15em] uppercase text-[#006644] mb-2">
-                  Your Name <span className="text-[#8bbfb0]">*</span>
+                  Your Name <span className="text-[#006644]">*</span>
                 </label>
                 <input type="text" placeholder="Jamie" className="input-elegant" />
               </div>
 
               <div>
                 <label className="block text-xs tracking-[0.15em] uppercase text-[#006644] mb-3">
-                  Rating <span className="text-[#8bbfb0]">*</span>
+                  Rating <span className="text-[#006644]">*</span>
                 </label>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button key={star} type="button"
-                      className="text-2xl text-[#e4dfd5] hover:text-[#8bbfb0] transition-colors leading-none">
+                      className="text-2xl text-[#e4dfd5] hover:text-[#006644] transition-colors leading-none">
                       ★
                     </button>
                   ))}
@@ -165,7 +165,7 @@ export default function AboutPage() {
 
               <div>
                 <label className="block text-xs tracking-[0.15em] uppercase text-[#006644] mb-2">
-                  Your Review <span className="text-[#8bbfb0]">*</span>
+                  Your Review <span className="text-[#006644]">*</span>
                 </label>
                 <textarea
                   rows={5}
