@@ -28,7 +28,7 @@ export default function Testimonials() {
               Testimonials
             </span>
             <h2
-              className="text-4xl md:text-5xl text-[#00704d] leading-tight"
+              className="text-4xl md:text-5xl text-[#006644] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               What Our Bakers Say
@@ -54,11 +54,11 @@ export default function Testimonials() {
 
               {/* Attribution */}
               <div className="flex items-center gap-3 pt-6 border-t border-[#e4dfd5]">
-                <div className="w-8 h-8 rounded-full bg-[#00704d]/10 flex items-center justify-center text-[#00704d] text-xs font-bold shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#006644]/10 flex items-center justify-center text-[#006644] text-xs font-bold shrink-0">
                   {t.name[0]}
                 </div>
                 <div>
-                  <p className="text-[#00704d] text-sm font-semibold">{t.name}</p>
+                  <p className="text-[#006644] text-sm font-semibold">{t.name}</p>
                   <p className="text-[#6b7280] text-xs tracking-wide">{t.role}</p>
                 </div>
               </div>

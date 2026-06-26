@@ -89,7 +89,7 @@ export default function Home() {
             <div>
               <span className="section-label">Our Philosophy</span>
               <h2
-                className="text-4xl md:text-5xl text-[#00704d] leading-tight"
+                className="text-4xl md:text-5xl text-[#006644] leading-tight"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
                 Why Imperfect Bakers?
@@ -108,7 +108,7 @@ export default function Home() {
               <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10 group hover:bg-white transition-colors">
                 <span className="text-xs tracking-[0.2em] text-[#c9a96e] mb-6 block">{f.number}</span>
                 <h3
-                  className="text-xl text-[#00704d] mb-4 leading-snug"
+                  className="text-xl text-[#006644] mb-4 leading-snug"
                   style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                 >
                   {f.title}
@@ -131,7 +131,7 @@ export default function Home() {
           backgroundPosition: "center 60%",
         }}
       >
-        <div className="absolute inset-0 bg-[#00704d]/40" />
+        <div className="absolute inset-0 bg-[#006644]/40" />
         <div className="absolute inset-0 flex items-center justify-center">
           <p
             className="text-2xl md:text-4xl text-white text-center max-w-xl px-8 leading-relaxed"
@@ -148,7 +148,7 @@ export default function Home() {
           <div>
             <span className="section-label">Join Us</span>
             <h2
-              className="text-4xl md:text-5xl text-[#00704d] leading-tight max-w-lg"
+              className="text-4xl md:text-5xl text-[#006644] leading-tight max-w-lg"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Ready to get messy?

@@ -20,7 +20,7 @@ export default function Nav() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#00704d] text-white">
+          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#006644] text-white">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5" stroke="currentColor" strokeWidth="1.8">
               <line x1="12" y1="3" x2="12" y2="5" />
               <path d="M6 8 Q12 5 18 8" />
@@ -30,7 +30,7 @@ export default function Nav() {
             </svg>
           </span>
           <span
-            className="text-[#00704d] font-bold text-lg tracking-wide"
+            className="text-[#006644] font-bold text-lg tracking-wide"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Imperfect Bakers
@@ -47,8 +47,8 @@ export default function Nav() {
                 href={link.href}
                 className={`text-sm tracking-wide transition-colors relative pb-0.5 whitespace-nowrap ${
                   active
-                    ? "text-[#00704d] font-medium after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-[#c9a96e]"
-                    : "text-[#6b7280] hover:text-[#00704d]"
+                    ? "text-[#006644] font-medium after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-[#c9a96e]"
+                    : "text-[#6b7280] hover:text-[#006644]"
                 }`}
               >
                 {link.label}
@@ -71,7 +71,7 @@ export default function Nav() {
 
         {/* Mobile toggle */}
         <button
-          className="lg:hidden p-2 text-[#00704d]"
+          className="lg:hidden p-2 text-[#006644]"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
@@ -91,7 +91,7 @@ export default function Nav() {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="text-sm text-[#00704d] tracking-wide py-1"
+              className="text-sm text-[#006644] tracking-wide py-1"
             >
               {link.label}
             </Link>

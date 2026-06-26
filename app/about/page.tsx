@@ -9,7 +9,7 @@ export default function AboutPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#00704d] px-8 pt-20 pb-16">
+      <section className="bg-[#006644] px-8 pt-20 pb-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
           <div>
             <span className="section-label">Our Story</span>
@@ -48,7 +48,7 @@ export default function AboutPage() {
           </div>
           <div className="md:col-span-8">
             <h2
-              className="text-3xl md:text-4xl text-[#00704d] mb-8 leading-snug"
+              className="text-3xl md:text-4xl text-[#006644] mb-8 leading-snug"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Building confidence in the kitchen, one imperfect dish at a time.
@@ -74,7 +74,7 @@ export default function AboutPage() {
             <div className="md:col-span-6 order-2 md:order-1">
               <span className="section-label">Meet the Chef</span>
               <h2
-                className="text-4xl md:text-5xl text-[#00704d] mb-8 leading-tight"
+                className="text-4xl md:text-5xl text-[#006644] mb-8 leading-tight"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
                 Chef Sarah
@@ -85,7 +85,7 @@ export default function AboutPage() {
                   Sarah grew up in Williamstown, Melbourne. She has always loved the way food brings people together, and that passion is at the heart of everything she does at Imperfect Bakers.
                 </p>
                 <p>
-                  She holds a <strong className="text-[#00704d] font-medium">Bachelor of Education (Honours)</strong> and a <strong className="text-[#00704d] font-medium">Certificate III in Patisserie</strong> — the perfect combination for someone who loves teaching people how to make delicious food.
+                  She holds a <strong className="text-[#006644] font-medium">Bachelor of Education (Honours)</strong> and a <strong className="text-[#006644] font-medium">Certificate III in Patisserie</strong> — the perfect combination for someone who loves teaching people how to make delicious food.
                 </p>
                 <p>
                   Outside the kitchen, Sarah is a keen tennis player, holds a black belt in karate, and loves to travel for food and inspiration.
@@ -95,7 +95,7 @@ export default function AboutPage() {
               {/* Pull quote */}
               <blockquote className="border-l-2 border-[#c9a96e] pl-6">
                 <p
-                  className="text-xl text-[#00704d] leading-relaxed italic mb-4"
+                  className="text-xl text-[#006644] leading-relaxed italic mb-4"
                   style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                 >
                   &ldquo;The kitchen is the best classroom — and every messy moment is a lesson worth learning.&rdquo;
@@ -129,7 +129,7 @@ export default function AboutPage() {
           <div className="md:col-span-4">
             <span className="section-label">Leave a Review</span>
             <h2
-              className="text-3xl md:text-4xl text-[#00704d] leading-tight mt-2"
+              className="text-3xl md:text-4xl text-[#006644] leading-tight mt-2"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Share Your Experience
@@ -143,14 +143,14 @@ export default function AboutPage() {
           <div className="md:col-span-8">
             <form className="space-y-6">
               <div>
-                <label className="block text-xs tracking-[0.15em] uppercase text-[#00704d] mb-2">
+                <label className="block text-xs tracking-[0.15em] uppercase text-[#006644] mb-2">
                   Your Name <span className="text-[#c9a96e]">*</span>
                 </label>
                 <input type="text" placeholder="Jamie" className="input-elegant" />
               </div>
 
               <div>
-                <label className="block text-xs tracking-[0.15em] uppercase text-[#00704d] mb-3">
+                <label className="block text-xs tracking-[0.15em] uppercase text-[#006644] mb-3">
                   Rating <span className="text-[#c9a96e]">*</span>
                 </label>
                 <div className="flex gap-1">
@@ -164,7 +164,7 @@ export default function AboutPage() {
               </div>
 
               <div>
-                <label className="block text-xs tracking-[0.15em] uppercase text-[#00704d] mb-2">
+                <label className="block text-xs tracking-[0.15em] uppercase text-[#006644] mb-2">
                   Your Review <span className="text-[#c9a96e]">*</span>
                 </label>
                 <textarea
@@ -193,7 +193,7 @@ export default function AboutPage() {
           <div>
             <span className="section-label">Join Us</span>
             <h2
-              className="text-3xl md:text-4xl text-[#00704d] leading-tight"
+              className="text-3xl md:text-4xl text-[#006644] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Ready to cook with us?

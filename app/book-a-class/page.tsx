@@ -22,7 +22,7 @@ export default function BookAClassPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#00704d] px-8 pt-20 pb-16">
+      <section className="bg-[#006644] px-8 pt-20 pb-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
           <div>
             <span className="section-label">Reserve Your Spot</span>
@@ -52,8 +52,8 @@ export default function BookAClassPage() {
                 onClick={() => setActiveFilter(f)}
                 className={`px-5 py-2.5 text-xs tracking-[0.12em] uppercase border transition-colors ${
                   activeFilter === f
-                    ? "bg-[#00704d] text-white border-[#00704d]"
-                    : "bg-white text-[#6b7280] border-[#e4dfd5] hover:border-[#00704d] hover:text-[#00704d]"
+                    ? "bg-[#006644] text-white border-[#006644]"
+                    : "bg-white text-[#6b7280] border-[#e4dfd5] hover:border-[#006644] hover:text-[#006644]"
                 }`}
               >
                 {f}
@@ -69,7 +69,7 @@ export default function BookAClassPage() {
                 onClick={() => setActiveClass(activeClass === c.label ? null : c.label)}
                 className={`w-full flex items-center justify-between px-8 py-6 text-left transition-colors group ${
                   activeClass === c.label
-                    ? "bg-[#00704d]"
+                    ? "bg-[#006644]"
                     : "bg-white hover:bg-[#faf9f6]"
                 }`}
               >
@@ -81,7 +81,7 @@ export default function BookAClassPage() {
                   </span>
                   <div>
                     <p className={`font-medium text-base transition-colors ${
-                      activeClass === c.label ? "text-white" : "text-[#00704d]"
+                      activeClass === c.label ? "text-white" : "text-[#006644]"
                     }`}
                       style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                     >
@@ -100,7 +100,7 @@ export default function BookAClassPage() {
                     <span className={`text-xs tracking-widest uppercase px-3 py-1 ${
                       activeClass === c.label
                         ? "text-[#c9a96e] border border-[#c9a96e]/30"
-                        : "text-[#00704d] border border-[#e4dfd5]"
+                        : "text-[#006644] border border-[#e4dfd5]"
                     }`}>
                       {c.sessions}
                     </span>
@@ -109,7 +109,7 @@ export default function BookAClassPage() {
                     className={`w-4 h-4 transition-all ${
                       activeClass === c.label
                         ? "text-[#c9a96e] rotate-45"
-                        : "text-[#00704d] group-hover:translate-x-1"
+                        : "text-[#006644] group-hover:translate-x-1"
                     }`}
                     fill="none" stroke="currentColor" viewBox="0 0 24 24"
                   >
@@ -121,7 +121,7 @@ export default function BookAClassPage() {
           </div>
 
           {/* Custom class CTA */}
-          <div className="mt-20 bg-[#00704d] p-12">
+          <div className="mt-20 bg-[#006644] p-12">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
               <div>
                 <span className="section-label">Private Bookings</span>
