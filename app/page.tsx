@@ -116,28 +116,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FULL-BLEED IMAGE BREAK ────────────────────────────── */}
-      <section
-        className="relative h-[50vh] min-h-[360px]"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=1800&auto=format&fit=crop&q=85')",
-          backgroundSize: "cover",
-          backgroundPosition: "center 60%",
-        }}
-      >
-        <div className="absolute inset-0 bg-[#006644]/40" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <p
-            className="text-2xl md:text-4xl text-white text-center max-w-xl px-8 leading-relaxed"
-            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-          >
-            <em>&ldquo;The kitchen is the heart of every home.&rdquo;</em>
-          </p>
-        </div>
-      </section>
-
-      {/* ── CTA BAND ──────────────────────────────────────────── */}
+{/* ── CTA BAND ──────────────────────────────────────────── */}
       <section className="py-16 px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
           <div className="bg-[#006644] rounded-2xl px-12 py-16 flex flex-col items-center text-center relative overflow-hidden">
