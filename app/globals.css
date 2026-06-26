@@ -37,6 +37,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Heading base weight — matches original site (DM Sans 700) */
+h1, h2, h3, h4 {
+  font-weight: 700;
+}
+
 /* Utility classes */
 .font-serif  { font-family: var(--font-dm-sans), system-ui, sans-serif; }
 .text-gold   { color: var(--gold); }
