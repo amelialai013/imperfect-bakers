@@ -81,15 +81,10 @@ export default function Nav() {
 
           <div className="flex items-center gap-4">
             <Link href="/book-a-class" className="shrink-0">
-              <button className="bg-[#006644] text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-[#005c3f] transition-colors whitespace-nowrap">
-                Book a Class
-              </button>
+              <button className="btn-primary btn-sm">Book a Class</button>
             </Link>
-
             <Link href="/interest" className="shrink-0">
-              <button className="border border-[#006644] text-[#006644] text-sm font-medium px-5 py-2 rounded-full hover:bg-[#006644] hover:text-white transition-colors whitespace-nowrap">
-                I&apos;m Interested
-              </button>
+              <button className="btn-secondary btn-sm">I&apos;m Interested</button>
             </Link>
           </div>
         </div>
@@ -127,10 +122,10 @@ export default function Nav() {
           ))}
           <div className="pt-2 flex flex-col gap-3">
             <Link href="/book-a-class" onClick={() => setOpen(false)}>
-              <button className="btn-primary w-full justify-center text-xs">Book a Class</button>
+              <button className="btn-primary btn-sm w-full justify-center">Book a Class</button>
             </Link>
             <Link href="/interest" onClick={() => setOpen(false)}>
-              <button className="btn-outline w-full justify-center text-xs">I&apos;m Interested</button>
+              <button className="btn-secondary btn-sm w-full justify-center">I&apos;m Interested</button>
             </Link>
           </div>
         </div>

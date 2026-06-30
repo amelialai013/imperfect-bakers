@@ -57,7 +57,7 @@ export default function Home() {
 
           <div className="flex flex-wrap gap-4">
             <Link href="/classes">
-              <button className="btn-outline-white">
+              <button className="btn-tertiary">
                 Explore Classes
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -65,7 +65,7 @@ export default function Home() {
               </button>
             </Link>
             <Link href="/interest">
-              <button className="btn-outline-white">Register Interest</button>
+              <button className="btn-tertiary">Register Interest</button>
             </Link>
           </div>
         </div>
@@ -127,10 +127,10 @@ export default function Home() {
               Ready to get messy?
             </h2>
             <Link href="/interest" className="relative z-10">
-              <button className="bg-white text-[#006644] font-semibold px-8 py-3 rounded-full flex items-center gap-2 hover:bg-white/90 transition-colors">
+              <button className="btn-tertiary">
                 Register Interest
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </button>
             </Link>

@@ -207,7 +207,7 @@ export default function AboutPage() {
               <button className="btn-primary">See Our Classes</button>
             </Link>
             <Link href="/interest">
-              <button className="btn-outline">I&apos;m Interested</button>
+              <button className="btn-secondary">I&apos;m Interested</button>
             </Link>
           </div>
         </div>
