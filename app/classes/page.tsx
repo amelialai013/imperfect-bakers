@@ -114,28 +114,35 @@ export default function ClassesPage() {
       </section>
 
       {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
-      <section className="px-8 py-8 bg-[#1a1a1a]">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-6">
-            <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/30 shrink-0">Private bookings</span>
-            <div className="w-px h-4 bg-white/10 shrink-0 hidden sm:block" />
-            <p
-              className="text-white text-base font-medium"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              Looking for something more personal?
-            </p>
+      <div className="px-8 pb-4 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 h-56">
+          {/* Photo half */}
+          <div
+            className="bg-cover bg-center"
+            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
+          />
+          {/* Text half */}
+          <div className="bg-[#006644] flex flex-col justify-center px-10 gap-4">
+            <div>
+              <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private bookings</span>
+              <h2
+                className="text-2xl text-white leading-snug"
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+              >
+                Looking for something more personal?
+              </h2>
+            </div>
+            <Link href="/interest" className="self-start">
+              <button className="btn-tertiary btn-sm group">
+                Request a private class
+                <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </Link>
           </div>
-          <Link href="/interest" className="shrink-0">
-            <button className="btn-tertiary btn-sm group">
-              Request a private class
-              <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </Link>
         </div>
-      </section>
+      </div>
 
       {/* ── GOOGLE REVIEWS CTA ───────────────────────────────── */}
       {/* TODO: Replace GOOGLE_REVIEW_URL with your Google Business Profile review link */}
