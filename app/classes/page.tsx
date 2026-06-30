@@ -70,8 +70,7 @@ export default function ClassesPage() {
           {classes.map((c, i) => (
             <Link href="/book-a-class" key={c.title} className={i === 0 ? "md:col-span-2" : ""}>
               <div
-                className="group relative overflow-hidden cursor-pointer"
-                style={{ height: i === 0 ? "520px" : "360px" }}
+                className={`group relative overflow-hidden cursor-pointer h-[360px] ${i === 0 ? "md:h-[520px]" : ""}`}
               >
                 {/* Background image */}
                 <div
@@ -94,7 +93,7 @@ export default function ClassesPage() {
                       >
                         {c.title}
                       </h2>
-                      <p className="text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <p className="text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                         {c.desc}
                       </p>
                     </div>

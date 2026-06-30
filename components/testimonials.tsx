@@ -38,9 +38,9 @@ export default function Testimonials() {
             >
               &ldquo;{featured.quote}&rdquo;
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mt-8">
               <div className="w-8 h-px bg-white/30" />
-              <p className="text-white/50 text-xs tracking-wide">
+              <p className="text-white/70 text-sm tracking-wide font-medium">
                 {featured.name} · {featured.role}
               </p>
             </div>
