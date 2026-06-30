@@ -16,7 +16,7 @@ export default function AboutPage() {
               className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              About <em className="not-italic text-[#006644]">Imperfect</em> Bakers
+              Who <em className="not-italic text-[#006644]">we</em> are
             </h1>
             <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
               Getting messy, learning heaps, and having a great time along the way.

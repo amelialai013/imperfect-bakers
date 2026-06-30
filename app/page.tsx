@@ -83,7 +83,7 @@ export default function Home() {
               className="text-4xl md:text-5xl text-[#006644] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              <span className="text-[#1a1a1a]">Why</span> Imperfect Bakers?
+              Why <span className="text-[#1a1a1a]">Imperfect</span> Bakers?
             </h2>
             <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
               We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
