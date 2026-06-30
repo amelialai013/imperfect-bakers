@@ -76,7 +76,7 @@ export default function ClassesPage() {
           {classes.map((c, i) => (
             <Link href="/book-a-class" key={c.title}>
               <div
-                className="group relative overflow-hidden cursor-pointer h-[280px] rounded-[8px]"
+                className="group relative overflow-hidden cursor-pointer h-[284px] rounded-[8px]"
               >
                 {/* Background image */}
                 <div
