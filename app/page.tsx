@@ -91,12 +91,9 @@ export default function Home() {
           </div>
 
           {/* Feature grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-px lg:gap-0 sm:bg-[#e4dfd5] lg:bg-transparent">
-            {features.map((f, i) => (
-              <div key={f.title} className="relative bg-[#faf9f6] p-8 lg:p-10">
-                {i > 0 && (
-                  <div className="hidden lg:block absolute left-0 top-10 bottom-10 w-px bg-[#e4dfd5]" />
-                )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#e4dfd5]">
+            {features.map((f) => (
+              <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10">
                 <span className="text-xs tracking-[0.2em] text-[#006644] mb-6 block">{f.number}</span>
                 <h3
                   className="text-xl text-[#006644] mb-4 leading-snug"
