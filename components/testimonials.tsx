@@ -28,7 +28,7 @@ export default function Testimonials() {
           Testimonials
         </span>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24">
 
           {/* Featured quote — large */}
           <div className="flex flex-col justify-between">
@@ -39,7 +39,6 @@ export default function Testimonials() {
               &ldquo;{featured.quote}&rdquo;
             </p>
             <div className="flex items-center gap-4 mt-4">
-              <div className="w-8 h-px bg-white/30" />
               <p className="text-white/70 text-sm tracking-wide font-medium">
                 {featured.name} · {featured.role}
               </p>
@@ -54,7 +53,6 @@ export default function Testimonials() {
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-px bg-white/30" />
                   <p className="text-white/50 text-xs tracking-wide">
                     {t.name} · {t.role}
                   </p>
