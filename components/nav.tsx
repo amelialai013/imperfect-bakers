@@ -79,17 +79,19 @@ export default function Nav() {
 
           <div className="w-px h-5 bg-[#e4dfd5] mx-1" />
 
-          <Link href="/book-a-class" className="shrink-0">
-            <button className="bg-[#006644] text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-[#005c3f] transition-colors whitespace-nowrap">
-              Book a Class
-            </button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/book-a-class" className="shrink-0">
+              <button className="bg-[#006644] text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-[#005c3f] transition-colors whitespace-nowrap">
+                Book a Class
+              </button>
+            </Link>
 
-          <Link href="/interest" className="shrink-0">
-            <button className="border border-[#006644] text-[#006644] text-sm font-medium px-5 py-2 rounded-full hover:bg-[#006644] hover:text-white transition-colors whitespace-nowrap">
-              I&apos;m Interested
-            </button>
-          </Link>
+            <Link href="/interest" className="shrink-0">
+              <button className="border border-[#006644] text-[#006644] text-sm font-medium px-5 py-2 rounded-full hover:bg-[#006644] hover:text-white transition-colors whitespace-nowrap">
+                I&apos;m Interested
+              </button>
+            </Link>
+          </div>
         </div>
 
         {/* Mobile toggle */}
