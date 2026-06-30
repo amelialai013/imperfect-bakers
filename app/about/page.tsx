@@ -8,7 +8,7 @@ export default function AboutPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="px-8 pt-16 pb-14 bg-[#faf9f6] border-b border-[#e4dfd5]">
+      <section className="px-8 pt-16 pb-14 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
           <span className="section-label">Our story</span>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12" style={{ alignItems: "last baseline" }}>
