@@ -85,7 +85,7 @@ export default function ClassesPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <span className="text-[0.6875rem] tracking-[0.2em] font-semibold text-white/50 mb-3 block uppercase">
-                        {String(i + 1).padStart(2, "0")} · {c.age}
+                        {c.age}
                       </span>
                       <h2
                         className={`text-white leading-tight ${i === 0 ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl"}`}
