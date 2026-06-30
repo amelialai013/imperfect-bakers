@@ -53,19 +53,19 @@ export default function ClassesPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#006644] px-8 pt-20 pb-16">
+      <section className="px-8 pt-16 pb-14 bg-[#faf9f6] border-b border-[#e4dfd5]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
           <div>
-            <span className="section-label">What We Offer</span>
+            <span className="section-label">What we offer</span>
             <h1
-              className="text-5xl md:text-6xl text-white leading-tight"
+              className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight mt-3"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Our Classes
+              Our <em className="not-italic text-[#006644]">classes</em>
             </h1>
           </div>
           <div className="flex items-end">
-            <p className="text-white/50 text-base leading-relaxed max-w-sm">
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
               From beginners to budding foodies, there&apos;s a class for everyone. Pick your adventure.
             </p>
           </div>
