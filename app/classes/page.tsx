@@ -161,7 +161,7 @@ export default function ClassesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 h-64">
         {/* Photo half */}
         <div
-          className="bg-cover bg-center"
+          className="bg-cover bg-center h-full"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
         />
         {/* Text half */}
