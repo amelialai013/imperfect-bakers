@@ -134,7 +134,6 @@ export default function ClassesPage() {
                 </div>
                 <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]/50">Google Reviews</span>
               </div>
-              <div className="w-12 h-px bg-[#006644]/20 mx-auto mb-10" />
               <h2
                 className="text-4xl md:text-5xl text-[#006644] leading-tight mb-6"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
