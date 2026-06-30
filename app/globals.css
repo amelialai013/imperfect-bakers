@@ -71,7 +71,6 @@ body {
 
 /* Shared base */
 .btn-primary,
-.btn-primary-inverse,
 .btn-secondary,
 .btn-tertiary {
   display: inline-flex;
@@ -128,9 +127,19 @@ body {
 
 /* Primary inverse — white bg, green text (for dark/hero/green backgrounds) */
 .btn-primary-inverse {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  border: 1px solid #fff;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  white-space: nowrap;
   background: #fff;
   color: var(--green-deep);
-  border-color: #fff;
 }
 .btn-primary-inverse:hover {
   background: rgba(255, 255, 255, 0.88);
