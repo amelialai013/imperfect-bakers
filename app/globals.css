@@ -142,9 +142,9 @@ body {
   color: var(--green-deep);
 }
 .btn-primary-inverse:hover {
-  background: var(--green-deep);
+  background: transparent;
   color: #fff;
-  border-color: var(--green-deep);
+  border-color: #fff;
 }
 
 /* Section label */
