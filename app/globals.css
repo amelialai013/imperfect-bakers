@@ -135,14 +135,15 @@ body {
   font-weight: 500;
   border-radius: 9999px;
   border: 1px solid #fff;
-  transition: opacity 0.2s;
+  transition: background 0.2s, border-color 0.2s;
   cursor: pointer;
   white-space: nowrap;
   background: #fff;
   color: var(--green-deep);
 }
 .btn-primary-inverse:hover {
-  opacity: 0.8;
+  background: #e8f5ee;
+  border-color: #e8f5ee;
 }
 
 /* Section label */
