@@ -70,7 +70,7 @@ export default function ClassesPage() {
           {classes.map((c, i) => (
             <Link href="/book-a-class" key={c.title}>
               <div
-                className="group relative overflow-hidden cursor-pointer h-[280px]"
+                className="group relative overflow-hidden cursor-pointer h-[280px] rounded-[4px]"
               >
                 {/* Background image */}
                 <div
@@ -164,7 +164,7 @@ export default function ClassesPage() {
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
         />
         {/* Text half */}
-        <div className="bg-[#006644] flex flex-col justify-center px-12 py-10 md:py-12 gap-8">
+        <div className="bg-[#006644] flex flex-col justify-center px-8 py-10 md:py-12 gap-8">
           <div>
             <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private bookings</span>
             <h2
