@@ -157,12 +157,14 @@ export default function ClassesPage() {
       })()}
 
       {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 h-64">
+      <div className="grid grid-cols-1 md:grid-cols-2 min-h-64">
         {/* Photo half */}
-        <div
-          className="bg-cover bg-center h-full"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
-        />
+        <div className="relative min-h-64 md:min-h-0">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
+          />
+        </div>
         {/* Text half */}
         <div className="bg-[#006644] flex flex-col justify-center px-8 gap-4">
           <div>
