@@ -96,7 +96,7 @@ export default function AboutPage() {
                 >
                   &ldquo;The kitchen is the best classroom — and every messy moment is a lesson worth learning.&rdquo;
                 </p>
-                <footer className="text-xs tracking-[0.15em] uppercase text-[#006644]">— Chef Sarah</footer>
+                <footer className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">— Chef Sarah</footer>
               </blockquote>
             </div>
 

@@ -30,12 +30,6 @@ const classes = [
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&auto=format&fit=crop&q=85",
   },
   {
-    title: "Kids Lead Parents",
-    desc: "Flip the script! The kids are head chefs and parents are sous chefs. Prepare for chaos, laughter, and something delicious.",
-    age: "Families",
-    image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&auto=format&fit=crop&q=85",
-  },
-  {
     title: "Random Kitchen Fun",
     desc: "Mystery ingredients, wild challenges, and creative experiments. You never know what you'll make, but you'll always have fun.",
     age: "All ages",
@@ -85,17 +79,13 @@ export default function ClassesPage() {
                   style={{ backgroundImage: `url('${c.image}')` }}
                 />
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 group-hover:from-black/70 transition-all duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-black/10 transition-all duration-300" />
 
-                {/* Content */}
-                <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10">
-                  {/* Description — absolutely above, fades in on hover */}
-                  <p className="text-white/60 text-sm leading-relaxed mb-4 max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {c.desc}
-                  </p>
-                  <div className="flex items-end justify-between">
+                {/* Content — top aligned */}
+                <div className="absolute inset-0 flex flex-col justify-start p-8 md:p-10">
+                  <div className="flex items-start justify-between">
                     <div>
-                      <span className="text-xs tracking-[0.2em] text-white/50 mb-3 block">
+                      <span className="text-[0.6875rem] tracking-[0.2em] font-semibold text-white/50 mb-3 block uppercase">
                         {String(i + 1).padStart(2, "0")} · {c.age}
                       </span>
                       <h2
@@ -104,6 +94,9 @@ export default function ClassesPage() {
                       >
                         {c.title}
                       </h2>
+                      <p className="text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {c.desc}
+                      </p>
                     </div>
                     <div className="shrink-0 ml-6">
                       <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white/20 transition-colors">

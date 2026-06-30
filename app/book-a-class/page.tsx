@@ -74,7 +74,7 @@ export default function BookAClassPage() {
                 }`}
               >
                 <div className="flex items-center gap-6">
-                  <span className={`text-xs tracking-[0.2em] w-6 shrink-0 ${
+                  <span className={`text-[0.6875rem] font-semibold tracking-[0.2em] w-6 shrink-0 ${
                     activeClass === c.label ? "text-[#006644]" : "text-[#006644]"
                   }`}>
                     {String(i + 1).padStart(2, "0")}
