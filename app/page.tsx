@@ -77,21 +77,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
 
           {/* Section header */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
-            <div>
-              <span className="section-label">Our Philosophy</span>
-              <h2
-                className="text-4xl md:text-5xl text-[#006644] leading-tight"
-                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-              >
-                Why Imperfect Bakers?
-              </h2>
-            </div>
-            <div className="flex items-end">
-              <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
-                We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
-              </p>
-            </div>
+          <span className="section-label">Our Philosophy</span>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-20" style={{ alignItems: "last baseline" }}>
+            <h2
+              className="text-4xl md:text-5xl text-[#006644] leading-tight"
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+            >
+              Why Imperfect Bakers?
+            </h2>
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
+              We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
+            </p>
           </div>
 
           {/* Feature grid */}

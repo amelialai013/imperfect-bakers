@@ -17,53 +17,53 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
+  const [featured, ...rest] = testimonials;
+
   return (
-    <section className="bg-[#faf9f6] py-24 px-8 border-t border-[#e4dfd5]">
+    <section className="bg-[#006644] py-24 px-8">
       <div className="max-w-7xl mx-auto">
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div>
-            <span className="block text-xs tracking-[0.2em] uppercase text-[#006644] mb-4">
-              Testimonials
-            </span>
-            <h2
-              className="text-4xl md:text-5xl text-[#006644] leading-tight"
+        {/* Label */}
+        <span className="block text-xs tracking-[0.2em] uppercase text-white/40 mb-12">
+          Testimonials
+        </span>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
+
+          {/* Featured quote — large */}
+          <div className="flex flex-col justify-between">
+            <p
+              className="text-white text-2xl md:text-3xl leading-relaxed mb-12"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              What Our Bakers Say
-            </h2>
-          </div>
-          <p className="text-[#6b7280] text-sm max-w-xs md:text-right leading-relaxed">
-            Real stories from real kitchens.
-          </p>
-        </div>
-
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
-            <div key={t.name} className="bg-white border border-[#e4dfd5] rounded-sm p-8 flex flex-col justify-between gap-8">
-
-              {/* Quote mark + text */}
+              &ldquo;{featured.quote}&rdquo;
+            </p>
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-px bg-white/30" />
               <div>
-                <span className="text-4xl text-[#006644] leading-none block mb-4" aria-hidden>&ldquo;</span>
-                <p className="text-[#1a1a1a] text-base leading-relaxed">
-                  {t.quote}
-                </p>
-              </div>
-
-              {/* Attribution */}
-              <div className="flex items-center gap-3 pt-6 border-t border-[#e4dfd5]">
-                <div className="w-8 h-8 rounded-full bg-[#006644]/10 flex items-center justify-center text-[#006644] text-xs font-bold shrink-0">
-                  {t.name[0]}
-                </div>
-                <div>
-                  <p className="text-[#006644] text-sm font-semibold">{t.name}</p>
-                  <p className="text-[#6b7280] text-xs tracking-wide">{t.role}</p>
-                </div>
+                <p className="text-white text-sm font-semibold">{featured.name}</p>
+                <p className="text-white/50 text-xs tracking-wide mt-0.5">{featured.role}</p>
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Stacked secondary quotes */}
+          <div className="flex flex-col divide-y divide-white/10">
+            {rest.map((t) => (
+              <div key={t.name} className="py-8 first:pt-0 last:pb-0">
+                <p className="text-white/70 text-base leading-relaxed mb-6">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-px bg-white/30" />
+                  <p className="text-white/50 text-xs tracking-wide">
+                    {t.name} · {t.role}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </section>
