@@ -114,33 +114,27 @@ export default function ClassesPage() {
       </section>
 
       {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
-      <section className="px-8 py-16 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-end">
-            <div className="md:col-span-7">
-              <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-5">Private bookings</span>
-              <h2
-                className="text-3xl md:text-4xl text-[#1a1a1a] leading-tight"
-                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-              >
-                Can&apos;t find the right class?{" "}
-                <em className="not-italic text-[#006644]/30">We&apos;ll create one for you.</em>
-              </h2>
-            </div>
-            <div className="md:col-span-5 flex flex-col items-start md:items-end gap-6">
-              <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right">
-                Bespoke experiences for private groups, hen dos, birthdays, and special occasions — at your place or ours.
-              </p>
-              <Link href="/interest">
-                <button className="btn-primary">
-                  Request a private class
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </Link>
-            </div>
-          </div>
+      <section className="px-8 py-20 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
+          <div className="w-px h-12 bg-[#006644]/30 mb-8" />
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">Private bookings</span>
+          <h2
+            className="text-3xl md:text-5xl text-[#1a1a1a] leading-tight mb-5 max-w-xl"
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+          >
+            Something more <em className="not-italic text-[#006644]">personal?</em>
+          </h2>
+          <p className="text-[#6b7280] text-sm leading-relaxed max-w-sm mb-10">
+            We create bespoke cooking experiences for private groups, birthdays, hen dos, and special occasions — at your place or ours.
+          </p>
+          <Link href="/interest">
+            <button className="btn-primary group">
+              Request a private class
+              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </Link>
         </div>
       </section>
 
