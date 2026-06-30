@@ -89,6 +89,10 @@ export default function ClassesPage() {
 
                 {/* Content */}
                 <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10">
+                  {/* Description — absolutely above, fades in on hover */}
+                  <p className="text-white/60 text-sm leading-relaxed mb-4 max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {c.desc}
+                  </p>
                   <div className="flex items-end justify-between">
                     <div>
                       <span className="text-xs tracking-[0.2em] text-white/50 mb-3 block">
@@ -100,11 +104,8 @@ export default function ClassesPage() {
                       >
                         {c.title}
                       </h2>
-                      <p className="text-white/60 text-sm leading-relaxed mt-3 max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {c.desc}
-                      </p>
                     </div>
-                    <div className="shrink-0 ml-6 mb-1">
+                    <div className="shrink-0 ml-6">
                       <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white/20 transition-colors">
                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
