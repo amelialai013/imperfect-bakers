@@ -26,12 +26,12 @@ export default function InterestPage() {
       <section className="bg-[#006644] px-8 pt-20 pb-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
           <div>
-            <span className="section-label">Get in Touch</span>
+            <span className="section-label">Get in touch</span>
             <h1
               className="text-5xl md:text-6xl text-white leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Register Your Interest
+              Register your interest
             </h1>
           </div>
           <div className="flex items-end">
@@ -48,7 +48,7 @@ export default function InterestPage() {
 
           {/* Sidebar */}
           <div className="md:col-span-4">
-            <span className="section-label">What to Expect</span>
+            <span className="section-label">What to expect</span>
             <div className="mt-6 space-y-6">
               {[
                 { step: "01", text: "Fill in the form with your details and class preferences." },
@@ -113,7 +113,7 @@ export default function InterestPage() {
               {/* Class interests */}
               <div>
                 <p className="text-xs tracking-[0.15em] uppercase text-[#006644] mb-1">
-                  Classes of Interest <span className="text-[#006644]">*</span>
+                  Classes of interest <span className="text-[#006644]">*</span>
                 </p>
                 <p className="text-xs text-[#b0a898] mb-4 tracking-wide">Select as many as you like</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#e4dfd5]">
@@ -173,7 +173,7 @@ export default function InterestPage() {
 
               <div className="pt-2">
                 <button type="submit" className="btn-primary w-full sm:w-auto justify-center">
-                  Send My Interest
+                  Send my interest
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

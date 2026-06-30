@@ -115,7 +115,7 @@ export default function ClassesPage() {
       {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
       <section className="py-16 px-8 bg-[#006644]">
         <div className="max-w-7xl mx-auto">
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private Bookings</span>
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private bookings</span>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-16">
             <div>
               <h2

@@ -4,22 +4,22 @@ import Testimonials from "@/components/testimonials";
 const features = [
   {
     number: "01",
-    title: "Fun First",
+    title: "Fun first",
     desc: "Every class is built around laughter, creativity, and enjoying the moment together.",
   },
   {
     number: "02",
-    title: "No Judgement Zone",
+    title: "No judgement zone",
     desc: "Burnt edges? Wonky shapes? We celebrate every attempt — that's where the magic is.",
   },
   {
     number: "03",
-    title: "Build Confidence",
+    title: "Build confidence",
     desc: "Leave each class knowing you can make something amazing, entirely by yourself.",
   },
   {
     number: "04",
-    title: "Real Skills",
+    title: "Real skills",
     desc: "From knife techniques to flavour pairing — practical skills you'll use every single day.",
   },
 ];
@@ -77,7 +77,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
 
           {/* Section header */}
-          <span className="section-label block">Our Philosophy</span>
+          <span className="section-label block">Our philosophy</span>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
             <h2
               className="text-4xl md:text-5xl text-[#006644] leading-tight"

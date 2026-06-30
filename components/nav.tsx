@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
 const links = [
   { label: "Home",        href: "/" },
   { label: "About",       href: "/about" },
-  { label: "Our Classes", href: "/classes" },
+  { label: "Our classes", href: "/classes" },
 ];
 
 export default function Nav() {

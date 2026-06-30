@@ -10,7 +10,7 @@ export default function AboutPage() {
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
       <section className="px-8 pt-16 pb-14 bg-[#faf9f6] border-b border-[#e4dfd5]">
         <div className="max-w-7xl mx-auto">
-          <span className="section-label">Our Story</span>
+          <span className="section-label">Our story</span>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12" style={{ alignItems: "last baseline" }}>
             <h1
               className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
@@ -40,7 +40,7 @@ export default function AboutPage() {
       <section className="py-24 px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
           <div className="md:col-span-4 pt-1">
-            <span className="section-label">Our Vision</span>
+            <span className="section-label">Our vision</span>
           </div>
           <div className="md:col-span-8">
             <h2
@@ -68,7 +68,7 @@ export default function AboutPage() {
 
             {/* Text */}
             <div className="md:col-span-6 order-2 md:order-1">
-              <span className="section-label">Meet the Chef</span>
+              <span className="section-label">Meet the chef</span>
               <h2
                 className="text-4xl md:text-5xl text-[#006644] mb-8 leading-tight"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
@@ -119,7 +119,7 @@ export default function AboutPage() {
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="py-32 px-8 bg-[#006644]">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-8">Join Us</span>
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-8">Join us</span>
           <h2
             className="text-5xl md:text-6xl text-white leading-tight mb-6"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}

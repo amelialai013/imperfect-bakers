@@ -39,9 +39,9 @@ export default function Footer() {
               {[
                 { label: "Home",              href: "/" },
                 { label: "About",             href: "/about" },
-                { label: "Our Classes",       href: "/classes" },
-                { label: "Book a Class",      href: "/book-a-class" },
-                { label: "Register Interest", href: "/interest" },
+                { label: "Our classes",       href: "/classes" },
+                { label: "Book a class",      href: "/book-a-class" },
+                { label: "Register interest", href: "/interest" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="text-white/60 hover:text-white transition-colors">
@@ -54,7 +54,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="md:col-span-3">
-            <h4 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-5">Get in Touch</h4>
+            <h4 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-5">Get in touch</h4>
             <a
               href="mailto:imperfectbakers@outlook.com"
               className="text-sm text-white/60 hover:text-white transition-colors block mb-4 break-all"

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const filters = ["Browse by Class Type", "Browse by Date", "Browse by Age", "Class at My Home"];
+const filters = ["Browse by class type", "Browse by date", "Browse by age", "Class at my home"];
 
 const classTypes = [
   { label: "Sweet Food",               sub: "Cakes, cookies & pastries",     sessions: "1 session" },
@@ -23,7 +23,7 @@ export default function BookAClassPage() {
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
       <section className="bg-[#006644] px-8 pt-16 pb-14">
         <div className="max-w-7xl mx-auto">
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Reserve Your Spot</span>
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Reserve your spot</span>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12" style={{ alignItems: "last baseline" }}>
             <h1
               className="text-4xl md:text-5xl text-white leading-tight tracking-tight"
@@ -117,7 +117,7 @@ export default function BookAClassPage() {
           <div className="mt-20 pt-16 border-t border-[#e4dfd5]">
             <div className="flex flex-col md:flex-row md:items-end gap-10 md:gap-24">
               <div className="flex-1">
-                <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">Private Bookings</span>
+                <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">Private bookings</span>
                 <h2
                   className="text-2xl md:text-3xl text-[#1a1a1a] leading-snug mb-3"
                   style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
