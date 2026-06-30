@@ -45,7 +45,7 @@ export default function BookAClassPage() {
         <div className="max-w-4xl mx-auto">
 
           {/* Filter tabs — minimal text links with underline indicator */}
-          <div className="flex flex-wrap gap-x-8 gap-y-3 pb-6 mb-14 border-b border-[#e4dfd5]">
+          <div className="flex flex-wrap gap-x-8 gap-y-3 pb-6 mb-14">
             {filters.map((f) => (
               <button
                 key={f}
