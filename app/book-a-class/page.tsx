@@ -114,7 +114,7 @@ export default function BookAClassPage() {
           </div>
 
           {/* Private bookings CTA */}
-          <div className="mt-20 pt-16">
+          <div className="mt-10 pt-10">
             <div className="flex flex-col md:flex-row md:items-end gap-10 md:gap-24">
               <div className="flex-1">
                 <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">Private bookings</span>
