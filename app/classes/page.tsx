@@ -23,7 +23,7 @@ const classes = [
     title: "Knife Skills",
     desc: "Chop, dice and julienne like a pro. Safe, impressive techniques for the kitchen.",
     age: "Ages 12+",
-    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=900&auto=format&fit=crop&q=85",
+    image: "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=900&auto=format&fit=crop&q=85",
     longTitle: false,
   },
   {
