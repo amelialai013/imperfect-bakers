@@ -142,7 +142,7 @@ export default function AboutPage() {
                     <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40">Google Reviews</span>
                   </div>
                   <h2
-                    className="text-3xl md:text-4xl text-white leading-tight"
+                    className="text-4xl md:text-[2.75rem] text-white leading-tight"
                     style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                   >
                     Loved your class?<br />
