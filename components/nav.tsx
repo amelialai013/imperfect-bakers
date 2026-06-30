@@ -110,16 +110,23 @@ export default function Nav() {
           style={{ opacity: 0, transition: "opacity 0.25s ease" }}
           className="lg:hidden absolute top-full left-0 right-0 z-50 border-t border-[#e4dfd5] bg-[#faf9f6] shadow-lg px-8 py-6 flex flex-col gap-4"
         >
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="text-sm text-[#006644] tracking-wide py-1"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const active = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={`text-sm tracking-wide py-1 transition-colors ${
+                  active
+                    ? "text-[#006644] font-semibold"
+                    : "text-[#555] font-normal"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <div className="pt-2 flex flex-col gap-3">
             <Link href="/book-a-class" onClick={() => setOpen(false)}>
               <button className="btn-primary btn-sm w-full justify-center">Book a class</button>
