@@ -116,56 +116,55 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── REVIEW FORM ──────────────────────────────────────── */}
       {/* ── GOOGLE REVIEWS CTA ───────────────────────────────── */}
       {/* TODO: Replace GOOGLE_REVIEW_URL with your Google Business Profile review link */}
       {(() => {
         const GOOGLE_REVIEW_URL = "https://g.page/r/YOUR_PLACE_ID/review";
         return (
-          <section className="py-24 px-8 bg-[#faf9f6]">
-            <div className="max-w-7xl mx-auto">
-              <div className="bg-white border border-[#e4dfd5] rounded-2xl px-12 py-16 flex flex-col md:flex-row items-center gap-10">
-                {/* Google icon + stars */}
-                <div className="shrink-0 flex flex-col items-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-14 h-14">
-                    <path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.2-.4-4.7H24v9h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.6 7.3-17.5z"/>
-                    <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.9-6c-2.1 1.4-4.8 2.3-8 2.3-6.1 0-11.3-4.1-13.2-9.7H2.7v6.2C6.7 42.8 14.8 48 24 48z"/>
-                    <path fill="#FBBC05" d="M10.8 28.8c-.5-1.4-.7-2.9-.7-4.8s.3-3.3.7-4.8v-6.2H2.7C1 16.4 0 20.1 0 24s1 7.6 2.7 11z"/>
-                    <path fill="#EA4335" d="M24 9.5c3.4 0 6.5 1.2 8.9 3.5l6.7-6.7C35.9 2.1 30.5 0 24 0 14.8 0 6.7 5.2 2.7 13l8.1 6.2C12.7 13.6 17.9 9.5 24 9.5z"/>
-                  </svg>
-                  <div className="flex gap-0.5">
-                    {[1,2,3,4,5].map((s) => (
-                      <span key={s} className="text-2xl text-[#FBBC05]">★</span>
-                    ))}
-                  </div>
-                  <p className="text-xs text-[#6b7280] tracking-wide">Google Reviews</p>
-                </div>
+          <section className="py-24 px-8 bg-[#006644]">
+            <div className="max-w-7xl mx-auto pl-8 lg:pl-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-end">
 
-                {/* Text */}
-                <div className="flex-1 text-center md:text-left">
-                  <span className="section-label">Leave a Review</span>
+                {/* Left — heading */}
+                <div>
+                  <div className="flex items-center gap-3 mb-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-6 h-6 opacity-70">
+                      <path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.2-.4-4.7H24v9h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.6 7.3-17.5z"/>
+                      <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.9-6c-2.1 1.4-4.8 2.3-8 2.3-6.1 0-11.3-4.1-13.2-9.7H2.7v6.2C6.7 42.8 14.8 48 24 48z"/>
+                      <path fill="#FBBC05" d="M10.8 28.8c-.5-1.4-.7-2.9-.7-4.8s.3-3.3.7-4.8v-6.2H2.7C1 16.4 0 20.1 0 24s1 7.6 2.7 11z"/>
+                      <path fill="#EA4335" d="M24 9.5c3.4 0 6.5 1.2 8.9 3.5l6.7-6.7C35.9 2.1 30.5 0 24 0 14.8 0 6.7 5.2 2.7 13l8.1 6.2C12.7 13.6 17.9 9.5 24 9.5z"/>
+                    </svg>
+                    <div className="flex gap-0.5">
+                      {[1,2,3,4,5].map((s) => (
+                        <span key={s} className="text-base text-[#FBBC05]">★</span>
+                      ))}
+                    </div>
+                    <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40">Google Reviews</span>
+                  </div>
                   <h2
-                    className="text-3xl md:text-4xl text-[#006644] leading-tight mt-2 mb-4"
+                    className="text-4xl md:text-5xl text-white leading-tight"
                     style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                   >
-                    Share Your Experience
+                    Loved your class?<br />
+                    <span className="text-white/40">Tell the world.</span>
                   </h2>
-                  <p className="text-[#6b7280] text-sm leading-relaxed max-w-md">
-                    Loved your class? Your review helps other families discover Imperfect Bakers and means the world to us.
-                  </p>
                 </div>
 
-                {/* CTA */}
-                <div className="shrink-0">
+                {/* Right — body + CTA */}
+                <div className="flex flex-col gap-8 items-start">
+                  <p className="text-white/60 text-base leading-relaxed max-w-sm">
+                    Your review helps other families discover Imperfect Bakers — and means the world to us. It only takes a minute.
+                  </p>
                   <a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
-                    <button className="btn-primary">
+                    <button className="btn-tertiary">
                       Write a review
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                       </svg>
                     </button>
                   </a>
                 </div>
+
               </div>
             </div>
           </section>
