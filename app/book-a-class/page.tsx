@@ -32,7 +32,7 @@ export default function BookAClassPage() {
             >
               <em className="not-italic text-white/50">Book a</em> class
             </h1>
-          <div className="ml-auto">
+          <div className="md:ml-auto">
             <p className="text-white/50 text-base leading-relaxed max-w-sm">
               Browse upcoming sessions and secure your spot in the kitchen.
             </p>

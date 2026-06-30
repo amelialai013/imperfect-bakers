@@ -57,7 +57,7 @@ export default function ClassesPage() {
             >
               Our <em className="not-italic text-[#006644]">classes</em>
             </h1>
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm ml-auto">
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto">
               From beginners to budding foodies, there&apos;s a class for everyone. Pick your adventure.
             </p>
           </div>
