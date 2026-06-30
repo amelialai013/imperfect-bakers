@@ -11,11 +11,11 @@ export default function Footer() {
             <div className="flex items-center gap-3 mb-5">
               <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#006644] text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5" stroke="currentColor" strokeWidth="1.8">
-                  <line x1="12" y1="3" x2="12" y2="5" />
-                  <path d="M6 8 Q12 5 18 8" />
-                  <rect x="5" y="8" width="14" height="10" rx="2" />
-                  <line x1="5" y1="11" x2="3" y2="11" />
-                  <line x1="19" y1="11" x2="21" y2="11" />
+                  <path d="M9 8 Q7.5 6 9 4.5" />
+                  <path d="M15 8 Q13.5 6 15 4.5" />
+                  <path d="M4 11 Q5 19 12 19 Q19 19 20 11" />
+                  <line x1="3.5" y1="11" x2="20.5" y2="11" />
+                  <path d="M17 17.5 Q18 18.5 17 20" />
                 </svg>
               </span>
               <span className="font-bold text-lg tracking-tight"
@@ -61,7 +61,6 @@ export default function Footer() {
             >
               imperfectbakers@outlook.com
             </a>
-            <div className="w-8 h-px bg-white/30 mb-4" />
             <p className="text-xs text-white/40 leading-relaxed">
               Follow along on social for behind-the-scenes kitchen moments.
             </p>
