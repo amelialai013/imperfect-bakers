@@ -109,29 +109,30 @@ export default function ClassesPage() {
               </div>
             </Link>
           ))}
-        </div>
-      </section>
 
-      {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
-      <section className="px-8 py-12 bg-[#faf9f6] border-t border-b border-[#e4dfd5]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-          <div className="flex items-start gap-6">
-            <div className="w-px self-stretch bg-[#006644] shrink-0" />
-            <div>
-              <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-2">Private bookings</span>
-              <h2
-                className="text-xl md:text-2xl text-[#1a1a1a] leading-snug"
-                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-              >
-                Can&apos;t find the right class?
-              </h2>
-              <p className="text-[#6b7280] text-sm leading-relaxed mt-1 max-w-sm">
-                We create bespoke experiences for private groups, birthdays, and special occasions.
-              </p>
+          {/* Private bookings card */}
+          <Link href="/interest" className="md:col-span-2">
+            <div className="group bg-[#1a1a1a] h-[160px] flex items-center justify-between px-10 transition-colors hover:bg-[#006644]">
+              <div>
+                <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/30 mb-2">Private bookings</span>
+                <h2
+                  className="text-white text-2xl md:text-3xl leading-tight"
+                  style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+                >
+                  Can&apos;t find the right class?
+                </h2>
+                <p className="text-white/40 text-sm leading-relaxed mt-1">
+                  Bespoke experiences for private groups, birthdays &amp; special occasions.
+                </p>
+              </div>
+              <div className="shrink-0 ml-10">
+                <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
             </div>
-          </div>
-          <Link href="/interest" className="shrink-0">
-            <button className="btn-secondary">Request a private class</button>
           </Link>
         </div>
       </section>
