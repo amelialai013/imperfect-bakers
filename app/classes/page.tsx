@@ -100,7 +100,7 @@ export default function ClassesPage() {
                     <div className="shrink-0 ml-6">
                       <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white/20 transition-colors">
                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                         </svg>
                       </div>
                     </div>
@@ -157,10 +157,10 @@ export default function ClassesPage() {
       })()}
 
       {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 h-64">
+      <div className="grid grid-cols-1 md:grid-cols-2">
         {/* Photo half */}
         <div
-          className="bg-cover bg-center h-full"
+          className="bg-cover bg-center min-h-[200px] md:min-h-[256px]"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
         />
         {/* Text half */}
