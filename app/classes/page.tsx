@@ -118,7 +118,7 @@ export default function ClassesPage() {
       {(() => {
         const GOOGLE_REVIEW_URL = "https://g.page/r/YOUR_PLACE_ID/review";
         return (
-          <section className="pt-12 pb-6 px-8 bg-[#faf9f6]">
+          <section className="pt-12 pb-24 px-8 bg-[#faf9f6]">
             <div className="max-w-3xl mx-auto text-center">
               <div className="flex items-center justify-center gap-3 mb-8">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-5 h-5">
@@ -158,10 +158,10 @@ export default function ClassesPage() {
       })()}
 
       {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 min-h-64">
+      <div className="grid grid-cols-1 md:grid-cols-2 h-64">
         {/* Photo half */}
         <div
-          className="bg-cover bg-center self-stretch min-h-64"
+          className="bg-cover bg-center h-full"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
         />
         {/* Text half */}
