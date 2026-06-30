@@ -113,8 +113,8 @@ export default function ClassesPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="py-20 pr-8 bg-[#f0ede6]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+      <section className="py-20 bg-[#f0ede6]">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-10">
           <div>
             <span className="section-label">Private Bookings</span>
             <h2
