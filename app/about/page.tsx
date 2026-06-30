@@ -33,7 +33,7 @@ export default function AboutPage() {
         className="w-full h-[55vh] min-h-[360px]"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&auto=format&fit=crop&q=85')",
+            "url('https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?w=1600&auto=format&fit=crop&q=85')",
           backgroundSize: "cover",
           backgroundPosition: "center 30%",
         }}
