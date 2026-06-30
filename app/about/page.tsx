@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Testimonials from "@/components/testimonials";
 
 export const metadata = {
   title: "About | Imperfect Bakers",
@@ -116,9 +115,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* ── TESTIMONIALS ──────────────────────────────────────── */}
-      <Testimonials />
 
       {/* ── REVIEW FORM ──────────────────────────────────────── */}
       {/* ── GOOGLE REVIEWS CTA ───────────────────────────────── */}

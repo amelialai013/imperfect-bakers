@@ -108,32 +108,6 @@ export default function Home() {
         </div>
       </section>
 
-{/* ── CTA BAND ──────────────────────────────────────────── */}
-      <section className="py-16 px-8 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-[#006644] rounded-2xl px-12 py-16 flex flex-col items-center text-center relative overflow-hidden">
-            {/* Decorative circles */}
-            <div className="absolute -left-12 -bottom-12 w-48 h-48 rounded-full bg-white/5" />
-            <div className="absolute -right-8 -bottom-8 w-36 h-36 rounded-full bg-white/5" />
-
-            <h2
-              className="text-4xl md:text-5xl text-white leading-tight mb-8 relative z-10"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              Ready to get messy?
-            </h2>
-            <Link href="/interest" className="relative z-10">
-              <button className="btn-primary-inverse">
-                Register interest
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* ── TESTIMONIALS ──────────────────────────────────────── */}
       <Testimonials />
     </>
