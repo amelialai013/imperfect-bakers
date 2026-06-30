@@ -10,36 +10,42 @@ const classes = [
     desc: "Cakes, cookies, pastries and sweet treats — learn to bake with confidence.",
     age: "All ages",
     image: "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=900&auto=format&fit=crop&q=85",
+    longTitle: false,
   },
   {
     title: "Savoury Food",
     desc: "Pasta, pizza and hearty meals. Master the art of cooking food everyone loves.",
     age: "All ages",
     image: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=900&auto=format&fit=crop&q=85",
+    longTitle: false,
   },
   {
     title: "Knife Skills",
     desc: "Chop, dice and julienne like a pro. Safe, impressive techniques for the kitchen.",
     age: "Ages 12+",
     image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=900&auto=format&fit=crop&q=85",
+    longTitle: false,
   },
   {
     title: "Dietary Requirement Food",
     desc: "Gluten-free, vegan, nut-free and more. Delicious food for every dietary need.",
     age: "All ages",
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&auto=format&fit=crop&q=85",
+    longTitle: true,
   },
   {
     title: "Random Kitchen Fun",
     desc: "Mystery ingredients, wild challenges, zero rules. Always a surprise, always fun.",
     age: "All ages",
     image: "https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?w=900&auto=format&fit=crop&q=85",
+    longTitle: false,
   },
   {
     title: "Private Group Class",
     desc: "Birthdays, hen dos, special occasions — a custom class built just for your group.",
     age: "Groups & celebrations",
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&auto=format&fit=crop&q=85",
+    longTitle: false,
   },
 ];
 
@@ -92,7 +98,7 @@ export default function ClassesPage() {
                     >
                       {c.title}
                     </h2>
-                    <p className="text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 line-clamp-2 md:line-clamp-none">
+                    <p className={`text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ${c.longTitle ? "line-clamp-2" : "line-clamp-3"} md:line-clamp-none`}>
                       {c.desc}
                     </p>
                   </div>
