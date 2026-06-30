@@ -32,32 +32,32 @@ export default function Home() {
         className="relative h-screen min-h-[640px] flex flex-col justify-center"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1800&auto=format&fit=crop&q=85')",
+            "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800&auto=format&fit=crop&q=85')",
           backgroundSize: "cover",
           backgroundPosition: "center 40%",
         }}
       >
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#faf9f6] via-[#faf9f6]/90 to-[#faf9f6]/50" />
 
 
         {/* Hero content */}
         <div className="relative z-10 px-8 md:px-16 max-w-5xl">
           <h1
-            className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] mb-8 tracking-tight"
+            className="text-5xl md:text-7xl lg:text-8xl text-[#1a1a1a] leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Messy hands,<br />
-            <em className="not-italic text-white">delicious</em> food
+            <em className="not-italic text-[#006644]">delicious</em> food
           </h1>
 
-          <p className="text-white/60 text-base md:text-lg max-w-md leading-relaxed mb-10">
+          <p className="text-[#6b7280] text-base md:text-lg max-w-md leading-relaxed mb-10">
             A joyful, hands-on cooking school where you build real kitchen confidence — one imperfect dish at a time.
           </p>
 
           <div className="flex flex-wrap gap-4">
             <Link href="/classes">
-              <button className="btn-primary-inverse group">
+              <button className="btn-primary group">
                 Explore classes
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
@@ -65,7 +65,7 @@ export default function Home() {
               </button>
             </Link>
             <Link href="/interest">
-              <button className="btn-tertiary">Register interest</button>
+              <button className="btn-secondary">Register interest</button>
             </Link>
           </div>
         </div>

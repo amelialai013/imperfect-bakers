@@ -33,7 +33,7 @@ const classes = [
     title: "Random Kitchen Fun",
     desc: "Mystery ingredients, wild challenges, and creative experiments. You never know what you'll make, but you'll always have fun.",
     age: "All ages",
-    image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=900&auto=format&fit=crop&q=85",
+    image: "https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?w=900&auto=format&fit=crop&q=85",
   },
   {
     title: "Private Group Class",
@@ -47,7 +47,7 @@ export default function ClassesPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="px-8 pt-16 pb-14 bg-[#faf9f6] border-b border-[#e4dfd5]">
+      <section className="px-8 pt-16 pb-14 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
           <span className="section-label">What we offer</span>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12" style={{ alignItems: "last baseline" }}>
@@ -78,7 +78,7 @@ export default function ClassesPage() {
                   style={{ backgroundImage: `url('${c.image}')` }}
                 />
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-black/10 transition-all duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-black/30 md:from-black/70 md:via-black/30 md:to-black/10 group-hover:from-black/85 group-hover:via-black/50 group-hover:to-black/30 transition-all duration-500" />
 
                 {/* Content — top aligned */}
                 <div className="absolute inset-0 flex flex-col justify-start p-8 md:p-10">
@@ -116,7 +116,7 @@ export default function ClassesPage() {
       <section className="py-16 px-8 bg-[#006644]">
         <div className="max-w-7xl mx-auto">
           <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private Bookings</span>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-16">
             <div>
               <h2
                 className="text-2xl md:text-3xl text-white leading-snug mb-2"
