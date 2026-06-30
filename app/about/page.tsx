@@ -9,21 +9,24 @@ export default function AboutPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#006644] px-8 pt-20 pb-16">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
-          <div>
-            <span className="section-label">Our Story</span>
+      <section className="px-8 pt-24 pb-20 bg-[#faf9f6] border-b border-[#e4dfd5]">
+        <div className="max-w-7xl mx-auto">
+          <span className="section-label">Our Story</span>
+          <div className="mt-4 flex flex-col md:flex-row md:items-end gap-8 md:gap-20">
             <h1
-              className="text-5xl md:text-6xl text-white leading-tight"
+              className="text-6xl md:text-8xl text-[#1a1a1a] leading-[0.95] tracking-tight shrink-0"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              About Imperfect Bakers
+              About<br />
+              <em className="not-italic text-[#006644]">Imperfect</em><br />
+              Bakers
             </h1>
-          </div>
-          <div className="flex items-end">
-            <p className="text-white/50 text-base leading-relaxed max-w-sm">
-              Getting messy, learning heaps, and having a great time along the way.
-            </p>
+            <div className="md:pb-3 max-w-xs">
+              <div className="w-8 h-px bg-[#006644] mb-6" />
+              <p className="text-[#6b7280] text-base leading-relaxed">
+                Getting messy, learning heaps, and having a great time along the way.
+              </p>
+            </div>
           </div>
         </div>
       </section>
