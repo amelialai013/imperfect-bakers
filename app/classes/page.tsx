@@ -39,6 +39,7 @@ const classes = [
     age: "All ages",
     image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&auto=format&fit=crop&q=85",
     longTitle: false,
+    bgPosition: "center bottom",
   },
   {
     title: "Private Group Class",
@@ -80,8 +81,8 @@ export default function ClassesPage() {
               >
                 {/* Background image */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                  style={{ backgroundImage: `url('${c.image}')` }}
+                  className="absolute inset-0 bg-cover transition-transform duration-700 group-hover:scale-105"
+                  style={{ backgroundImage: `url('${c.image}')`, backgroundPosition: c.bgPosition ?? "center" }}
                 />
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] via-[#1a1a1a]/85 to-[#1a1a1a]/65 md:from-[#1a1a1a]/80 md:via-[#1a1a1a]/50 md:to-[#1a1a1a]/20 group-hover:from-[#1a1a1a] group-hover:via-[#1a1a1a]/85 group-hover:to-[#1a1a1a]/65 transition-all duration-500" />
