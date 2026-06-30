@@ -33,12 +33,12 @@ export default function Testimonials() {
           {/* Featured quote — large */}
           <div className="flex flex-col justify-between">
             <p
-              className="text-white text-2xl md:text-3xl leading-relaxed mb-4"
+              className="text-white text-2xl md:text-3xl leading-relaxed mb-7"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               &ldquo;{featured.quote}&rdquo;
             </p>
-            <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center gap-4 mt-4">
               <div className="w-8 h-px bg-white/30" />
               <p className="text-white/70 text-sm tracking-wide font-medium">
                 {featured.name} · {featured.role}
