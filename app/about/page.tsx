@@ -47,7 +47,6 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
           <div className="md:col-span-4">
             <span className="section-label">Our Vision</span>
-            <div className="w-8 h-px bg-[#e4dfd5] mt-2" />
           </div>
           <div className="md:col-span-8">
             <h2
