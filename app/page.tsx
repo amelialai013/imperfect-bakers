@@ -42,7 +42,7 @@ export default function Home() {
 
 
         {/* Hero content */}
-        <div className="relative z-10 px-8 max-w-5xl pb-24">
+        <div className="relative z-10 px-8 max-w-5xl pb-32">
           <h1
             className="text-5xl md:text-7xl lg:text-8xl text-[#1a1a1a] leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
