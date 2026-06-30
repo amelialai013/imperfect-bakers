@@ -21,7 +21,7 @@ const classes = [
     title: "Knife Skills",
     desc: "Chop, dice, julienne: learn safe and impressive knife techniques that'll make you feel like a professional.",
     age: "Ages 12+",
-    image: "https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=900&auto=format&fit=crop&q=85",
+    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=900&auto=format&fit=crop&q=85",
   },
   {
     title: "Dietary Requirement Food",
