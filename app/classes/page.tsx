@@ -81,28 +81,26 @@ export default function ClassesPage() {
                 <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] via-[#1a1a1a]/85 to-[#1a1a1a]/65 md:from-[#1a1a1a]/80 md:via-[#1a1a1a]/50 md:to-[#1a1a1a]/20 group-hover:from-[#1a1a1a] group-hover:via-[#1a1a1a]/85 group-hover:to-[#1a1a1a]/65 transition-all duration-500" />
 
                 {/* Content — top aligned */}
-                <div className="absolute inset-0 flex flex-col justify-start p-8 md:p-10">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <span className="text-[0.6875rem] tracking-[0.2em] font-semibold text-white/50 mb-3 block uppercase">
-                        {c.age}
-                      </span>
-                      <h2
-                        className="text-white leading-tight text-2xl md:text-3xl"
-                        style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-                      >
-                        {c.title}
-                      </h2>
-                      <p className="text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 line-clamp-3">
-                        {c.desc}
-                      </p>
-                    </div>
-                    <div className="shrink-0 ml-6">
-                      <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
+                <div className="absolute inset-0 flex flex-col justify-between p-8 md:p-10">
+                  <div>
+                    <span className="text-[0.6875rem] tracking-[0.2em] font-semibold text-white/50 mb-3 block uppercase">
+                      {c.age}
+                    </span>
+                    <h2
+                      className="text-white leading-tight text-2xl md:text-3xl"
+                      style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+                    >
+                      {c.title}
+                    </h2>
+                    <p className="text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 line-clamp-3">
+                      {c.desc}
+                    </p>
+                  </div>
+                  <div className="flex justify-end">
+                    <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                      </svg>
                     </div>
                   </div>
                 </div>
