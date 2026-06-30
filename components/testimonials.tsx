@@ -2,17 +2,17 @@ const testimonials = [
   {
     quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.",
     name: "Sarah M.",
-    role: "Parent",
+    role: "Kids Lead Parents",
   },
   {
     quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real.",
     name: "James R.",
-    role: "Adult Student",
+    role: "Savoury Food",
   },
   {
     quote: "The kids lead parents class was a total game-changer. My son taught me how to make pasta from scratch. I'll never forget his little face.",
     name: "Laura K.",
-    role: "Parent",
+    role: "Kids Lead Parents",
   },
 ];
 
@@ -39,11 +39,10 @@ export default function Testimonials() {
               &ldquo;{featured.quote}&rdquo;
             </p>
             <div className="flex items-center gap-4">
-              <div className="w-10 h-px bg-white/30" />
-              <div>
-                <p className="text-white text-sm font-semibold">{featured.name}</p>
-                <p className="text-white/50 text-xs tracking-wide mt-0.5">{featured.role}</p>
-              </div>
+              <div className="w-8 h-px bg-white/30" />
+              <p className="text-white/50 text-xs tracking-wide">
+                {featured.name} · {featured.role}
+              </p>
             </div>
           </div>
 
@@ -55,7 +54,7 @@ export default function Testimonials() {
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-px bg-white/30" />
+                  <div className="w-8 h-px bg-white/30" />
                   <p className="text-white/50 text-xs tracking-wide">
                     {t.name} · {t.role}
                   </p>
