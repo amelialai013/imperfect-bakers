@@ -99,8 +99,8 @@ body {
   border-color: var(--green-deep);
 }
 .btn-primary:hover {
-  background: var(--green-mid);
-  border-color: var(--green-mid);
+  background: #1a1a1a;
+  border-color: #1a1a1a;
 }
 
 /* Secondary — green outline */
