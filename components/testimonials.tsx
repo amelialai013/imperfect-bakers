@@ -2,7 +2,7 @@ const testimonials = [
   {
     quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.",
     name: "Sarah M.",
-    role: "Kids Lead Parents",
+    role: "Sweet Food",
   },
   {
     quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real.",
@@ -10,9 +10,9 @@ const testimonials = [
     role: "Savoury Food",
   },
   {
-    quote: "The kids lead parents class was a total game-changer. My son taught me how to make pasta from scratch. I'll never forget his little face.",
+    quote: "The random kitchen fun class was a total game-changer. My son taught me how to make pasta from scratch. I'll never forget his little face.",
     name: "Laura K.",
-    role: "Kids Lead Parents",
+    role: "Random Kitchen Fun",
   },
 ];
 
