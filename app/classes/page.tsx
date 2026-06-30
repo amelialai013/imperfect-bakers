@@ -112,6 +112,26 @@ export default function ClassesPage() {
         </div>
       </section>
 
+      {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
+      <section className="py-32 px-8 bg-[#006644]">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-8">Private Bookings</span>
+          <h2
+            className="text-5xl md:text-6xl text-white leading-tight mb-6"
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+          >
+            Can&apos;t find the<br />
+            <span className="text-white/40">right class?</span>
+          </h2>
+          <p className="text-white/60 text-base leading-relaxed max-w-sm mx-auto mb-12">
+            We create bespoke experiences for private groups, birthdays, and special occasions — tailored just for you.
+          </p>
+          <Link href="/interest">
+            <button className="btn-primary-inverse">Request a private class</button>
+          </Link>
+        </div>
+      </section>
+
       {/* ── GOOGLE REVIEWS CTA ───────────────────────────────── */}
       {/* TODO: Replace GOOGLE_REVIEW_URL with your Google Business Profile review link */}
       {(() => {
@@ -155,27 +175,6 @@ export default function ClassesPage() {
           </section>
         );
       })()}
-
-      {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#f0ede6]">
-        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-10">
-          <div>
-            <span className="section-label">Private Bookings</span>
-            <h2
-              className="text-3xl md:text-4xl text-[#006644] leading-tight"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              Can&apos;t find the right class?
-            </h2>
-            <p className="text-[#6b7280] text-sm mt-3">
-              We create bespoke experiences for private groups, birthdays, and special occasions.
-            </p>
-          </div>
-          <Link href="/interest">
-            <button className="btn-primary shrink-0">Request a private class</button>
-          </Link>
-        </div>
-      </section>
     </>
   );
 }
