@@ -20,7 +20,7 @@ export default function AboutPage() {
             </h1>
             <div className="md:ml-auto">
               <p className="text-white/50 text-base leading-relaxed max-w-sm">
-                Get messy, learn heaps, and have a great time along the way.
+                Get messy, learn a ton, and have a great time along the way.
               </p>
             </div>
           </div>
