@@ -114,23 +114,22 @@ export default function ClassesPage() {
       </section>
 
       {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
-      <section className="px-8 py-20 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
-          <div className="w-px h-12 bg-[#006644]/30 mb-8" />
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">Private bookings</span>
-          <h2
-            className="text-3xl md:text-5xl text-[#1a1a1a] leading-tight mb-5 max-w-xl"
-            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-          >
-            Something more <em className="not-italic text-[#006644]">personal?</em>
-          </h2>
-          <p className="text-[#6b7280] text-sm leading-relaxed max-w-sm mb-10">
-            We create bespoke cooking experiences for private groups, birthdays, hen dos, and special occasions — at your place or ours.
-          </p>
-          <Link href="/interest">
-            <button className="btn-primary group">
+      <section className="px-8 py-8 bg-[#1a1a1a]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/30 shrink-0">Private bookings</span>
+            <div className="w-px h-4 bg-white/10 shrink-0 hidden sm:block" />
+            <p
+              className="text-white text-base font-medium"
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+            >
+              Looking for something more personal?
+            </p>
+          </div>
+          <Link href="/interest" className="shrink-0">
+            <button className="btn-tertiary btn-sm group">
               Request a private class
-              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             </button>
