@@ -117,26 +117,25 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="py-24 px-8 bg-[#f0ede6]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-          <div>
-            <span className="section-label">Join Us</span>
-            <h2
-              className="text-3xl md:text-4xl text-[#006644] leading-tight"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              Ready to cook with us?
-            </h2>
-            <p className="text-[#6b7280] text-sm mt-3 max-w-sm">
-              Browse upcoming classes or register your interest — we&apos;d love to have you.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 shrink-0">
+      <section className="py-32 px-8 bg-[#006644]">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-8">Join Us</span>
+          <h2
+            className="text-5xl md:text-6xl text-white leading-tight mb-6"
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+          >
+            Ready to get your<br />
+            <span className="text-white/40">hands dirty?</span>
+          </h2>
+          <p className="text-white/60 text-base leading-relaxed max-w-sm mx-auto mb-12">
+            Browse upcoming classes or register your interest — we&apos;d love to have you in the kitchen.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/classes">
-              <button className="btn-primary">See our classes</button>
+              <button className="btn-primary-inverse">See our classes</button>
             </Link>
             <Link href="/interest">
-              <button className="btn-secondary">I&apos;m interested</button>
+              <button className="btn-tertiary">I&apos;m interested</button>
             </Link>
           </div>
         </div>
