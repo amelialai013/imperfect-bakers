@@ -68,9 +68,9 @@ export default function ClassesPage() {
       <section className="pt-4 pb-12 px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
           {classes.map((c, i) => (
-            <Link href="/book-a-class" key={c.title} className={i === 0 ? "md:col-span-2" : ""}>
+            <Link href="/book-a-class" key={c.title}>
               <div
-                className={`group relative overflow-hidden cursor-pointer h-[280px] ${i === 0 ? "md:h-[400px]" : ""}`}
+                className="group relative overflow-hidden cursor-pointer h-[280px]"
               >
                 {/* Background image */}
                 <div
