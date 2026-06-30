@@ -125,6 +125,17 @@ body {
   border-color: rgba(255, 255, 255, 0.9);
 }
 
+/* Primary inverse — white bg, green text (for dark/hero/green backgrounds) */
+.btn-primary-inverse {
+  background: #fff;
+  color: var(--green-deep);
+  border-color: #fff;
+}
+.btn-primary-inverse:hover {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(255, 255, 255, 0.88);
+}
+
 /* Section label */
 .section-label {
   display: block;
