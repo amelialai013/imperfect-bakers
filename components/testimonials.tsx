@@ -49,7 +49,7 @@ export default function Testimonials() {
           {/* Stacked secondary quotes */}
           <div className="grid grid-cols-2 md:grid-cols-1 gap-px bg-white/10 md:bg-transparent md:divide-y md:divide-white/10">
             {rest.map((t) => (
-              <div key={t.name} className="bg-[#006644] px-6 py-6 md:px-0 md:py-8 md:first:pt-0 md:last:pb-0">
+              <div key={t.name} className="bg-[#006644] px-6 pt-6 pb-0 md:px-0 md:py-8 md:first:pt-0 md:last:pb-0">
                 <p className="text-white/70 text-base leading-relaxed mb-6">
                   &ldquo;{t.quote}&rdquo;
                 </p>
