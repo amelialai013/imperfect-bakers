@@ -51,7 +51,7 @@ export default function Home() {
             <em className="not-italic text-[#006644]">delicious</em> food
           </h1>
 
-          <p className="text-[#6b7280] text-base md:text-lg max-w-md leading-relaxed mb-10">
+          <p className="text-[#6b7280] text-base md:text-lg max-w-lg leading-relaxed mb-10">
             A joyful, hands-on cooking school where you build real kitchen confidence — one imperfect dish at a time.
           </p>
 
