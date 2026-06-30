@@ -71,6 +71,7 @@ body {
 
 /* Shared base */
 .btn-primary,
+.btn-primary-inverse,
 .btn-secondary,
 .btn-tertiary {
   display: inline-flex;
