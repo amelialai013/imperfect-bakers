@@ -40,7 +40,7 @@ export default function BookAClassPage() {
       </section>
 
       {/* ── CLASS BROWSER ────────────────────────────────────── */}
-      <section className="py-20 px-8 bg-[#faf9f6]">
+      <section className="pt-10 pb-20 px-8 bg-[#faf9f6]">
         <div className="max-w-4xl mx-auto">
 
           {/* Class list — clean divider rows */}
