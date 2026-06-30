@@ -30,7 +30,7 @@ export default function BookAClassPage() {
               className="text-4xl md:text-5xl text-white leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Book a <em className="not-italic text-white/50">class</em>
+              <em className="not-italic text-white/50">Book a</em> class
             </h1>
           <div className="ml-auto">
             <p className="text-white/50 text-base leading-relaxed max-w-sm">
