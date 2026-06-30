@@ -56,14 +56,14 @@ export default function ClassesPage() {
       <section className="px-8 pt-16 pb-14 bg-[#faf9f6] border-b border-[#e4dfd5]">
         <div className="max-w-7xl mx-auto">
           <span className="section-label">What we offer</span>
-          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12" style={{ alignItems: "last baseline" }}>
             <h1
               className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Our <em className="not-italic text-[#006644]">classes</em>
             </h1>
-            <p className="text-[#6b7280] text-base max-w-sm" style={{ lineHeight: 1.6, marginBottom: "-0.3em" }}>
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
               From beginners to budding foodies, there&apos;s a class for everyone. Pick your adventure.
             </p>
           </div>
