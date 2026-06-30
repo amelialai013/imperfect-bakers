@@ -77,8 +77,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
 
           {/* Section header */}
-          <span className="section-label block pl-8 lg:pl-10">Our Philosophy</span>
-          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12 pl-8 lg:pl-10" style={{ alignItems: "last baseline" }}>
+          <span className="section-label block">Our Philosophy</span>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
             <h2
               className="text-4xl md:text-5xl text-[#006644] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}

@@ -9,7 +9,7 @@ export default function AboutPage() {
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
       <section className="px-8 pt-16 pb-14 bg-[#faf9f6] border-b border-[#e4dfd5]">
-        <div className="max-w-7xl mx-auto pl-8 lg:pl-10">
+        <div className="max-w-7xl mx-auto">
           <span className="section-label">Our Story</span>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12" style={{ alignItems: "last baseline" }}>
             <h1
@@ -38,7 +38,7 @@ export default function AboutPage() {
 
       {/* ── VISION ───────────────────────────────────────────── */}
       <section className="py-24 px-8 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto pl-8 lg:pl-10 grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
           <div className="md:col-span-4 pt-1">
             <span className="section-label">Our Vision</span>
           </div>
@@ -63,7 +63,7 @@ export default function AboutPage() {
 
       {/* ── MEET THE CHEF ────────────────────────────────────── */}
       <section className="py-24 px-8 bg-white">
-        <div className="max-w-7xl mx-auto pl-8 lg:pl-10">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
 
             {/* Text */}
@@ -122,7 +122,7 @@ export default function AboutPage() {
         const GOOGLE_REVIEW_URL = "https://g.page/r/YOUR_PLACE_ID/review";
         return (
           <section className="py-24 px-8 bg-[#006644]">
-            <div className="max-w-7xl mx-auto pl-8 lg:pl-10">
+            <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-end">
 
                 {/* Left — heading */}
@@ -173,7 +173,7 @@ export default function AboutPage() {
 
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="py-24 px-8 bg-[#f0ede6]">
-        <div className="max-w-7xl mx-auto pl-8 lg:pl-10 flex flex-col md:flex-row items-center justify-between gap-10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
           <div>
             <span className="section-label">Join Us</span>
             <h2
