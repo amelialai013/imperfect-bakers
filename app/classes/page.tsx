@@ -70,7 +70,7 @@ export default function ClassesPage() {
           {classes.map((c, i) => (
             <Link href="/book-a-class" key={c.title} className={i === 0 ? "md:col-span-2" : ""}>
               <div
-                className={`group relative overflow-hidden cursor-pointer h-[360px] ${i === 0 ? "md:h-[520px]" : ""}`}
+                className={`group relative overflow-hidden cursor-pointer h-[280px] ${i === 0 ? "md:h-[400px]" : ""}`}
               >
                 {/* Background image */}
                 <div
