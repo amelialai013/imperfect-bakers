@@ -54,9 +54,6 @@ export default function BookAClassPage() {
                 }`}
               >
                 <div className="flex items-baseline gap-7">
-                  <span className="text-[0.6875rem] font-semibold tracking-[0.2em] text-[#c8c0b4] w-5 shrink-0 select-none">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
                   <div>
                     <p
                       className={`text-lg font-medium leading-snug transition-colors ${
