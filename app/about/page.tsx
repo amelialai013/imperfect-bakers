@@ -9,24 +9,21 @@ export default function AboutPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="px-8 pt-24 pb-20 bg-[#faf9f6] border-b border-[#e4dfd5]">
-        <div className="max-w-7xl mx-auto">
-          <span className="section-label">Our Story</span>
-          <div className="mt-4 flex flex-col md:flex-row md:items-end gap-8 md:gap-20">
+      <section className="px-8 pt-16 pb-14 bg-[#faf9f6] border-b border-[#e4dfd5]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+          <div>
+            <span className="section-label">Our Story</span>
             <h1
-              className="text-6xl md:text-8xl text-[#1a1a1a] leading-[0.95] tracking-tight shrink-0"
+              className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight mt-3"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              About<br />
-              <em className="not-italic text-[#006644]">Imperfect</em><br />
-              Bakers
+              About <em className="not-italic text-[#006644]">Imperfect</em> Bakers
             </h1>
-            <div className="md:pb-3 max-w-xs">
-              <div className="w-8 h-px bg-[#006644] mb-6" />
-              <p className="text-[#6b7280] text-base leading-relaxed">
-                Getting messy, learning heaps, and having a great time along the way.
-              </p>
-            </div>
+          </div>
+          <div className="flex items-end">
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
+              Getting messy, learning heaps, and having a great time along the way.
+            </p>
           </div>
         </div>
       </section>
@@ -45,7 +42,7 @@ export default function AboutPage() {
       {/* ── VISION ───────────────────────────────────────────── */}
       <section className="py-24 px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
-          <div className="md:col-span-4">
+          <div className="md:col-span-4 pt-1">
             <span className="section-label">Our Vision</span>
           </div>
           <div className="md:col-span-8">
