@@ -25,26 +25,21 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── HERO IMAGE ───────────────────────────────────────── */}
-      <section
-        className="w-full h-[55vh] min-h-[360px]"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?w=1600&auto=format&fit=crop&q=85')",
-          backgroundSize: "cover",
-          backgroundPosition: "center 30%",
-        }}
-      />
-
       {/* ── VISION ───────────────────────────────────────────── */}
       <section className="py-24 px-8 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
-          <div className="md:col-span-4 pt-1">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <div
+            className="w-full h-[360px] md:h-[440px]"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?w=1600&auto=format&fit=crop&q=85')",
+              backgroundSize: "cover",
+              backgroundPosition: "center 30%",
+            }}
+          />
+          <div>
             <span className="section-label">Our vision</span>
-          </div>
-          <div className="md:col-span-8">
             <h2
-              className="text-3xl md:text-4xl text-[#006644] mb-8 leading-snug"
+              className="text-3xl md:text-4xl text-[#006644] mt-4 mb-8 leading-snug"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Building confidence in the kitchen, one imperfect dish at a time.
