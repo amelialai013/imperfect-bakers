@@ -119,14 +119,14 @@ export default function InterestPage() {
             </div>
 
             {/* Submit */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pt-10">
-              <button type="submit" className="btn-primary group shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-10 pt-10">
+              <button type="submit" className="btn-primary group shrink-0 self-start">
                 Register interest
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#c4bdb3] mb-1">Or reach out directly</span>
                 <a
                   href="mailto:imperfectbakers@outlook.com"
