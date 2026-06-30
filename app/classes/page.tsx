@@ -88,7 +88,7 @@ export default function ClassesPage() {
                         {c.age}
                       </span>
                       <h2
-                        className={`text-white leading-tight ${i === 0 ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl"}`}
+                        className="text-white leading-tight text-2xl md:text-3xl"
                         style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                       >
                         {c.title}
