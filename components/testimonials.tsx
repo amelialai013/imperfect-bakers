@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 
 const testimonials = [
   {
@@ -20,6 +21,7 @@ const testimonials = [
 
 export default function Testimonials() {
   const [featured, ...rest] = testimonials;
+  const [active, setActive] = useState(0);
 
   return (
     <section className="bg-[#006644] py-24 px-8">
@@ -47,24 +49,61 @@ export default function Testimonials() {
             </div>
           </div>
 
-          {/* Stacked secondary quotes */}
-          {/* Mobile: carousel — Desktop: stacked */}
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-0 md:overflow-visible md:flex-col scrollbar-hide">
-            {rest.map((t, i) => (
-              <React.Fragment key={t.name}>
-                {i > 0 && (
-                  <div className="hidden md:block w-full border-t border-white/10 my-8" />
-                )}
-                <div className="w-full shrink-0 snap-center md:shrink md:w-auto md:px-0 md:py-0">
-                  <p className="text-white/70 text-base leading-relaxed mb-6">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-                  <p className="text-white/50 text-xs tracking-wide">
-                    {t.name} · {t.role}
-                  </p>
-                </div>
-              </React.Fragment>
-            ))}
+          {/* Secondary quotes — carousel on mobile, stacked on desktop */}
+          <div>
+            {/* Mobile carousel */}
+            <div className="md:hidden relative overflow-hidden">
+              <div
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${active * 100}%)` }}
+              >
+                {rest.map((t) => (
+                  <div key={t.name} className="w-full shrink-0">
+                    <p className="text-white/70 text-base leading-relaxed mb-6">
+                      &ldquo;{t.quote}&rdquo;
+                    </p>
+                    <p className="text-white/50 text-xs tracking-wide">
+                      {t.name} · {t.role}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Dot indicators */}
+              <div className="flex items-center gap-2 mt-8">
+                {rest.map((t, i) => (
+                  <button
+                    key={t.name}
+                    onClick={() => setActive(i)}
+                    className={`transition-all duration-300 rounded-full ${
+                      i === active
+                        ? "w-6 h-1.5 bg-white"
+                        : "w-1.5 h-1.5 bg-white/30"
+                    }`}
+                    aria-label={`Go to ${t.name}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop stacked */}
+            <div className="hidden md:flex md:flex-col">
+              {rest.map((t, i) => (
+                <React.Fragment key={t.name}>
+                  {i > 0 && (
+                    <div className="w-full border-t border-white/10 my-8" />
+                  )}
+                  <div>
+                    <p className="text-white/70 text-base leading-relaxed mb-6">
+                      &ldquo;{t.quote}&rdquo;
+                    </p>
+                    <p className="text-white/50 text-xs tracking-wide">
+                      {t.name} · {t.role}
+                    </p>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
           </div>
 
         </div>
