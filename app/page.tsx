@@ -29,7 +29,7 @@ export default function Home() {
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section
-        className="relative h-screen min-h-[640px] flex flex-col justify-center"
+        className="relative h-[calc(100vh-80px)] min-h-[560px] flex flex-col justify-end pb-16 md:pb-20"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800&auto=format&fit=crop&q=85')",
@@ -73,7 +73,7 @@ export default function Home() {
       </section>
 
       {/* ── WHY IMPERFECT BAKERS ──────────────────────────────── */}
-      <section className="pt-1 pb-28 px-8 bg-[#faf9f6]">
+      <section className="pt-16 pb-28 px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
 
           {/* Section header */}
