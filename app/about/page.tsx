@@ -110,7 +110,7 @@ export default function AboutPage() {
                 className="w-full aspect-[4/5] object-cover"
                 style={{
                   backgroundImage:
-                    "url('https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=900&auto=format&fit=crop&q=85')",
+                    "url('/sarah.jpg')",
                   backgroundSize: "cover",
                   backgroundPosition: "center top",
                 }}
