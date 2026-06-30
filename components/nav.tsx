@@ -77,8 +77,6 @@ export default function Nav() {
             );
           })}
 
-          <div className="w-px h-5 bg-[#e4dfd5] mx-1" />
-
           <div className="flex items-center gap-4">
             <Link href="/book-a-class" className="shrink-0">
               <button className="btn-primary btn-sm">Book a class</button>
