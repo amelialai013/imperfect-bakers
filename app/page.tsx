@@ -57,9 +57,9 @@ export default function Home() {
 
           <div className="flex flex-wrap gap-4">
             <Link href="/classes">
-              <button className="btn-primary-inverse">
+              <button className="btn-primary-inverse group">
                 Explore classes
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
