@@ -43,7 +43,7 @@ const classes = [
   {
     title: "Private Group Class",
     desc: "Birthdays, hen dos, special occasions — a custom class built just for your group.",
-    age: "Groups & celebrations",
+    age: "Custom",
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&auto=format&fit=crop&q=85",
     longTitle: false,
   },
