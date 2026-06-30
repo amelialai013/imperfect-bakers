@@ -113,37 +113,6 @@ export default function ClassesPage() {
         </div>
       </section>
 
-      {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
-      <div className="px-8 pb-4 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 h-56">
-          {/* Photo half */}
-          <div
-            className="bg-cover bg-center"
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
-          />
-          {/* Text half */}
-          <div className="bg-[#006644] flex flex-col justify-center px-10 gap-4">
-            <div>
-              <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private bookings</span>
-              <h2
-                className="text-2xl text-white leading-snug"
-                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-              >
-                Looking for something more personal?
-              </h2>
-            </div>
-            <Link href="/interest" className="self-start">
-              <button className="btn-tertiary btn-sm group">
-                Request a private class
-                <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* ── GOOGLE REVIEWS CTA ───────────────────────────────── */}
       {/* TODO: Replace GOOGLE_REVIEW_URL with your Google Business Profile review link */}
       {(() => {
@@ -187,6 +156,35 @@ export default function ClassesPage() {
           </section>
         );
       })()}
+
+      {/* ── PRIVATE BOOKINGS ─────────────────────────────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 h-64">
+        {/* Photo half */}
+        <div
+          className="bg-cover bg-center"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
+        />
+        {/* Text half */}
+        <div className="bg-[#006644] flex flex-col justify-center px-12 gap-4">
+          <div>
+            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private bookings</span>
+            <h2
+              className="text-2xl text-white leading-snug"
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+            >
+              Looking for something more personal?
+            </h2>
+          </div>
+          <Link href="/interest" className="self-start">
+            <button className="btn-tertiary btn-sm group">
+              Request a private class
+              <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </Link>
+        </div>
+      </div>
     </>
   );
 }
