@@ -200,6 +200,20 @@ body {
 .input-underline::placeholder {
   color: #c4bdb3;
 }
+textarea.input-underline::-webkit-scrollbar {
+  width: 3px;
+}
+textarea.input-underline::-webkit-scrollbar-track {
+  background: transparent;
+}
+textarea.input-underline::-webkit-scrollbar-thumb {
+  background: #e4dfd5;
+  border-radius: 9999px;
+}
+textarea.input-underline::-webkit-scrollbar-thumb:hover {
+  background: #c4bdb3;
+}
+
 select.input-underline {
   appearance: none;
   cursor: pointer;

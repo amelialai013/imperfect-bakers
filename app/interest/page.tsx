@@ -30,7 +30,7 @@ export default function InterestPage() {
               className="text-4xl md:text-5xl text-white leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              <em className="not-italic text-white/50">Contact</em> us
+              <em className="not-italic text-white/50">Register</em> interest
             </h1>
             <div className="md:ml-auto">
               <p className="text-white/50 text-base leading-relaxed max-w-sm">
@@ -62,9 +62,9 @@ export default function InterestPage() {
               </div>
               <div>
                 <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
-                  Phone <span className="text-[#c4bdb3] normal-case font-normal tracking-normal text-xs ml-1">optional</span>
+                  Phone
                 </label>
-                <input type="tel" placeholder="07700 900000" className="input-underline" />
+                <input type="tel" placeholder="0400 000 000" className="input-underline" />
               </div>
               <div>
                 <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
@@ -72,15 +72,12 @@ export default function InterestPage() {
                 </label>
                 <select className="input-underline text-[#1a1a1a]">
                   <option value="">Select your level</option>
-                  <option value="complete_beginner">Complete Beginner</option>
-                  <option value="some_experience">Some Experience</option>
-                  <option value="confident_cook">Confident Cook</option>
+                  <option value="complete_beginner">Complete beginner</option>
+                  <option value="some_experience">Some experience</option>
+                  <option value="confident_cook">Confident cook</option>
                 </select>
               </div>
             </div>
-
-            {/* Divider */}
-            <div className="border-t border-[#e4dfd5]" />
 
             {/* Class interests */}
             <div>
@@ -109,35 +106,36 @@ export default function InterestPage() {
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-[#e4dfd5]" />
-
             {/* Notes */}
             <div>
               <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
                 Anything else?
               </label>
               <textarea
-                rows={3}
+                rows={2}
                 placeholder="Allergies, group sizes, special occasions..."
                 className="input-underline resize-none"
               />
             </div>
 
             {/* Submit */}
-            <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pt-10">
               <button type="submit" className="btn-primary group shrink-0">
-                Send my interest
+                Register interest
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
-              <p className="text-sm text-[#b0a898] leading-relaxed">
-                Or email us at{" "}
-                <a href="mailto:imperfectbakers@outlook.com" className="text-[#006644] hover:underline transition-colors">
+              <div className="text-right">
+                <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#c4bdb3] mb-1">Or reach out directly</span>
+                <a
+                  href="mailto:imperfectbakers@outlook.com"
+                  className="text-sm text-[#1a1a1a] hover:text-[#006644] transition-colors duration-200"
+                  style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+                >
                   imperfectbakers@outlook.com
                 </a>
-              </p>
+              </div>
             </div>
 
           </form>
