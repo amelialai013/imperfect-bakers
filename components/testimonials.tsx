@@ -2,7 +2,7 @@ const testimonials = [
   {
     quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.",
     name: "Sarah M.",
-    role: "Sweet Food",
+    role: "Knife Skills",
   },
   {
     quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real.",
