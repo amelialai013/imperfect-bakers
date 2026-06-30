@@ -164,19 +164,19 @@ export default function ClassesPage() {
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
         />
         {/* Text half */}
-        <div className="bg-[#006644] flex flex-col justify-center px-8 py-10 md:py-12 gap-8">
+        <div className="bg-[#006644] flex flex-col justify-center px-12 py-10 md:py-12 gap-8">
           <div>
             <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private bookings</span>
             <h2
-              className="text-2xl text-white leading-snug"
+              className="text-3xl md:text-4xl text-white leading-snug"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Looking for something more personal?
             </h2>
           </div>
           <Link href="/interest" className="self-start">
-            <button className="btn-tertiary btn-sm group">
-              Request a private class
+            <button className="btn-tertiary group">
+              Request private class
               <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>

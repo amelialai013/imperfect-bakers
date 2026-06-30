@@ -79,7 +79,7 @@ export default function Nav() {
 
           <div className="flex items-center gap-4">
             <Link href="/book-a-class" className="shrink-0">
-              <button className="btn-primary btn-sm">Book a class</button>
+              <button className="btn-primary btn-sm">Book class</button>
             </Link>
             <Link href="/interest" className="shrink-0">
               <button className="btn-secondary btn-sm">I&apos;m interested</button>
@@ -127,7 +127,7 @@ export default function Nav() {
           })}
           <div className="pt-2 flex flex-col gap-3">
             <Link href="/book-a-class" onClick={() => setOpen(false)}>
-              <button className="btn-primary btn-sm w-full justify-center">Book a class</button>
+              <button className="btn-primary btn-sm w-full justify-center">Book class</button>
             </Link>
             <Link href="/interest" onClick={() => setOpen(false)}>
               <button className="btn-secondary btn-sm w-full justify-center">I&apos;m interested</button>
