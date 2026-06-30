@@ -32,7 +32,7 @@ export default function Testimonials() {
           Testimonials
         </span>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
 
           {/* Featured quote — large */}
           <div className="flex flex-col justify-between">
