@@ -87,14 +87,11 @@ export default function ClassesPage() {
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 group-hover:from-black/70 transition-all duration-300" />
 
-                {/* Content — slides up on hover to reveal description */}
-                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10 translate-y-20 group-hover:translate-y-0 transition-transform duration-300 ease-out">
-                  <p className="text-white/70 text-sm leading-relaxed mb-5 max-w-md">
-                    {c.desc}
-                  </p>
+                {/* Content */}
+                <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10">
                   <div className="flex items-end justify-between">
                     <div>
-                      <span className="text-xs tracking-[0.2em] text-white/50 mb-2 block">
+                      <span className="text-xs tracking-[0.2em] text-white/50 mb-3 block">
                         {String(i + 1).padStart(2, "0")} · {c.age}
                       </span>
                       <h2
@@ -103,9 +100,12 @@ export default function ClassesPage() {
                       >
                         {c.title}
                       </h2>
+                      <p className="text-white/60 text-sm leading-relaxed mt-3 max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {c.desc}
+                      </p>
                     </div>
-                    <div className="shrink-0 ml-6">
-                      <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                    <div className="shrink-0 ml-6 mb-1">
+                      <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white/20 transition-colors">
                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
