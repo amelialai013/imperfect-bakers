@@ -37,7 +37,7 @@ const classes = [
     title: "Random Kitchen Fun",
     desc: "Mystery ingredients, wild challenges, zero rules. Always a surprise, always fun.",
     age: "All ages",
-    image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=900&auto=format&fit=crop&q=85",
+    image: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=900&auto=format&fit=crop&q=85",
     longTitle: false,
   },
   {
