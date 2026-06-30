@@ -142,8 +142,9 @@ body {
   color: var(--green-deep);
 }
 .btn-primary-inverse:hover {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(255, 255, 255, 0.88);
+  background: var(--green-deep);
+  color: #fff;
+  border-color: var(--green-deep);
 }
 
 /* Section label */
