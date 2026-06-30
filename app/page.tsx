@@ -77,8 +77,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
 
           {/* Section header */}
-          <span className="section-label pl-8 lg:pl-10">Our Philosophy</span>
-          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12 pl-8 lg:pl-10" style={{ alignItems: "last baseline" }}>
+          <span className="section-label">Our Philosophy</span>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
             <h2
               className="text-4xl md:text-5xl text-[#006644] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
@@ -93,7 +93,7 @@ export default function Home() {
           {/* Feature grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#e4dfd5]">
             {features.map((f) => (
-              <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10">
+              <div key={f.title} className="bg-[#faf9f6] pt-8 pr-8 pb-8 pl-0 lg:pt-10 lg:pr-10 lg:pb-10 lg:pl-0">
                 <span className="text-xs tracking-[0.2em] text-[#006644] mb-6 block">{f.number}</span>
                 <h3
                   className="text-xl text-[#006644] mb-4 leading-snug"
