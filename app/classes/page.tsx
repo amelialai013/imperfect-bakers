@@ -7,37 +7,37 @@ export const metadata = {
 const classes = [
   {
     title: "Sweet Food",
-    desc: "Dive into the wonderful world of cakes, cookies, pastries and sweet treats. Learn to bake with confidence and creativity.",
+    desc: "Cakes, cookies, pastries and sweet treats — learn to bake with confidence.",
     age: "All ages",
     image: "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=900&auto=format&fit=crop&q=85",
   },
   {
     title: "Savoury Food",
-    desc: "Pasta, pizza, and more. Master the art of making meals that bring everyone to the table.",
+    desc: "Pasta, pizza and hearty meals. Master the art of cooking food everyone loves.",
     age: "All ages",
     image: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=900&auto=format&fit=crop&q=85",
   },
   {
     title: "Knife Skills",
-    desc: "Chop, dice, julienne: learn safe and impressive knife techniques that'll make you feel like a professional.",
+    desc: "Chop, dice and julienne like a pro. Safe, impressive techniques for the kitchen.",
     age: "Ages 12+",
     image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=900&auto=format&fit=crop&q=85",
   },
   {
     title: "Dietary Requirement Food",
-    desc: "Gluten-free, vegan, nut-free and more. Delicious food that everyone can enjoy, no matter the dietary need.",
+    desc: "Gluten-free, vegan, nut-free and more. Delicious food for every dietary need.",
     age: "All ages",
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&auto=format&fit=crop&q=85",
   },
   {
     title: "Random Kitchen Fun",
-    desc: "Mystery ingredients, wild challenges, and creative experiments. You never know what you'll make, but you'll always have fun.",
+    desc: "Mystery ingredients, wild challenges, zero rules. Always a surprise, always fun.",
     age: "All ages",
     image: "https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?w=900&auto=format&fit=crop&q=85",
   },
   {
     title: "Private Group Class",
-    desc: "Celebrate in style. Whether it's a birthday party, hens do, or any special occasion — we'll create a custom class just for your group.",
+    desc: "Birthdays, hen dos, special occasions — a custom class built just for your group.",
     age: "Groups & celebrations",
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&auto=format&fit=crop&q=85",
   },
