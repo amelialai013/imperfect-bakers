@@ -73,7 +73,7 @@ export default function Home() {
       </section>
 
       {/* ── WHY IMPERFECT BAKERS ──────────────────────────────── */}
-      <section className="py-28 px-8 bg-[#faf9f6]">
+      <section className="pt-1 pb-28 px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
 
           {/* Section header */}

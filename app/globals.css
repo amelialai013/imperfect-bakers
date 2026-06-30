@@ -194,6 +194,8 @@ body {
 }
 .input-underline:focus {
   border-bottom-color: #006644;
+  outline: none;
+  box-shadow: none;
 }
 .input-underline::placeholder {
   color: #c4bdb3;
