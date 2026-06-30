@@ -1,3 +1,5 @@
+import React from "react";
+
 const testimonials = [
   {
     quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.",
@@ -48,11 +50,11 @@ export default function Testimonials() {
           {/* Stacked secondary quotes */}
           <div className="grid grid-cols-2 md:flex md:flex-col items-start">
             {rest.map((t, i) => (
-              <>
+              <React.Fragment key={t.name}>
                 {i > 0 && (
-                  <div key={`divider-${i}`} className="hidden md:block w-full border-t border-white/10 my-8" />
+                  <div className="hidden md:block w-full border-t border-white/10 my-8" />
                 )}
-                <div key={t.name} className={`px-6 md:px-0 ${i === 0 ? "border-r border-white/10 md:border-r-0" : ""}`}>
+                <div className={`px-6 md:px-0 ${i === 0 ? "border-r border-white/10 md:border-r-0" : ""}`}>
                   <p className="text-white/70 text-base leading-relaxed mb-6">
                     &ldquo;{t.quote}&rdquo;
                   </p>
@@ -62,7 +64,7 @@ export default function Testimonials() {
                     </p>
                   </div>
                 </div>
-              </>
+              </React.Fragment>
             ))}
           </div>
 
