@@ -76,7 +76,7 @@ export default function BookAClassPage() {
                   <svg
                     className={`w-4 h-4 transition-all duration-300 ${
                       activeClass === c.label
-                        ? "text-[#006644] rotate-45"
+                        ? "text-[#006644]"
                         : "text-[#c8c0b4] group-hover:text-[#006644] group-hover:translate-x-1"
                     }`}
                     fill="none" stroke="currentColor" viewBox="0 0 24 24"
