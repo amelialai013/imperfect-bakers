@@ -41,7 +41,7 @@ export default function BookAClassPage() {
 
       {/* ── CLASS BROWSER ────────────────────────────────────── */}
       <section className="pt-10 pb-20 px-8 bg-[#faf9f6]">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
 
           {/* Class list — clean divider rows */}
           <div>
