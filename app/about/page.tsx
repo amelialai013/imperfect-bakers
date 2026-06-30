@@ -21,7 +21,7 @@ export default function AboutPage() {
             </h1>
           </div>
           <div className="flex items-end">
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
+            <p className="text-[#6b7280] text-base max-w-sm" style={{ lineHeight: 1.6, marginBottom: "-0.3em" }}>
               Getting messy, learning heaps, and having a great time along the way.
             </p>
           </div>
