@@ -29,7 +29,7 @@ export default function Home() {
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section
-        className="relative h-screen min-h-[640px] flex flex-col justify-end"
+        className="relative h-screen min-h-[640px] flex flex-col justify-center"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1800&auto=format&fit=crop&q=85')",
@@ -42,7 +42,7 @@ export default function Home() {
 
 
         {/* Hero content */}
-        <div className="relative z-10 px-8 pb-16 md:pb-24 max-w-5xl">
+        <div className="relative z-10 px-8 md:px-16 max-w-5xl">
           <h1
             className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
