@@ -65,7 +65,7 @@ export default function ClassesPage() {
             </h1>
           </div>
           <div className="flex items-end">
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
+            <p className="text-[#6b7280] text-base max-w-sm" style={{ lineHeight: 1.6, marginBottom: "-0.3em" }}>
               From beginners to budding foodies, there&apos;s a class for everyone. Pick your adventure.
             </p>
           </div>
