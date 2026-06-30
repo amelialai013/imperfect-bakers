@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const filters = ["Browse by class type", "Browse by date", "Browse by age", "Class at my home"];
+
 
 const classTypes = [
   { label: "Sweet Food",               sub: "Cakes, cookies & pastries",     sessions: "1 session" },
@@ -15,7 +15,6 @@ const classTypes = [
 ];
 
 export default function BookAClassPage() {
-  const [activeFilter, setActiveFilter] = useState("Browse by Class Type");
   const [activeClass, setActiveClass] = useState<string | null>(null);
 
   return (
@@ -43,26 +42,6 @@ export default function BookAClassPage() {
       {/* ── CLASS BROWSER ────────────────────────────────────── */}
       <section className="py-20 px-8 bg-[#faf9f6]">
         <div className="max-w-4xl mx-auto">
-
-          {/* Filter tabs — minimal text links with underline indicator */}
-          <div className="flex flex-wrap gap-x-8 gap-y-3 pb-6 mb-14">
-            {filters.map((f) => (
-              <button
-                key={f}
-                onClick={() => setActiveFilter(f)}
-                className={`relative text-sm tracking-wide pb-0.5 transition-colors ${
-                  activeFilter === f
-                    ? "text-[#1a1a1a] font-medium"
-                    : "text-[#6b7280] hover:text-[#1a1a1a]"
-                }`}
-              >
-                {f}
-                {activeFilter === f && (
-                  <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#006644]" />
-                )}
-              </button>
-            ))}
-          </div>
 
           {/* Class list — clean divider rows */}
           <div>
