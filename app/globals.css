@@ -178,3 +178,32 @@ body {
 .input-elegant::placeholder {
   color: #b0a898;
 }
+
+/* Underline input — minimal style for elegant forms */
+.input-underline {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #e4dfd5;
+  padding: 12px 0;
+  font-size: 1rem;
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+.input-underline:focus {
+  border-bottom-color: #006644;
+}
+.input-underline::placeholder {
+  color: #c4bdb3;
+}
+select.input-underline {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23b0a898'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  background-size: 16px;
+  padding-right: 24px;
+}
