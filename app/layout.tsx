@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll-to-top";
+import PageTransition from "@/components/page-transition";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,7 +34,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ScrollToTop />
         <Nav />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1"><PageTransition>{children}</PageTransition></main>
         <Footer />
       </body>
     </html>
