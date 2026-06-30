@@ -29,7 +29,7 @@ export default function Home() {
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section
-        className="relative h-[75vh] min-h-[580px] flex flex-col justify-center"
+        className="relative h-[60vh] min-h-[520px] flex flex-col justify-center"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800&auto=format&fit=crop&q=85')",
