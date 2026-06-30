@@ -18,7 +18,7 @@ export default function AboutPage() {
             >
               Who <em className="not-italic text-[#006644]">we</em> are
             </h1>
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm">
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm ml-auto">
               Get messy, learn heaps, and have a great time along the way.
             </p>
           </div>
