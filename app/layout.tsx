@@ -3,6 +3,7 @@ import { Inter, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
+import ScrollToTop from "@/components/scroll-to-top";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${dmSans.variable} h-full`}>
       <body className="min-h-full flex flex-col">
+        <ScrollToTop />
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />
