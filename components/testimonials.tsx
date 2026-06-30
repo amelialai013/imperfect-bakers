@@ -21,7 +21,7 @@ export default function Testimonials() {
 
   return (
     <section className="bg-[#006644] py-24 px-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto pl-8 lg:pl-10">
 
         {/* Label */}
         <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-12">
