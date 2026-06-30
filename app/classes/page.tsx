@@ -78,7 +78,7 @@ export default function ClassesPage() {
                   style={{ backgroundImage: `url('${c.image}')` }}
                 />
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-black/30 md:from-black/70 md:via-black/30 md:to-black/10 group-hover:from-black/85 group-hover:via-black/50 group-hover:to-black/30 transition-all duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/85 via-[#1a1a1a]/50 to-[#1a1a1a]/30 md:from-[#1a1a1a]/70 md:via-[#1a1a1a]/30 md:to-[#1a1a1a]/10 group-hover:from-[#1a1a1a]/85 group-hover:via-[#1a1a1a]/50 group-hover:to-[#1a1a1a]/30 transition-all duration-500" />
 
                 {/* Content — top aligned */}
                 <div className="absolute inset-0 flex flex-col justify-start p-8 md:p-10">
