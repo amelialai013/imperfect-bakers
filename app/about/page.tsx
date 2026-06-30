@@ -10,17 +10,15 @@ export default function AboutPage() {
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
       <section className="px-8 pt-16 pb-14 bg-[#faf9f6] border-b border-[#e4dfd5]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
-          <div>
-            <span className="section-label">Our Story</span>
+        <div className="max-w-7xl mx-auto">
+          <span className="section-label">Our Story</span>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
             <h1
-              className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight mt-3"
+              className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               About <em className="not-italic text-[#006644]">Imperfect</em> Bakers
             </h1>
-          </div>
-          <div className="flex items-end">
             <p className="text-[#6b7280] text-base max-w-sm" style={{ lineHeight: 1.6, marginBottom: "-0.3em" }}>
               Getting messy, learning heaps, and having a great time along the way.
             </p>
