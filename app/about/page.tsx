@@ -173,7 +173,7 @@ export default function AboutPage() {
 
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="py-24 px-8 bg-[#f0ede6]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+        <div className="max-w-7xl mx-auto pl-8 lg:pl-10 flex flex-col md:flex-row items-center justify-between gap-10">
           <div>
             <span className="section-label">Join Us</span>
             <h2
