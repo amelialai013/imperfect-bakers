@@ -47,8 +47,8 @@ export default function Home() {
             className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
-            <em className="not-italic text-[#006644]">Messy</em> hands,<br />
-            <em className="not-italic text-[#006644]">delicious</em> food
+            Messy hands,<br />
+            <em className="not-italic text-white">delicious</em> food
           </h1>
 
           <p className="text-white/60 text-base md:text-lg max-w-md leading-relaxed mb-10">
