@@ -92,7 +92,7 @@ export default function ClassesPage() {
                     >
                       {c.title}
                     </h2>
-                    <p className="text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 line-clamp-3">
+                    <p className="text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 line-clamp-2 md:line-clamp-none">
                       {c.desc}
                     </p>
                   </div>
