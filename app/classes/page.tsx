@@ -137,7 +137,7 @@ export default function ClassesPage() {
             </p>
           </div>
           <Link href="/interest">
-            <button className="btn-primary shrink-0">Request a Private Class</button>
+            <button className="btn-primary shrink-0">Request a private class</button>
           </Link>
         </div>
       </section>

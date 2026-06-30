@@ -30,7 +30,7 @@ export default function BookAClassPage() {
               className="text-5xl md:text-6xl text-white leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Book a Class
+              Book a class
             </h1>
           </div>
           <div className="flex items-end">
@@ -137,7 +137,7 @@ export default function BookAClassPage() {
               </div>
               <Link href="/interest" className="shrink-0">
                 <button className="btn-tertiary">
-                  Request a Class
+                  Request a class
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

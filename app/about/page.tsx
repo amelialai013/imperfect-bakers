@@ -165,7 +165,7 @@ export default function AboutPage() {
                 <div className="shrink-0">
                   <a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
                     <button className="btn-primary">
-                      Write a Review
+                      Write a review
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                       </svg>
@@ -195,10 +195,10 @@ export default function AboutPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-4 shrink-0">
             <Link href="/classes">
-              <button className="btn-primary">See Our Classes</button>
+              <button className="btn-primary">See our classes</button>
             </Link>
             <Link href="/interest">
-              <button className="btn-secondary">I&apos;m Interested</button>
+              <button className="btn-secondary">I&apos;m interested</button>
             </Link>
           </div>
         </div>

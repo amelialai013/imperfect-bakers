@@ -58,14 +58,14 @@ export default function Home() {
           <div className="flex flex-wrap gap-4">
             <Link href="/classes">
               <button className="btn-primary-inverse">
-                Explore Classes
+                Explore classes
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             </Link>
             <Link href="/interest">
-              <button className="btn-tertiary">Register Interest</button>
+              <button className="btn-tertiary">Register interest</button>
             </Link>
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function Home() {
             </h2>
             <Link href="/interest" className="relative z-10">
               <button className="btn-primary-inverse">
-                Register Interest
+                Register interest
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
