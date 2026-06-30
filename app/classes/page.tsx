@@ -70,52 +70,54 @@ export default function ClassesPage() {
         </div>
       </section>
 
-      {/* ── CLASSES GRID ─────────────────────────────────────── */}
-      <section className="py-20 px-8 bg-[#faf9f6]">
+      {/* ── CLASSES LIST ─────────────────────────────────────── */}
+      <section className="px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#e4dfd5]">
-            {classes.map((c, i) => (
-              <div key={c.title} className="bg-[#faf9f6] group hover:bg-white transition-colors flex flex-col">
-                {/* Image */}
-                <div
-                  className="w-full h-56 overflow-hidden"
-                  style={{
-                    backgroundImage: `url('${c.image}')`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                />
+          {classes.map((c, i) => (
+            <Link href="/book-a-class" key={c.title}>
+              <div className="group border-t border-[#e4dfd5] py-10 grid grid-cols-12 gap-8 items-center hover:bg-white -mx-8 px-8 transition-colors cursor-pointer">
 
-                {/* Content */}
-                <div className="p-8 flex flex-col flex-1">
-                  <span className="text-xs tracking-[0.2em] text-[#006644] mb-3 block">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+                {/* Number */}
+                <span className="col-span-1 text-xs tracking-[0.2em] text-[#006644]/50 self-start pt-1">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
+                {/* Title + desc */}
+                <div className="col-span-7 md:col-span-6">
                   <h2
-                    className="text-2xl text-[#006644] mb-3 leading-snug"
+                    className="text-2xl md:text-3xl text-[#006644] leading-snug mb-3"
                     style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                   >
                     {c.title}
                   </h2>
-                  <p className="text-[#6b7280] text-sm leading-relaxed mb-6 flex-1">{c.desc}</p>
-
-                  <div className="flex items-center justify-between pt-5 border-t border-[#e4dfd5]">
-                    <span className="text-xs tracking-[0.12em] uppercase text-[#006644]/60">
-                      {c.age}
-                    </span>
-                    <Link href="/book-a-class">
-                      <button className="text-xs tracking-[0.12em] uppercase text-[#006644] hover:text-[#006644] transition-colors flex items-center gap-2">
-                        Book
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                      </button>
-                    </Link>
-                  </div>
+                  <p className="text-[#6b7280] text-sm leading-relaxed max-w-md">{c.desc}</p>
                 </div>
+
+                {/* Age tag + book */}
+                <div className="col-span-2 hidden md:flex flex-col gap-2 items-start">
+                  <span className="text-xs tracking-[0.12em] uppercase text-[#006644]/50">{c.age}</span>
+                </div>
+
+                {/* Thumbnail */}
+                <div className="col-span-4 md:col-span-3 flex items-center justify-end gap-6">
+                  <div
+                    className="w-24 h-24 md:w-28 md:h-28 rounded-sm overflow-hidden shrink-0 opacity-80 group-hover:opacity-100 transition-opacity"
+                    style={{
+                      backgroundImage: `url('${c.image}')`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
+                  <svg className="w-4 h-4 text-[#006644] shrink-0 -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+
               </div>
-            ))}
-          </div>
+            </Link>
+          ))}
+          {/* Bottom border */}
+          <div className="border-t border-[#e4dfd5]" />
         </div>
       </section>
 
