@@ -16,7 +16,7 @@ export default function AboutPage() {
               className="text-4xl md:text-5xl text-white leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Who <em className="not-italic text-white/50">we</em> are
+              <em className="not-italic text-white/50">Who we</em> are
             </h1>
             <div className="md:ml-auto">
               <p className="text-white/50 text-base leading-relaxed max-w-sm">
