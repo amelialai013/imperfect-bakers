@@ -41,7 +41,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
             <select
               value={activeClass}
               onChange={(e) => setActiveClass(e.target.value)}
-              className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors"
+              className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[38px]"
             >
               <option value="All">All classes</option>
               {classLabels.map((label) => (
@@ -54,10 +54,10 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           </div>
 
           {/* Grid / List toggle */}
-          <div className="flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white">
+          <div className="flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[38px]">
             <button
               onClick={() => setView("grid")}
-              className={`px-3 py-2 transition-colors ${view === "grid" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
+              className={`px-3 h-full transition-colors ${view === "grid" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
               aria-label="Grid view"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
             <div className="w-px h-4 bg-[#e4dfd5]" />
             <button
               onClick={() => setView("list")}
-              className={`px-3 py-2 transition-colors ${view === "list" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
+              className={`px-3 h-full transition-colors ${view === "list" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
               aria-label="List view"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
