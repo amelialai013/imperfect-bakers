@@ -233,9 +233,9 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                   </h3>
                 </div>
                 {!isFull ? (
-                  <span className="text-[0.6rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2 py-0.5 shrink-0">{s.spotsLeft} left</span>
+                  <span className="text-[0.6rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2 py-0.5 shrink-0 mt-[4px]">{s.spotsLeft} left</span>
                 ) : (
-                  <span className="text-[0.6rem] font-medium text-red-400 bg-red-50 rounded-full px-2 py-0.5 shrink-0">Full</span>
+                  <span className="text-[0.6rem] font-medium text-red-400 bg-red-50 rounded-full px-2 py-0.5 shrink-0 mt-[4px]">Full</span>
                 )}
               </div>
               <div className="flex items-center justify-between">
