@@ -48,26 +48,29 @@ export default async function BookAClassPage() {
       </section>
 
       {/* ── PRIVATE BOOKINGS CTA ─────────────────────────────── */}
-      <section className="bg-[#f0ece4] px-8 py-24">
+      <section className="px-8 pb-24 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col items-center text-center">
-            <span className="text-[0.6875rem] font-semibold tracking-[0.25em] uppercase text-[#006644] mb-10">
-              Private bookings
-            </span>
-            <h2
-              className="text-5xl md:text-7xl text-[#1a1a1a] leading-[1.05] tracking-tight mb-10 max-w-2xl"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              Your kitchen,<br />
-              <span className="text-[#1a1a1a]/30">your rules.</span>
-            </h2>
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm mb-10">
-              Private and custom classes at your place or ours — tailored for birthdays, team events, or a night in with friends.
-            </p>
-            <Link href="/interest">
-              <button className="group inline-flex items-center gap-3 bg-[#006644] text-white font-semibold text-sm px-7 py-4 rounded-full hover:bg-[#005538] transition-colors">
+          <div className="border border-[#e4dfd5] rounded-[12px] bg-white px-10 py-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-0 justify-between">
+            <div className="flex items-start gap-5">
+              <div className="w-10 h-10 rounded-full bg-[#006644]/8 flex items-center justify-center shrink-0 mt-0.5">
+                <svg className="w-4.5 h-4.5 text-[#006644]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-1">Private bookings</p>
+                <p className="text-[#1a1a1a] font-medium text-base" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                  Looking for something more personal?
+                </p>
+                <p className="text-[#6b7280] text-sm mt-1 leading-relaxed max-w-sm">
+                  Custom classes at your place or ours — birthdays, team events, or a private night in.
+                </p>
+              </div>
+            </div>
+            <Link href="/interest" className="shrink-0 sm:ml-10">
+              <button className="group inline-flex items-center gap-2.5 border border-[#006644] text-[#006644] font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-[#006644] hover:text-white transition-colors whitespace-nowrap">
                 Request a class
-                <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
