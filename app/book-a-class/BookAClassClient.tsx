@@ -81,7 +81,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           {/* Date sort toggle */}
           <button
             onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
-            className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[38px]"
+            className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[38px] w-[148px] justify-center"
           >
             {sortOrder === "desc" ? (
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -295,7 +295,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         }`}
       >
         <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
-        <div className="p-4 flex flex-col gap-3 flex-1">
+        <div className="p-4 flex flex-col gap-2 flex-1">
           <div className="flex items-start justify-between gap-3">
             <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
             {!isFull ? (
