@@ -112,7 +112,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           </div>
           {/* Desktop: respects toggle */}
           {view === "grid" ? (
-            <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
               {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
             </div>
           ) : (
