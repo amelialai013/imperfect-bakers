@@ -62,7 +62,7 @@ export default async function BookAClassPage() {
             </h2>
             <div className="md:ml-auto flex flex-col items-start md:items-end gap-6">
               <p className="text-white/50 text-base leading-relaxed max-w-sm md:text-right">
-                Custom classes at your place or ours —<br />birthdays, team events, or a private night in.
+                Custom classes at your place or ours —<br className="hidden md:block" />birthdays, team events, or a private night in.
               </p>
               <Link href="/interest">
                 <button className="btn-tertiary group">
