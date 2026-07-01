@@ -219,7 +219,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span className="text-2xl font-bold text-white leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {dateParts(s.date).day}
               </span>
-              <span className="text-[0.75rem] font-medium text-white/50 leading-none mt-1">
+              <span className="text-[0.65rem] font-medium text-white/50 leading-none mt-1">
                 {dateParts(s.date).dow}
               </span>
             </div>
