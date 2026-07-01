@@ -80,7 +80,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
         {/* Date sort toggle */}
         <button
           onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
-          className="flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#006644] transition-colors shrink-0"
+          className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[38px]"
         >
           {sortOrder === "desc" ? (
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
