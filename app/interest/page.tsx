@@ -114,7 +114,7 @@ export default function InterestPage() {
             </div>
 
             {/* Submit */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-10 pt-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-10 -mt-4">
               <button type="submit" className="btn-primary group shrink-0 self-start">
                 Register interest
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
