@@ -28,7 +28,7 @@ export default async function BookAClassPage() {
           >
             Class <em className="not-italic text-[#006644]">bookings</em>
           </h1>
-          <p className="text-[#9ca3af] text-sm leading-relaxed max-w-xs md:text-right pb-1">
+          <p className="text-[#9ca3af] text-sm leading-relaxed max-w-xs md:text-right pb-1 text-balance">
             Browse upcoming sessions and secure your spot in the kitchen.
           </p>
         </div>
