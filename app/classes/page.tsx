@@ -4,7 +4,7 @@ export const metadata = {
   title: "Classes | Imperfect Bakers",
 };
 
-const classes = [
+const classes: { title: string; desc: string; age: string; image: string; longTitle: boolean; bgPosition?: string }[] = [
   {
     title: "Sweet Food",
     desc: "Cakes, cookies, pastries and sweet treats — learn to bake with confidence.",
