@@ -48,35 +48,31 @@ export default async function BookAClassPage() {
       </section>
 
       {/* ── PRIVATE BOOKINGS CTA ─────────────────────────────── */}
-      <section className="px-8 pb-24 bg-[#faf9f6]">
+      <section className="bg-[#006644] px-8 pt-14 pb-16">
         <div className="max-w-7xl mx-auto">
-          <div className="relative overflow-hidden rounded-[12px] bg-[#006644] px-10 md:px-14 py-12 flex flex-col md:flex-row md:items-center gap-8 md:gap-0 md:justify-between">
-            {/* Subtle decorative ring */}
-            <div className="pointer-events-none absolute -right-16 -top-16 w-64 h-64 rounded-full border border-white/10" />
-            <div className="pointer-events-none absolute -right-6 -top-6 w-40 h-40 rounded-full border border-white/10" />
-            <div>
-              <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
-                Private bookings
-              </span>
-              <p
-                className="text-white text-2xl md:text-3xl leading-snug tracking-tight mb-2"
-                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-              >
-                Something more personal<br className="hidden md:block" />
-                <span className="text-white/50"> in mind?</span>
-              </p>
-              <p className="text-white/50 text-sm leading-relaxed max-w-sm mt-3">
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">
+            Private bookings
+          </span>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-10" style={{ alignItems: "last baseline" }}>
+            <h2
+              className="text-4xl md:text-5xl text-white leading-tight tracking-tight"
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+            >
+              <em className="not-italic text-white/50">Something more</em> personal in mind?
+            </h2>
+            <div className="md:ml-auto flex flex-col items-start md:items-end gap-6">
+              <p className="text-white/50 text-base leading-relaxed max-w-sm md:text-right">
                 Custom classes at your place or ours — birthdays, team events, or a private night in.
               </p>
+              <Link href="/interest">
+                <button className="btn-tertiary group">
+                  Request a class
+                  <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </Link>
             </div>
-            <Link href="/interest" className="shrink-0 md:ml-16">
-              <button className="group inline-flex items-center gap-3 bg-white text-[#006644] font-semibold text-sm px-6 py-3.5 rounded-full hover:bg-[#faf9f6] transition-colors whitespace-nowrap">
-                Request a class
-                <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </Link>
           </div>
         </div>
       </section>
