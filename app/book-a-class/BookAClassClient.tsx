@@ -265,7 +265,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-2 shrink-0 ml-3">
                   <p className="text-[#1a1a1a] text-sm font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
                   {!isFull && (
                     <svg className="w-3.5 h-3.5 text-[#006644] transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
