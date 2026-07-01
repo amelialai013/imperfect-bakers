@@ -176,7 +176,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               : "bg-white border border-[#e8e2d9] hover:border-[#006644] hover:shadow-[0_8px_32px_rgba(0,102,68,0.10)] cursor-pointer"
           }`}
         >
-          <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
+          <div className={`hidden sm:block h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
           {/* Desktop layout: single row */}
           <div className="hidden sm:flex px-6 py-4 items-center gap-6">
             <div className="flex-1 min-w-0">
