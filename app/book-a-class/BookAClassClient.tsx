@@ -136,22 +136,15 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           }`}
         >
           <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
-          <div className="px-6 py-4 flex items-center gap-6">
-            {/* Name + label */}
+          {/* Desktop layout: single row */}
+          <div className="hidden sm:flex px-6 py-4 items-center gap-6">
             <div className="flex-1 min-w-0">
               <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
               <h3 className="text-[#1a1a1a] text-base font-medium leading-snug truncate" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
               </h3>
-              {/* Date + time shown below name on small screens */}
-              <div className="flex sm:hidden items-center gap-3 mt-1 text-xs text-[#6b7280]">
-                <span>{s.date}</span>
-                <span className="text-[#c8c0b4]">·</span>
-                <span>{s.time}</span>
-              </div>
             </div>
-            {/* Meta — hidden on small, shown on sm+ */}
-            <div className="hidden sm:flex items-center gap-5 text-sm text-[#6b7280] shrink-0">
+            <div className="flex items-center gap-5 text-sm text-[#6b7280] shrink-0">
               <span className="flex items-center gap-1.5">
                 <svg className="w-3.5 h-3.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -165,7 +158,6 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 {s.time}
               </span>
             </div>
-            {/* Price + badge */}
             <div className="flex items-center gap-4 shrink-0">
               {!isFull ? (
                 <span className="text-[0.65rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2.5 py-1">{s.spotsLeft} left</span>
@@ -181,6 +173,41 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                   </svg>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Mobile layout: two-row card */}
+          <div className="sm:hidden px-5 pt-4 pb-4 flex flex-col gap-3">
+            {/* Top row: label + name */}
+            <div className="min-w-0">
+              <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
+              <h3 className="text-[#1a1a1a] text-base font-medium leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                {s.sessionName || s.classLabel}
+              </h3>
+            </div>
+            {/* Bottom row: date · time left, price + arrow right */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{s.date}</span>
+                <span className="text-[#d4cfc8]">·</span>
+                <span>{s.time}</span>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                {!isFull ? (
+                  <span className="text-[0.65rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2.5 py-1">{s.spotsLeft} left</span>
+                ) : (
+                  <span className="text-[0.65rem] font-medium text-red-400 bg-red-50 rounded-full px-2.5 py-1">Full</span>
+                )}
+                <p className="text-[#1a1a1a] text-base font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
+                {!isFull && (
+                  <svg className="w-4 h-4 text-[#006644] transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                )}
+              </div>
             </div>
           </div>
         </article>
