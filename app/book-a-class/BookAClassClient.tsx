@@ -117,6 +117,24 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
   );
 }
 
+function dateParts(date: string) {
+  // "Saturday 18 July 2026" → { dow: "Sat", day: "18", mon: "Jul" }
+  const months: Record<string, string> = {
+    January: "Jan", February: "Feb", March: "Mar", April: "Apr",
+    May: "May", June: "Jun", July: "Jul", August: "Aug",
+    September: "Sep", October: "Oct", November: "Nov", December: "Dec",
+  };
+  const days: Record<string, string> = {
+    Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu",
+    Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
+  };
+  const parts = date.split(" "); // ["Saturday", "18", "July", "2026"]
+  if (parts.length === 4) {
+    return { dow: days[parts[0]] ?? parts[0], day: parts[1], mon: months[parts[2]] ?? parts[2] };
+  }
+  return { dow: "", day: "", mon: date };
+}
+
 function shortDate(date: string) {
   // "Saturday 18 July 2026" → "18 Jul 2026"
   const months: Record<string, string> = {
@@ -191,41 +209,43 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             </div>
           </div>
 
-          {/* Mobile layout */}
-          <div className="sm:hidden px-5 pt-4 pb-4 flex flex-col gap-2.5">
-            {/* Top row: label + price */}
-            <div className="flex items-start justify-between gap-2">
-              <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
-              <p className="text-[#1a1a1a] text-base font-semibold shrink-0" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
+          {/* Mobile layout: date stamp + content */}
+          <div className="sm:hidden flex items-stretch">
+            {/* Date stamp */}
+            <div className={`flex flex-col items-center justify-center px-4 shrink-0 ${isFull ? "bg-[#e8e4de]" : "bg-[#006644]"}`} style={{ minWidth: "62px" }}>
+              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-white/60 leading-none mb-1">
+                {dateParts(s.date).mon}
+              </span>
+              <span className="text-2xl font-bold text-white leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                {dateParts(s.date).day}
+              </span>
+              <span className="text-[0.55rem] font-medium text-white/50 leading-none mt-1">
+                {dateParts(s.date).dow}
+              </span>
             </div>
-            {/* Middle: class name */}
-            <h3 className="text-[#1a1a1a] text-base font-medium leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              {s.sessionName || s.classLabel}
-            </h3>
-            {/* Bottom row: date · time + spots + arrow */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-xs text-[#6b7280]">
-                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span>{shortDate(s.date)}</span>
-                <span className="text-[#d4cfc8]">·</span>
-                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{s.time}</span>
+            {/* Content */}
+            <div className="flex-1 min-w-0 px-4 py-3.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <span className="text-[0.58rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
+                <h3 className="text-[#1a1a1a] text-sm font-medium leading-snug mt-0.5" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                  {s.sessionName || s.classLabel}
+                </h3>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
-                {!isFull ? (
-                  <span className="text-[0.65rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2.5 py-1">{s.spotsLeft} left</span>
-                ) : (
-                  <span className="text-[0.65rem] font-medium text-red-400 bg-red-50 rounded-full px-2.5 py-1">Full</span>
-                )}
-                {!isFull && (
-                  <svg className="w-4 h-4 text-[#006644] transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                  </svg>
-                )}
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-[#9ca3af]">{s.time}</span>
+                <div className="flex items-center gap-2 shrink-0">
+                  {!isFull ? (
+                    <span className="text-[0.6rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2 py-0.5">{s.spotsLeft} left</span>
+                  ) : (
+                    <span className="text-[0.6rem] font-medium text-red-400 bg-red-50 rounded-full px-2 py-0.5">Full</span>
+                  )}
+                  <p className="text-[#1a1a1a] text-sm font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
+                  {!isFull && (
+                    <svg className="w-3.5 h-3.5 text-[#006644] transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    </svg>
+                  )}
+                </div>
               </div>
             </div>
           </div>
