@@ -231,13 +231,13 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           <div className="sm:hidden flex items-stretch">
             {/* Date stamp */}
             <div className={`flex flex-col items-center justify-center px-4 shrink-0 ${isFull ? "bg-[#e8e4de]" : "bg-[#006644]"}`} style={{ minWidth: "62px" }}>
-              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-white/60 leading-none mb-1">
+              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-white/60 leading-none mb-1.5">
                 {dateParts(s.date).mon}
               </span>
               <span className="text-2xl font-bold text-white leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {dateParts(s.date).day}
               </span>
-              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-white/60 leading-none mt-1">
+              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-white/60 leading-none mt-1.5">
                 {dateParts(s.date).dow}
               </span>
             </div>
