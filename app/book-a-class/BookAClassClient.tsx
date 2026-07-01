@@ -248,13 +248,12 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 )}
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-[0.65rem] text-[#9ca3af] min-w-0">
-                  <span className="shrink-0">{s.time}</span>
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="text-[0.65rem] text-[#9ca3af] shrink-0">{s.time}</span>
                   {s.location && (
-                    <>
-                      <span className="text-[#d4cfc8] shrink-0">·</span>
-                      <span className="truncate">{s.location}</span>
-                    </>
+                    <span className="text-[0.58rem] font-medium tracking-wide text-[#006644]/60 bg-[#006644]/8 rounded px-1.5 py-0.5 truncate">
+                      {s.location.split(",")[0]}
+                    </span>
                   )}
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
