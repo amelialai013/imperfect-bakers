@@ -34,8 +34,8 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
   return (
     <div>
       {/* ── Filter & sort bar ── */}
-      <div className="flex flex-row items-center justify-between gap-3 mb-8">
-        {/* Left: class filter + view toggle */}
+      <div className="flex flex-row items-center gap-3 mb-8">
+        {/* Left: class filter + sort + view toggle */}
         <div className="flex items-center gap-2">
           <div className="relative w-auto">
             <select
@@ -52,6 +52,23 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </div>
+
+          {/* Date sort toggle */}
+          <button
+            onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
+            className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[38px]"
+          >
+            {sortOrder === "desc" ? (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+              </svg>
+            ) : (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 4l4 4m0 0l4-4m-4 4V8" />
+              </svg>
+            )}
+            <span className="hidden min-[480px]:inline">{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
+          </button>
 
           {/* Grid / List toggle */}
           <div className="flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[38px]">
@@ -77,22 +94,6 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           </div>
         </div>
 
-        {/* Date sort toggle */}
-        <button
-          onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
-          className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[38px]"
-        >
-          {sortOrder === "desc" ? (
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-            </svg>
-          ) : (
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 4l4 4m0 0l4-4m-4 4V8" />
-            </svg>
-          )}
-          <span className="hidden min-[480px]:inline">{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
-        </button>
       </div>
 
       {/* ── Session cards ── */}
