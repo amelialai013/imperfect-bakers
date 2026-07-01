@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="md:col-span-5">
             <div className="flex items-center gap-3 mb-5">
               <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#006644]">
-                <img src="/logo.png" alt="" className="w-5 h-5 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                <img src="/logo.png" alt="" className="w-5 h-5 object-contain" style={{ filter: "invert(1)", mixBlendMode: "screen" }} />
               </span>
               <span className="font-bold text-lg tracking-tight"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
