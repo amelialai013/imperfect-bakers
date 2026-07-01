@@ -117,6 +117,20 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
   );
 }
 
+function shortDate(date: string) {
+  // "Saturday 18 July 2026" → "18 Jul 2026"
+  const months: Record<string, string> = {
+    January: "Jan", February: "Feb", March: "Mar", April: "Apr",
+    May: "May", June: "Jun", July: "Jul", August: "Aug",
+    September: "Sep", October: "Oct", November: "Nov", December: "Dec",
+  };
+  const parts = date.split(" "); // ["Saturday", "18", "July", "2026"]
+  if (parts.length === 4) {
+    return `${parts[1]} ${months[parts[2]] ?? parts[2]} ${parts[3]}`;
+  }
+  return date;
+}
+
 function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view: "grid" | "list" }) {
   const isFull = s.spotsLeft === 0;
   const spotsPercent = Math.round(((s.maxSpots - s.spotsLeft) / s.maxSpots) * 100);
@@ -140,7 +154,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           <div className="hidden sm:flex px-6 py-4 items-center gap-6">
             <div className="flex-1 min-w-0">
               <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
-              <h3 className="text-[#1a1a1a] text-base font-medium leading-snug truncate" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              <h3 className="text-[#1a1a1a] text-base font-medium leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
               </h3>
             </div>
@@ -149,7 +163,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 <svg className="w-3.5 h-3.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                {s.date}
+                {shortDate(s.date)}
               </span>
               <span className="flex items-center gap-1.5">
                 <svg className="w-3.5 h-3.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
