@@ -34,10 +34,9 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
   return (
     <div>
       {/* ── Filter & sort bar ── */}
-      <div className="flex flex-row items-center gap-3 mb-8">
-        {/* Left: class filter + sort + view toggle */}
-        <div className="flex items-center gap-2">
-          <div className="relative w-auto">
+      <div className="flex flex-wrap items-center gap-3 mb-8">
+        {/* Class filter */}
+        <div className="relative w-auto">
             <select
               value={activeClass}
               onChange={(e) => setActiveClass(e.target.value)}
@@ -52,6 +51,9 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </div>
+
+          {/* Grid/List + Sort — grouped so they wrap together */}
+          <div className="flex items-center gap-2">
 
           {/* Grid / List toggle */}
           <div className="flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[38px]">
@@ -92,7 +94,8 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
             )}
             <span className="hidden min-[480px]:inline">{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
           </button>
-        </div>
+
+          </div>{/* end grouped */}
 
       </div>
 
