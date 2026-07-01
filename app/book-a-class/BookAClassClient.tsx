@@ -143,8 +143,14 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <h3 className="text-[#1a1a1a] text-base font-medium leading-snug truncate" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
               </h3>
+              {/* Date + time shown below name on small screens */}
+              <div className="flex sm:hidden items-center gap-3 mt-1 text-xs text-[#6b7280]">
+                <span>{s.date}</span>
+                <span className="text-[#c8c0b4]">·</span>
+                <span>{s.time}</span>
+              </div>
             </div>
-            {/* Meta */}
+            {/* Meta — hidden on small, shown on sm+ */}
             <div className="hidden sm:flex items-center gap-5 text-sm text-[#6b7280] shrink-0">
               <span className="flex items-center gap-1.5">
                 <svg className="w-3.5 h-3.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
