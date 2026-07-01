@@ -175,6 +175,15 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <h3 className="text-[#1a1a1a] text-base font-medium leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
               </h3>
+              {s.location && (
+                <span className="flex items-center gap-1 mt-1 text-[#9ca3af] text-xs">
+                  <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  {s.location}
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-5 text-sm text-[#6b7280] shrink-0">
               <span className="flex items-center gap-1.5">
