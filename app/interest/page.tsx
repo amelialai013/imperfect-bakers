@@ -22,12 +22,12 @@ export default function InterestPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#006644] px-8 pt-16 pb-14">
+      <section className="bg-[#006644] px-8 py-7">
         <div className="max-w-7xl mx-auto">
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Get in touch</span>
-          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12" style={{ alignItems: "last baseline" }}>
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">Get in touch</span>
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-8" style={{ alignItems: "last baseline" }}>
             <h1
-              className="text-4xl md:text-5xl text-white leading-tight tracking-tight"
+              className="text-3xl md:text-4xl text-white leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               <em className="not-italic text-white/50">Register</em> interest

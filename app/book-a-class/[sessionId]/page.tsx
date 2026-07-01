@@ -21,10 +21,10 @@ export default async function SessionBookingPage({
   if (!session) {
     return (
       <>
-        <section className="bg-[#006644] px-8 pt-16 pb-14">
+        <section className="bg-[#006644] px-8 py-7">
           <div className="max-w-7xl mx-auto">
-            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Reserve your spot</span>
-            <h1 className="text-4xl md:text-5xl text-white leading-tight tracking-tight mt-3" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">Reserve your spot</span>
+            <h1 className="text-3xl md:text-4xl text-white leading-tight tracking-tight mt-3" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               Session not found
             </h1>
           </div>
@@ -42,7 +42,7 @@ export default async function SessionBookingPage({
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#006644] px-8 pt-16 pb-14">
+      <section className="bg-[#006644] px-8 py-7">
         <div className="max-w-7xl mx-auto">
           <Link
             href="/book-a-class"
@@ -53,11 +53,11 @@ export default async function SessionBookingPage({
             </svg>
             All classes
           </Link>
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">
+          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">
             {session.classLabel}
           </span>
           <h1
-            className="text-4xl md:text-5xl text-white leading-tight tracking-tight mt-3"
+            className="text-3xl md:text-4xl text-white leading-tight tracking-tight mt-3"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             {session.sessionName || session.classLabel}

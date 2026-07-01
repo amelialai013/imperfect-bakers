@@ -53,12 +53,12 @@ export default function ClassesPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="px-8 pt-16 pb-14 bg-[#faf9f6]">
+      <section className="px-8 py-7 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
           <span className="section-label">What we offer</span>
-          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12" style={{ alignItems: "last baseline" }}>
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-8" style={{ alignItems: "last baseline" }}>
             <h1
-              className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
+              className="text-3xl md:text-4xl text-[#1a1a1a] leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Our <em className="not-italic text-[#006644]">classes</em>
@@ -139,7 +139,7 @@ export default function ClassesPage() {
                 <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]/50">Google Reviews</span>
               </div>
               <h2
-                className="text-4xl md:text-5xl text-[#006644] leading-tight mb-6"
+                className="text-3xl md:text-4xl text-[#006644] leading-tight mb-6"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
                 Loved your class?
@@ -170,7 +170,7 @@ export default function ClassesPage() {
         {/* Text half */}
         <div className="bg-[#006644] flex flex-col justify-center px-8 py-10 md:py-12 gap-8">
           <div>
-            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Private bookings</span>
+            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">Private bookings</span>
             <h2
               className="text-3xl md:text-4xl text-white leading-snug"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
