@@ -116,7 +116,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
               {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
             </div>
           ) : (
-            <div className="hidden sm:flex flex-col gap-3">
+            <div className="hidden sm:flex flex-col gap-2">
               {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
             </div>
           )}
