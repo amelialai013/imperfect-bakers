@@ -33,34 +33,38 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
   return (
     <div>
       {/* ── Filter & sort bar ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        {/* Class filter chips */}
-        <div className="flex items-center gap-2 flex-wrap">
-          {["All", ...classLabels].map((label) => (
-            <button
-              key={label}
-              onClick={() => setActiveClass(label)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-150 ${
-                activeClass === label
-                  ? "bg-[#006644] text-white border-[#006644]"
-                  : "bg-transparent text-[#6b7280] border-[#e4dfd5] hover:border-[#006644] hover:text-[#006644]"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-8">
+        {/* Class filter dropdown */}
+        <div className="relative">
+          <select
+            value={activeClass}
+            onChange={(e) => setActiveClass(e.target.value)}
+            className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors"
+          >
+            <option value="All">All classes</option>
+            {classLabels.map((label) => (
+              <option key={label} value={label}>{label}</option>
+            ))}
+          </select>
+          <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
 
-        {/* Date sort toggle */}
-        <button
-          onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
-          className="flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#006644] transition-colors shrink-0 self-start sm:self-auto"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+        {/* Date sort dropdown */}
+        <div className="relative">
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+            className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors"
+          >
+            <option value="asc">Date: earliest first</option>
+            <option value="desc">Date: latest first</option>
+          </select>
+          <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
-          <span>{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
-        </button>
+        </div>
       </div>
 
       {/* ── Session cards ── */}
