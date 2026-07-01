@@ -151,7 +151,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         <div className="mb-12">
           <div className="flex items-baseline justify-between mb-6">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
-            <span className="text-xs text-[#9ca3af]">{totalPeople > 0 ? `${totalPeople} of ${session.spotsLeft} spots` : `${session.spotsLeft} spots available`}</span>
+            <span className="text-xs text-[#9ca3af]">{totalPeople} / {session.spotsLeft}</span>
           </div>
           <div className="divide-y divide-[#f0ece4]">
             <Counter label="Child" sub="7–17 yrs" value={counts.child} onChange={(v) => setCount("child", v)} />
