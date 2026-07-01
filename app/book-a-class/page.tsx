@@ -57,7 +57,7 @@ export default async function BookAClassPage() {
                 className="text-2xl md:text-3xl text-[#1a1a1a] leading-snug tracking-tight mb-3"
                 style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
-                Want something more personal?
+                Can&apos;t find what you&apos;re looking for?
               </h2>
               <p className="text-[#6b7280] text-sm leading-relaxed max-w-sm">
                 Custom classes at your place or ours — birthdays, team events, or a private night in.
