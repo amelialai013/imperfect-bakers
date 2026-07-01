@@ -18,24 +18,24 @@ function Counter({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="flex items-center justify-between py-4 border-b border-[#e4dfd5] last:border-0">
+    <div className="flex items-center justify-between py-5 border-b border-[#f0ece4] last:border-0">
       <div>
         <p className="text-sm font-medium text-[#1a1a1a]">{label}</p>
-        <p className="text-xs text-[#6b7280] mt-0.5">{sub}</p>
+        <p className="text-xs text-[#9ca3af] mt-0.5 tracking-wide">{sub}</p>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5">
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="w-8 h-8 rounded-full border border-[#e4dfd5] flex items-center justify-center text-[#6b7280] hover:border-[#006644] hover:text-[#006644] transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[#9ca3af] hover:text-[#006644] transition-colors text-lg leading-none"
         >
           −
         </button>
-        <span className="w-4 text-center text-sm font-medium text-[#1a1a1a]">{value}</span>
+        <span className="w-5 text-center text-base font-medium text-[#1a1a1a] tabular-nums">{value}</span>
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className="w-8 h-8 rounded-full border border-[#e4dfd5] flex items-center justify-center text-[#6b7280] hover:border-[#006644] hover:text-[#006644] transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[#9ca3af] hover:text-[#006644] transition-colors text-lg leading-none"
         >
           +
         </button>
@@ -43,6 +43,12 @@ function Counter({
     </div>
   );
 }
+
+const inputClass =
+  "w-full bg-transparent border-0 border-b border-[#e4dfd5] pb-2 pt-1 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] transition-colors";
+
+const labelClass =
+  "block text-[0.6rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-3";
 
 export default function BookingForm({ session }: { session: ClassSession }) {
   const [counts, setCounts] = useState<Counts>({ child: 0, youngAdult: 0, adult: 0 });
@@ -100,16 +106,16 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   if (submitted) {
     return (
       <div className="max-w-2xl">
-        <div className="bg-white border border-[#e4dfd5] rounded-[8px] p-8 mb-8">
-          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-2">{session.classLabel}</p>
+        <div className="border-l-2 border-[#006644] pl-6 mb-10">
+          <p className="text-[0.6rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-1">{session.classLabel}</p>
           <p className="text-[#1a1a1a] font-medium text-base">{session.date} · {session.time}</p>
-          <p className="text-[#6b7280] text-sm mt-1">{session.location}</p>
+          <p className="text-[#9ca3af] text-sm mt-0.5">{session.location}</p>
         </div>
         <h2 className="text-3xl text-[#1a1a1a] mb-4" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-          You&apos;re on the list! 🎉
+          You&apos;re on the list
         </h2>
-        <p className="text-[#6b7280] text-base leading-relaxed mb-8">
-          A confirmation email will be sent once the class is confirmed — we run classes once we have enough students signed up. We&apos;ll be in touch soon!
+        <p className="text-[#6b7280] text-base leading-relaxed mb-8 max-w-md">
+          A confirmation email will be sent once the class is confirmed — we run classes once we have enough students signed up. We&apos;ll be in touch soon.
         </p>
         <Link href="/book-a-class"><button className="btn-secondary">Browse more classes</button></Link>
       </div>
@@ -119,14 +125,14 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   if (isFull) {
     return (
       <div className="max-w-2xl">
-        <div className="bg-white border border-[#e4dfd5] rounded-[8px] p-8 mb-8">
-          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-2">{session.classLabel}</p>
+        <div className="border-l-2 border-[#006644] pl-6 mb-10">
+          <p className="text-[0.6rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-1">{session.classLabel}</p>
           <p className="text-[#1a1a1a] font-medium text-base">{session.date} · {session.time}</p>
-          <p className="text-[#6b7280] text-sm mt-1">{session.location}</p>
+          <p className="text-[#9ca3af] text-sm mt-0.5">{session.location}</p>
         </div>
-        <p className="text-[#1a1a1a] text-lg mb-4">This session is fully booked.</p>
-        <p className="text-[#6b7280] text-sm mb-8 leading-relaxed">
-          Register your interest below and we&apos;ll let you know when a new session opens up.
+        <p className="text-[#1a1a1a] text-lg mb-3">This session is fully booked.</p>
+        <p className="text-[#6b7280] text-sm mb-8 leading-relaxed max-w-sm">
+          Register your interest and we&apos;ll let you know when a new session opens up.
         </p>
         <div className="flex gap-4 flex-wrap">
           <Link href="/interest"><button className="btn-primary">Register interest</button></Link>
@@ -137,185 +143,150 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 lg:gap-16 items-start">
-      {/* Form */}
-      <form onSubmit={handleSubmit}>
-        {/* Personal details */}
-        <div className="mb-10">
-          <h2 className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Your details</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-16 lg:gap-24 items-start">
+
+      {/* ── Form ── */}
+      <form onSubmit={handleSubmit} className="space-y-14">
+
+        {/* Your details */}
+        <div>
+          <p className={labelClass}>Your details</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-[#1a1a1a] mb-2">
-                Full Name <span className="text-[#006644]">*</span>
-              </label>
-              <input
-                required
-                name="name"
-                type="text"
-                placeholder="Jane Smith"
-                className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors"
-              />
+              <label className="block text-xs text-[#9ca3af] mb-2">Full name <span className="text-[#006644]">*</span></label>
+              <input required name="name" type="text" placeholder="Jane Smith" className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1a1a1a] mb-2">
-                Email <span className="text-[#006644]">*</span>
-              </label>
-              <input
-                required
-                name="email"
-                type="email"
-                placeholder="jane@example.com"
-                className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors"
-              />
+              <label className="block text-xs text-[#9ca3af] mb-2">Email <span className="text-[#006644]">*</span></label>
+              <input required name="email" type="email" placeholder="jane@example.com" className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1a1a1a] mb-2">
-                Phone <span className="text-[#6b7280] font-normal">(optional)</span>
-              </label>
-              <input
-                name="phone"
-                type="tel"
-                placeholder="04xx xxx xxx"
-                className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors"
-              />
+              <label className="block text-xs text-[#9ca3af] mb-2">Phone <span className="text-[#9ca3af]">(optional)</span></label>
+              <input name="phone" type="tel" placeholder="04xx xxx xxx" className={inputClass} />
             </div>
           </div>
         </div>
 
-        {/* Attendees */}
-        <div className="mb-10">
-          <div className="flex items-baseline justify-between mb-4">
-            <h2 className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Number of people</h2>
-            <span className="text-xs text-[#6b7280]">{totalPeople} / {session.spotsLeft} spots available</span>
+        {/* Number of people */}
+        <div>
+          <div className="flex items-baseline justify-between mb-1">
+            <p className={labelClass}>Number of people</p>
+            <span className="text-[0.65rem] text-[#9ca3af]">{totalPeople} / {session.spotsLeft} spots</span>
           </div>
-          <div className="bg-white border border-[#e4dfd5] rounded-[8px] px-6">
-            <Counter label="Child" sub="7–17 yrs" value={counts.child} onChange={(v) => setCount("child", v)} />
-            <Counter label="Young Adult" sub="18–34 yrs" value={counts.youngAdult} onChange={(v) => setCount("youngAdult", v)} />
-            <Counter label="Adult" sub="35+ yrs" value={counts.adult} onChange={(v) => setCount("adult", v)} />
-          </div>
+          <Counter label="Child" sub="7–17 yrs" value={counts.child} onChange={(v) => setCount("child", v)} />
+          <Counter label="Young Adult" sub="18–34 yrs" value={counts.youngAdult} onChange={(v) => setCount("youngAdult", v)} />
+          <Counter label="Adult" sub="35+ yrs" value={counts.adult} onChange={(v) => setCount("adult", v)} />
         </div>
 
         {/* Payment */}
-        <div className="mb-10">
-          <h2 className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Payment details</h2>
-          <div className="bg-white border border-[#e4dfd5] rounded-[8px] p-6 mb-4 text-sm text-[#1a1a1a] space-y-1.5">
-            <p>Pay to: <span className="font-medium">Sarah Jasper</span></p>
-            <p>BSB: <span className="font-medium">733-100</span></p>
-            <p>Account: <span className="font-medium">759127</span></p>
-            <p className="text-[#6b7280] text-xs mt-3 pt-3 border-t border-[#e4dfd5]">
-              💡 Please include your name and class in the payment reference.
-            </p>
+        <div>
+          <p className={labelClass}>Payment</p>
+          <div className="mb-6 space-y-1 text-sm text-[#6b7280]">
+            <p>Transfer to <span className="text-[#1a1a1a] font-medium">Sarah Jasper</span></p>
+            <p>BSB <span className="text-[#1a1a1a] font-medium">733-100</span> · Account <span className="text-[#1a1a1a] font-medium">759127</span></p>
+            <p className="text-xs text-[#9ca3af] pt-2">Include your name and class name in the reference.</p>
           </div>
-          <p className="text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-3">
-            Payment status <span className="text-[#006644]">*</span>
-          </p>
-          <div className="space-y-2">
+          <p className="text-xs text-[#9ca3af] mb-3">Payment status <span className="text-[#006644]">*</span></p>
+          <div className="flex flex-wrap gap-2">
             {[
-              { value: "completed", label: "✅  Payment completed" },
-              { value: "within-week", label: "📅  I will pay within the week" },
-              { value: "other", label: "💬  Other" },
+              { value: "completed", label: "Paid" },
+              { value: "within-week", label: "Paying this week" },
+              { value: "other", label: "Other" },
             ].map((opt) => (
-              <label
+              <button
                 key={opt.value}
-                className="flex items-center gap-3 bg-white border border-[#e4dfd5] rounded-[6px] px-4 py-3 cursor-pointer hover:border-[#006644] transition-colors"
+                type="button"
+                onClick={() => setPaymentStatus(opt.value)}
+                className={`px-4 py-2 text-sm border transition-all duration-200 rounded-full ${
+                  paymentStatus === opt.value
+                    ? "bg-[#006644] border-[#006644] text-white"
+                    : "bg-transparent border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
+                }`}
               >
-                <input
-                  required
-                  type="radio"
-                  name="payment-status"
-                  value={opt.value}
-                  checked={paymentStatus === opt.value}
-                  onChange={() => setPaymentStatus(opt.value)}
-                  className="accent-[#006644]"
-                />
-                <span className="text-sm text-[#1a1a1a]">{opt.label}</span>
-              </label>
+                {opt.label}
+              </button>
             ))}
           </div>
+          {/* Hidden radio for form validation */}
+          <input type="radio" name="payment-status" required value={paymentStatus} checked={!!paymentStatus} onChange={() => {}} className="sr-only" />
         </div>
 
         {/* Notes */}
-        <div className="mb-10">
-          <label className="block text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-3">
-            Anything else you&apos;d like us to know?
-          </label>
+        <div>
+          <label className={labelClass}>Anything else?</label>
           <textarea
             name="notes"
-            rows={4}
+            rows={2}
             placeholder="Dietary requirements, allergies, questions…"
-            className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-none"
+            className="w-full bg-transparent border-0 border-b border-[#e4dfd5] pb-2 pt-1 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] transition-colors resize-none"
           />
         </div>
 
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-[6px] px-4 py-3 text-sm text-red-600">
-            {error}
-          </div>
+          <p className="text-sm text-red-500 -mt-6">{error}</p>
         )}
 
-        <button type="submit" disabled={submitting} className="btn-primary w-full sm:w-auto justify-center">
-          {submitting ? "Requesting…" : "Request My Spot"}
-          {!submitting && (
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-            </svg>
-          )}
-        </button>
-        <p className="text-xs text-[#6b7280] mt-4 leading-relaxed max-w-sm">
-          A confirmation email will be sent once the class is confirmed — we run classes once we have enough students signed up.
-        </p>
-      </form>
-
-      {/* Session summary sidebar */}
-      <div className="lg:sticky lg:top-28">
-        <div className="bg-white border border-[#e4dfd5] rounded-[8px] p-8">
-          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
-            {session.classLabel}
-          </p>
-          <p
-            className="text-[#1a1a1a] font-semibold text-xl mb-5 leading-snug"
-            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-          >
-            {session.sessionName || session.classLabel}
-          </p>
-          <div className="space-y-3 text-sm border-t border-[#e4dfd5] pt-5">
-            <div className="flex items-start gap-3">
-              <svg className="w-4 h-4 mt-0.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        <div>
+          <button type="submit" disabled={submitting} className="btn-primary group">
+            {submitting ? "Requesting…" : "Request my spot"}
+            {!submitting && (
+              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
-              <div>
-                <p className="font-medium text-[#1a1a1a]">{session.date}</p>
-                <p className="text-[#6b7280]">{session.time}</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <svg className="w-4 h-4 mt-0.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <p className="text-[#6b7280]">{session.location}</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <svg className="w-4 h-4 mt-0.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <p className="text-[#6b7280]">{session.ages}</p>
-            </div>
-          </div>
-          <div className="border-t border-[#e4dfd5] mt-5 pt-5 flex items-baseline justify-between">
-            <p
-              className="text-2xl font-semibold text-[#1a1a1a]"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              ${session.price}
-            </p>
-            <p className="text-xs text-[#6b7280]">per person</p>
-          </div>
-          <p className="text-[0.6875rem] tracking-[0.1em] uppercase text-[#006644] mt-2">
-            {session.spotsLeft} {session.spotsLeft === 1 ? "spot" : "spots"} left
+            )}
+          </button>
+          <p className="text-xs text-[#9ca3af] mt-4 leading-relaxed max-w-xs">
+            We confirm classes once enough students sign up — you&apos;ll hear from us soon.
           </p>
         </div>
+
+      </form>
+
+      {/* ── Session summary sidebar ── */}
+      <div className="lg:sticky lg:top-28">
+        <div className="border-l-2 border-[#006644] pl-6 mb-8">
+          <p className="text-[0.6rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-2">{session.classLabel}</p>
+          <p className="text-[#1a1a1a] font-medium text-lg leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            {session.sessionName || session.classLabel}
+          </p>
+        </div>
+
+        <div className="space-y-4 text-sm">
+          <div className="flex items-start gap-3">
+            <svg className="w-3.5 h-3.5 mt-0.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <div>
+              <p className="text-[#1a1a1a]">{session.date}</p>
+              <p className="text-[#9ca3af] text-xs mt-0.5">{session.time}</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <svg className="w-3.5 h-3.5 mt-0.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <p className="text-[#6b7280]">{session.location}</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <svg className="w-3.5 h-3.5 mt-0.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <p className="text-[#6b7280]">{session.ages}</p>
+          </div>
+        </div>
+
+        <div className="border-t border-[#e8e2d9] mt-8 pt-6 flex items-baseline justify-between">
+          <p className="text-2xl font-semibold text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            ${session.price}
+          </p>
+          <p className="text-xs text-[#9ca3af]">per person</p>
+        </div>
+        <p className="text-[0.65rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mt-2">
+          {session.spotsLeft} {session.spotsLeft === 1 ? "spot" : "spots"} left
+        </p>
       </div>
+
     </div>
   );
 }
