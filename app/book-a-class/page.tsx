@@ -48,38 +48,24 @@ export default async function BookAClassPage() {
       </section>
 
       {/* ── PRIVATE BOOKINGS CTA ─────────────────────────────── */}
-      <section className="bg-[#1a1a1a] px-8 py-16">
+      <section className="bg-[#faf9f6] px-8 pb-20">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-20">
-            {/* Left accent line + label */}
-            <div className="flex items-start gap-6 flex-1">
-              <div className="w-px self-stretch bg-[#006644] shrink-0" />
-              <div>
-                <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
-                  Private bookings
-                </span>
-                <h2
-                  className="text-3xl md:text-4xl text-white leading-snug tracking-tight"
-                  style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-                >
-                  Want something<br />more personal?
-                </h2>
-              </div>
-            </div>
-            {/* Right: body + CTA */}
-            <div className="flex flex-col gap-6 md:max-w-xs shrink-0">
-              <p className="text-white/40 text-sm leading-relaxed">
-                Custom classes at your place or ours — birthdays, team events, or a private night in.
+          <div className="border-t border-[#e4dfd5] pt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-2">Private bookings</p>
+              <p className="text-[#1a1a1a] text-base" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                Want something more personal?
               </p>
-              <Link href="/interest">
-                <button className="btn-tertiary group">
-                  Request a class
-                  <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </Link>
+              <p className="text-[#6b7280] text-sm mt-1">Custom classes at your place or ours.</p>
             </div>
+            <Link href="/interest" className="shrink-0">
+              <button className="btn-secondary group">
+                Request a class
+                <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </Link>
           </div>
         </div>
       </section>
