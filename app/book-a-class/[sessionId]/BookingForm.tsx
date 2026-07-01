@@ -187,10 +187,10 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 key={opt.value}
                 type="button"
                 onClick={() => setPaymentStatus(opt.value)}
-                className={`px-4 py-2.5 text-sm rounded-lg transition-all duration-200 ${
+                className={`px-5 py-2.5 text-sm font-medium border transition-all duration-200 rounded-full ${
                   paymentStatus === opt.value
-                    ? "bg-[#006644] text-white"
-                    : "bg-[#f5f2ed] text-[#1a1a1a] hover:bg-[#eeeae4]"
+                    ? "bg-[#006644] border-[#006644] text-white"
+                    : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
                 }`}
               >
                 {opt.label}
