@@ -33,9 +33,9 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
   return (
     <div>
       {/* ── Filter & sort bar ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-8">
+      <div className="flex flex-row items-center gap-3 mb-8">
         {/* Class filter dropdown */}
-        <div className="relative">
+        <div className="relative w-auto">
           <select
             value={activeClass}
             onChange={(e) => setActiveClass(e.target.value)}
