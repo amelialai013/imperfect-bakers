@@ -106,9 +106,9 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
         </div>
       ) : (
         <>
-          {/* Mobile: always list */}
-          <div className={`sm:hidden flex flex-col gap-2`}>
-            {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
+          {/* Mobile: always grid */}
+          <div className="sm:hidden grid grid-cols-1 gap-3">
+            {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
           </div>
           {/* Desktop: respects toggle */}
           {view === "grid" ? (
