@@ -245,7 +245,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             <div className="flex-1 min-w-0 px-4 py-3.5 flex flex-col justify-between gap-1.5">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <span className="text-[0.58rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
+                  <span className="text-[0.58rem] font-semibold tracking-[0.18em] uppercase text-[#006644] truncate block">{s.classLabel}</span>
                   <h3 className="text-[#1a1a1a] text-sm font-medium leading-snug mt-0.5" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                     {s.sessionName || s.classLabel}
                   </h3>
