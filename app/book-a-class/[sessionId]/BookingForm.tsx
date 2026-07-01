@@ -266,9 +266,6 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             </p>
             <p className="text-xs text-white/40">per person</p>
           </div>
-          <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-white/40 mt-2">
-            {session.spotsLeft} {session.spotsLeft === 1 ? "spot" : "spots"} remaining
-          </p>
         </div>
       </div>
 
