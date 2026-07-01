@@ -92,7 +92,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 4l4 4m0 0l4-4m-4 4V8" />
               </svg>
             )}
-            <span className="hidden min-[480px]:inline">{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
+            <span>{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
           </button>
 
           </div>{/* end grouped */}
