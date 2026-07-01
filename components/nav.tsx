@@ -41,7 +41,7 @@ export default function Nav() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#006644]">
+          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#006644] shrink-0">
             <img src="/logo.png" alt="" className="w-5 h-5 object-contain" style={{ filter: "invert(1)", mixBlendMode: "screen" }} />
           </span>
           <span
