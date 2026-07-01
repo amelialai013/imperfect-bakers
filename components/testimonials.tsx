@@ -22,6 +22,21 @@ const testimonials = [
 export default function Testimonials() {
   const [featured, ...rest] = testimonials;
   const [active, setActive] = useState(0);
+  const touchStartX = React.useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 40) {
+      if (delta > 0) setActive((a) => Math.min(a + 1, rest.length - 1));
+      else setActive((a) => Math.max(a - 1, 0));
+    }
+    touchStartX.current = null;
+  };
 
   return (
     <section className="bg-[#006644] py-24">
@@ -52,7 +67,7 @@ export default function Testimonials() {
           {/* Secondary quotes — carousel on mobile, stacked on desktop */}
           <div>
             {/* Mobile carousel */}
-            <div className="md:hidden relative overflow-hidden">
+            <div className="md:hidden relative overflow-hidden" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
               <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${active * 100}%)` }}
