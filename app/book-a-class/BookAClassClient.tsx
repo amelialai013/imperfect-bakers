@@ -191,32 +191,36 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             </div>
           </div>
 
-          {/* Mobile layout: two-row card */}
-          <div className="sm:hidden px-5 pt-4 pb-4 flex flex-col gap-3">
-            {/* Top row: label + name */}
-            <div className="min-w-0">
+          {/* Mobile layout */}
+          <div className="sm:hidden px-5 pt-4 pb-4 flex flex-col gap-2.5">
+            {/* Top row: label + price */}
+            <div className="flex items-start justify-between gap-2">
               <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
-              <h3 className="text-[#1a1a1a] text-base font-medium leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                {s.sessionName || s.classLabel}
-              </h3>
+              <p className="text-[#1a1a1a] text-base font-semibold shrink-0" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
             </div>
-            {/* Bottom row: date · time left, price + arrow right */}
+            {/* Middle: class name */}
+            <h3 className="text-[#1a1a1a] text-base font-medium leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              {s.sessionName || s.classLabel}
+            </h3>
+            {/* Bottom row: date · time + spots + arrow */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+              <div className="flex items-center gap-1.5 text-xs text-[#6b7280]">
                 <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <span>{s.date}</span>
+                <span>{shortDate(s.date)}</span>
                 <span className="text-[#d4cfc8]">·</span>
+                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 <span>{s.time}</span>
               </div>
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 {!isFull ? (
                   <span className="text-[0.65rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2.5 py-1">{s.spotsLeft} left</span>
                 ) : (
                   <span className="text-[0.65rem] font-medium text-red-400 bg-red-50 rounded-full px-2.5 py-1">Full</span>
                 )}
-                <p className="text-[#1a1a1a] text-base font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
                 {!isFull && (
                   <svg className="w-4 h-4 text-[#006644] transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
