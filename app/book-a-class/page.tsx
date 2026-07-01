@@ -50,25 +50,27 @@ export default async function BookAClassPage() {
       {/* ── PRIVATE BOOKINGS CTA ─────────────────────────────── */}
       <section className="px-8 pb-24 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
-          <div className="border border-[#e4dfd5] rounded-[12px] bg-white px-10 py-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-0 justify-between">
-            <div className="flex items-start gap-5">
-              <div className="w-10 h-10 rounded-full bg-[#006644]/8 flex items-center justify-center shrink-0 mt-0.5">
-                <svg className="w-4.5 h-4.5 text-[#006644]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-1">Private bookings</p>
-                <p className="text-[#1a1a1a] font-medium text-base" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                  Looking for something more personal?
-                </p>
-                <p className="text-[#6b7280] text-sm mt-1 leading-relaxed max-w-sm">
-                  Custom classes at your place or ours — birthdays, team events, or a private night in.
-                </p>
-              </div>
+          <div className="relative overflow-hidden rounded-[12px] bg-[#006644] px-10 md:px-14 py-12 flex flex-col md:flex-row md:items-center gap-8 md:gap-0 md:justify-between">
+            {/* Subtle decorative ring */}
+            <div className="pointer-events-none absolute -right-16 -top-16 w-64 h-64 rounded-full border border-white/10" />
+            <div className="pointer-events-none absolute -right-6 -top-6 w-40 h-40 rounded-full border border-white/10" />
+            <div>
+              <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
+                Private bookings
+              </span>
+              <p
+                className="text-white text-2xl md:text-3xl leading-snug tracking-tight mb-2"
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+              >
+                Something more personal<br className="hidden md:block" />
+                <span className="text-white/50"> in mind?</span>
+              </p>
+              <p className="text-white/50 text-sm leading-relaxed max-w-sm mt-3">
+                Custom classes at your place or ours — birthdays, team events, or a private night in.
+              </p>
             </div>
-            <Link href="/interest" className="shrink-0 sm:ml-10">
-              <button className="group inline-flex items-center gap-2.5 border border-[#006644] text-[#006644] font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-[#006644] hover:text-white transition-colors whitespace-nowrap">
+            <Link href="/interest" className="shrink-0 md:ml-16">
+              <button className="group inline-flex items-center gap-3 bg-white text-[#006644] font-semibold text-sm px-6 py-3.5 rounded-full hover:bg-[#faf9f6] transition-colors whitespace-nowrap">
                 Request a class
                 <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
