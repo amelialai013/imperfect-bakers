@@ -62,7 +62,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
             </svg>
           ) : (
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m4 4V4" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 4l4 4m0 0l4-4m-4 4V8" />
             </svg>
           )}
           <span className="hidden sm:inline">{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
