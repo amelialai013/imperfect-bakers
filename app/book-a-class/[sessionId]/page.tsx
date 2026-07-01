@@ -59,7 +59,6 @@ export default async function SessionBookingPage({
           >
             {session.sessionName || session.classLabel}
           </h1>
-          <p className="text-[#9ca3af] text-sm mt-2">{session.classLabel}</p>
         </div>
       </section>
 
