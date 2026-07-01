@@ -73,8 +73,8 @@ export default function Home() {
       </section>
 
       {/* ── WHY IMPERFECT BAKERS ──────────────────────────────── */}
-      <section className="pt-16 pb-28 px-8 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-16 pb-28 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto px-8">
 
           {/* Section header */}
           <span className="section-label block">Our philosophy</span>

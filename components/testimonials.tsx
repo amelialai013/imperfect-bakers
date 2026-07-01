@@ -24,8 +24,8 @@ export default function Testimonials() {
   const [active, setActive] = useState(0);
 
   return (
-    <section className="bg-[#006644] py-24 px-8">
-      <div className="max-w-7xl mx-auto">
+    <section className="bg-[#006644] py-24">
+      <div className="max-w-7xl mx-auto px-8">
 
         {/* Label */}
         <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-12">
