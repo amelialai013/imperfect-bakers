@@ -225,20 +225,22 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             </div>
             {/* Content */}
             <div className="flex-1 min-w-0 px-4 py-3.5 flex flex-col justify-between gap-1.5">
-              <div>
-                <span className="text-[0.58rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
-                <h3 className="text-[#1a1a1a] text-sm font-medium leading-snug mt-0.5" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                  {s.sessionName || s.classLabel}
-                </h3>
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <span className="text-[0.58rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
+                  <h3 className="text-[#1a1a1a] text-sm font-medium leading-snug mt-0.5" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                    {s.sessionName || s.classLabel}
+                  </h3>
+                </div>
+                {!isFull ? (
+                  <span className="text-[0.6rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2 py-0.5 shrink-0 mt-0.5">{s.spotsLeft} left</span>
+                ) : (
+                  <span className="text-[0.6rem] font-medium text-red-400 bg-red-50 rounded-full px-2 py-0.5 shrink-0 mt-0.5">Full</span>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-[#9ca3af]">{s.time}</span>
                 <div className="flex items-center gap-2 shrink-0">
-                  {!isFull ? (
-                    <span className="text-[0.6rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2 py-0.5">{s.spotsLeft} left</span>
-                  ) : (
-                    <span className="text-[0.6rem] font-medium text-red-400 bg-red-50 rounded-full px-2 py-0.5">Full</span>
-                  )}
                   <p className="text-[#1a1a1a] text-sm font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
                   {!isFull && (
                     <svg className="w-3.5 h-3.5 text-[#006644] transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
