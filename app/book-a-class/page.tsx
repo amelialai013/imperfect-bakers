@@ -44,23 +44,31 @@ export default async function BookAClassPage() {
         <div className="max-w-7xl mx-auto">
           <BookAClassClient sessions={sessions} />
 
-          {/* Private bookings CTA */}
-          <div className="mt-10 pt-10 border-t border-[#e4dfd5]">
-            <div className="flex flex-col md:flex-row md:items-end gap-10 md:gap-24">
-              <div className="flex-1">
-                <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">Private bookings</span>
-                <h2
-                  className="text-2xl md:text-3xl text-[#1a1a1a] leading-snug mb-3"
-                  style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-                >
-                  Don&apos;t see what you&apos;re looking for?
-                </h2>
-                <p className="text-[#6b7280] text-sm leading-relaxed max-w-sm">
-                  Request a private or custom class — at your place or ours. We&apos;ll tailor everything just for you.
-                </p>
-              </div>
-              <Link href="/interest" className="shrink-0">
-                <button className="btn-secondary group">
+        </div>
+      </section>
+
+      {/* ── PRIVATE BOOKINGS CTA ─────────────────────────────── */}
+      <section className="bg-[#006644] px-8 py-20">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-end">
+            <div>
+              <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-5">
+                Private bookings
+              </span>
+              <h2
+                className="text-3xl md:text-4xl text-white leading-tight tracking-tight"
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+              >
+                Something more<br />
+                <em className="not-italic text-white/50">personal in mind?</em>
+              </h2>
+            </div>
+            <div className="flex flex-col gap-8 md:items-end">
+              <p className="text-white/60 text-base leading-relaxed md:text-right max-w-xs md:ml-auto">
+                We offer private and custom classes — at your place or ours. Perfect for birthdays, team events, or just a night in with friends.
+              </p>
+              <Link href="/interest">
+                <button className="group inline-flex items-center gap-3 bg-white text-[#006644] font-semibold text-sm px-6 py-3.5 rounded-full hover:bg-[#faf9f6] transition-colors">
                   Request a class
                   <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
