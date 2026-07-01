@@ -192,7 +192,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         }`}
       >
         <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
-        <div className="p-7 flex flex-col gap-6 flex-1">
+        <div className="p-5 flex flex-col gap-4 flex-1">
           <div className="flex items-start justify-between gap-4">
             <span className="text-[0.6875rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
             {!isFull ? (
@@ -202,7 +202,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             )}
           </div>
           <div>
-            <h3 className="text-[#1a1a1a] text-xl font-medium leading-snug mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            <h3 className="text-[#1a1a1a] text-base font-medium leading-snug mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {s.sessionName || s.classLabel}
             </h3>
             {s.description && <p className="text-[#9ca3af] text-sm leading-relaxed line-clamp-2">{s.description}</p>}
@@ -235,7 +235,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           )}
           <div className="flex items-center justify-between pt-1">
             <div>
-              <p className="text-[#1a1a1a] text-2xl font-semibold leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
+              <p className="text-[#1a1a1a] text-xl font-semibold leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
               <p className="text-[#c8c0b4] text-xs mt-0.5">per person</p>
             </div>
             {!isFull && (
