@@ -240,15 +240,6 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                   <h3 className="text-[#1a1a1a] text-sm font-medium leading-snug mt-0.5" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                     {s.sessionName || s.classLabel}
                   </h3>
-                  {s.location && (
-                    <span className="flex items-center gap-1 mt-1 text-[#9ca3af] text-[0.65rem]">
-                      <svg className="w-2.5 h-2.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      {s.location}
-                    </span>
-                  )}
                 </div>
                 {!isFull ? (
                   <span className="text-[0.6rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2 py-0.5 shrink-0 mt-[6px]">{s.spotsLeft} left</span>
@@ -257,7 +248,15 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 )}
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#9ca3af]">{s.time}</span>
+                <div className="flex items-center gap-1.5 text-[0.65rem] text-[#9ca3af] min-w-0">
+                  <span className="shrink-0">{s.time}</span>
+                  {s.location && (
+                    <>
+                      <span className="text-[#d4cfc8] shrink-0">·</span>
+                      <span className="truncate">{s.location}</span>
+                    </>
+                  )}
+                </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <p className="text-[#1a1a1a] text-sm font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
                   {!isFull && (
