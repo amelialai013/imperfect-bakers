@@ -332,7 +332,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             </div>
           </div>
           {!isFull && (
-            <div className="h-0.5 bg-[#f0ece4] rounded-full overflow-hidden">
+            <div className="h-0.5 bg-[#f0ece4] rounded-full overflow-hidden my-1">
               <div className="h-full bg-[#006644] rounded-full" style={{ width: `${spotsPercent}%` }} />
             </div>
           )}
