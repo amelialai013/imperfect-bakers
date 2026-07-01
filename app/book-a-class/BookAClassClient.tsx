@@ -33,7 +33,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
   return (
     <div>
       {/* ── Filter & sort bar ── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+      <div className="flex flex-row items-center justify-between gap-3 mb-8">
         {/* Class filter dropdown */}
         <div className="relative w-auto">
           <select
