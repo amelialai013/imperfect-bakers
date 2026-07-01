@@ -55,8 +55,8 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           {/* Grid/List + Sort — grouped so they wrap together */}
           <div className="flex items-center gap-2">
 
-          {/* Grid / List toggle */}
-          <div className="flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[38px]">
+          {/* Grid / List toggle — hidden on mobile */}
+          <div className="hidden sm:flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[38px]">
             <button
               onClick={() => setView("grid")}
               className={`px-3 h-full transition-colors ${view === "grid" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
@@ -104,14 +104,23 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
         <div className="py-16 text-center">
           <p className="text-[#6b7280] text-sm">No sessions for this class type.</p>
         </div>
-      ) : view === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
-        </div>
       ) : (
-        <div className="flex flex-col gap-3">
-          {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
-        </div>
+        <>
+          {/* Mobile: always list */}
+          <div className={`sm:hidden flex flex-col gap-3`}>
+            {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
+          </div>
+          {/* Desktop: respects toggle */}
+          {view === "grid" ? (
+            <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
+            </div>
+          ) : (
+            <div className="hidden sm:flex flex-col gap-3">
+              {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
