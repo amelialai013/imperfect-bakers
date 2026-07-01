@@ -37,7 +37,7 @@ export default function InterestPage() {
       </section>
 
       {/* ── FORM ─────────────────────────────────────────────── */}
-      <section className="bg-[#faf9f6] px-8 pt-10 pb-12 md:pt-12 md:pb-16">
+      <section className="bg-[#faf9f6] px-8 pt-10 pb-4 md:pt-12">
         <div className="max-w-2xl mx-auto">
           <form className="space-y-12">
 
