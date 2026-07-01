@@ -48,9 +48,9 @@ export default async function BookAClassPage() {
       </section>
 
       {/* ── PRIVATE BOOKINGS CTA ─────────────────────────────── */}
-      <section className="bg-[#faf9f6] px-8 pb-20">
+      <section className="bg-[#ede8df] px-8 py-12">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-[#ede8df] rounded-2xl px-10 md:px-14 py-12 grid md:grid-cols-[1fr_auto] gap-8 md:gap-16 items-center">
+          <div className="grid md:grid-cols-[1fr_auto] gap-8 md:gap-16 items-center">
             <div>
               <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-3 block">Private bookings</span>
               <h2
