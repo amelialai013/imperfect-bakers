@@ -41,14 +41,8 @@ export default function Nav() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#006644] text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5" stroke="currentColor" strokeWidth="1.8">
-              <line x1="12" y1="3" x2="12" y2="5" />
-              <path d="M6 8 Q12 5 18 8" />
-              <rect x="5" y="8" width="14" height="10" rx="2" />
-              <line x1="5" y1="11" x2="3" y2="11" />
-              <line x1="19" y1="11" x2="21" y2="11" />
-            </svg>
+          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#006644]">
+            <img src="/logo.png" alt="" className="w-5 h-5 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
           </span>
           <span
             className="text-[#006644] font-bold text-base tracking-tight"
