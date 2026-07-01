@@ -51,20 +51,16 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           </svg>
         </div>
 
-        {/* Date sort dropdown */}
-        <div className="relative">
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-            className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors"
-          >
-            <option value="asc">Date: earliest first</option>
-            <option value="desc">Date: latest first</option>
-          </select>
-          <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        {/* Date sort toggle */}
+        <button
+          onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
+          className="flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#006644] transition-colors shrink-0"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
           </svg>
-        </div>
+          <span>{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
+        </button>
       </div>
 
       {/* ── Session cards ── */}
