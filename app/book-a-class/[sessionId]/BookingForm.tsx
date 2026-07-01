@@ -9,11 +9,6 @@ type Counts = { child: number; youngAdult: number; adult: number };
 const inputClass =
   "w-full bg-[#f5f2ed] rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none focus:bg-[#eeeae4] transition-colors";
 
-function SectionNumber({ n }: { n: string }) {
-  return (
-    <span className="text-[0.6rem] font-semibold tracking-[0.25em] text-[#c8c0b4]">{n}</span>
-  );
-}
 
 function Counter({
   label,
@@ -142,11 +137,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 01 — Your details */}
         <div className="mb-12">
-          <div className="flex items-center gap-4 mb-6">
-            <SectionNumber n="01" />
-            <div className="flex-1 h-px bg-[#e8e2d9]" />
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Your details</p>
-          </div>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Your details</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="sm:col-span-2">
               <input required name="name" type="text" placeholder="Full name *" className={inputClass} />
@@ -158,15 +149,9 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 02 — Number of people */}
         <div className="mb-12">
-          <div className="flex items-center gap-4 mb-6">
-            <SectionNumber n="02" />
-            <div className="flex-1 h-px bg-[#e8e2d9]" />
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">
-              Attendees
-              <span className="ml-3 font-normal text-[#9ca3af] normal-case tracking-normal">
-                {totalPeople > 0 ? `${totalPeople} of ${session.spotsLeft} spots` : `${session.spotsLeft} spots available`}
-              </span>
-            </p>
+          <div className="flex items-baseline justify-between mb-6">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
+            <span className="text-xs text-[#9ca3af]">{totalPeople > 0 ? `${totalPeople} of ${session.spotsLeft} spots` : `${session.spotsLeft} spots available`}</span>
           </div>
           <div className="divide-y divide-[#f0ece4]">
             <Counter label="Child" sub="7–17 yrs" value={counts.child} onChange={(v) => setCount("child", v)} />
@@ -177,11 +162,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 03 — Payment */}
         <div className="mb-12">
-          <div className="flex items-center gap-4 mb-6">
-            <SectionNumber n="03" />
-            <div className="flex-1 h-px bg-[#e8e2d9]" />
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Payment</p>
-          </div>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Payment</p>
           <div className="bg-[#f5f2ed] rounded-lg px-5 py-4 mb-5 text-sm">
             <p className="text-[#1a1a1a] mb-1">
               Transfer to <span className="font-semibold">Sarah Jasper</span>
@@ -221,11 +202,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 04 — Notes */}
         <div className="mb-10">
-          <div className="flex items-center gap-4 mb-6">
-            <SectionNumber n="04" />
-            <div className="flex-1 h-px bg-[#e8e2d9]" />
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Anything else?</p>
-          </div>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Anything else?</p>
           <textarea
             name="notes"
             rows={3}
