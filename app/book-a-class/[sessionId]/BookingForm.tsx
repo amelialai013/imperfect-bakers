@@ -260,15 +260,14 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <p className="text-white/60">{session.ages}</p>
             </div>
           </div>
-          <div className="border-t border-white/10 mt-6 pt-6 flex items-baseline justify-between">
+          <div className="border-t border-white/10 mt-6 pt-6">
             <p className="text-3xl font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               ${session.price}
             </p>
-            <p className="text-xs text-white/40">per person</p>
+            <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-white/40 mt-2">
+              per person
+            </p>
           </div>
-          <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-white/40 mt-2">
-            {session.spotsLeft} {session.spotsLeft === 1 ? "spot" : "spots"} remaining
-          </p>
         </div>
       </div>
 
