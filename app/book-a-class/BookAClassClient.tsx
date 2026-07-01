@@ -169,9 +169,9 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
                         <p className="text-[#c8c0b4] text-xs mt-0.5">per person</p>
                       </div>
                       {!isFull && (
-                        <div className="flex items-center gap-1.5 text-[#006644] text-sm font-medium group-hover:gap-2.5 transition-all duration-200">
+                        <div className="flex items-center gap-1.5 text-[#006644] text-sm font-medium">
                           <span>Book</span>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                           </svg>
                         </div>
