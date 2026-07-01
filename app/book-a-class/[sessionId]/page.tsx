@@ -42,26 +42,24 @@ export default async function SessionBookingPage({
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#006644] px-8 py-7">
+      <section className="bg-[#faf9f6] px-8 pt-8 pb-8 border-b border-[#e8e2d9]">
         <div className="max-w-7xl mx-auto">
           <Link
             href="/book-a-class"
-            className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm mb-6 transition-colors"
+            className="inline-flex items-center gap-2 text-[#9ca3af] hover:text-[#006644] text-sm mb-5 transition-colors"
           >
             <svg className="w-3.5 h-3.5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
             </svg>
             All classes
           </Link>
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">
-            {session.classLabel}
-          </span>
           <h1
-            className="text-3xl md:text-4xl text-white leading-tight tracking-tight mt-3"
+            className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             {session.sessionName || session.classLabel}
           </h1>
+          <p className="text-[#9ca3af] text-sm mt-2">{session.classLabel}</p>
         </div>
       </section>
 

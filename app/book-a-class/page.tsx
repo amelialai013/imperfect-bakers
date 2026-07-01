@@ -20,22 +20,17 @@ export default async function BookAClassPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#006644] px-8 py-7">
-        <div className="max-w-7xl mx-auto">
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">Reserve your spot</span>
-          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-8" style={{ alignItems: "last baseline" }}>
-            <h1
-              className="text-3xl md:text-4xl text-white leading-tight tracking-tight"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              <em className="not-italic text-white/50">Class</em> bookings
-            </h1>
-            <div className="md:ml-auto">
-              <p className="text-white/50 text-base leading-relaxed max-w-sm">
-                Browse upcoming sessions and secure your spot in the kitchen.
-              </p>
-            </div>
-          </div>
+      <section className="bg-[#faf9f6] px-8 pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+          <h1
+            className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+          >
+            Class <em className="not-italic text-[#006644]">bookings</em>
+          </h1>
+          <p className="text-[#9ca3af] text-sm leading-relaxed max-w-xs md:text-right pb-1">
+            Browse upcoming sessions and secure your spot in the kitchen.
+          </p>
         </div>
       </section>
 

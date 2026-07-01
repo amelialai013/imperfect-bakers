@@ -53,20 +53,17 @@ export default function ClassesPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="px-8 py-7 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto">
-          <span className="section-label">What we offer</span>
-          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-8" style={{ alignItems: "last baseline" }}>
-            <h1
-              className="text-3xl md:text-4xl text-[#1a1a1a] leading-tight tracking-tight"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              Our <em className="not-italic text-[#006644]">classes</em>
-            </h1>
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto">
-              From beginners to budding foodies, there&apos;s a class for everyone. Pick your adventure.
-            </p>
-          </div>
+      <section className="bg-[#faf9f6] px-8 pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+          <h1
+            className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+          >
+            Our <em className="not-italic text-[#006644]">classes</em>
+          </h1>
+          <p className="text-[#9ca3af] text-sm leading-relaxed max-w-xs md:text-right pb-1">
+            From beginners to budding foodies, there&apos;s a class for everyone.
+          </p>
         </div>
       </section>
 
