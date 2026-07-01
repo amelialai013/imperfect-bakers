@@ -36,7 +36,7 @@ export default function Nav() {
   }, [visible]);
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/98 backdrop-blur-md border-b border-[#e8e4dc]">
+    <nav className="sticky top-0 z-50 bg-[#faf9f6]/98 backdrop-blur-md border-b border-[#e8e4dc]">
       <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
 
         {/* Logo */}
