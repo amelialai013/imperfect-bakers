@@ -47,7 +47,7 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="md:col-span-3">
+          <div className="mt-[28px] md:mt-0 md:col-span-3">
             <h4 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-5">Get in touch</h4>
             <a
               href="mailto:imperfectbakers@outlook.com"
