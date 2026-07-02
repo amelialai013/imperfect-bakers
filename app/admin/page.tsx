@@ -1126,11 +1126,11 @@ export default function AdminPage() {
   return (
     <>
       <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
-        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
           <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
             Admin <em className="not-italic text-[#006644]">dashboard</em>
           </h1>
-          <div className="flex flex-wrap items-center gap-4 pb-1 mt-12 md:mt-0 md:ml-auto">
+          <div className="flex flex-wrap items-center gap-4 pb-1 mt-6 lg:mt-0 lg:ml-auto">
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
