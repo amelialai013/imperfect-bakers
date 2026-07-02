@@ -929,7 +929,7 @@ export default function AdminPage() {
                     <label className={labelCls}>Description</label>
                     <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value }))} rows={2} placeholder="Short description…" className={inputCls + " resize-none"} />
                   </div>
-                  <div className="flex items-center gap-3 pt-1">
+                  <div className="flex flex-wrap items-center gap-3 pt-1">
                     <button onClick={saveNewClass} disabled={savingNewClass || !newClass.title.trim()} className="btn-primary">
                       {savingNewClass ? "Saving…" : "Save class"}
                     </button>
