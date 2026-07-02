@@ -174,15 +174,13 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
               <p className="text-[#6b7280] break-all">{b.email}</p>
             </div>
             <div>
-              <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">People</p>
-              <p className="text-[#1a1a1a]">
-                {b.totalPeople} total
-                {(b.counts.child > 0 || b.counts.youngAdult > 0 || b.counts.adult > 0) && (
-                  <span className="text-[#6b7280] text-xs ml-1">
-                    ({b.counts.child}C · {b.counts.youngAdult}YA · {b.counts.adult}A)
-                  </span>
-                )}
-              </p>
+              <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Attendees</p>
+              <p className="text-[#1a1a1a] font-medium">{b.totalPeople} total</p>
+              <div className="text-[#6b7280] text-xs mt-1 space-y-0.5">
+                {b.counts.child > 0 && <p>Child (7–17): {b.counts.child}</p>}
+                {b.counts.youngAdult > 0 && <p>Young Adult (18–34): {b.counts.youngAdult}</p>}
+                {b.counts.adult > 0 && <p>Adult (35+): {b.counts.adult}</p>}
+              </div>
             </div>
             <div>
               <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Payment</p>
