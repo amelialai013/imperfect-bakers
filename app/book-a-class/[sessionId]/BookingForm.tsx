@@ -103,6 +103,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         counts,
         totalPeople,
         paymentStatus,
+        paymentOther: paymentStatus === "other" ? (fd.get("payment-other") ?? "") : "",
         notes: fd.get("notes") ?? "",
       }),
     });
@@ -229,6 +230,16 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               </button>
             ))}
           </div>
+          {paymentStatus === "other" && (
+            <div className="mt-3">
+              <input
+                name="payment-other"
+                type="text"
+                placeholder="Let us know your situation…"
+                className={inputClass}
+              />
+            </div>
+          )}
           {fieldErrors.payment && <p className="text-xs text-red-500 mt-2">{fieldErrors.payment}</p>}
         </div>
 
