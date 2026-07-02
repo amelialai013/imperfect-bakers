@@ -235,7 +235,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <input
                 name="payment-other"
                 type="text"
-                placeholder="Let us know your situation…"
+                placeholder="e.g. I'll pay on the day, or need to check with my bank…"
                 className={inputClass}
               />
             </div>
