@@ -261,12 +261,6 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               </svg>
               <span>{session.location}</span>
             </div>
-            <div className="flex items-center gap-2 text-white/70">
-              <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span>{session.ages}</span>
-            </div>
           </div>
 
           {/* Divider + price */}
