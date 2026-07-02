@@ -85,7 +85,7 @@ export default function Home() {
             >
               Why <span className="text-[#1a1a1a]">Imperfect</span> Bakers?
             </h2>
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto">
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto text-left">
               We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function Home() {
           {/* Feature grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#e4dfd5]">
             {features.map((f) => (
-              <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10">
+              <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10 text-left">
                 <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-6 block">{f.number}</span>
                 <h3
                   className="text-xl text-[#006644] mb-4 leading-snug"
