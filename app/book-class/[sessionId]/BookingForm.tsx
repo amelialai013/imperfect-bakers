@@ -287,7 +287,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         <div className="mt-8 pt-2 flex flex-col sm:flex-row sm:items-center gap-6">
           <button type="submit" disabled={submitting} className="btn-primary group self-start">
-            {submitting ? "Requesting…" : "Request my spot"}
+            {submitting ? "Requesting…" : "Request reservation"}
             {!submitting && (
               <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
