@@ -86,6 +86,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     const phone = (fd.get("phone") as string).trim();
     if (!name) errors.name = "Please enter your full name";
     if (!email) errors.email = "Please enter your email address";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = "Please enter a valid email address";
     if (!phone) errors.phone = "Please enter your phone number";
     else if (!/^[\d\s\+\-\(\)]{7,15}$/.test(phone)) errors.phone = "Please enter a valid phone number";
     if (totalPeople < 1) errors.attendees = "Please add at least one person";
