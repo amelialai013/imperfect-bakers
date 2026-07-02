@@ -59,7 +59,7 @@ export default function ClassesPage() {
             className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
-            Our <em className="not-italic text-[#006644]">classes</em>
+            What we <em className="not-italic text-[#006644]">offer</em>
           </h1>
           <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right pb-1 text-balance">
             From beginners to budding foodies, there&apos;s a class for everyone.
@@ -133,7 +133,6 @@ export default function ClassesPage() {
                     <span key={s} className="text-base text-[#FBBC05]">★</span>
                   ))}
                 </div>
-                <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]/50">Google Reviews</span>
               </div>
               <h2
                 className="text-3xl md:text-4xl text-[#006644] leading-tight mb-6"
