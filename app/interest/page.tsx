@@ -46,7 +46,7 @@ export default function InterestPage() {
 
             {/* Contact Details */}
             <div>
-              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Contact details</p>
+              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Contact details</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="sm:col-span-2">
                 <input type="text" placeholder="Full name" className={inputClass} />
@@ -75,7 +75,7 @@ export default function InterestPage() {
 
             {/* Class interests */}
             <div>
-              <p className={labelClass}>Classes of interest</p>
+              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Classes of interest</p>
               <div className="flex flex-wrap gap-2.5 mt-3">
                 {classOptions.map((name) => {
                   const active = selected.includes(name);
