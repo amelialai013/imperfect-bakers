@@ -101,7 +101,7 @@ function Field({
   return (
     <div>
       <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2">
-        {label} {required && <span className="text-[#006644]">*</span>}
+        {label}
       </label>
       {type === "textarea" ? (
         <textarea
@@ -213,7 +213,7 @@ function SessionForm({
     required?: boolean; children: React.ReactNode;
   }) => (
     <div>
-      <label className={labelCls}>{label}{req && <span className="text-[#006644] ml-1">*</span>}</label>
+      <label className={labelCls}>{label}</label>
       <div className="relative">
         <select name={name} value={value} onChange={onChange} required={req}
           className={cls + " appearance-none pr-8 cursor-pointer"}>
@@ -239,7 +239,7 @@ function SessionForm({
             <option value="">Select class type…</option>
             {CLASS_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
           </SelectField>
-          <Field label="Session name" name="sessionName" value={form.sessionName} onChange={handle} placeholder="e.g. Delicious Dinner (optional)" />
+          <Field label="Session name (optional)" name="sessionName" value={form.sessionName} onChange={handle} placeholder="e.g. Delicious Dinner" />
         </div>
       </div>
 
@@ -248,12 +248,12 @@ function SessionForm({
         <span className={sectionLabel}>Schedule</span>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={labelCls}>Date <span className="text-[#006644]">*</span></label>
+            <label className={labelCls}>Date</label>
             <input type="date" value={dateIso} onChange={(e) => setDateIso(e.target.value)} required className={cls} />
             {form.date && <p className="text-xs text-[#006644]/70 mt-1.5">{form.date}</p>}
           </div>
           <div>
-            <label className={labelCls}>Time <span className="text-[#006644]">*</span></label>
+            <label className={labelCls}>Time</label>
             <div className="flex gap-2">
               <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required className={cls} />
               <div className="relative shrink-0 w-32">
@@ -311,8 +311,8 @@ function SessionForm({
       <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-6">
         <span className={sectionLabel}>Content</span>
         <div className="space-y-4">
-          <Field label="Description" name="description" value={form.description} onChange={handle} type="textarea" placeholder="Short description of the session…" />
-          <Field label="Image URL" name="imageUrl" value={form.imageUrl} onChange={handle} placeholder="https://images.unsplash.com/…" />
+          <Field label="Description (optional)" name="description" value={form.description} onChange={handle} type="textarea" placeholder="Short description of the session…" />
+          <Field label="Image URL (optional)" name="imageUrl" value={form.imageUrl} onChange={handle} placeholder="https://images.unsplash.com/…" />
         </div>
       </div>
 
