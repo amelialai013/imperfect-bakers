@@ -553,9 +553,19 @@ export default function AdminPage() {
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
-    const res = await authFetch("/api/sessions", token);
-    const data = await res.json();
-    setSessions(Array.isArray(data) ? data : []);
+    try {
+      const res = await authFetch("/api/sessions", token);
+      if (res.status === 401) {
+        // Stale token — clear everything and go back to login
+        storageRemove("ib_admin_token");
+        setToken("");
+        setView("login");
+        setLoading(false);
+        return;
+      }
+      const data = await res.json();
+      setSessions(Array.isArray(data) ? data : []);
+    } catch { /* network error — keep showing what we have */ }
     setLoading(false);
   }, [token]);
 
@@ -580,22 +590,31 @@ export default function AdminPage() {
     if (view === "classes" && token) loadClassConfigs();
   }, [view, token, loadClassConfigs]);
 
-  async function login(e: React.FormEvent) {
-    e.preventDefault();
+  async function doLogin() {
     setLoginError("");
-    const res = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    if (!res.ok) {
-      setLoginError("Incorrect password.");
-      return;
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (!res.ok) {
+        setLoginError("Incorrect password.");
+        return;
+      }
+      const { token: t } = await res.json();
+      storageSet("ib_admin_token", t);
+      setToken(t);
+      setView("dashboard");
+    } catch {
+      setLoginError("Connection error. Please try again.");
     }
-    const { token: t } = await res.json();
-    storageSet("ib_admin_token", t);
-    setToken(t);
-    setView("dashboard");
+  }
+
+  // Sync wrapper so e.preventDefault() fires before any async work (Safari-safe)
+  function login(e: React.FormEvent) {
+    e.preventDefault();
+    doLogin();
   }
 
   function logout() {
@@ -743,7 +762,7 @@ export default function AdminPage() {
         </section>
         <section className="px-8 pt-14 pb-32 bg-[#faf9f6]">
           <div className="max-w-sm">
-            <form onSubmit={login} className="space-y-4">
+            <form onSubmit={login} noValidate className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2">Password</label>
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -751,10 +770,12 @@ export default function AdminPage() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && doLogin()}
+                    autoComplete="current-password"
                     autoFocus
                     className="flex-1 border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm focus:outline-none focus:border-[#006644] bg-white"
                   />
-                  <button type="submit" className="btn-primary shrink-0">Sign in</button>
+                  <button type="button" onClick={doLogin} className="btn-primary shrink-0">Sign in</button>
                 </div>
               </div>
               {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
