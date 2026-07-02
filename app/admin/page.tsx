@@ -662,10 +662,10 @@ export default function AdminPage() {
               { label: "Sessions", value: sessions.length },
               { label: "Total bookings", value: totalBookings },
               { label: "Est. revenue", value: `$${totalRevenue.toLocaleString()}` },
-            ].map((s) => (
-              <div key={s.label} className="bg-white border border-[#e4dfd5] rounded-[8px] px-6 py-5">
-                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-1">{s.label}</p>
-                <p className="text-2xl font-semibold text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{s.value}</p>
+            ].map((stat) => (
+              <div key={stat.label} className="bg-white border border-[#e8e2d9] rounded-xl px-7 py-6">
+                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-3">{stat.label}</p>
+                <p className="text-3xl font-medium text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{stat.value}</p>
               </div>
             ))}
           </div>
@@ -676,10 +676,10 @@ export default function AdminPage() {
           ) : sessions.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-[#6b7280] mb-6">No sessions yet. Add your first one to get started.</p>
-              <button onClick={() => setView("add")} className="btn-primary">Add session</button>
+              <button onClick={() => setView("add")} className="btn-primary">Add session +</button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {sessions.map((s) => {
                 const booked = s.maxSpots - s.spotsLeft;
                 const pct = Math.round((booked / s.maxSpots) * 100);
@@ -687,69 +687,79 @@ export default function AdminPage() {
                 const showBookings = expandedBookings === s.id;
 
                 return (
-                  <div key={s.id} className="bg-white border border-[#e4dfd5] rounded-[8px] overflow-hidden">
-                    {/* Session header */}
-                    <div className="px-6 py-5 flex flex-col sm:flex-row sm:items-start gap-4">
+                  <div key={s.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+                    <div className="px-7 py-6 flex flex-col sm:flex-row sm:items-center gap-5">
+
+                      {/* Left: occupancy ring-style indicator */}
+                      <div className="shrink-0 hidden sm:flex flex-col items-center justify-center w-14 h-14 rounded-full border-2 border-[#e8e2d9] relative">
+                        <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
+                          <circle cx="28" cy="28" r="24" fill="none" stroke="#e8e2d9" strokeWidth="3" />
+                          <circle cx="28" cy="28" r="24" fill="none" stroke="#006644" strokeWidth="3"
+                            strokeDasharray={`${2 * Math.PI * 24}`}
+                            strokeDashoffset={`${2 * Math.PI * 24 * (1 - pct / 100)}`}
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                        <span className="text-[0.65rem] font-semibold text-[#1a1a1a] relative z-10">{pct}%</span>
+                      </div>
+
+                      {/* Centre: session info */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 flex-wrap mb-1">
-                          <p className="font-semibold text-[#1a1a1a] text-base" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                        <div className="flex items-center gap-2.5 flex-wrap mb-1.5">
+                          <p className="font-semibold text-[#1a1a1a] text-base leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                             {s.classLabel}
                             {s.sessionName && <span className="text-[#6b7280] font-normal"> · {s.sessionName}</span>}
                           </p>
                           {isFull && (
-                            <span className="text-[0.6875rem] tracking-[0.1em] uppercase bg-red-50 text-red-500 border border-red-200 rounded-full px-2 py-0.5">Full</span>
+                            <span className="text-[0.625rem] tracking-[0.12em] uppercase bg-red-50 text-red-500 border border-red-200 rounded-full px-2.5 py-0.5 font-semibold">Full</span>
                           )}
                         </div>
-                        <p className="text-sm text-[#6b7280]">{s.date} · {s.time} · {s.location}</p>
-                        <p className="text-sm text-[#6b7280] mt-0.5">${s.price}/person · {s.ages}</p>
-                        {/* Progress bar */}
+                        <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-[#6b7280]">
+                          <span>{s.date}</span>
+                          <span>{s.time}</span>
+                          <span>{s.location}</span>
+                          <span>${s.price}/person</span>
+                          <span>{s.ages}</span>
+                        </div>
                         <div className="mt-3 flex items-center gap-3">
-                          <div className="flex-1 h-1.5 bg-[#e4dfd5] rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-[#006644] rounded-full transition-all"
-                              style={{ width: `${pct}%` }}
-                            />
+                          <div className="flex-1 h-1 bg-[#e8e2d9] rounded-full overflow-hidden max-w-[180px]">
+                            <div className="h-full bg-[#006644] rounded-full transition-all" style={{ width: `${pct}%` }} />
                           </div>
-                          <span className="text-xs text-[#6b7280] shrink-0">
-                            {booked}/{s.maxSpots} booked
-                          </span>
+                          <span className="text-xs text-[#6b7280]">{booked}/{s.maxSpots} booked</span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                      {/* Right: actions */}
+                      <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => setExpandedBookings(showBookings ? null : s.id)}
-                          className="text-xs border border-[#e4dfd5] rounded-[6px] px-3 py-1.5 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+                          className="text-sm border border-[#e8e2d9] rounded-lg px-4 py-2 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
                         >
                           {showBookings ? "Hide" : "Bookings"} ({booked})
                         </button>
                         <button
                           onClick={() => { setEditTarget(s); setView("edit"); }}
-                          className="text-xs border border-[#e4dfd5] rounded-[6px] px-3 py-1.5 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+                          className="text-sm border border-[#e8e2d9] rounded-lg px-4 py-2 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
                         >
                           Edit
                         </button>
                         {deleteConfirm === s.id ? (
-                          <>
-                            <button
-                              onClick={() => deleteSession(s.id)}
-                              className="text-xs border border-red-300 rounded-[6px] px-3 py-1.5 text-red-500 hover:bg-red-50 transition-colors"
-                            >
-                              Confirm delete
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => deleteSession(s.id)} className="text-sm border border-red-200 rounded-lg px-4 py-2 text-red-500 hover:bg-red-50 transition-colors">
+                              Confirm
                             </button>
-                            <button
-                              onClick={() => setDeleteConfirm(null)}
-                              className="text-xs text-[#6b7280] hover:text-[#1a1a1a] transition-colors"
-                            >
-                              Keep
+                            <button onClick={() => setDeleteConfirm(null)} className="text-sm text-[#6b7280] hover:text-[#1a1a1a] transition-colors px-2 py-2">
+                              Cancel
                             </button>
-                          </>
+                          </div>
                         ) : (
                           <button
                             onClick={() => setDeleteConfirm(s.id)}
-                            className="text-xs border border-[#e4dfd5] rounded-[6px] px-3 py-1.5 text-[#6b7280] hover:border-red-300 hover:text-red-500 transition-colors"
+                            className="text-sm text-[#c8c0b4] hover:text-red-400 transition-colors px-2 py-2"
                           >
-                            Delete
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
                           </button>
                         )}
                       </div>
@@ -757,7 +767,7 @@ export default function AdminPage() {
 
                     {/* Bookings panel */}
                     {showBookings && (
-                      <div className="border-t border-[#e4dfd5] px-6 pb-5">
+                      <div className="border-t border-[#e8e2d9] px-7 pb-6 pt-1">
                         <BookingsPanel sessionId={s.id} token={token} />
                       </div>
                     )}
