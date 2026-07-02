@@ -688,9 +688,10 @@ export default function AdminPage() {
 
                 return (
                   <div key={s.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
-                    <div className="px-7 py-6 flex flex-col sm:flex-row sm:items-center gap-5">
 
-                      {/* Left: occupancy ring-style indicator */}
+                    {/* Session body */}
+                    <div className="px-7 pt-6 pb-5 flex flex-col sm:flex-row sm:items-center gap-5">
+                      {/* Occupancy ring */}
                       <div className="shrink-0 hidden sm:flex flex-col items-center justify-center w-14 h-14 rounded-full border-2 border-[#e8e2d9] relative">
                         <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
                           <circle cx="28" cy="28" r="24" fill="none" stroke="#e8e2d9" strokeWidth="3" />
@@ -703,7 +704,7 @@ export default function AdminPage() {
                         <span className="text-[0.65rem] font-semibold text-[#1a1a1a] relative z-10">{pct}%</span>
                       </div>
 
-                      {/* Centre: session info */}
+                      {/* Session info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2.5 flex-wrap mb-1.5">
                           <p className="font-semibold text-[#1a1a1a] text-base leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
@@ -721,45 +722,47 @@ export default function AdminPage() {
                           <span>${s.price}/person</span>
                           <span>{s.ages}</span>
                         </div>
-                        <div className="mt-3 flex items-center gap-3">
-                          <div className="flex-1 h-1 bg-[#e8e2d9] rounded-full overflow-hidden max-w-[180px]">
-                            <div className="h-full bg-[#006644] rounded-full transition-all" style={{ width: `${pct}%` }} />
-                          </div>
-                          <span className="text-xs text-[#6b7280]">{booked}/{s.maxSpots} booked</span>
-                        </div>
                       </div>
+                    </div>
 
-                      {/* Right: actions */}
-                      <div className="flex items-center gap-2 shrink-0">
+                    {/* Progress bar */}
+                    <div className="px-7 pb-0">
+                      <div className="h-px bg-[#e8e2d9] rounded-full overflow-hidden">
+                        <div className="h-full bg-[#006644] rounded-full transition-all" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+
+                    {/* Footer action bar */}
+                    <div className="px-7 py-3 flex items-center justify-between">
+                      <span className="text-xs text-[#6b7280]">{booked} of {s.maxSpots} spots booked</span>
+                      <div className="flex items-center divide-x divide-[#e8e2d9]">
                         <button
                           onClick={() => setExpandedBookings(showBookings ? null : s.id)}
-                          className="text-sm border border-[#e8e2d9] rounded-lg px-4 py-2 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+                          className="text-xs text-[#6b7280] hover:text-[#006644] transition-colors px-4 py-1"
                         >
-                          {showBookings ? "Hide" : "Bookings"} ({booked})
+                          {showBookings ? "Hide bookings" : `Bookings (${booked})`}
                         </button>
                         <button
                           onClick={() => { setEditTarget(s); setView("edit"); }}
-                          className="text-sm border border-[#e8e2d9] rounded-lg px-4 py-2 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+                          className="text-xs text-[#6b7280] hover:text-[#006644] transition-colors px-4 py-1"
                         >
                           Edit
                         </button>
                         {deleteConfirm === s.id ? (
-                          <div className="flex items-center gap-2">
-                            <button onClick={() => deleteSession(s.id)} className="text-sm border border-red-200 rounded-lg px-4 py-2 text-red-500 hover:bg-red-50 transition-colors">
-                              Confirm
+                          <>
+                            <button onClick={() => deleteSession(s.id)} className="text-xs text-red-500 hover:text-red-600 transition-colors px-4 py-1">
+                              Confirm delete
                             </button>
-                            <button onClick={() => setDeleteConfirm(null)} className="text-sm text-[#6b7280] hover:text-[#1a1a1a] transition-colors px-2 py-2">
+                            <button onClick={() => setDeleteConfirm(null)} className="text-xs text-[#6b7280] hover:text-[#1a1a1a] transition-colors px-4 py-1">
                               Cancel
                             </button>
-                          </div>
+                          </>
                         ) : (
                           <button
                             onClick={() => setDeleteConfirm(s.id)}
-                            className="text-sm text-[#c8c0b4] hover:text-red-400 transition-colors px-2 py-2"
+                            className="text-xs text-[#c8c0b4] hover:text-red-400 transition-colors px-4 py-1"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
+                            Delete
                           </button>
                         )}
                       </div>
