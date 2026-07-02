@@ -84,7 +84,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     if (totalPeople < 1) errors.attendees = "Please add at least one person";
     if (totalPeople > session.spotsLeft) errors.attendees = `Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} left — you requested ${totalPeople}`;
     if (!paymentStatus) errors.payment = "Please select a payment status";
-    if (paymentStatus === "other" && !(fd.get("payment-other") as string)?.trim()) errors.paymentOther = "Please let us know when you're able to pay";
+    if (paymentStatus === "other" && !(fd.get("payment-other") as string)?.trim()) errors.paymentOther = "Please add a note";
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
