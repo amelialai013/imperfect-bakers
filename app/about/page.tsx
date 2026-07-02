@@ -121,7 +121,7 @@ export default function AboutPage() {
           <p className="text-white/60 text-base leading-relaxed max-w-sm mx-auto mb-12">
             Browse upcoming classes or register your interest — we&apos;d love to have you in the kitchen.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link href="/classes" className="btn-primary-inverse group">
               See our classes
               <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
