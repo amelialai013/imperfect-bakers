@@ -516,6 +516,7 @@ export default function AdminPage() {
   const [newClass, setNewClass] = useState<Omit<ClassConfig, "key">>({ title: "", ages: "", imageUrl: "", description: "" });
   const [savingNewClass, setSavingNewClass] = useState(false);
   const [deletingClass, setDeletingClass] = useState<string | null>(null);
+  const [deleteClassConfirm, setDeleteClassConfirm] = useState<string | null>(null);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -798,6 +799,47 @@ export default function AdminPage() {
 
     return (
       <>
+        {/* ── Delete class confirmation modal ── */}
+        {deleteClassConfirm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+            <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
+            <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
+              <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5">
+                <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </div>
+              <h2 className="text-lg font-semibold text-[#1a1a1a] text-center mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                Delete class?
+              </h2>
+              <p className="text-sm text-[#6b7280] text-center mb-8 leading-relaxed">
+                {DEFAULT_CLASS_KEYS.has(deleteClassConfirm)
+                  ? "This will hide the class from your public website. You can restore it at any time."
+                  : "This will permanently remove the class. This action cannot be undone."}
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={async () => {
+                    const key = deleteClassConfirm;
+                    setDeleteClassConfirm(null);
+                    await deleteCustomClass(key);
+                  }}
+                  disabled={deletingClass === deleteClassConfirm}
+                  className="w-full py-3 rounded-full bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors disabled:opacity-50"
+                >
+                  {deletingClass === deleteClassConfirm ? "Deleting…" : "Yes, delete class"}
+                </button>
+                <button
+                  onClick={() => setDeleteClassConfirm(null)}
+                  className="w-full py-3 rounded-full border border-[#e4dfd5] text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ── Unsaved changes modal ── */}
         {unsavedWarning && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
@@ -973,9 +1015,9 @@ export default function AdminPage() {
                         </button>
                       ) : (
                         <button
-                          onClick={() => deleteCustomClass(c.key)}
+                          onClick={() => setDeleteClassConfirm(c.key)}
                           disabled={deletingClass === c.key}
-                          className="text-sm text-[#6b7280] hover:text-red-500 transition-colors"
+                          className="text-sm text-red-500 hover:text-red-700 transition-colors"
                         >
                           {deletingClass === c.key ? "Deleting…" : "Delete class"}
                         </button>
