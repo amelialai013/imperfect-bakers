@@ -74,7 +74,7 @@ export default function InterestPage() {
             </div>
 
             {/* Class interests */}
-            <div>
+            <div className="mt-8">
               <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Classes of interest</p>
               <div className="flex flex-wrap gap-2.5 mt-3">
                 {classOptions.map((name) => {
@@ -100,9 +100,10 @@ export default function InterestPage() {
 
             {/* Notes */}
             <div>
+              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
               <textarea
                 rows={3}
-                placeholder="Anything else? Allergies, group sizes, special occasions…"
+                placeholder="Dietary requirements, allergies, questions…"
                 className={`${inputClass} resize-none`}
                 style={{ scrollbarWidth: "thin", scrollbarColor: "#c8c0b4 transparent" } as React.CSSProperties}
               />
