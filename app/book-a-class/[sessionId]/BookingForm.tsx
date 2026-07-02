@@ -231,37 +231,48 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
       {/* ── Sidebar ── */}
       <div className="lg:sticky lg:top-28">
-        <div className="bg-[#006644] rounded-2xl p-8 text-white">
-          <p className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-white/40 mb-3">{session.classLabel}</p>
-          <p className="text-xl font-medium leading-snug mb-8" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-            {session.sessionName || session.classLabel}
-          </p>
-          <div className="space-y-4 text-sm border-t border-white/10 pt-6">
-            <div className="flex items-start gap-3">
-              <svg className="w-3.5 h-3.5 mt-0.5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-[#006644] rounded-2xl p-6 text-white flex flex-col gap-3">
+          {/* Label + title */}
+          <div>
+            <span className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-white/40">{session.classLabel}</span>
+            <h3 className="text-lg font-medium leading-snug mt-1 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              {session.sessionName || session.classLabel}
+            </h3>
+          </div>
+
+          {/* Metadata rows */}
+          <div className="space-y-2 text-sm">
+            <div className="flex items-center gap-2 text-white/70">
+              <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <div>
-                <p className="text-white/90">{session.date}</p>
-                <p className="text-white/40 text-xs mt-0.5">{session.time}</p>
-              </div>
+              <span>{session.date}</span>
             </div>
-            <div className="flex items-start gap-3">
-              <svg className="w-3.5 h-3.5 mt-0.5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center gap-2 text-white/70">
+              <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{session.time}</span>
+            </div>
+            <div className="flex items-center gap-2 text-white/70">
+              <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <p className="text-white/60">{session.location}</p>
+              <span>{session.location}</span>
             </div>
-            <div className="flex items-start gap-3">
-              <svg className="w-3.5 h-3.5 mt-0.5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center gap-2 text-white/70">
+              <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <p className="text-white/60">{session.ages}</p>
+              <span>{session.ages}</span>
             </div>
           </div>
-          <div className="border-t border-white/10 mt-6 pt-6 flex items-baseline justify-between">
-            <p className="text-3xl font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+
+          {/* Divider + price */}
+          <div className="h-px bg-white/10 my-1" />
+          <div className="flex items-baseline justify-between">
+            <p className="text-2xl font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               ${session.price}
             </p>
             <p className="text-xs text-white/40">per person</p>
