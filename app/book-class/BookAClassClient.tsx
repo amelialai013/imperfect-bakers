@@ -40,7 +40,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
             <select
               value={activeClass}
               onChange={(e) => setActiveClass(e.target.value)}
-              className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[38px]"
+              className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]"
             >
               <option value="All">All classes</option>
               {classLabels.map((label) => (
@@ -56,7 +56,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           <div className="flex items-center gap-2">
 
           {/* Grid / List toggle — hidden on mobile */}
-          <div className="hidden sm:flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[38px]">
+          <div className="hidden sm:flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[46px]">
             <button
               onClick={() => setView("grid")}
               className={`px-3 h-full transition-colors ${view === "grid" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
@@ -81,7 +81,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           {/* Date sort toggle */}
           <button
             onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
-            className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[38px] w-[148px] justify-center"
+            className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[46px] w-[148px] justify-center"
           >
             {sortOrder === "desc" ? (
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
