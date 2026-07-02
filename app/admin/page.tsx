@@ -320,7 +320,7 @@ function SessionForm({
         <button type="submit" disabled={saving} className="btn-primary">
           {saving ? "Saving…" : "Save session"}
         </button>
-        <button type="button" onClick={onCancel} className="text-sm text-[#6b7280] hover:text-[#1a1a1a] transition-colors px-4 py-2">
+        <button type="button" onClick={onCancel} className="btn-secondary">
           Cancel
         </button>
       </div>
