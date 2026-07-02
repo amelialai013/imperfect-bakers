@@ -119,6 +119,19 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
 
       </div>
 
+      {/* Subtle clear-filter link */}
+      {activeClass !== "All" && (
+        <p className="text-xs text-[#6b7280] -mt-4 mb-8">
+          Showing {activeClass.toLowerCase()} classes only —{" "}
+          <button
+            onClick={() => setActiveClass("All")}
+            className="text-[#006644] underline underline-offset-2 hover:text-[#004d33] transition-colors"
+          >
+            show all
+          </button>
+        </p>
+      )}
+
       {/* ── Session cards ── */}
       {filtered.length === 0 ? (
         <div className="py-20 text-center">
