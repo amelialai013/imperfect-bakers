@@ -11,6 +11,9 @@ const classOptions = [
   "Private Group Class",
 ];
 
+const inputClass = "w-full bg-[#f5f2ed] rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none focus:bg-[#eeeae4] transition-colors";
+const labelClass = "block text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-2";
+
 export default function InterestPage() {
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -39,34 +42,22 @@ export default function InterestPage() {
       {/* ── FORM ─────────────────────────────────────────────── */}
       <section className="bg-[#faf9f6] px-8 pt-10 pb-12 md:pt-12 md:pb-16">
         <div className="max-w-2xl mx-auto">
-          <form className="space-y-12">
+          <form className="space-y-8">
 
-            {/* Name + Email */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-12">
-              <div>
-                <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
-                  Full Name
-                </label>
-                <input type="text" placeholder="Jamie Oliver" className="input-underline" />
+            {/* Name + Email + Phone + Experience */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="sm:col-span-2">
+                <input type="text" placeholder="Full name" className={inputClass} />
               </div>
               <div>
-                <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
-                  Email
-                </label>
-                <input type="email" placeholder="jamie@email.com" className="input-underline" />
+                <input type="email" placeholder="Email" className={inputClass} />
               </div>
               <div>
-                <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
-                  Phone
-                </label>
-                <input type="tel" placeholder="0400 000 000" className="input-underline" />
+                <input type="tel" placeholder="Phone" className={inputClass} />
               </div>
-              <div>
-                <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
-                  Experience Level
-                </label>
-                <select className="input-underline text-[#1a1a1a]">
-                  <option value="">Select your level</option>
+              <div className="sm:col-span-2">
+                <select className={`${inputClass} appearance-none`}>
+                  <option value="">Experience level</option>
                   <option value="complete_beginner">Complete beginner</option>
                   <option value="some_experience">Some experience</option>
                   <option value="confident_cook">Confident cook</option>
@@ -76,10 +67,8 @@ export default function InterestPage() {
 
             {/* Class interests */}
             <div>
-              <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-6">
-                Classes of interest
-              </label>
-              <div className="flex flex-wrap gap-2.5">
+              <p className={labelClass}>Classes of interest</p>
+              <div className="flex flex-wrap gap-2.5 mt-3">
                 {classOptions.map((name) => {
                   const active = selected.includes(name);
                   return (
@@ -87,10 +76,10 @@ export default function InterestPage() {
                       key={name}
                       type="button"
                       onClick={() => toggle(name)}
-                      className={`px-5 py-2.5 text-sm border transition-all duration-200 ${
+                      className={`px-4 py-2 text-sm rounded-full border transition-all duration-200 ${
                         active
                           ? "bg-[#006644] border-[#006644] text-white"
-                          : "bg-transparent border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
+                          : "bg-[#f5f2ed] border-[#f5f2ed] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
                       }`}
                       style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                     >
@@ -103,18 +92,16 @@ export default function InterestPage() {
 
             {/* Notes */}
             <div>
-              <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">
-                Anything else?
-              </label>
               <textarea
-                rows={2}
-                placeholder="Allergies, group sizes, special occasions..."
-                className="input-underline resize-none"
+                rows={3}
+                placeholder="Anything else? Allergies, group sizes, special occasions…"
+                className={`${inputClass} resize-none`}
+                style={{ scrollbarWidth: "thin", scrollbarColor: "#c8c0b4 transparent" } as React.CSSProperties}
               />
             </div>
 
             {/* Submit */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-10 -mt-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8 pt-2">
               <button type="submit" className="btn-primary group shrink-0 self-start">
                 Register interest
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
