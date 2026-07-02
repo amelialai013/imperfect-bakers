@@ -74,29 +74,26 @@ export default function Home() {
 
       {/* ── WHY IMPERFECT BAKERS ──────────────────────────────── */}
       <section className="pt-16 pb-28 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-8">
 
           {/* Section header */}
-          <div className="px-8">
-            <span className="section-label block">Our philosophy</span>
-            <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
-              <h2
-                className="text-4xl md:text-5xl text-[#006644] leading-tight"
-                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-              >
-                Why <span className="text-[#1a1a1a]">Imperfect</span> Bakers?
-              </h2>
-              <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto text-left">
-                We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
-              </p>
-            </div>
+          <span className="section-label block">Our philosophy</span>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
+            <h2
+              className="text-4xl md:text-5xl text-[#006644] leading-tight"
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+            >
+              Why <span className="text-[#1a1a1a]">Imperfect</span> Bakers?
+            </h2>
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto">
+              We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
+            </p>
           </div>
 
           {/* Feature grid */}
-          <div className="px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#e4dfd5]">
             {features.map((f) => (
-              <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10 text-left">
+              <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10">
                 <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-6 block">{f.number}</span>
                 <h3
                   className="text-xl text-[#006644] mb-4 leading-snug"
@@ -107,7 +104,6 @@ export default function Home() {
                 <p className="text-[#6b7280] text-sm leading-relaxed">{f.desc}</p>
               </div>
             ))}
-          </div>
           </div>
 
         </div>
