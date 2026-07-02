@@ -87,11 +87,6 @@ export default function LocationInput({ value, onChange, placeholder = "Williams
         className={`${baseCls} ${borderCls} ${className}`}
         autoComplete="off"
       />
-      {!apiKey && (
-        <p className="text-[0.65rem] text-[#c8c0b4] mt-1">
-          Add <code>NEXT_PUBLIC_GOOGLE_MAPS_API_KEY</code> to .env.local to enable address autocomplete
-        </p>
-      )}
     </div>
   );
 }
