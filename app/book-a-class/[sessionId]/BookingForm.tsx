@@ -169,7 +169,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         <div className="mb-12">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Payment</p>
           <div className="mb-5">
-            <p className="text-xs text-[#6b7280] mb-2">Include your name and class name in the reference.</p>
+            <p className="text-xs text-[#6b7280] mb-2">Include your name and class name in the reference</p>
             <p className="text-sm text-[#1a1a1a]">Transfer to <span className="font-semibold">Sarah Jasper</span></p>
             <p className="text-sm text-[#1a1a1a] mt-0.5">BSB <span className="font-medium">733-100</span></p>
             <p className="text-sm text-[#1a1a1a] mt-0.5">Account <span className="font-medium">759127</span></p>
