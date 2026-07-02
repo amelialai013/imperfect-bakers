@@ -439,19 +439,35 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
   );
 }
 
-// ── storage helpers (Safari-safe) ─────────────────────────────────────────────
+// ── storage helpers (Safari-safe, cookie-backed) ──────────────────────────────
+
+function cookieGet(key: string): string {
+  if (typeof document === "undefined") return "";
+  const match = document.cookie.match(new RegExp("(?:^|; )" + key + "=([^;]*)"));
+  return match ? decodeURIComponent(match[1]) : "";
+}
+function cookieSet(key: string, value: string) {
+  if (typeof document === "undefined") return;
+  document.cookie = `${key}=${encodeURIComponent(value)}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Strict`;
+}
+function cookieRemove(key: string) {
+  if (typeof document === "undefined") return;
+  document.cookie = `${key}=; path=/; max-age=0`;
+}
 
 function storageGet(key: string): string {
   if (typeof window === "undefined") return "";
-  try { return localStorage.getItem(key) ?? ""; } catch {}
-  try { return sessionStorage.getItem(key) ?? ""; } catch {}
-  return "";
+  try { const v = localStorage.getItem(key); if (v) return v; } catch {}
+  try { const v = sessionStorage.getItem(key); if (v) return v; } catch {}
+  return cookieGet(key);
 }
 function storageSet(key: string, value: string) {
-  try { localStorage.setItem(key, value); return; } catch {}
+  cookieSet(key, value); // always set cookie as reliable cross-browser fallback
+  try { localStorage.setItem(key, value); } catch {}
   try { sessionStorage.setItem(key, value); } catch {}
 }
 function storageRemove(key: string) {
+  cookieRemove(key);
   try { localStorage.removeItem(key); } catch {}
   try { sessionStorage.removeItem(key); } catch {}
 }
