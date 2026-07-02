@@ -135,7 +135,7 @@ export default function InterestPage() {
 
             {/* Contact Details */}
             <div>
-              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Contact details</p>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Contact details</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
                 <div className="sm:col-span-2">
