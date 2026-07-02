@@ -7,10 +7,10 @@ import type { ClassSession } from "@/lib/types";
 type Counts = { child: number; youngAdult: number; adult: number };
 
 const inputClass =
-  "w-full bg-[#f5f2ed] rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none focus:bg-[#eeeae4] transition-colors";
+  "w-full bg-white border border-[#e4dfd5] rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#6b7280] focus:outline-none focus:border-[#006644] transition-colors";
 
 const inputErrorClass =
-  "w-full rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none transition-colors bg-red-50 border border-red-300 focus:border-red-400";
+  "w-full bg-white rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#6b7280] focus:outline-none transition-colors border border-red-300 focus:border-red-400";
 
 const scrollbarStyle = {
   scrollbarWidth: "thin" as const,
