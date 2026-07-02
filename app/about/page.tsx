@@ -76,7 +76,7 @@ export default function AboutPage() {
                   She holds a <strong className="text-[#006644] font-medium">Bachelor of Education (Honours)</strong> and a <strong className="text-[#006644] font-medium">Certificate III in Patisserie</strong> — the perfect combination for someone who loves teaching people how to make delicious food.
                 </p>
                 <p>
-                  Outside the kitchen, Sarah is a keen tennis player, holds a black belt in karate, and loves to travel for food and inspiration.
+                  Outside the kitchen, Sarah enjoys an active and creative life. She is a keen tennis player, has achieved Grade 6 Piano, and loves the rhythm and fun of salsa dancing. Her Christian faith is at the heart of who she is, shaping her values and inspiring her commitment to serving others with kindness, generosity, and joy.
                 </p>
               </div>
 
