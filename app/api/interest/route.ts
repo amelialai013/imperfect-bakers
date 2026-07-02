@@ -20,10 +20,12 @@ export async function POST(req: Request) {
     await kv.rpush("interests:all", id);
 
     // Fire email + sheets in parallel — don't fail the response if they error
-    await Promise.allSettled([
+    const [emailResult, sheetsResult] = await Promise.allSettled([
       sendEmail(entry),
       sendToSheets(entry),
     ]);
+    if (emailResult.status === "rejected") console.error("sendEmail failed:", emailResult.reason);
+    if (sheetsResult.status === "rejected") console.error("sendToSheets failed:", sheetsResult.reason);
 
     return NextResponse.json({ ok: true });
   } catch (err) {
