@@ -28,34 +28,36 @@ export default function Home() {
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section
-        className="relative h-[calc(100vh-80px)] min-h-[560px] flex flex-col justify-end pb-32 md:pb-40"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800&auto=format&fit=crop&q=85')",
-          backgroundSize: "cover",
-          backgroundPosition: "center 40%",
-        }}
-      >
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#faf9f6] via-[#faf9f6]/90 to-[#faf9f6]/50" />
+      <section className="relative h-[calc(100vh-80px)] min-h-[560px] flex flex-col justify-end pb-32 md:pb-40 overflow-hidden">
+        {/* Background image — animates independently so text stays still */}
+        <div
+          className="absolute inset-0 hero-bg"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800&auto=format&fit=crop&q=85')",
+            backgroundSize: "cover",
+            backgroundPosition: "center 40%",
+          }}
+        />
 
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 hero-overlay bg-gradient-to-t from-[#faf9f6] via-[#faf9f6]/90 to-[#faf9f6]/50" />
 
         {/* Hero content */}
         <div className="relative z-10 w-full px-8 max-w-7xl mx-auto">
           <h1
-            className="text-5xl md:text-7xl lg:text-8xl text-[#1a1a1a] leading-[1.05] mb-8 tracking-tight"
+            className="hero-title text-5xl md:text-7xl lg:text-8xl text-[#1a1a1a] leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Messy hands,<br />
             <em className="not-italic text-[#006644]">delicious</em> food
           </h1>
 
-          <p className="text-[#6b7280] text-base md:text-lg max-w-lg leading-relaxed mb-10">
+          <p className="hero-sub text-[#6b7280] text-base md:text-lg max-w-lg leading-relaxed mb-10">
             A joyful, hands-on cooking school where you build real kitchen confidence — one imperfect dish at a time.
           </p>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="hero-cta flex flex-wrap gap-4">
             <Link href="/classes" className="btn-primary group">
               Explore classes
               <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
