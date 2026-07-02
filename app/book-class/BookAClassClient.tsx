@@ -55,21 +55,37 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
       {/* ── Filter & sort bar ── */}
       <div className="flex flex-wrap items-center gap-3 mb-8">
         {/* Class filter */}
-        <div className="relative w-auto">
-            <select
-              value={activeClass}
-              onChange={(e) => setActiveClass(e.target.value)}
-              className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]"
+        <div className="relative w-auto flex items-center">
+          <select
+            value={activeClass}
+            onChange={(e) => setActiveClass(e.target.value)}
+            className={`appearance-none bg-white border rounded-full text-sm text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] ${
+              activeClass !== "All"
+                ? "border-[#006644] pl-4 pr-12 text-[#006644] font-medium"
+                : "border-[#e4dfd5] pl-4 pr-9"
+            }`}
+          >
+            <option value="All">All classes</option>
+            {classLabels.map((label) => (
+              <option key={label} value={label}>{label}</option>
+            ))}
+          </select>
+          {activeClass !== "All" ? (
+            <button
+              onClick={() => setActiveClass("All")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#006644] flex items-center justify-center hover:bg-[#004d33] transition-colors"
+              aria-label="Clear filter"
             >
-              <option value="All">All classes</option>
-              {classLabels.map((label) => (
-                <option key={label} value={label}>{label}</option>
-              ))}
-            </select>
+              <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          ) : (
             <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </div>
+          )}
+        </div>
 
 
           {/* Grid/List + Sort — grouped so they wrap together */}
@@ -118,19 +134,6 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
           </div>{/* end grouped */}
 
       </div>
-
-      {/* Subtle clear-filter link */}
-      {activeClass !== "All" && (
-        <p className="text-xs text-[#6b7280] -mt-4 mb-8">
-          Showing {activeClass.toLowerCase()} classes only —{" "}
-          <button
-            onClick={() => setActiveClass("All")}
-            className="text-[#006644] underline underline-offset-2 hover:text-[#004d33] transition-colors"
-          >
-            show all
-          </button>
-        </p>
-      )}
 
       {/* ── Session cards ── */}
       {filtered.length === 0 ? (
