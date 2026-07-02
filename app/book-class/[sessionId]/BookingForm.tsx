@@ -203,7 +203,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         {/* 02 — Attendees */}
-        <div className="mb-12">
+        <div className="mt-[60px] mb-12">
           <div className="flex items-baseline justify-between mb-8">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
             <span className="text-xs text-[#6b7280]">{totalPeople} / {session.spotsLeft}</span>
@@ -217,7 +217,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         {/* 03 — Payment */}
-        <div className="mb-12">
+        <div className="mt-[60px] mb-12">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
           <div className="mb-8">
             <p className="text-xs text-[#6b7280] mb-2">Include your name and class name in the reference</p>
@@ -264,7 +264,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         {/* 04 — Notes */}
-        <div className="mb-10">
+        <div className="mt-[60px] mb-10">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
           <textarea
             name="notes"
