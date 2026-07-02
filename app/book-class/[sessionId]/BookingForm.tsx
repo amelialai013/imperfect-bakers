@@ -208,11 +208,21 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
             <span className="text-sm text-[#1a1a1a]">{totalPeople} / {session.spotsLeft}</span>
           </div>
-          <div className={`divide-y divide-[#f0ece4] ${fieldErrors.attendees ? "rounded-lg ring-1 ring-red-300 bg-red-50/40 px-2" : ""}`}>
-            <Counter label="Child" sub="7–17 yrs" value={counts.child} onChange={(v) => setCount("child", v)} />
-            <Counter label="Young Adult" sub="18–34 yrs" value={counts.youngAdult} onChange={(v) => setCount("youngAdult", v)} />
-            <Counter label="Adult" sub="35+ yrs" value={counts.adult} onChange={(v) => setCount("adult", v)} />
-          </div>
+          {(() => {
+            const types = session.attendeeTypes ?? ["child", "youngAdult", "adult"];
+            const rows = [
+              { key: "child" as const, label: "Child", sub: "7–17 yrs" },
+              { key: "youngAdult" as const, label: "Young Adult", sub: "18–34 yrs" },
+              { key: "adult" as const, label: "Adult", sub: "35+ yrs" },
+            ].filter((r) => types.includes(r.key));
+            return (
+              <div className={`divide-y divide-[#f0ece4] ${fieldErrors.attendees ? "rounded-lg ring-1 ring-red-300 bg-red-50/40 px-2" : ""}`}>
+                {rows.map((r) => (
+                  <Counter key={r.key} label={r.label} sub={r.sub} value={counts[r.key]} onChange={(v) => setCount(r.key, v)} />
+                ))}
+              </div>
+            );
+          })()}
           {fieldErrors.attendees && <p className="text-xs text-red-500 mt-2">{fieldErrors.attendees}</p>}
         </div>
 

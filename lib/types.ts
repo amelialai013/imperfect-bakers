@@ -12,6 +12,7 @@ export interface ClassSession {
   description: string;
   imageUrl: string;
   createdAt: string;
+  attendeeTypes?: Array<"child" | "youngAdult" | "adult">;
 }
 
 export interface Booking {

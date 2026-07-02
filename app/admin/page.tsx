@@ -83,26 +83,41 @@ function Field({
   );
 }
 
+const ATTENDEE_OPTIONS = [
+  { key: "child" as const, label: "Child", sub: "7–17 yrs" },
+  { key: "youngAdult" as const, label: "Young Adult", sub: "18–34 yrs" },
+  { key: "adult" as const, label: "Adult", sub: "35+ yrs" },
+];
+
 function SessionForm({
   initial,
+  initialAttendeeTypes,
   onSave,
   onCancel,
   saving,
 }: {
   initial: FormState;
-  onSave: (data: FormState) => void;
+  initialAttendeeTypes: Array<"child" | "youngAdult" | "adult">;
+  onSave: (data: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">) => void;
   onCancel: () => void;
   saving: boolean;
 }) {
   const [form, setForm] = useState(initial);
+  const [attendeeTypes, setAttendeeTypes] = useState(initialAttendeeTypes);
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  function toggleAttendeeType(key: "child" | "youngAdult" | "adult") {
+    setAttendeeTypes((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  }
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSave(form);
+        onSave(form, attendeeTypes);
       }}
       className="space-y-4"
     >
@@ -118,6 +133,32 @@ function SessionForm({
       </div>
       <Field label="Description" name="description" value={form.description} onChange={handle} type="textarea" placeholder="Short description of the session…" />
       <Field label="Image URL" name="imageUrl" value={form.imageUrl} onChange={handle} placeholder="https://images.unsplash.com/…" />
+
+      {/* Attendee types */}
+      <div>
+        <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-3">
+          Attendee types
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {ATTENDEE_OPTIONS.map((opt) => {
+            const active = attendeeTypes.includes(opt.key);
+            return (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => toggleAttendeeType(opt.key)}
+                className={`px-4 py-2 text-sm border rounded-full transition-all duration-200 ${
+                  active
+                    ? "bg-[#006644] border-[#006644] text-white"
+                    : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
+                }`}
+              >
+                {opt.label} <span className={`text-xs ${active ? "text-white/70" : "text-[#6b7280]"}`}>{opt.sub}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       <div className="flex gap-3 pt-2">
         <button type="submit" disabled={saving} className="btn-primary">
@@ -280,7 +321,7 @@ export default function AdminPage() {
     setSessions([]);
   }
 
-  async function saveSession(form: FormState) {
+  async function saveSession(form: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">) {
     setSaving(true);
     const payload = {
       classLabel: form.classLabel,
@@ -293,6 +334,7 @@ export default function AdminPage() {
       ages: form.ages,
       description: form.description,
       imageUrl: form.imageUrl,
+      attendeeTypes,
     };
 
     if (view === "edit" && editTarget) {
@@ -389,6 +431,7 @@ export default function AdminPage() {
           <div className="max-w-2xl mx-auto">
             <SessionForm
               initial={initial}
+              initialAttendeeTypes={editTarget?.attendeeTypes ?? ["child", "youngAdult", "adult"]}
               onSave={saveSession}
               onCancel={() => { setView("dashboard"); setEditTarget(null); }}
               saving={saving}
