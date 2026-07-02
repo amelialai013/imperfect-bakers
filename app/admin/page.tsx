@@ -836,7 +836,7 @@ export default function AdminPage() {
                           />
                         </div>
                         <div>
-                          <label className={labelCls}>Ages</label>
+                          <label className={labelCls}>Tag</label>
                           <input
                             type="text"
                             value={c.ages}
