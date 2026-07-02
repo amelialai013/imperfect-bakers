@@ -59,32 +59,16 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
           <select
             value={activeClass}
             onChange={(e) => setActiveClass(e.target.value)}
-            className={`appearance-none bg-white border rounded-full text-sm text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] ${
-              activeClass !== "All"
-                ? "border-[#006644] pl-4 pr-12 text-[#006644] font-medium"
-                : "border-[#e4dfd5] pl-4 pr-9"
-            }`}
+            className="appearance-none bg-white border border-[#e4dfd5] rounded-full text-sm text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] pl-4 pr-9"
           >
             <option value="All">All classes</option>
             {classLabels.map((label) => (
               <option key={label} value={label}>{label}</option>
             ))}
           </select>
-          {activeClass !== "All" ? (
-            <button
-              onClick={() => setActiveClass("All")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#006644] flex items-center justify-center hover:bg-[#004d33] transition-colors"
-              aria-label="Clear filter"
-            >
-              <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          ) : (
-            <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          )}
+          <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
 
 
@@ -158,15 +142,27 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
         </div>
       ) : (
         /* Single render — no mobile/desktop split that can cause Safari display bugs */
-        view === "grid" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-            {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
-          </div>
-        )
+        <>
+          {view === "grid" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+              {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
+            </div>
+          )}
+          {activeClass !== "All" && (
+            <div className="mt-8 text-center">
+              <button
+                onClick={() => setActiveClass("All")}
+                className="text-sm text-[#006644] hover:underline"
+              >
+                See all classes
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
