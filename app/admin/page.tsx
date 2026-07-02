@@ -275,10 +275,8 @@ function SessionForm({
       {/* ── Section 3: Venue & capacity ──────────────────── */}
       <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
         <span className={sectionLabel}>Venue & capacity</span>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="sm:col-span-2">
-            <Field label="Location" name="location" value={form.location} onChange={handle} placeholder="Williamstown, Melbourne" required />
-          </div>
+        <div className="space-y-6">
+          <Field label="Location" name="location" value={form.location} onChange={handle} placeholder="Williamstown, Melbourne" required />
           <SelectField label="Ages" name="ages" value={form.ages} onChange={(e) => {
             const val = e.target.value;
             setForm((f) => ({ ...f, ages: val }));
@@ -290,20 +288,22 @@ function SessionForm({
           </SelectField>
           <div>
             <label className={labelCls}>Attendee types</label>
-            <div className="flex flex-wrap gap-2 mt-1">
+            <div className="flex flex-wrap gap-3 mt-1">
               {ATTENDEE_OPTIONS.map((opt) => {
                 const active = attendeeTypes.includes(opt.key);
                 return (
                   <button key={opt.key} type="button" onClick={() => toggleAttendeeType(opt.key)}
-                    className={`px-3 py-1.5 text-sm border rounded-full transition-all duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"}`}>
-                    {opt.label} <span className={`text-xs ${active ? "text-white/70" : "text-[#6b7280]"}`}>{opt.sub}</span>
+                    className={`inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-all duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
+                    {opt.label} <span className={`text-sm ${active ? "text-white/70" : "text-[#006644]/60"}`}>{opt.sub}</span>
                   </button>
                 );
               })}
             </div>
           </div>
-          <Field label="Price per person ($)" name="price" value={form.price} onChange={handle} type="number" placeholder="150" required />
-          <Field label="Max spots" name="maxSpots" value={form.maxSpots} onChange={handle} type="number" placeholder="15" required />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <Field label="Price per person ($)" name="price" value={form.price} onChange={handle} type="number" placeholder="150" required />
+            <Field label="Max spots" name="maxSpots" value={form.maxSpots} onChange={handle} type="number" placeholder="15" required />
+          </div>
         </div>
       </div>
 
