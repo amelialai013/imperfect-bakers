@@ -4,25 +4,44 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import type { ClassSession } from "@/lib/types";
 
+// Parse "Saturday 18 July 2026" → Date
+function parseDisplayDate(dateStr: string): Date {
+  const parts = dateStr.split(" "); // ["Saturday", "18", "July", "2026"]
+  if (parts.length === 4) {
+    return new Date(`${parts[1]} ${parts[2]} ${parts[3]}`);
+  }
+  return new Date(dateStr);
+}
+
 export default function BookAClassClient({ sessions, initialClass }: { sessions: ClassSession[]; initialClass?: string }) {
   const [activeClass, setActiveClass] = useState<string>(initialClass ?? "All");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [view, setView] = useState<"grid" | "list">("grid");
 
-  const classLabels = useMemo(() => {
-    const labels = Array.from(new Set(sessions.map((s) => s.classLabel)));
-    return labels;
+  // Filter out past sessions
+  const upcomingSessions = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return sessions.filter((s) => parseDisplayDate(s.date) >= today);
   }, [sessions]);
 
-  const filtered = useMemo(() => {
-    let result = activeClass === "All" ? sessions : sessions.filter((s) => s.classLabel === activeClass);
-    result = [...result].sort((a, b) =>
-      sortOrder === "asc" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date)
-    );
-    return result;
-  }, [sessions, activeClass, sortOrder]);
+  const classLabels = useMemo(() => {
+    return Array.from(new Set(upcomingSessions.map((s) => s.classLabel)));
+  }, [upcomingSessions]);
 
-  if (sessions.length === 0) {
+  const filtered = useMemo(() => {
+    let result = activeClass === "All"
+      ? upcomingSessions
+      : upcomingSessions.filter((s) => s.classLabel === activeClass);
+    result = [...result].sort((a, b) => {
+      const da = parseDisplayDate(a.date).getTime();
+      const db = parseDisplayDate(b.date).getTime();
+      return sortOrder === "asc" ? da - db : db - da;
+    });
+    return result;
+  }, [upcomingSessions, activeClass, sortOrder]);
+
+  if (upcomingSessions.length === 0) {
     return (
       <div className="py-20 text-center">
         <p className="text-[#6b7280] text-base">No sessions currently available.</p>
@@ -121,22 +140,16 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
           )}
         </div>
       ) : (
-        <>
-          {/* Mobile: always grid */}
-          <div className="sm:hidden grid grid-cols-1 gap-3">
+        /* Single render — no mobile/desktop split that can cause Safari display bugs */
+        view === "grid" ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
             {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
           </div>
-          {/* Desktop: respects toggle */}
-          {view === "grid" ? (
-            <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-              {filtered.map((s) => <SessionCard key={s.id} s={s} view="grid" />)}
-            </div>
-          ) : (
-            <div className="hidden sm:flex flex-col gap-2">
-              {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
-            </div>
-          )}
-        </>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {filtered.map((s) => <SessionCard key={s.id} s={s} view="list" />)}
+          </div>
+        )
       )}
     </div>
   );
@@ -192,7 +205,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               : "bg-white border border-[#e8e2d9] hover:border-[#006644] hover:shadow-[0_8px_32px_rgba(0,102,68,0.10)] cursor-pointer"
           }`}
         >
-          <div className={`hidden sm:block h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
+          <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
           {/* Desktop layout: single row */}
           <div className="hidden sm:flex px-4 pt-[9px] pb-4 gap-6">
             <div className="flex-1 min-w-0">

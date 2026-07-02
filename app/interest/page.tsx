@@ -26,13 +26,16 @@ type FieldErrors = {
 export default function InterestPage() {
   const [selected, setSelected] = useState<string[]>([]);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const toggle = (name: string) =>
     setSelected((prev) =>
       prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
     );
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const name = (fd.get("name") as string).trim();
@@ -54,7 +57,58 @@ export default function InterestPage() {
     }
 
     setFieldErrors({});
-    // TODO: submit form
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/interest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          experience: fd.get("experience") ?? "",
+          classes: selected,
+          notes: (fd.get("notes") as string ?? "").trim(),
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setSubmitError(data.error ?? "Something went wrong. Please try again.");
+      } else {
+        setSubmitted(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } catch {
+      setSubmitError("Something went wrong. Please try again.");
+    }
+    setSubmitting(false);
+  }
+
+  if (submitted) {
+    return (
+      <>
+        <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-8">
+            <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Register <em className="not-italic text-[#006644]">interest</em>
+            </h1>
+          </div>
+        </section>
+        <section className="bg-[#faf9f6] pt-14 pb-32">
+          <div className="max-w-2xl mx-auto px-8">
+            <p className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-[#006644] mb-6">Interest registered</p>
+            <h2 className="text-3xl text-[#1a1a1a] mb-4 leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              We&apos;ll be in touch.
+            </h2>
+            <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
+              Thanks for registering your interest. We&apos;ll reach out as soon as a relevant session opens up.
+            </p>
+            <a href="/classes" className="btn-secondary">Browse our classes</a>
+          </div>
+        </section>
+      </>
+    );
   }
 
   return (
@@ -172,12 +226,15 @@ export default function InterestPage() {
             </div>
 
             {/* Submit */}
+            {submitError && <p className="text-sm text-red-500 mt-2">{submitError}</p>}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8 pt-2">
-              <button type="submit" className="btn-primary group shrink-0 self-start">
-                Register interest
-                <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
+              <button type="submit" disabled={submitting} className="btn-primary group shrink-0 self-start">
+                {submitting ? "Submitting…" : "Register interest"}
+                {!submitting && (
+                  <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                )}
               </button>
               <div className="text-left sm:text-right">
                 <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#c4bdb3] mb-1">Or reach out directly</span>
