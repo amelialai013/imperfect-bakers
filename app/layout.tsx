@@ -22,6 +22,9 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Imperfect Bakers",
   description: "A boutique cooking school where kids and adults build culinary confidence through joyful, hands-on kitchen experiences.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({
