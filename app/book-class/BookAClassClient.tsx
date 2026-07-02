@@ -178,8 +178,8 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         >
           <div className={`hidden sm:block h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
           {/* Desktop layout: single row */}
-          <div className="hidden sm:flex px-4 pt-[9px] pb-4 gap-6">
-            <div className="flex-1 min-w-0">
+          <div className="hidden sm:flex px-4 py-4 items-center gap-6">
+            <div className="flex-1 min-w-0 self-start pt-[9px]">
               <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
               <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mt-[9.5px]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
@@ -194,7 +194,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-5 text-sm text-[#6b7280] shrink-0 self-center">
+            <div className="flex items-center gap-5 text-sm text-[#6b7280] shrink-0">
               <span className="flex items-center gap-1.5">
                 <svg className="w-3.5 h-3.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -209,7 +209,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 {s.time}
               </span>
             </div>
-            <div className="flex items-center gap-4 shrink-0 self-center">
+            <div className="flex items-center gap-4 shrink-0">
               {!isFull ? (
                 <span className="text-[0.65rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2.5 py-1">{s.spotsLeft} left</span>
               ) : (
