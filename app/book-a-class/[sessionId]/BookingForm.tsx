@@ -9,6 +9,11 @@ type Counts = { child: number; youngAdult: number; adult: number };
 const inputClass =
   "w-full bg-[#f5f2ed] rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none focus:bg-[#eeeae4] transition-colors";
 
+const scrollbarStyle = {
+  scrollbarWidth: "thin" as const,
+  scrollbarColor: "#c8c0b4 transparent",
+} as React.CSSProperties;
+
 
 function Counter({
   label,
@@ -208,6 +213,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             rows={3}
             placeholder="Dietary requirements, allergies, questions…"
             className={inputClass + " resize-none"}
+            style={scrollbarStyle}
           />
         </div>
 
