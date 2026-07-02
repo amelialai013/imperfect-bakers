@@ -9,6 +9,9 @@ type Counts = { child: number; youngAdult: number; adult: number };
 const inputClass =
   "w-full bg-[#f5f2ed] rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none focus:bg-[#eeeae4] transition-colors";
 
+const inputErrorClass =
+  "w-full rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none transition-colors bg-red-50 border border-red-300 focus:border-red-400";
+
 const scrollbarStyle = {
   scrollbarWidth: "thin" as const,
   scrollbarColor: "#c8c0b4 transparent",
@@ -58,32 +61,44 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [paymentStatus, setPaymentStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; attendees?: string; payment?: string }>({});
 
   const totalPeople = counts.child + counts.youngAdult + counts.adult;
   const isFull = session.spotsLeft === 0;
 
   function setCount(key: keyof Counts, value: number) {
     setCounts((prev) => ({ ...prev, [key]: value }));
+    if (fieldErrors.attendees) setFieldErrors((prev) => ({ ...prev, attendees: undefined }));
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError("");
-    if (totalPeople < 1) { setError("Please add at least one person."); return; }
-    if (totalPeople > session.spotsLeft) {
-      setError(`Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} left — you requested ${totalPeople}.`);
+    const fd = new FormData(e.currentTarget);
+    const name = (fd.get("name") as string).trim();
+    const email = (fd.get("email") as string).trim();
+
+    // Validate all fields and collect errors
+    const errors: typeof fieldErrors = {};
+    if (!name) errors.name = "Please enter your full name";
+    if (!email) errors.email = "Please enter your email address";
+    if (totalPeople < 1) errors.attendees = "Please add at least one person";
+    if (totalPeople > session.spotsLeft) errors.attendees = `Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} left — you requested ${totalPeople}`;
+    if (!paymentStatus) errors.payment = "Please select a payment status";
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
-    const fd = new FormData(e.currentTarget);
+
+    setFieldErrors({});
     setSubmitting(true);
     const res = await fetch("/api/bookings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         sessionId: session.id,
-        name: fd.get("name"),
-        email: fd.get("email"),
+        name,
+        email,
         phone: fd.get("phone") ?? "",
         counts,
         totalPeople,
@@ -94,7 +109,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     setSubmitting(false);
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "Something went wrong. Please try again.");
+      setFieldErrors({ name: data.error ?? "Something went wrong. Please try again." });
       return;
     }
     setSubmitted(true);
@@ -138,31 +153,48 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-16 lg:gap-20 items-start">
 
       {/* ── Form ── */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
 
         {/* 01 — Your details */}
         <div className="mb-12">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Your details</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="sm:col-span-2">
-              <input required name="name" type="text" placeholder="Full name *" className={inputClass} />
+              <input
+                name="name"
+                type="text"
+                placeholder="Full name"
+                className={fieldErrors.name ? inputErrorClass : inputClass}
+                onChange={() => fieldErrors.name && setFieldErrors((p) => ({ ...p, name: undefined }))}
+              />
+              {fieldErrors.name && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.name}</p>}
             </div>
-            <input required name="email" type="email" placeholder="Email *" className={inputClass} />
+            <div>
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                className={fieldErrors.email ? inputErrorClass : inputClass}
+                onChange={() => fieldErrors.email && setFieldErrors((p) => ({ ...p, email: undefined }))}
+              />
+              {fieldErrors.email && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.email}</p>}
+            </div>
             <input name="phone" type="tel" placeholder="Phone (optional)" className={inputClass} />
           </div>
         </div>
 
-        {/* 02 — Number of people */}
+        {/* 02 — Attendees */}
         <div className="mb-12">
           <div className="flex items-baseline justify-between mb-6">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
             <span className="text-xs text-[#6b7280]">{totalPeople} / {session.spotsLeft}</span>
           </div>
-          <div className="divide-y divide-[#f0ece4]">
+          <div className={`divide-y divide-[#f0ece4] ${fieldErrors.attendees ? "rounded-lg ring-1 ring-red-300 bg-red-50/40 px-2" : ""}`}>
             <Counter label="Child" sub="7–17 yrs" value={counts.child} onChange={(v) => setCount("child", v)} />
             <Counter label="Young Adult" sub="18–34 yrs" value={counts.youngAdult} onChange={(v) => setCount("youngAdult", v)} />
             <Counter label="Adult" sub="35+ yrs" value={counts.adult} onChange={(v) => setCount("adult", v)} />
           </div>
+          {fieldErrors.attendees && <p className="text-xs text-red-500 mt-2">{fieldErrors.attendees}</p>}
         </div>
 
         {/* 03 — Payment */}
@@ -174,7 +206,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             <p className="text-sm text-[#1a1a1a] mt-0.5">BSB <span className="font-medium">733-100</span></p>
             <p className="text-sm text-[#1a1a1a] mt-0.5">Account <span className="font-medium">759127</span></p>
           </div>
-          <p className="text-xs text-[#6b7280] mb-3">Payment status <span className="text-[#006644]">*</span></p>
+          <p className="text-xs text-[#6b7280] mb-3">Payment status</p>
           <div className="flex flex-wrap gap-2">
             {[
               { value: "completed", label: "Paid" },
@@ -184,10 +216,12 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <button
                 key={opt.value}
                 type="button"
-                onClick={() => setPaymentStatus(opt.value)}
+                onClick={() => { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
                 className={`px-5 py-2.5 text-sm font-medium border transition-all duration-200 rounded-full ${
                   paymentStatus === opt.value
                     ? "bg-[#006644] border-[#006644] text-white"
+                    : fieldErrors.payment
+                    ? "bg-red-50 border-red-300 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
                     : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
                 }`}
               >
@@ -195,7 +229,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               </button>
             ))}
           </div>
-          <input type="radio" name="payment-status" required value={paymentStatus} checked={!!paymentStatus} onChange={() => {}} className="sr-only" />
+          {fieldErrors.payment && <p className="text-xs text-red-500 mt-2">{fieldErrors.payment}</p>}
         </div>
 
         {/* 04 — Notes */}
@@ -209,8 +243,6 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             style={scrollbarStyle}
           />
         </div>
-
-        {error && <p className="text-sm text-red-500 mb-6">{error}</p>}
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-6">
           <button type="submit" disabled={submitting} className="btn-primary group self-start">
