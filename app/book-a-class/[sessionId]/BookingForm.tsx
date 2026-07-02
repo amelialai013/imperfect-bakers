@@ -61,7 +61,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [paymentStatus, setPaymentStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; attendees?: string; payment?: string; paymentOther?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; phone?: string; attendees?: string; payment?: string; paymentOther?: string }>({});
 
   const totalPeople = counts.child + counts.youngAdult + counts.adult;
   const isFull = session.spotsLeft === 0;
@@ -83,8 +83,10 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
     // Validate all fields and collect errors
     const errors: typeof fieldErrors = {};
+    const phone = (fd.get("phone") as string).trim();
     if (!name) errors.name = "Please enter your full name";
     if (!email) errors.email = "Please enter your email address";
+    if (!phone) errors.phone = "Please enter your phone number";
     if (totalPeople < 1) errors.attendees = "Please add at least one person";
     if (totalPeople > session.spotsLeft) errors.attendees = `Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} left — you requested ${totalPeople}`;
     if (!paymentStatus) errors.payment = "Please select a payment status";
@@ -185,7 +187,16 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               />
               {fieldErrors.email && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.email}</p>}
             </div>
-            <input name="phone" type="tel" placeholder="Phone (optional)" className={inputClass} />
+            <div>
+              <input
+                name="phone"
+                type="tel"
+                placeholder="Phone"
+                className={fieldErrors.phone ? inputErrorClass : inputClass}
+                onChange={() => fieldErrors.phone && setFieldErrors((p) => ({ ...p, phone: undefined }))}
+              />
+              {fieldErrors.phone && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.phone}</p>}
+            </div>
           </div>
         </div>
 
