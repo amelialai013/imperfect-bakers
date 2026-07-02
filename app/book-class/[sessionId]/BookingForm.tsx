@@ -275,7 +275,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           />
         </div>
 
-        <div className="mt-[60px] flex flex-col sm:flex-row sm:items-center gap-6">
+        <div className="mt-8 pt-2 flex flex-col sm:flex-row sm:items-center gap-6">
           <button type="submit" disabled={submitting} className="btn-primary group self-start">
             {submitting ? "Requesting…" : "Request my spot"}
             {!submitting && (
