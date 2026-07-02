@@ -227,7 +227,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
           {/* Live cost total */}
           {totalPeople > 0 && (
-            <div className="mt-6 flex items-baseline justify-between rounded-xl bg-[#006644]/8 px-5 py-4">
+            <div className="mt-6 flex items-center justify-between rounded-xl bg-[#006644]/8 px-5 py-4">
               <div>
                 <p className="text-sm text-[#1a1a1a]">{totalPeople} {totalPeople === 1 ? "person" : "people"} × ${session.price}</p>
               </div>
