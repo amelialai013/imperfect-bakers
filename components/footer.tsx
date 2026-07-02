@@ -34,7 +34,7 @@ export default function Footer() {
                 { label: "Home",              href: "/" },
                 { label: "About",             href: "/about" },
                 { label: "Our classes",       href: "/classes" },
-                { label: "Book a class",      href: "/book-a-class" },
+                { label: "Book a class",      href: "/book-class" },
                 { label: "Register interest", href: "/interest" },
               ].map((l) => (
                 <li key={l.href}>

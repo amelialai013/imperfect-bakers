@@ -32,7 +32,7 @@ export default async function SessionBookingPage({
         <section className="px-8 pt-14 pb-32 bg-[#faf9f6]">
           <div className="max-w-2xl mx-auto">
             <p className="text-[#6b7280] mb-8">This session doesn&apos;t exist or may have been removed.</p>
-            <Link href="/book-a-class"><button className="btn-primary">View all classes</button></Link>
+            <Link href="/book-class"><button className="btn-primary">View all classes</button></Link>
           </div>
         </section>
       </>
@@ -45,7 +45,7 @@ export default async function SessionBookingPage({
       <section className="bg-[#faf9f6] px-8 pt-8 pb-8 border-b border-[#e8e2d9]">
         <div className="max-w-7xl mx-auto">
           <Link
-            href="/book-a-class"
+            href="/book-class"
             className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors"
           >
             <svg className="w-3.5 h-3.5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">

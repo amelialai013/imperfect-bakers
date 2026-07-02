@@ -136,7 +136,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
           We confirm classes once we have enough students signed up. A confirmation email will be on its way shortly.
         </p>
-        <Link href="/book-a-class"><button className="btn-secondary">Browse more classes</button></Link>
+        <Link href="/book-class"><button className="btn-secondary">Browse more classes</button></Link>
       </div>
     );
   }
@@ -153,7 +153,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </p>
         <div className="flex gap-4 flex-wrap">
           <Link href="/interest"><button className="btn-primary">Register interest</button></Link>
-          <Link href="/book-a-class"><button className="btn-secondary">Browse other classes</button></Link>
+          <Link href="/book-class"><button className="btn-secondary">Browse other classes</button></Link>
         </div>
       </div>
     );

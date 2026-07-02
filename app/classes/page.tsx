@@ -71,7 +71,7 @@ export default function ClassesPage() {
       <section className="py-12 px-8 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
           {classes.map((c, i) => (
-            <Link href="/book-a-class" key={c.title}>
+            <Link href="/book-class" key={c.title}>
               <div
                 className="group relative overflow-hidden cursor-pointer h-[292px] rounded-[8px]"
               >

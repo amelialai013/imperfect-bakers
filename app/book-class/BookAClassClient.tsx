@@ -165,7 +165,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
   if (view === "list") {
     return (
       <Link
-        href={isFull ? "#" : `/book-a-class/${s.id}`}
+        href={isFull ? "#" : `/book-class/${s.id}`}
         aria-disabled={isFull}
         className={isFull ? "pointer-events-none" : ""}
       >
@@ -283,7 +283,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
 
   return (
     <Link
-      href={isFull ? "#" : `/book-a-class/${s.id}`}
+      href={isFull ? "#" : `/book-class/${s.id}`}
       aria-disabled={isFull}
       className={isFull ? "pointer-events-none" : ""}
     >
