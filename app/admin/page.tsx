@@ -674,6 +674,18 @@ export default function AdminPage() {
     setDeletingClass(null);
   }
 
+  async function restoreDefaultClass(key: string) {
+    setDeletingClass(key);
+    await authFetch("/api/classconfigs", token, {
+      method: "DELETE",
+      body: JSON.stringify({ key, restore: true }),
+    });
+    const res = await fetch("/api/classconfigs");
+    const data = await res.json();
+    if (Array.isArray(data)) { setClassConfigs(data); setSavedClassConfigs(data); }
+    setDeletingClass(null);
+  }
+
   const DEFAULT_CLASS_KEYS = new Set(DEFAULT_CLASS_CONFIGS.map((d) => d.key));
 
   function updateClassConfig(key: string, field: keyof ClassConfig, value: string) {
@@ -891,7 +903,7 @@ export default function AdminPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {classConfigs.map((c) => (
-                  <div key={c.key} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+                  <div key={c.key} className={`bg-white border rounded-xl overflow-hidden ${c.hidden ? "border-[#e8e2d9] opacity-60" : "border-[#e8e2d9]"}`}>
                     {/* Image preview */}
                     <div
                       className="h-40 bg-cover bg-center relative"
@@ -950,8 +962,16 @@ export default function AdminPage() {
 
                     {/* Save / Revert / Delete actions */}
                     <div className="px-6 pb-5 flex items-center justify-between">
-                      {/* Delete — only for custom classes */}
-                      {!DEFAULT_CLASS_KEYS.has(c.key) ? (
+                      {c.hidden ? (
+                        /* Hidden default class — show restore */
+                        <button
+                          onClick={() => restoreDefaultClass(c.key)}
+                          disabled={deletingClass === c.key}
+                          className="text-sm text-[#006644] hover:text-[#004d33] transition-colors"
+                        >
+                          {deletingClass === c.key ? "Restoring…" : "Restore class"}
+                        </button>
+                      ) : (
                         <button
                           onClick={() => deleteCustomClass(c.key)}
                           disabled={deletingClass === c.key}
@@ -959,21 +979,23 @@ export default function AdminPage() {
                         >
                           {deletingClass === c.key ? "Deleting…" : "Delete class"}
                         </button>
-                      ) : <span />}
-                      <div className="flex items-center gap-3">
-                        {isClassDirty(c.key) && (
-                          <button onClick={() => revertClassConfig(c.key)} className="btn-secondary">
-                            Revert
+                      )}
+                      {!c.hidden && (
+                        <div className="flex items-center gap-3">
+                          {isClassDirty(c.key) && (
+                            <button onClick={() => revertClassConfig(c.key)} className="btn-secondary">
+                              Revert
+                            </button>
+                          )}
+                          <button
+                            onClick={() => saveClassConfigItem(c)}
+                            disabled={savingClass === c.key}
+                            className="btn-primary"
+                          >
+                            {savingClass === c.key ? "Saving…" : "Save changes"}
                           </button>
-                        )}
-                        <button
-                          onClick={() => saveClassConfigItem(c)}
-                          disabled={savingClass === c.key}
-                          className="btn-primary"
-                        >
-                          {savingClass === c.key ? "Saving…" : "Save changes"}
-                        </button>
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

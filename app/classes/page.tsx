@@ -15,7 +15,7 @@ export default async function ClassesPage() {
   // Fetch class configs from admin (falls back to defaults)
   let classes: ClassConfig[] = DEFAULT_CLASS_CONFIGS;
   try {
-    classes = await getClassConfigs();
+    classes = (await getClassConfigs()).filter((c) => !c.hidden);
   } catch {
     // KV not configured — use defaults
   }

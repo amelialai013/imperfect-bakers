@@ -21,6 +21,7 @@ export interface ClassConfig {
   ages: string;      // e.g. "All ages", "Ages 12+"
   imageUrl: string;  // hero image URL
   description: string;
+  hidden?: boolean;  // soft-delete for default classes
 }
 
 export interface Booking {

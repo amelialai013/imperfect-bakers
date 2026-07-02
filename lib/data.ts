@@ -36,8 +36,22 @@ export async function saveClassConfig(config: ClassConfig): Promise<ClassConfig>
 }
 
 export async function deleteClassConfig(key: string): Promise<void> {
-  await kv.del(`classconfig:${key}`);
-  await kv.lrem("classconfigs:custom", 0, key);
+  if (DEFAULT_KEYS.has(key)) {
+    // Default classes can't be fully removed — soft-delete by marking hidden
+    const existing = await kv.get<ClassConfig>(`classconfig:${key}`);
+    const base = DEFAULT_CLASS_CONFIGS.find((d) => d.key === key)!;
+    await kv.set(`classconfig:${key}`, { ...(existing ?? base), hidden: true });
+  } else {
+    await kv.del(`classconfig:${key}`);
+    await kv.lrem("classconfigs:custom", 0, key);
+  }
+}
+
+export async function restoreClassConfig(key: string): Promise<void> {
+  const existing = await kv.get<ClassConfig>(`classconfig:${key}`);
+  if (existing) {
+    await kv.set(`classconfig:${key}`, { ...existing, hidden: false });
+  }
 }
 
 // ── Sessions ──────────────────────────────────────────────
