@@ -1017,9 +1017,9 @@ export default function AdminPage() {
                         <button
                           onClick={() => setDeleteClassConfirm(c.key)}
                           disabled={deletingClass === c.key}
-                          className="text-xs text-[#6b7280] hover:text-red-500 transition-colors px-4 py-1"
+                          className="text-xs text-[#6b7280] hover:text-red-500 transition-colors"
                         >
-                          {deletingClass === c.key ? "Deleting…" : "Delete class"}
+                          {deletingClass === c.key ? "Deleting…" : "Delete"}
                         </button>
                       )}
                       {!c.hidden && (
