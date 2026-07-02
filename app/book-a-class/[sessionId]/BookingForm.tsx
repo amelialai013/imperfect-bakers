@@ -168,17 +168,16 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         {/* 03 — Payment */}
         <div className="mb-12">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Payment</p>
-          <div className="bg-[#f5f2ed] rounded-lg px-5 py-4 mb-5 text-sm">
-            <p className="text-[#1a1a1a] mb-1">
+          <div className="mb-5">
+            <p className="text-sm text-[#1a1a1a] mb-1">
               Transfer to <span className="font-semibold">Sarah Jasper</span>
-            </p>
-            <p className="text-[#6b7280]">
-              BSB <span className="font-medium text-[#1a1a1a]">733-100</span>
               <span className="mx-2 text-[#d4cfc8]">·</span>
-              Account <span className="font-medium text-[#1a1a1a]">759127</span>
+              BSB <span className="font-medium">733-100</span>
+              <span className="mx-2 text-[#d4cfc8]">·</span>
+              Account <span className="font-medium">759127</span>
             </p>
-            <p className="text-xs text-[#9ca3af] mt-3 pt-3 border-t border-[#e8e2d9]">
-              Include your name and class name in the payment reference.
+            <p className="text-xs text-[#9ca3af] mt-1.5">
+              Include your name and class name in the reference.
             </p>
           </div>
           <p className="text-xs text-[#9ca3af] mb-3">Payment status <span className="text-[#006644]">*</span></p>
