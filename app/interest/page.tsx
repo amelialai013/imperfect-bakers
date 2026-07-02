@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const classOptions = [
   "Sweet Food",
@@ -29,6 +29,13 @@ export default function InterestPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
+
+  // Scroll to top when success state is shown
+  useEffect(() => {
+    if (submitted) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [submitted]);
 
   const toggle = (name: string) =>
     setSelected((prev) =>
@@ -77,7 +84,6 @@ export default function InterestPage() {
         setSubmitError(data.error ?? "Something went wrong. Please try again.");
       } else {
         setSubmitted(true);
-        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch {
       setSubmitError("Something went wrong. Please try again.");

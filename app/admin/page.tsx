@@ -474,9 +474,9 @@ function storageRemove(key: string) {
 
 // ── main component ─────────────────────────────────────────────────────────────
 
-type View = "login" | "dashboard" | "add" | "edit" | "classes";
+type View = "login" | "dashboard" | "add" | "edit" | "classes" | "interests";
 
-function MoreMenu({ onManageClasses, onLogout }: { onManageClasses: () => void; onLogout: () => void }) {
+function MoreMenu({ onManageClasses, onInterests, onLogout }: { onManageClasses: () => void; onInterests: () => void; onLogout: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
@@ -493,6 +493,16 @@ function MoreMenu({ onManageClasses, onLogout }: { onManageClasses: () => void; 
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[180px]">
+            <button
+              onClick={() => { setOpen(false); onInterests(); }}
+              className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
+            >
+              <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+              </svg>
+              Interest registrations
+            </button>
+            <div className="h-px bg-[#e8e2d9]" />
             <button
               onClick={() => { setOpen(false); onManageClasses(); }}
               className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
@@ -516,6 +526,200 @@ function MoreMenu({ onManageClasses, onLogout }: { onManageClasses: () => void; 
         </>
       )}
     </div>
+  );
+}
+
+// ── Interest entry type ───────────────────────────────────────────────────────
+
+type InterestEntry = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  experience: string;
+  classes: string[];
+  notes: string;
+  createdAt: string;
+  status: "pending" | "confirmed" | "declined";
+  actionedAt?: string;
+};
+
+const EXP_LABELS: Record<string, string> = {
+  complete_beginner: "Complete beginner",
+  some_experience: "Some experience",
+  confident_cook: "Confident cook",
+};
+
+function InterestsView({ token, onBack }: { token: string; onBack: () => void }) {
+  const [interests, setInterests] = useState<InterestEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [acting, setActing] = useState<string | null>(null);
+  const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined">("all");
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await authFetch("/api/interest", token);
+      const data = await res.json();
+      setInterests(Array.isArray(data) ? data : []);
+    } catch { /* keep showing */ }
+    setLoading(false);
+  }, [token]);
+
+  useEffect(() => { load(); }, [load]);
+
+  async function act(id: string, status: "confirmed" | "declined") {
+    setActing(id);
+    try {
+      await authFetch(`/api/interest/${id}`, token, {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      });
+      setInterests((prev) => prev.map((e) => e.id === id ? { ...e, status, actionedAt: new Date().toISOString() } : e));
+    } catch { /* silent */ }
+    setActing(null);
+  }
+
+  const filtered = interests.filter((e) => filter === "all" || e.status === filter);
+  const pending = interests.filter((e) => e.status === "pending").length;
+
+  const statusBadge = (status: InterestEntry["status"]) => {
+    if (status === "confirmed") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>;
+    if (status === "declined") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-red-50 text-red-500 border border-red-200">Declined</span>;
+    return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Pending</span>;
+  };
+
+  return (
+    <>
+      <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+          <div>
+            <button
+              onClick={onBack}
+              className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+              </svg>
+              Dashboard
+            </button>
+            <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Interest <em className="not-italic text-[#006644]">registrations</em>
+            </h1>
+          </div>
+          {pending > 0 && (
+            <div className="pb-1">
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                {pending} pending
+              </span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto">
+
+          {/* Filter pills */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {(["all", "pending", "confirmed", "declined"] as const).map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-4 py-1.5 text-xs font-semibold tracking-[0.1em] uppercase rounded-full border transition-all duration-200 ${
+                  filter === f
+                    ? "bg-[#006644] border-[#006644] text-white"
+                    : "bg-white border-[#e4dfd5] text-[#6b7280] hover:border-[#006644] hover:text-[#006644]"
+                }`}
+              >
+                {f}{f === "all" ? ` (${interests.length})` : f === "pending" ? ` (${interests.filter((e) => e.status === "pending").length})` : f === "confirmed" ? ` (${interests.filter((e) => e.status === "confirmed").length})` : ` (${interests.filter((e) => e.status === "declined").length})`}
+              </button>
+            ))}
+          </div>
+
+          {loading ? (
+            <p className="text-[#6b7280] text-sm">Loading registrations…</p>
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-[#6b7280]">{filter === "all" ? "No interest registrations yet." : `No ${filter} registrations.`}</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filtered.map((e) => (
+                <div key={e.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+                  <div className="px-6 pt-5 pb-4">
+                    <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+                      <div>
+                        <div className="flex items-center gap-3 flex-wrap mb-1">
+                          <p className="font-semibold text-[#1a1a1a] text-base" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{e.name}</p>
+                          {statusBadge(e.status)}
+                        </div>
+                        <p className="text-xs text-[#6b7280]">
+                          {new Date(e.createdAt).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                          {e.actionedAt && ` · actioned ${new Date(e.actionedAt).toLocaleDateString("en-AU", { day: "numeric", month: "short" })}`}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 text-sm mb-4">
+                      <div>
+                        <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Email</p>
+                        <a href={`mailto:${e.email}`} className="text-[#1a1a1a] hover:text-[#006644] transition-colors break-all">{e.email}</a>
+                      </div>
+                      <div>
+                        <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Phone</p>
+                        <p className="text-[#1a1a1a]">{e.phone}</p>
+                      </div>
+                      <div>
+                        <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Experience</p>
+                        <p className="text-[#6b7280]">{EXP_LABELS[e.experience] ?? e.experience ?? "—"}</p>
+                      </div>
+                      <div>
+                        <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Classes</p>
+                        <p className="text-[#6b7280]">{Array.isArray(e.classes) && e.classes.length ? e.classes.join(", ") : "None selected"}</p>
+                      </div>
+                      {e.notes && (
+                        <div className="col-span-2 sm:col-span-4">
+                          <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Notes</p>
+                          <p className="text-[#6b7280] text-xs italic">{e.notes}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Action buttons — only show for pending */}
+                    {e.status === "pending" && (
+                      <div className="flex flex-wrap gap-2 pt-3 border-t border-[#e8e2d9]">
+                        <button
+                          onClick={() => act(e.id, "confirmed")}
+                          disabled={acting === e.id}
+                          className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                          {acting === e.id ? "Sending…" : "Confirm"}
+                        </button>
+                        <button
+                          onClick={() => act(e.id, "declined")}
+                          disabled={acting === e.id}
+                          className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          {acting === e.id ? "Sending…" : "Decline"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -1118,6 +1322,12 @@ export default function AdminPage() {
     );
   }
 
+  // ── Interest registrations ───────────────────────────────
+
+  if (view === "interests") {
+    return <InterestsView token={token} onBack={() => setView("dashboard")} />;
+  }
+
   // ── Dashboard ────────────────────────────────────────────
 
   const totalBookings = sessions.reduce((acc, s) => acc + (s.maxSpots - s.spotsLeft), 0);
@@ -1134,7 +1344,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <MoreMenu onManageClasses={() => setView("classes")} onLogout={logout} />
+            <MoreMenu onManageClasses={() => setView("classes")} onInterests={() => setView("interests")} onLogout={logout} />
           </div>
         </div>
       </section>
