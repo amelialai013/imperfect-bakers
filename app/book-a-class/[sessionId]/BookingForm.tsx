@@ -265,7 +265,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 04 — Notes */}
         <div className="mb-10">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Anything else?</p>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
           <textarea
             name="notes"
             rows={3}
