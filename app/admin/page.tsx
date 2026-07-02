@@ -1075,7 +1075,7 @@ export default function AdminPage() {
           <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
             Admin <em className="not-italic text-[#006644]">dashboard</em>
           </h1>
-          <div className="flex flex-nowrap items-center gap-4 pb-1 mt-12">
+          <div className="flex flex-wrap items-center gap-4 pb-1 mt-12">
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
