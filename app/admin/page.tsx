@@ -100,7 +100,7 @@ function Field({
     "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
   return (
     <div>
-      <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2">
+      <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4">
         {label}
       </label>
       {type === "textarea" ? (
@@ -187,7 +187,7 @@ function SessionForm({
   });
 
   const cls = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
-  const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2";
+  const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4";
 
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -738,7 +738,7 @@ export default function AdminPage() {
 
   if (view === "classes") {
     const inputCls = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
-    const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2";
+    const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4";
 
     function tryGoBack() {
       if (hasAnyUnsaved()) {
