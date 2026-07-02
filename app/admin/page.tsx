@@ -254,10 +254,36 @@ function SessionForm({
           <div>
             <label className={labelCls}>Time <span className="text-[#006644]">*</span></label>
             <div className="flex gap-2">
-              <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required className={cls} />
-              <div className="relative shrink-0 w-32">
+              {/* Elegant start-time select */}
+              <div className="relative flex-1">
+                <select
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  required
+                  className={cls + " appearance-none pr-8 cursor-pointer"}
+                >
+                  <option value="">Start time…</option>
+                  {Array.from({ length: 28 }, (_, i) => {
+                    const totalMins = 6 * 60 + i * 30; // 6:00am → 9:30pm
+                    const h24 = Math.floor(totalMins / 60);
+                    const m = totalMins % 60;
+                    const val = `${String(h24).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+                    const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+                    const period = h24 >= 12 ? "pm" : "am";
+                    const label = m === 0 ? `${h12}${period}` : `${h12}:${String(m).padStart(2,"0")}${period}`;
+                    return <option key={val} value={val}>{label}</option>;
+                  })}
+                </select>
+                <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              {/* Duration select */}
+              <div className="relative shrink-0 w-28">
                 <select value={duration} onChange={(e) => setDuration(e.target.value)} className={cls + " appearance-none pr-8 cursor-pointer"}>
-                  {[1,1.5,2,2.5,3,3.5,4,4.5,5].map((h) => <option key={h} value={String(h)}>{h}h</option>)}
+                  {[1,1.5,2,2.5,3,3.5,4,4.5,5].map((h) => (
+                    <option key={h} value={String(h)}>{h}h</option>
+                  ))}
                 </select>
                 <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
@@ -272,7 +298,7 @@ function SessionForm({
       {/* ── Section 3: Venue & capacity ──────────────────── */}
       <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
         <span className={sectionLabel}>Venue & capacity</span>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="sm:col-span-2">
             <Field label="Location" name="location" value={form.location} onChange={handle} placeholder="Williamstown, Melbourne" required />
           </div>
@@ -545,12 +571,12 @@ export default function AdminPage() {
   if (view === "login") {
     return (
       <>
-        <section className="bg-[#006644] px-8 pt-16 pb-14">
-          <div className="max-w-7xl mx-auto">
-            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Imperfect Bakers</span>
-            <h1 className="text-4xl md:text-5xl text-white leading-tight tracking-tight mt-3" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              Admin
+        <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+            <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Admin <em className="not-italic text-[#006644]">portal</em>
             </h1>
+            <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right pb-1">Imperfect Bakers</p>
           </div>
         </section>
         <section className="px-8 pt-14 pb-32 bg-[#faf9f6]">
@@ -595,21 +621,22 @@ export default function AdminPage() {
 
     return (
       <>
-        <section className="bg-[#006644] px-8 pt-12 pb-12">
-          <div className="max-w-2xl mx-auto">
-            <button
-              onClick={() => { setView("dashboard"); setEditTarget(null); }}
-              className="flex items-center gap-2 text-white/50 hover:text-white transition-colors text-sm mb-8"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to dashboard
-            </button>
-            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Admin</span>
-            <h1 className="text-4xl md:text-5xl text-white leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              {view === "edit" ? "Edit session" : "New session"}
-            </h1>
+        <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+            <div>
+              <button
+                onClick={() => { setView("dashboard"); setEditTarget(null); }}
+                className="flex items-center gap-1.5 text-[#006644] hover:text-[#004d33] transition-colors text-[0.6875rem] font-semibold tracking-[0.2em] uppercase mb-3"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                </svg>
+                Dashboard
+              </button>
+              <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                {view === "edit" ? <><em className="not-italic text-[#006644]">Edit</em> session</> : <>New <em className="not-italic text-[#006644]">session</em></>}
+              </h1>
+            </div>
           </div>
         </section>
         <section className="px-8 pt-10 pb-24 bg-[#faf9f6]">
@@ -634,19 +661,16 @@ export default function AdminPage() {
 
   return (
     <>
-      <section className="bg-[#006644] px-8 pt-16 pb-14">
-        <div className="max-w-7xl mx-auto flex items-end justify-between flex-wrap gap-4">
-          <div>
-            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Imperfect Bakers</span>
-            <h1 className="text-4xl md:text-5xl text-white leading-tight tracking-tight mt-3" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              Admin dashboard
-            </h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <button onClick={() => setView("add")} className="btn-tertiary group">
+      <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+          <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            Admin <em className="not-italic text-[#006644]">dashboard</em>
+          </h1>
+          <div className="flex items-center gap-4 pb-1">
+            <button onClick={() => setView("add")} className="btn-primary group">
               + Add session
             </button>
-            <button onClick={logout} className="text-white/40 hover:text-white text-sm transition-colors">
+            <button onClick={logout} className="text-sm text-[#6b7280] hover:text-[#1a1a1a] transition-colors">
               Sign out
             </button>
           </div>
