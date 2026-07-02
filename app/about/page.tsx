@@ -111,12 +111,12 @@ export default function AboutPage() {
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="py-32 px-8 bg-[#006644]">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-8">Join us</span>
           <h2
             className="text-5xl md:text-6xl text-white leading-tight mb-6"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
-            <span className="text-white/40">Ready to get your</span><br />
+            <span className="text-white/40">Ready to</span><br />
+            <span className="text-white/40">get your</span><br />
             hands dirty?
           </h2>
           <p className="text-white/60 text-base leading-relaxed max-w-sm mx-auto mb-12">
