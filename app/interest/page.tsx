@@ -60,8 +60,8 @@ export default function InterestPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#faf9f6] px-8 pt-10 pb-8 border-b border-[#e8e2d9]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+      <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <h1
             className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
@@ -75,8 +75,8 @@ export default function InterestPage() {
       </section>
 
       {/* ── FORM ─────────────────────────────────────────────── */}
-      <section className="bg-[#faf9f6] px-8 pt-10 pb-12 md:pt-12 md:pb-16">
-        <div className="max-w-2xl mx-auto">
+      <section className="bg-[#faf9f6] pt-10 pb-12 md:pt-12 md:pb-16">
+        <div className="max-w-2xl mx-auto px-8">
           <form className="space-y-8" onSubmit={handleSubmit} noValidate>
 
             {/* Contact Details */}

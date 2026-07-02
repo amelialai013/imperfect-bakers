@@ -53,8 +53,8 @@ export default function ClassesPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#faf9f6] px-8 pt-10 pb-8 border-b border-[#e8e2d9]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+      <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <h1
             className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
@@ -68,8 +68,8 @@ export default function ClassesPage() {
       </section>
 
       {/* ── CLASSES GRID ─────────────────────────────────────── */}
-      <section className="py-12 px-8 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section className="py-12 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-4">
           {classes.map((c, i) => (
             <Link href="/book-class" key={c.title}>
               <div
@@ -119,8 +119,8 @@ export default function ClassesPage() {
       {(() => {
         const GOOGLE_REVIEW_URL = "https://g.page/r/YOUR_PLACE_ID/review";
         return (
-          <section className="pt-12 pb-24 px-8 bg-[#faf9f6]">
-            <div className="max-w-3xl mx-auto text-center">
+          <section className="pt-12 pb-24 bg-[#faf9f6]">
+            <div className="max-w-3xl mx-auto px-8 text-center">
               <div className="flex items-center justify-center gap-3 mb-8">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-5 h-5">
                   <path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.2-.4-4.7H24v9h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.6 7.3-17.5z"/>

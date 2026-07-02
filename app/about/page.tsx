@@ -8,8 +8,8 @@ export default function AboutPage() {
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
-      <section className="bg-[#faf9f6] px-8 pt-10 pb-8 border-b border-[#e8e2d9]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+      <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <h1
             className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
@@ -23,8 +23,8 @@ export default function AboutPage() {
       </section>
 
       {/* ── VISION ───────────────────────────────────────────── */}
-      <section className="pt-16 pb-24 px-8 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+      <section className="pt-16 pb-24 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
           <div
             className="w-full h-[360px] md:h-[440px]"
             style={{
@@ -54,8 +54,8 @@ export default function AboutPage() {
       </section>
 
       {/* ── MEET THE CHEF ────────────────────────────────────── */}
-      <section className="py-24 px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
 
             {/* Text */}
@@ -109,8 +109,8 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="py-32 px-8 bg-[#006644]">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-32 bg-[#006644]">
+        <div className="max-w-4xl mx-auto px-8 text-center">
           <h2
             className="text-5xl md:text-6xl text-white leading-tight mb-6"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
