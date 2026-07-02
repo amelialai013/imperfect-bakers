@@ -9,7 +9,12 @@ export const metadata = {
   title: "Book a Class | Imperfect Bakers",
 };
 
-export default async function BookAClassPage() {
+export default async function BookAClassPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ class?: string }>;
+}) {
+  const { class: initialClass } = await searchParams;
   let sessions: ClassSession[] = [];
   try {
     sessions = await getAllSessions();
@@ -37,7 +42,7 @@ export default async function BookAClassPage() {
       {/* ── CLASS BROWSER ────────────────────────────────────── */}
       <section className="pt-10 pb-20 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto px-8">
-          <BookAClassClient sessions={sessions} />
+          <BookAClassClient sessions={sessions} initialClass={initialClass} />
 
         </div>
       </section>

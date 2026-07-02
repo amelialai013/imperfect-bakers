@@ -444,6 +444,49 @@ function storageRemove(key: string) {
 
 type View = "login" | "dashboard" | "add" | "edit" | "classes";
 
+function MoreMenu({ onManageClasses, onLogout }: { onManageClasses: () => void; onLogout: () => void }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="btn-secondary flex items-center gap-2"
+      >
+        More
+        <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[180px]">
+            <button
+              onClick={() => { setOpen(false); onManageClasses(); }}
+              className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
+            >
+              <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              Manage classes
+            </button>
+            <div className="h-px bg-[#e8e2d9]" />
+            <button
+              onClick={() => { setOpen(false); onLogout(); }}
+              className="w-full text-left px-5 py-3.5 text-sm text-[#6b7280] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
+            >
+              <svg className="w-4 h-4 text-[#6b7280] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Sign out
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const [token, setToken] = useState<string>("");
   const [view, setView] = useState<View>("login");
@@ -792,12 +835,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <button onClick={() => setView("classes")} className="btn-secondary">
-              Manage classes
-            </button>
-            <button onClick={logout} className="btn-secondary">
-              Sign out
-            </button>
+            <MoreMenu onManageClasses={() => setView("classes")} onLogout={logout} />
           </div>
         </div>
       </section>

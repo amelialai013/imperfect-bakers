@@ -4,8 +4,8 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import type { ClassSession } from "@/lib/types";
 
-export default function BookAClassClient({ sessions }: { sessions: ClassSession[] }) {
-  const [activeClass, setActiveClass] = useState<string>("All");
+export default function BookAClassClient({ sessions, initialClass }: { sessions: ClassSession[]; initialClass?: string }) {
+  const [activeClass, setActiveClass] = useState<string>(initialClass ?? "All");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [view, setView] = useState<"grid" | "list">("grid");
 
@@ -101,8 +101,24 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
 
       {/* ── Session cards ── */}
       {filtered.length === 0 ? (
-        <div className="py-16 text-center">
-          <p className="text-[#6b7280] text-sm">No sessions for this class type.</p>
+        <div className="py-20 text-center">
+          <div className="w-14 h-14 rounded-full bg-[#f0ece4] flex items-center justify-center mx-auto mb-6">
+            <svg className="w-6 h-6 text-[#c8c0b4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <p className="text-[#1a1a1a] font-medium mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            No upcoming {activeClass !== "All" ? activeClass.toLowerCase() : ""} classes
+          </p>
+          <p className="text-[#6b7280] text-sm mb-8">Check back soon — new sessions are added regularly.</p>
+          {activeClass !== "All" && (
+            <button
+              onClick={() => setActiveClass("All")}
+              className="btn-secondary"
+            >
+              See all classes
+            </button>
+          )}
         </div>
       ) : (
         <>

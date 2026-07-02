@@ -41,7 +41,7 @@ export default async function ClassesPage() {
       <section className="py-12 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-4">
           {classes.map((c) => (
-            <Link href="/book-class" key={c.key}>
+            <Link href={`/book-class?class=${encodeURIComponent(c.key)}`} key={c.key}>
               <div className="group relative overflow-hidden cursor-pointer h-[292px] rounded-[8px]">
                 {/* Background image */}
                 <div
