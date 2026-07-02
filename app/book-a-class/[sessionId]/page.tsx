@@ -46,7 +46,7 @@ export default async function SessionBookingPage({
         <div className="max-w-7xl mx-auto">
           <Link
             href="/book-a-class"
-            className="inline-flex items-center gap-2 text-[#9ca3af] hover:text-[#006644] text-sm mb-5 transition-colors"
+            className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors"
           >
             <svg className="w-3.5 h-3.5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />

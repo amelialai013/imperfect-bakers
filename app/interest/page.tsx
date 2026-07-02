@@ -30,7 +30,7 @@ export default function InterestPage() {
           >
             Register <em className="not-italic text-[#006644]">interest</em>
           </h1>
-          <p className="text-[#9ca3af] text-sm leading-relaxed max-w-xs md:text-right pb-1 text-balance">
+          <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right pb-1 text-balance">
             Tell us what you&apos;d like to learn — we&apos;ll reach out when a spot opens up.
           </p>
         </div>

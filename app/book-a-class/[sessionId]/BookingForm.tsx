@@ -119,7 +119,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   if (isFull) {
     return (
       <div className="max-w-xl">
-        <p className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-[#9ca3af] mb-6">Session full</p>
+        <p className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-[#6b7280] mb-6">Session full</p>
         <h2 className="text-3xl text-[#1a1a1a] mb-4" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
           No spots left.
         </h2>
@@ -156,7 +156,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         <div className="mb-12">
           <div className="flex items-baseline justify-between mb-6">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
-            <span className="text-xs text-[#9ca3af]">{totalPeople} / {session.spotsLeft}</span>
+            <span className="text-xs text-[#6b7280]">{totalPeople} / {session.spotsLeft}</span>
           </div>
           <div className="divide-y divide-[#f0ece4]">
             <Counter label="Child" sub="7–17 yrs" value={counts.child} onChange={(v) => setCount("child", v)} />
@@ -176,11 +176,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <span className="mx-2 text-[#d4cfc8]">·</span>
               Account <span className="font-medium">759127</span>
             </p>
-            <p className="text-xs text-[#9ca3af] mt-1.5">
+            <p className="text-xs text-[#6b7280] mt-1.5">
               Include your name and class name in the reference.
             </p>
           </div>
-          <p className="text-xs text-[#9ca3af] mb-3">Payment status <span className="text-[#006644]">*</span></p>
+          <p className="text-xs text-[#6b7280] mb-3">Payment status <span className="text-[#006644]">*</span></p>
           <div className="flex flex-wrap gap-2">
             {[
               { value: "completed", label: "Paid" },
@@ -227,7 +227,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               </svg>
             )}
           </button>
-          <p className="text-xs text-[#9ca3af] leading-relaxed max-w-xs">
+          <p className="text-xs text-[#6b7280] leading-relaxed max-w-xs">
             We confirm classes once enough students sign up — you&apos;ll hear from us soon.
           </p>
         </div>

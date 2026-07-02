@@ -185,7 +185,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 {s.sessionName || s.classLabel}
               </h3>
               {s.location && (
-                <span className="flex items-center gap-1 mt-1 text-[#9ca3af] text-xs">
+                <span className="flex items-center gap-1 mt-1 text-[#6b7280] text-xs">
                   <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -258,7 +258,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="text-[0.65rem] text-[#9ca3af] shrink-0">{s.time}</span>
+                  <span className="text-[0.65rem] text-[#6b7280] shrink-0">{s.time}</span>
                   {s.location && (
                     <span className="text-[0.58rem] font-medium tracking-wide text-[#006644]/60 bg-[#006644]/8 rounded px-1.5 py-0.5 truncate">
                       {s.location.split(",")[0]}
@@ -308,7 +308,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {s.sessionName || s.classLabel}
             </h3>
-            {s.description && <p className="text-[#9ca3af] text-xs leading-relaxed line-clamp-2">{s.description}</p>}
+            {s.description && <p className="text-[#6b7280] text-xs leading-relaxed line-clamp-2">{s.description}</p>}
           </div>
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2 text-xs text-[#6b7280]">
