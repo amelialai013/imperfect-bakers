@@ -74,7 +74,7 @@ export default function InterestPage() {
             </div>
 
             {/* Class interests */}
-            <div className="mt-8">
+            <div className="mt-[60px]">
               <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Classes of interest</p>
               <div className="flex flex-wrap gap-2.5 mt-3">
                 {classOptions.map((name) => {
@@ -99,7 +99,7 @@ export default function InterestPage() {
             </div>
 
             {/* Notes */}
-            <div>
+            <div className="mt-[60px]">
               <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
               <textarea
                 rows={3}
