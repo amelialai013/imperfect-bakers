@@ -67,7 +67,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const isFull = session.spotsLeft === 0;
 
   function setCount(key: keyof Counts, value: number) {
-    setCounts((prev) => ({ ...prev, [key]: value }));
+    const otherTotal = Object.entries(counts)
+      .filter(([k]) => k !== key)
+      .reduce((sum, [, v]) => sum + v, 0);
+    const clamped = Math.min(value, session.spotsLeft - otherTotal);
+    setCounts((prev) => ({ ...prev, [key]: Math.max(0, clamped) }));
     if (fieldErrors.attendees) setFieldErrors((prev) => ({ ...prev, attendees: undefined }));
   }
 
