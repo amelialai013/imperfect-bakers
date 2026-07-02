@@ -38,7 +38,7 @@ export default function Nav() {
   }, [visible]);
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#faf9f6]/80 backdrop-blur-lg shadow-sm" : "bg-[#faf9f6]"}`}>
+    <nav className={`sticky top-0 z-50 bg-[#faf9f6] transition-shadow duration-300 ${scrolled ? "shadow-sm" : ""}`}>
       <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
 
         {/* Logo */}
