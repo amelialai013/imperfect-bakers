@@ -57,8 +57,8 @@ export default function InterestPage() {
               <div>
                 <input type="tel" placeholder="Phone" className={inputClass} />
               </div>
-              <div className="sm:col-span-2 relative">
-                <select className="appearance-none w-full bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]">
+              <div className="sm:col-span-2 relative inline-flex mt-6">
+                <select className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]">
                   <option value="">Experience level</option>
                   <option value="complete_beginner">Complete beginner</option>
                   <option value="some_experience">Some experience</option>
