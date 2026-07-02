@@ -55,13 +55,11 @@ export default async function BookAClassPage() {
               Can&apos;t find what you&apos;re looking for?
             </h2>
           </div>
-          <Link href="/interest" className="self-start">
-            <button className="btn-primary group">
-              Request private class
-              <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+          <Link href="/interest" className="btn-primary group self-start">
+            Request private class
+            <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
           </Link>
         </div>
         {/* Photo half */}

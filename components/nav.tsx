@@ -38,7 +38,7 @@ export default function Nav() {
   }, [visible]);
 
   return (
-    <nav className={`sticky top-0 z-50 bg-[#faf9f6] transition-shadow duration-300 ${scrolled ? "shadow-sm" : ""}`}>
+    <nav className={`sticky top-0 z-[9999] bg-[#faf9f6] transition-shadow duration-300 ${scrolled ? "shadow-sm" : ""}`}>
       <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
 
         {/* Logo */}
@@ -74,12 +74,8 @@ export default function Nav() {
           })}
 
           <div className="flex items-center gap-4">
-            <Link href="/book-class" className="shrink-0">
-              <button className="btn-primary btn-sm">Book class</button>
-            </Link>
-            <Link href="/interest" className="shrink-0">
-              <button className="btn-secondary btn-sm">I&apos;m interested</button>
-            </Link>
+            <Link href="/book-class" className="btn-primary btn-sm shrink-0">Book class</Link>
+            <Link href="/interest" className="btn-secondary btn-sm shrink-0">I&apos;m interested</Link>
           </div>
         </div>
 
@@ -122,11 +118,11 @@ export default function Nav() {
             );
           })}
           <div className="pt-2 flex flex-col gap-3">
-            <Link href="/book-class" onClick={() => setOpen(false)}>
-              <button className="btn-primary btn-sm w-full justify-center">Book class</button>
+            <Link href="/book-class" onClick={() => setOpen(false)} className="btn-primary btn-sm w-full justify-center">
+              Book class
             </Link>
-            <Link href="/interest" onClick={() => setOpen(false)}>
-              <button className="btn-secondary btn-sm w-full justify-center">I&apos;m interested</button>
+            <Link href="/interest" onClick={() => setOpen(false)} className="btn-secondary btn-sm w-full justify-center">
+              I&apos;m interested
             </Link>
           </div>
         </div>

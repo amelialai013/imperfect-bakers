@@ -32,7 +32,7 @@ export default async function SessionBookingPage({
         <section className="pt-14 pb-32 bg-[#faf9f6]">
           <div className="max-w-2xl mx-auto px-8">
             <p className="text-[#6b7280] mb-8">This session doesn&apos;t exist or may have been removed.</p>
-            <Link href="/book-class"><button className="btn-primary">View all classes</button></Link>
+            <Link href="/book-class" className="btn-primary">View all classes</Link>
           </div>
         </section>
       </>

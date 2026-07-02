@@ -122,17 +122,13 @@ export default function AboutPage() {
             Browse upcoming classes or register your interest — we&apos;d love to have you in the kitchen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/classes">
-              <button className="btn-primary-inverse group">
-                See our classes
-                <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+            <Link href="/classes" className="btn-primary-inverse group">
+              See our classes
+              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
             </Link>
-            <Link href="/interest">
-              <button className="btn-tertiary">I&apos;m interested</button>
-            </Link>
+            <Link href="/interest" className="btn-tertiary">I&apos;m interested</Link>
           </div>
         </div>
       </section>

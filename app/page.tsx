@@ -56,17 +56,13 @@ export default function Home() {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <Link href="/classes">
-              <button className="btn-primary group">
-                Explore classes
-                <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+            <Link href="/classes" className="btn-primary group">
+              Explore classes
+              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
             </Link>
-            <Link href="/interest">
-              <button className="btn-secondary">Register interest</button>
-            </Link>
+            <Link href="/interest" className="btn-secondary">Register interest</Link>
           </div>
         </div>
 

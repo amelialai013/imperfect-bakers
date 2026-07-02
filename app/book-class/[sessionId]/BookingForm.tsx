@@ -39,7 +39,7 @@ function Counter({
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="w-9 h-9 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-all text-base"
+          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-all text-base touch-manipulation"
         >
           −
         </button>
@@ -47,7 +47,7 @@ function Counter({
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className="w-9 h-9 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-all text-base"
+          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-all text-base touch-manipulation"
         >
           +
         </button>
@@ -136,7 +136,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
           We confirm classes once we have enough students signed up. A confirmation email will be on its way shortly.
         </p>
-        <Link href="/book-class"><button className="btn-secondary">Browse more classes</button></Link>
+        <Link href="/book-class" className="btn-secondary">Browse more classes</Link>
       </div>
     );
   }
@@ -152,8 +152,8 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           Register your interest and we&apos;ll let you know when a new session opens up.
         </p>
         <div className="flex gap-4 flex-wrap">
-          <Link href="/interest"><button className="btn-primary">Register interest</button></Link>
-          <Link href="/book-class"><button className="btn-secondary">Browse other classes</button></Link>
+          <Link href="/interest" className="btn-primary">Register interest</Link>
+          <Link href="/book-class" className="btn-secondary">Browse other classes</Link>
         </div>
       </div>
     );
@@ -209,7 +209,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             <span className="text-sm text-[#1a1a1a]">{totalPeople} / {session.spotsLeft}</span>
           </div>
           {(() => {
-            const types = session.attendeeTypes ?? ["child", "youngAdult", "adult"];
+            const types = session.attendeeTypes?.length ? session.attendeeTypes : ["child", "youngAdult", "adult"];
             const rows = [
               { key: "child" as const, label: "Child", sub: "7–17 yrs" },
               { key: "youngAdult" as const, label: "Young Adult", sub: "18–34 yrs" },
