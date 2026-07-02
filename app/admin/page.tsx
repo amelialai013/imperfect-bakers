@@ -517,6 +517,7 @@ export default function AdminPage() {
   const [savingNewClass, setSavingNewClass] = useState(false);
   const [deletingClass, setDeletingClass] = useState<string | null>(null);
   const [deleteClassConfirm, setDeleteClassConfirm] = useState<string | null>(null);
+  const [classKebabOpen, setClassKebabOpen] = useState<string | null>(null);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -956,6 +957,39 @@ export default function AdminPage() {
                         <p className="text-[0.6875rem] tracking-[0.2em] font-semibold text-white/60 uppercase mb-1">{c.ages}</p>
                         <p className="text-white font-semibold text-lg leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{c.title}</p>
                       </div>
+                      {/* Kebab menu */}
+                      <div className="absolute top-3 right-3 z-10">
+                        <button
+                          onClick={() => setClassKebabOpen(classKebabOpen === c.key ? null : c.key)}
+                          className="w-8 h-8 rounded-full bg-[#1a1a1a]/40 hover:bg-[#1a1a1a]/60 flex items-center justify-center transition-colors"
+                        >
+                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="5" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="12" cy="19" r="1.5" />
+                          </svg>
+                        </button>
+                        {classKebabOpen === c.key && (
+                          <>
+                            <div className="fixed inset-0 z-10" onClick={() => setClassKebabOpen(null)} />
+                            <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                              {c.hidden ? (
+                                <button
+                                  onClick={() => { setClassKebabOpen(null); restoreDefaultClass(c.key); }}
+                                  className="w-full text-left px-4 py-3 text-sm text-[#006644] hover:bg-[#faf9f6] transition-colors"
+                                >
+                                  Restore class
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => { setClassKebabOpen(null); setDeleteClassConfirm(c.key); }}
+                                  className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                                >
+                                  Delete
+                                </button>
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </div>
                     </div>
 
                     {/* Fields */}
@@ -1002,43 +1036,23 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Save / Revert / Delete actions */}
-                    <div className="px-6 pb-5 flex items-center justify-between">
-                      {c.hidden ? (
-                        /* Hidden default class — show restore */
-                        <button
-                          onClick={() => restoreDefaultClass(c.key)}
-                          disabled={deletingClass === c.key}
-                          className="text-sm text-[#006644] hover:text-[#004d33] transition-colors"
-                        >
-                          {deletingClass === c.key ? "Restoring…" : "Restore class"}
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => setDeleteClassConfirm(c.key)}
-                          disabled={deletingClass === c.key}
-                          className="text-xs text-[#6b7280] hover:text-red-500 transition-colors"
-                        >
-                          {deletingClass === c.key ? "Deleting…" : "Delete"}
-                        </button>
-                      )}
-                      {!c.hidden && (
-                        <div className="flex items-center gap-3">
-                          {isClassDirty(c.key) && (
-                            <button onClick={() => revertClassConfig(c.key)} className="btn-secondary">
-                              Revert
-                            </button>
-                          )}
-                          <button
-                            onClick={() => saveClassConfigItem(c)}
-                            disabled={savingClass === c.key}
-                            className="btn-primary"
-                          >
-                            {savingClass === c.key ? "Saving…" : "Save changes"}
+                    {/* Save / Revert actions */}
+                    {!c.hidden && (
+                      <div className="px-6 pb-5 flex items-center justify-end gap-3">
+                        {isClassDirty(c.key) && (
+                          <button onClick={() => revertClassConfig(c.key)} className="btn-secondary">
+                            Revert
                           </button>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                        <button
+                          onClick={() => saveClassConfigItem(c)}
+                          disabled={savingClass === c.key}
+                          className="btn-primary"
+                        >
+                          {savingClass === c.key ? "Saving…" : "Save changes"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
