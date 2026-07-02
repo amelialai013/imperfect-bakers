@@ -206,145 +206,119 @@ function SessionForm({
     setForm((f) => ({ ...f, time: formatTimeRange(startTime, parseInt(duration, 10) || 3) }));
   }, [startTime, duration]);
 
+  const SelectField = ({ label, name, value, onChange, required: req, children }: {
+    label: string; name: string; value: string;
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    required?: boolean; children: React.ReactNode;
+  }) => (
+    <div>
+      <label className={labelCls}>{label}{req && <span className="text-[#006644] ml-1">*</span>}</label>
+      <div className="relative">
+        <select name={name} value={value} onChange={onChange} required={req}
+          className={cls + " appearance-none pr-8 cursor-pointer"}>
+          {children}
+        </select>
+        <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+    </div>
+  );
+
+  const sectionLabel = "text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-5 block";
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSave(form, attendeeTypes);
-      }}
-      className="space-y-4"
-    >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Class type — dropdown */}
-        <div>
-          <label className={labelCls}>Class type <span className="text-[#006644]">*</span></label>
-          <div className="relative">
-            <select
-              name="classLabel"
-              value={form.classLabel}
-              onChange={handle}
-              required
-              className={cls + " appearance-none pr-8 cursor-pointer"}
-            >
-              <option value="">Select class type…</option>
-              {CLASS_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-            </select>
-            <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-            </svg>
+    <form onSubmit={(e) => { e.preventDefault(); onSave(form, attendeeTypes); }}>
+
+      {/* ── Section 1: Class ─────────────────────────────── */}
+      <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
+        <span className={sectionLabel}>Class</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <SelectField label="Class type" name="classLabel" value={form.classLabel} onChange={handle} required>
+            <option value="">Select class type…</option>
+            {CLASS_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+          </SelectField>
+          <Field label="Session name" name="sessionName" value={form.sessionName} onChange={handle} placeholder="e.g. Delicious Dinner (optional)" />
+        </div>
+      </div>
+
+      {/* ── Section 2: Schedule ──────────────────────────── */}
+      <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
+        <span className={sectionLabel}>Schedule</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className={labelCls}>Date <span className="text-[#006644]">*</span></label>
+            <input type="date" value={dateIso} onChange={(e) => setDateIso(e.target.value)} required className={cls} />
+            {form.date && <p className="text-xs text-[#006644]/70 mt-1.5">{form.date}</p>}
+          </div>
+          <div>
+            <label className={labelCls}>Time <span className="text-[#006644]">*</span></label>
+            <div className="flex gap-2">
+              <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required className={cls} />
+              <div className="relative shrink-0 w-32">
+                <select value={duration} onChange={(e) => setDuration(e.target.value)} className={cls + " appearance-none pr-8 cursor-pointer"}>
+                  {[1,1.5,2,2.5,3,3.5,4,4.5,5].map((h) => <option key={h} value={String(h)}>{h}h</option>)}
+                </select>
+                <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+            {form.time && <p className="text-xs text-[#006644]/70 mt-1.5">{form.time}</p>}
           </div>
         </div>
+      </div>
 
-        <Field label="Session name" name="sessionName" value={form.sessionName} onChange={handle} placeholder="e.g. Delicious Dinner (optional)" />
-
-        {/* Date — native date picker */}
-        <div>
-          <label className={labelCls}>Date <span className="text-[#006644]">*</span></label>
-          <input
-            type="date"
-            value={dateIso}
-            onChange={(e) => setDateIso(e.target.value)}
-            required
-            className={cls}
-          />
-          {form.date && <p className="text-xs text-[#6b7280] mt-1">{form.date}</p>}
-        </div>
-
-        {/* Time — start + duration */}
-        <div>
-          <label className={labelCls}>Time <span className="text-[#006644]">*</span></label>
-          <div className="flex gap-2">
-            <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required
-              className={cls}
-            />
-            <div className="relative shrink-0 w-36">
-              <select
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                className={cls + " appearance-none pr-8 cursor-pointer"}
-              >
-                {[1,1.5,2,2.5,3,3.5,4,4.5,5].map((h) => (
-                  <option key={h} value={String(h)}>{h}h</option>
-                ))}
-              </select>
-              <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-              </svg>
+      {/* ── Section 3: Venue & capacity ──────────────────── */}
+      <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
+        <span className={sectionLabel}>Venue & capacity</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="sm:col-span-2">
+            <Field label="Location" name="location" value={form.location} onChange={handle} placeholder="Williamstown, Melbourne" required />
+          </div>
+          <SelectField label="Ages" name="ages" value={form.ages} onChange={(e) => {
+            const val = e.target.value;
+            setForm((f) => ({ ...f, ages: val }));
+            if (val === "All ages") setAttendeeTypes(["child", "youngAdult", "adult"]);
+            else if (val === "18+ yrs") setAttendeeTypes((prev) => prev.filter((k) => k !== "child"));
+          }} required>
+            <option value="All ages">All ages</option>
+            <option value="18+ yrs">18+ yrs</option>
+          </SelectField>
+          <div>
+            <label className={labelCls}>Attendee types</label>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {ATTENDEE_OPTIONS.map((opt) => {
+                const active = attendeeTypes.includes(opt.key);
+                return (
+                  <button key={opt.key} type="button" onClick={() => toggleAttendeeType(opt.key)}
+                    className={`px-3 py-1.5 text-sm border rounded-full transition-all duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"}`}>
+                    {opt.label} <span className={`text-xs ${active ? "text-white/70" : "text-[#6b7280]"}`}>{opt.sub}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
-          {form.time && <p className="text-xs text-[#6b7280] mt-1">{form.time}</p>}
-        </div>
-
-        {/* Location — plain text (Google Places requires API key in .env.local) */}
-        <Field label="Location" name="location" value={form.location} onChange={handle} placeholder="Williamstown, Melbourne" required />
-        {/* Ages — dropdown with auto attendee type sync */}
-        <div>
-          <label className={labelCls}>Ages <span className="text-[#006644]">*</span></label>
-          <div className="relative">
-            <select
-              name="ages"
-              value={form.ages}
-              onChange={(e) => {
-                const val = e.target.value;
-                setForm((f) => ({ ...f, ages: val }));
-                if (val === "All ages") {
-                  setAttendeeTypes(["child", "youngAdult", "adult"]);
-                } else if (val === "18+ yrs") {
-                  setAttendeeTypes((prev) => prev.filter((k) => k !== "child"));
-                }
-              }}
-              required
-              className={cls + " appearance-none pr-8 cursor-pointer"}
-            >
-              <option value="All ages">All ages</option>
-              <option value="18+ yrs">18+ yrs</option>
-            </select>
-            <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-        </div>
-        <Field label="Price per person ($)" name="price" value={form.price} onChange={handle} type="number" placeholder="150" required />
-        <Field label="Max spots" name="maxSpots" value={form.maxSpots} onChange={handle} type="number" placeholder="15" required />
-      </div>
-      <Field label="Description" name="description" value={form.description} onChange={handle} type="textarea" placeholder="Short description of the session…" />
-      <Field label="Image URL" name="imageUrl" value={form.imageUrl} onChange={handle} placeholder="https://images.unsplash.com/…" />
-
-      {/* Attendee types */}
-      <div>
-        <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-3">
-          Attendee types
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {ATTENDEE_OPTIONS.map((opt) => {
-            const active = attendeeTypes.includes(opt.key);
-            return (
-              <button
-                key={opt.key}
-                type="button"
-                onClick={() => toggleAttendeeType(opt.key)}
-                className={`px-4 py-2 text-sm border rounded-full transition-all duration-200 ${
-                  active
-                    ? "bg-[#006644] border-[#006644] text-white"
-                    : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
-                }`}
-              >
-                {opt.label} <span className={`text-xs ${active ? "text-white/70" : "text-[#6b7280]"}`}>{opt.sub}</span>
-              </button>
-            );
-          })}
+          <Field label="Price per person ($)" name="price" value={form.price} onChange={handle} type="number" placeholder="150" required />
+          <Field label="Max spots" name="maxSpots" value={form.maxSpots} onChange={handle} type="number" placeholder="15" required />
         </div>
       </div>
 
-      <div className="flex gap-3 pt-2">
+      {/* ── Section 4: Content ───────────────────────────── */}
+      <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-6">
+        <span className={sectionLabel}>Content</span>
+        <div className="space-y-4">
+          <Field label="Description" name="description" value={form.description} onChange={handle} type="textarea" placeholder="Short description of the session…" />
+          <Field label="Image URL" name="imageUrl" value={form.imageUrl} onChange={handle} placeholder="https://images.unsplash.com/…" />
+        </div>
+      </div>
+
+      {/* ── Actions ──────────────────────────────────────── */}
+      <div className="flex items-center gap-3">
         <button type="submit" disabled={saving} className="btn-primary">
           {saving ? "Saving…" : "Save session"}
         </button>
-        <button type="button" onClick={onCancel} className="btn-secondary">
+        <button type="button" onClick={onCancel} className="text-sm text-[#6b7280] hover:text-[#1a1a1a] transition-colors px-4 py-2">
           Cancel
         </button>
       </div>
@@ -621,14 +595,21 @@ export default function AdminPage() {
 
     return (
       <>
-        <section className="bg-[#006644] px-8 pt-16 pb-14">
-          <div className="max-w-7xl mx-auto flex items-end justify-between">
-            <div>
-              <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Admin</span>
-              <h1 className="text-4xl md:text-5xl text-white leading-tight tracking-tight mt-3" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                {view === "edit" ? "Edit session" : "Add session"}
-              </h1>
-            </div>
+        <section className="bg-[#006644] px-8 pt-12 pb-12">
+          <div className="max-w-2xl mx-auto">
+            <button
+              onClick={() => { setView("dashboard"); setEditTarget(null); }}
+              className="flex items-center gap-2 text-white/50 hover:text-white transition-colors text-sm mb-8"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to dashboard
+            </button>
+            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Admin</span>
+            <h1 className="text-4xl md:text-5xl text-white leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              {view === "edit" ? "Edit session" : "New session"}
+            </h1>
           </div>
         </section>
         <section className="px-8 pt-10 pb-24 bg-[#faf9f6]">
