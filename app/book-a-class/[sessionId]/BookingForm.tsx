@@ -236,7 +236,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <input
                 name="payment-other"
                 type="text"
-                placeholder="Let us know when you're able to pay…"
+                placeholder="Add note"
                 className={fieldErrors.paymentOther ? inputErrorClass : inputClass}
                 onChange={() => fieldErrors.paymentOther && setFieldErrors((p) => ({ ...p, paymentOther: undefined }))}
               />
