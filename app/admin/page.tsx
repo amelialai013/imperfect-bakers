@@ -293,8 +293,8 @@ function SessionForm({
                 const active = attendeeTypes.includes(opt.key);
                 return (
                   <button key={opt.key} type="button" onClick={() => toggleAttendeeType(opt.key)}
-                    className={`inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-all duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
-                    {opt.label} <span className={`text-sm ${active ? "text-white/70" : "text-[#006644]/60"}`}>{opt.sub}</span>
+                    className={`group inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-all duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
+                    {opt.label} <span className={`text-sm transition-colors duration-200 ${active ? "text-white/70" : "text-[#006644]/60 group-hover:text-white/70"}`}>{opt.sub}</span>
                   </button>
                 );
               })}
