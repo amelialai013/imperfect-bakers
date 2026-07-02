@@ -512,6 +512,10 @@ export default function AdminPage() {
   const [classConfigsLoading, setClassConfigsLoading] = useState(false);
   const [savingClass, setSavingClass] = useState<string | null>(null);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
+  const [addingClass, setAddingClass] = useState(false);
+  const [newClass, setNewClass] = useState<Omit<ClassConfig, "key">>({ title: "", ages: "", imageUrl: "", description: "" });
+  const [savingNewClass, setSavingNewClass] = useState(false);
+  const [deletingClass, setDeletingClass] = useState<string | null>(null);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -639,6 +643,38 @@ export default function AdminPage() {
       prev.map((c) => c.key === key ? { ...saved } : c)
     );
   }
+
+  async function saveNewClass() {
+    if (!newClass.title.trim()) return;
+    setSavingNewClass(true);
+    const key = newClass.title.trim();
+    const config: ClassConfig = { key, ...newClass };
+    await authFetch("/api/classconfigs", token, {
+      method: "POST",
+      body: JSON.stringify(config),
+    });
+    // Refresh the list from server
+    const res = await fetch("/api/classconfigs");
+    const data = await res.json();
+    if (Array.isArray(data)) { setClassConfigs(data); setSavedClassConfigs(data); }
+    setNewClass({ title: "", ages: "", imageUrl: "", description: "" });
+    setAddingClass(false);
+    setSavingNewClass(false);
+  }
+
+  async function deleteCustomClass(key: string) {
+    setDeletingClass(key);
+    await authFetch("/api/classconfigs", token, {
+      method: "DELETE",
+      body: JSON.stringify({ key }),
+    });
+    const res = await fetch("/api/classconfigs");
+    const data = await res.json();
+    if (Array.isArray(data)) { setClassConfigs(data); setSavedClassConfigs(data); }
+    setDeletingClass(null);
+  }
+
+  const DEFAULT_CLASS_KEYS = new Set(DEFAULT_CLASS_CONFIGS.map((d) => d.key));
 
   function updateClassConfig(key: string, field: keyof ClassConfig, value: string) {
     setClassConfigs((prev) =>
@@ -800,11 +836,56 @@ export default function AdminPage() {
                 Manage <em className="not-italic text-[#006644]">classes</em>
               </h1>
             </div>
+            <div className="pb-1 md:mt-12">
+              <button onClick={() => setAddingClass(true)} className="btn-primary group">
+                New class <span>+</span>
+              </button>
+            </div>
           </div>
         </section>
 
         <section className="px-8 pt-10 pb-24 bg-[#faf9f6]">
           <div className="max-w-7xl mx-auto">
+            {/* ── Add new class form ── */}
+            {addingClass && (
+              <div className="bg-white border border-[#006644] rounded-xl p-6 mb-6">
+                <div className="flex items-center justify-between mb-5">
+                  <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">New class</span>
+                  <button onClick={() => { setAddingClass(false); setNewClass({ title: "", ages: "", imageUrl: "", description: "" }); }} className="text-[#6b7280] hover:text-[#1a1a1a] transition-colors">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className={labelCls}>Title</label>
+                      <input type="text" value={newClass.title} onChange={(e) => setNewClass((n) => ({ ...n, title: e.target.value }))} placeholder="e.g. Bread Baking" className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Tag</label>
+                      <input type="text" value={newClass.ages} onChange={(e) => setNewClass((n) => ({ ...n, ages: e.target.value }))} placeholder="All ages" className={inputCls} />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Image URL</label>
+                    <input type="text" value={newClass.imageUrl} onChange={(e) => setNewClass((n) => ({ ...n, imageUrl: e.target.value }))} placeholder="https://images.unsplash.com/…" className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Description</label>
+                    <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value }))} rows={2} placeholder="Short description…" className={inputCls + " resize-none"} />
+                  </div>
+                  <div className="flex items-center gap-3 pt-1">
+                    <button onClick={saveNewClass} disabled={savingNewClass || !newClass.title.trim()} className="btn-primary">
+                      {savingNewClass ? "Saving…" : "Save class"}
+                    </button>
+                    <button onClick={() => { setAddingClass(false); setNewClass({ title: "", ages: "", imageUrl: "", description: "" }); }} className="btn-secondary">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {classConfigsLoading ? (
               <p className="text-[#6b7280] text-sm">Loading classes…</p>
             ) : (
@@ -867,23 +948,32 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Save / Revert actions */}
-                    <div className="px-6 pb-5 flex items-center justify-end gap-3">
-                      {isClassDirty(c.key) && (
+                    {/* Save / Revert / Delete actions */}
+                    <div className="px-6 pb-5 flex items-center justify-between">
+                      {/* Delete — only for custom classes */}
+                      {!DEFAULT_CLASS_KEYS.has(c.key) ? (
                         <button
-                          onClick={() => revertClassConfig(c.key)}
-                          className="btn-secondary"
+                          onClick={() => deleteCustomClass(c.key)}
+                          disabled={deletingClass === c.key}
+                          className="text-sm text-[#6b7280] hover:text-red-500 transition-colors"
                         >
-                          Revert
+                          {deletingClass === c.key ? "Deleting…" : "Delete class"}
                         </button>
-                      )}
-                      <button
-                        onClick={() => saveClassConfigItem(c)}
-                        disabled={savingClass === c.key}
-                        className="btn-primary"
-                      >
-                        {savingClass === c.key ? "Saving…" : "Save changes"}
-                      </button>
+                      ) : <span />}
+                      <div className="flex items-center gap-3">
+                        {isClassDirty(c.key) && (
+                          <button onClick={() => revertClassConfig(c.key)} className="btn-secondary">
+                            Revert
+                          </button>
+                        )}
+                        <button
+                          onClick={() => saveClassConfigItem(c)}
+                          disabled={savingClass === c.key}
+                          className="btn-primary"
+                        >
+                          {savingClass === c.key ? "Saving…" : "Save changes"}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}

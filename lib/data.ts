@@ -4,19 +4,40 @@ import { DEFAULT_CLASS_CONFIGS } from "./classDefaults";
 
 export { DEFAULT_CLASS_CONFIGS };
 
+const DEFAULT_KEYS = new Set(DEFAULT_CLASS_CONFIGS.map((d) => d.key));
+
 export async function getClassConfigs(): Promise<ClassConfig[]> {
-  const configs = await Promise.all(
+  // Defaults (with any KV overrides)
+  const defaults = await Promise.all(
     DEFAULT_CLASS_CONFIGS.map(async (def) => {
       const stored = await kv.get<ClassConfig>(`classconfig:${def.key}`);
       return stored ?? def;
     })
   );
-  return configs;
+  // Custom classes added via admin
+  const customKeys: string[] = (await kv.lrange("classconfigs:custom", 0, -1)) ?? [];
+  const customs = await Promise.all(
+    customKeys.map((key) => kv.get<ClassConfig>(`classconfig:${key}`))
+  );
+  const validCustoms = customs.filter(Boolean) as ClassConfig[];
+  return [...defaults, ...validCustoms];
 }
 
 export async function saveClassConfig(config: ClassConfig): Promise<ClassConfig> {
   await kv.set(`classconfig:${config.key}`, config);
+  // Track custom (non-default) classes in a separate list
+  if (!DEFAULT_KEYS.has(config.key)) {
+    const existing: string[] = (await kv.lrange("classconfigs:custom", 0, -1)) ?? [];
+    if (!existing.includes(config.key)) {
+      await kv.rpush("classconfigs:custom", config.key);
+    }
+  }
   return config;
+}
+
+export async function deleteClassConfig(key: string): Promise<void> {
+  await kv.del(`classconfig:${key}`);
+  await kv.lrem("classconfigs:custom", 0, key);
 }
 
 // ── Sessions ──────────────────────────────────────────────
