@@ -30,7 +30,7 @@ function Counter({
     <div className="flex items-center justify-between py-4">
       <div>
         <p className="text-sm text-[#1a1a1a]">{label}</p>
-        <p className="text-xs text-[#9ca3af] mt-0.5">{sub}</p>
+        <p className="text-xs text-[#6b7280] mt-0.5">{sub}</p>
       </div>
       <div className="flex items-center gap-4">
         <button
