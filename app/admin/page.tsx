@@ -254,32 +254,8 @@ function SessionForm({
           <div>
             <label className={labelCls}>Time <span className="text-[#006644]">*</span></label>
             <div className="flex gap-2">
-              {/* Elegant start-time select */}
-              <div className="relative flex-1">
-                <select
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  required
-                  className={cls + " appearance-none pr-8 cursor-pointer"}
-                >
-                  <option value="">Start time…</option>
-                  {Array.from({ length: 28 }, (_, i) => {
-                    const totalMins = 6 * 60 + i * 30; // 6:00am → 9:30pm
-                    const h24 = Math.floor(totalMins / 60);
-                    const m = totalMins % 60;
-                    const val = `${String(h24).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
-                    const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
-                    const period = h24 >= 12 ? "pm" : "am";
-                    const label = m === 0 ? `${h12}${period}` : `${h12}:${String(m).padStart(2,"0")}${period}`;
-                    return <option key={val} value={val}>{label}</option>;
-                  })}
-                </select>
-                <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-              {/* Duration select */}
-              <div className="relative shrink-0 w-28">
+              <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required className={cls} />
+              <div className="relative shrink-0 w-32">
                 <select value={duration} onChange={(e) => setDuration(e.target.value)} className={cls + " appearance-none pr-8 cursor-pointer"}>
                   {[1,1.5,2,2.5,3,3.5,4,4.5,5].map((h) => (
                     <option key={h} value={String(h)}>{h}h</option>
