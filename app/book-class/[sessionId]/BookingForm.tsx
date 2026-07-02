@@ -160,7 +160,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-16 lg:gap-20 items-start">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-[60px] lg:gap-20 items-start">
 
       {/* ── Form ── */}
       <form onSubmit={handleSubmit} noValidate>
@@ -264,7 +264,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         {/* 04 — Notes */}
-        <div className="mt-[60px] mb-10">
+        <div className="mt-[60px]">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
           <textarea
             name="notes"
@@ -275,7 +275,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+        <div className="mt-[60px] flex flex-col sm:flex-row sm:items-center gap-6">
           <button type="submit" disabled={submitting} className="btn-primary group self-start">
             {submitting ? "Requesting…" : "Request my spot"}
             {!submitting && (
