@@ -642,7 +642,7 @@ export default function AdminPage() {
           <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
             Admin <em className="not-italic text-[#006644]">dashboard</em>
           </h1>
-          <div className="flex items-center gap-4 pb-1">
+          <div className="flex items-center gap-4 pb-1 mt-8">
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
@@ -732,16 +732,10 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Footer action bar */}
+                    {/* Footer action bar — Edit + Delete only */}
                     <div className="px-7 py-3 flex items-center justify-between">
                       <span className="text-xs text-[#6b7280]">{booked} of {s.maxSpots} spots booked</span>
                       <div className="flex items-center divide-x divide-[#e8e2d9]">
-                        <button
-                          onClick={() => setExpandedBookings(showBookings ? null : s.id)}
-                          className="text-xs text-[#6b7280] hover:text-[#006644] transition-colors px-4 py-1"
-                        >
-                          {showBookings ? "Hide bookings" : `Bookings (${booked})`}
-                        </button>
                         <button
                           onClick={() => { setEditTarget(s); setView("edit"); }}
                           className="text-xs text-[#6b7280] hover:text-[#006644] transition-colors px-4 py-1"
@@ -768,9 +762,25 @@ export default function AdminPage() {
                       </div>
                     </div>
 
+                    {/* Bookings accordion trigger */}
+                    <button
+                      onClick={() => setExpandedBookings(showBookings ? null : s.id)}
+                      className="w-full border-t border-[#e8e2d9] px-7 py-3.5 flex items-center justify-between hover:bg-[#faf9f6] transition-colors"
+                    >
+                      <span className="text-xs font-semibold tracking-[0.15em] uppercase text-[#006644]">
+                        Bookings · {booked} {booked === 1 ? "person" : "people"}
+                      </span>
+                      <svg
+                        className={`w-4 h-4 text-[#6b7280] transition-transform duration-200 ${showBookings ? "rotate-180" : ""}`}
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
                     {/* Bookings panel */}
                     {showBookings && (
-                      <div className="border-t border-[#e8e2d9] px-7 pb-6 pt-1">
+                      <div className="border-t border-[#e8e2d9] px-7 pb-6 pt-4">
                         <BookingsPanel sessionId={s.id} token={token} />
                       </div>
                     )}

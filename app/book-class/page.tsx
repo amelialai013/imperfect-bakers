@@ -47,7 +47,7 @@ export default async function BookAClassPage() {
         {/* Text half */}
         <div className="bg-[#ede8df] flex flex-col justify-center px-12 py-10 md:py-12 gap-8">
           <div>
-            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-2">Private bookings</span>
+            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">Private bookings</span>
             <h2
               className="text-3xl md:text-4xl text-[#1a1a1a] leading-snug"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}

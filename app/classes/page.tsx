@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getAllSessions } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Classes | Imperfect Bakers",
@@ -49,7 +52,20 @@ const classes: { title: string; desc: string; age: string; image: string; longTi
   },
 ];
 
-export default function ClassesPage() {
+export default async function ClassesPage() {
+  // Build a map of classLabel → ages from live session data
+  let agesMap: Record<string, string> = {};
+  try {
+    const sessions = await getAllSessions();
+    for (const s of sessions) {
+      if (s.classLabel && s.ages && !agesMap[s.classLabel]) {
+        agesMap[s.classLabel] = s.ages;
+      }
+    }
+  } catch {
+    // KV not configured — fall back to hardcoded ages
+  }
+
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────────────────────── */}
@@ -87,7 +103,7 @@ export default function ClassesPage() {
                 <div className="absolute inset-0 flex flex-col justify-between p-8 md:p-10">
                   <div>
                     <span className="text-[0.6875rem] tracking-[0.2em] font-semibold text-white/50 mb-3 block uppercase">
-                      {c.age}
+                      {agesMap[c.title] ?? c.age}
                     </span>
                     <h2
                       className="text-white leading-tight text-2xl md:text-3xl"
@@ -164,7 +180,7 @@ export default function ClassesPage() {
         {/* Text half */}
         <div className="bg-[#006644] flex flex-col justify-center px-12 py-10 md:py-12 gap-8">
           <div>
-            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">Private bookings</span>
+            <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">Private bookings</span>
             <h2
               className="text-3xl md:text-4xl text-white leading-snug"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
