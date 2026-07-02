@@ -644,7 +644,7 @@ export default function AdminPage() {
           </h1>
           <div className="flex items-center gap-4 pb-1">
             <button onClick={() => setView("add")} className="btn-primary group">
-              <span>+</span> Add session
+              Add session <span>+</span>
             </button>
             <button onClick={logout} className="btn-secondary">
               Sign out
