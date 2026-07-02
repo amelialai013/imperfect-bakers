@@ -229,7 +229,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           {totalPeople > 0 && (
             <div className="mt-6 flex items-baseline justify-between rounded-xl bg-[#006644]/8 px-5 py-4">
               <div>
-                <p className="text-xs text-[#6b7280]">{totalPeople} {totalPeople === 1 ? "person" : "people"} × ${session.price}</p>
+                <p className="text-sm text-[#1a1a1a]">{totalPeople} {totalPeople === 1 ? "person" : "people"} × ${session.price}</p>
               </div>
               <p className="text-2xl font-semibold text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 ${(totalPeople * session.price).toLocaleString()}

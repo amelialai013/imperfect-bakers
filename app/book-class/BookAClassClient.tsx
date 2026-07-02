@@ -71,18 +71,6 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
             </svg>
           </div>
 
-          {/* Clear filter pill — only when a specific class is selected */}
-          {activeClass !== "All" && (
-            <button
-              onClick={() => setActiveClass("All")}
-              className="inline-flex items-center gap-1.5 h-[46px] px-4 rounded-full bg-[#006644] text-white text-sm font-medium hover:bg-[#004d33] transition-colors"
-            >
-              See all classes
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          )}
 
           {/* Grid/List + Sort — grouped so they wrap together */}
           <div className="flex items-center gap-2">
