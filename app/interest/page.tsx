@@ -97,9 +97,8 @@ export default function InterestPage() {
         </section>
         <section className="bg-[#faf9f6] pt-14 pb-32">
           <div className="max-w-2xl mx-auto px-8">
-            <p className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-[#006644] mb-6">Interest registered</p>
             <h2 className="text-3xl text-[#1a1a1a] mb-4 leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              We&apos;ll be in touch.
+              We&apos;ll be in touch!
             </h2>
             <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
               Thanks for registering your interest. We&apos;ll reach out as soon as a relevant session opens up.
