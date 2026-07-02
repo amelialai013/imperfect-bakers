@@ -11,16 +11,51 @@ const classOptions = [
   "Private Group Class",
 ];
 
-const inputClass = "w-full bg-[#f5f2ed] rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none focus:bg-[#eeeae4] transition-colors";
-const labelClass = "block text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-2";
+const inputClass =
+  "w-full bg-[#f5f2ed] rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none focus:bg-[#eeeae4] transition-colors";
+
+const inputErrorClass =
+  "w-full rounded-lg px-4 py-3.5 text-sm text-[#1a1a1a] placeholder-[#b8b0a6] focus:outline-none transition-colors bg-red-50 border border-red-300 focus:border-red-400";
+
+type FieldErrors = {
+  name?: string;
+  email?: string;
+  phone?: string;
+};
 
 export default function InterestPage() {
   const [selected, setSelected] = useState<string[]>([]);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const toggle = (name: string) =>
     setSelected((prev) =>
       prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
     );
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const name = (fd.get("name") as string).trim();
+    const email = (fd.get("email") as string).trim();
+    const phone = (fd.get("phone") as string).trim();
+
+    const errors: FieldErrors = {};
+    if (!name) errors.name = "Please enter your full name";
+    if (!email) errors.email = "Please enter your email address";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      errors.email = "Please enter a valid email address";
+    if (!phone) errors.phone = "Please enter your phone number";
+    else if (!/^[\d\s\+\-\(\)]{7,15}$/.test(phone))
+      errors.phone = "Please enter a valid phone number";
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
+    setFieldErrors({});
+    // TODO: submit form
+  }
 
   return (
     <>
@@ -42,35 +77,61 @@ export default function InterestPage() {
       {/* ── FORM ─────────────────────────────────────────────── */}
       <section className="bg-[#faf9f6] px-8 pt-10 pb-12 md:pt-12 md:pb-16">
         <div className="max-w-2xl mx-auto">
-          <form className="space-y-8">
+          <form className="space-y-8" onSubmit={handleSubmit} noValidate>
 
             {/* Contact Details */}
             <div>
               <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Contact details</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="sm:col-span-2">
-                <input type="text" placeholder="Full name" className={inputClass} />
-              </div>
-              <div>
-                <input type="email" placeholder="Email" className={inputClass} />
-              </div>
-              <div>
-                <input type="tel" placeholder="Phone" className={inputClass} />
-              </div>
-              <div className="sm:col-span-2 mt-4">
-                <div className="relative inline-flex">
-                  <select className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]">
-                    <option value="">Experience level</option>
-                    <option value="complete_beginner">Complete beginner</option>
-                    <option value="some_experience">Some experience</option>
-                    <option value="confident_cook">Confident cook</option>
-                  </select>
-                  <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-                  </svg>
+
+                <div className="sm:col-span-2">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Full name"
+                    className={fieldErrors.name ? inputErrorClass : inputClass}
+                    onChange={() => fieldErrors.name && setFieldErrors((p) => ({ ...p, name: undefined }))}
+                  />
+                  {fieldErrors.name && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.name}</p>}
                 </div>
+
+                <div>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    className={fieldErrors.email ? inputErrorClass : inputClass}
+                    onChange={() => fieldErrors.email && setFieldErrors((p) => ({ ...p, email: undefined }))}
+                  />
+                  {fieldErrors.email && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.email}</p>}
+                </div>
+
+                <div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone"
+                    className={fieldErrors.phone ? inputErrorClass : inputClass}
+                    onChange={() => fieldErrors.phone && setFieldErrors((p) => ({ ...p, phone: undefined }))}
+                  />
+                  {fieldErrors.phone && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.phone}</p>}
+                </div>
+
+                <div className="sm:col-span-2 mt-4">
+                  <div className="relative inline-flex">
+                    <select name="experience" className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]">
+                      <option value="">Experience level</option>
+                      <option value="complete_beginner">Complete beginner</option>
+                      <option value="some_experience">Some experience</option>
+                      <option value="confident_cook">Confident cook</option>
+                    </select>
+                    <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+
               </div>
-            </div>
             </div>
 
             {/* Class interests */}
@@ -102,6 +163,7 @@ export default function InterestPage() {
             <div className="mt-[60px]">
               <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
               <textarea
+                name="notes"
                 rows={3}
                 placeholder="Dietary requirements, allergies, questions…"
                 className={`${inputClass} resize-none`}
