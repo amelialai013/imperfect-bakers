@@ -61,7 +61,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [paymentStatus, setPaymentStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; attendees?: string; payment?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; attendees?: string; payment?: string; paymentOther?: string }>({});
 
   const totalPeople = counts.child + counts.youngAdult + counts.adult;
   const isFull = session.spotsLeft === 0;
@@ -84,6 +84,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     if (totalPeople < 1) errors.attendees = "Please add at least one person";
     if (totalPeople > session.spotsLeft) errors.attendees = `Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} left — you requested ${totalPeople}`;
     if (!paymentStatus) errors.payment = "Please select a payment status";
+    if (paymentStatus === "other" && !(fd.get("payment-other") as string)?.trim()) errors.paymentOther = "Please explain your payment situation";
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -235,9 +236,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <input
                 name="payment-other"
                 type="text"
-                placeholder="Add a note…"
-                className={inputClass}
+                placeholder="Please explain your payment situation"
+                className={fieldErrors.paymentOther ? inputErrorClass : inputClass}
+                onChange={() => fieldErrors.paymentOther && setFieldErrors((p) => ({ ...p, paymentOther: undefined }))}
               />
+              {fieldErrors.paymentOther && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.paymentOther}</p>}
             </div>
           )}
           {fieldErrors.payment && <p className="text-xs text-red-500 mt-2">{fieldErrors.payment}</p>}
