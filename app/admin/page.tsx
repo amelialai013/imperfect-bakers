@@ -508,8 +508,10 @@ export default function AdminPage() {
   const [expandedBookings, setExpandedBookings] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [classConfigs, setClassConfigs] = useState<ClassConfig[]>(DEFAULT_CLASS_CONFIGS);
+  const [savedClassConfigs, setSavedClassConfigs] = useState<ClassConfig[]>(DEFAULT_CLASS_CONFIGS);
   const [classConfigsLoading, setClassConfigsLoading] = useState(false);
   const [savingClass, setSavingClass] = useState<string | null>(null);
+  const [unsavedWarning, setUnsavedWarning] = useState(false);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -524,7 +526,10 @@ export default function AdminPage() {
     try {
       const res = await fetch("/api/classconfigs");
       const data = await res.json();
-      if (Array.isArray(data)) setClassConfigs(data);
+      if (Array.isArray(data)) {
+        setClassConfigs(data);
+        setSavedClassConfigs(data);
+      }
     } catch { /* fall back to defaults */ }
     setClassConfigsLoading(false);
   }, []);
@@ -609,7 +614,30 @@ export default function AdminPage() {
       method: "POST",
       body: JSON.stringify(config),
     });
+    // Mark this card as saved
+    setSavedClassConfigs((prev) =>
+      prev.map((c) => c.key === config.key ? { ...config } : c)
+    );
     setSavingClass(null);
+  }
+
+  function isClassDirty(key: string): boolean {
+    const current = classConfigs.find((c) => c.key === key);
+    const saved = savedClassConfigs.find((c) => c.key === key);
+    if (!current || !saved) return false;
+    return JSON.stringify(current) !== JSON.stringify(saved);
+  }
+
+  function hasAnyUnsaved(): boolean {
+    return classConfigs.some((c) => isClassDirty(c.key));
+  }
+
+  function revertClassConfig(key: string) {
+    const saved = savedClassConfigs.find((c) => c.key === key);
+    if (!saved) return;
+    setClassConfigs((prev) =>
+      prev.map((c) => c.key === key ? { ...saved } : c)
+    );
   }
 
   function updateClassConfig(key: string, field: keyof ClassConfig, value: string) {
@@ -711,13 +739,56 @@ export default function AdminPage() {
   if (view === "classes") {
     const inputCls = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
     const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2";
+
+    function tryGoBack() {
+      if (hasAnyUnsaved()) {
+        setUnsavedWarning(true);
+      } else {
+        setView("dashboard");
+      }
+    }
+
     return (
       <>
+        {/* ── Unsaved changes modal ── */}
+        {unsavedWarning && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+            <div className="absolute inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setUnsavedWarning(false)} />
+            <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
+              <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center mx-auto mb-5">
+                <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                </svg>
+              </div>
+              <h2 className="text-lg font-semibold text-[#1a1a1a] text-center mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                Unsaved changes
+              </h2>
+              <p className="text-sm text-[#6b7280] text-center mb-8 leading-relaxed">
+                You have unsaved changes. If you leave now, your edits will be lost.
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => { setUnsavedWarning(false); setView("dashboard"); setClassConfigs(savedClassConfigs); }}
+                  className="w-full py-3 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-colors"
+                >
+                  Leave without saving
+                </button>
+                <button
+                  onClick={() => setUnsavedWarning(false)}
+                  className="w-full py-3 rounded-full border border-[#e4dfd5] text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+                >
+                  Stay and keep editing
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
             <div>
               <button
-                onClick={() => setView("dashboard")}
+                onClick={tryGoBack}
                 className="flex items-center gap-1.5 text-[#006644] hover:text-[#004d33] transition-colors text-[0.6875rem] font-semibold tracking-[0.2em] uppercase mb-5"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -799,8 +870,16 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Save action */}
-                    <div className="px-6 pb-5 flex justify-end">
+                    {/* Save / Revert actions */}
+                    <div className="px-6 pb-5 flex items-center justify-end gap-3">
+                      {isClassDirty(c.key) && (
+                        <button
+                          onClick={() => revertClassConfig(c.key)}
+                          className="btn-secondary"
+                        >
+                          Revert
+                        </button>
+                      )}
                       <button
                         onClick={() => saveClassConfigItem(c)}
                         disabled={savingClass === c.key}
