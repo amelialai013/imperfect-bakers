@@ -300,7 +300,7 @@ function SessionForm({
             else if (val === "18+ yrs") setAttendeeTypes((prev) => prev.filter((k) => k !== "child"));
           }} required>
             <option value="All ages">All ages</option>
-            <option value="18+ yrs">18+ yrs</option>
+            <option value="18+ yrs">Ages 18+</option>
           </SelectField>
           <div>
             <label className={labelCls}>Attendee types</label>
