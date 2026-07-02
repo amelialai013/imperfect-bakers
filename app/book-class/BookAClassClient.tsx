@@ -128,7 +128,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
             </svg>
           </div>
           <p className="text-[#1a1a1a] font-medium mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-            No upcoming {activeClass !== "All" ? <span className="text-[#006644]">{activeClass}</span> : ""} classes
+            No upcoming {activeClass !== "All" ? <span className="text-[#006644] font-semibold">{activeClass}</span> : ""} classes
           </p>
           <p className="text-[#6b7280] text-sm mb-8">Check back soon — new sessions are added regularly.</p>
           {activeClass !== "All" && (
