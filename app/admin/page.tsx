@@ -186,7 +186,12 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
             </div>
             <div>
               <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Payment</p>
-              <p className="text-[#6b7280] text-xs">{b.paymentStatus}</p>
+              <p className="text-[#6b7280] text-xs">
+                {b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}
+              </p>
+              {b.paymentStatus === "other" && b.paymentOther && (
+                <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
+              )}
             </div>
             {b.notes && (
               <div className="col-span-2 sm:col-span-4">

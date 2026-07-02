@@ -28,6 +28,7 @@ export interface Booking {
   };
   totalPeople: number;
   paymentStatus: string;
+  paymentOther?: string;
   notes: string;
   cancelled: boolean;
 }
