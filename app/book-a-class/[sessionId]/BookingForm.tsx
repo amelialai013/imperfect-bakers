@@ -167,7 +167,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 01 — Your details */}
         <div className="mb-12">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Your details</p>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Your details</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="sm:col-span-2">
               <input
@@ -204,7 +204,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 02 — Attendees */}
         <div className="mb-12">
-          <div className="flex items-baseline justify-between mb-6">
+          <div className="flex items-baseline justify-between mb-8">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
             <span className="text-xs text-[#6b7280]">{totalPeople} / {session.spotsLeft}</span>
           </div>
