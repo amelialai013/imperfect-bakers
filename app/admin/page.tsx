@@ -602,7 +602,7 @@ export default function AdminPage() {
             <div>
               <button
                 onClick={() => { setView("dashboard"); setEditTarget(null); }}
-                className="flex items-center gap-1.5 text-[#006644] hover:text-[#004d33] transition-colors text-[0.6875rem] font-semibold tracking-[0.2em] uppercase mb-3"
+                className="flex items-center gap-1.5 text-[#006644] hover:text-[#004d33] transition-colors text-[0.6875rem] font-semibold tracking-[0.2em] uppercase mb-5"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
