@@ -295,7 +295,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         }`}
       >
         <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
-        <div className="px-4 pt-3 pb-4 flex flex-col gap-2 flex-1">
+        <div className="px-4 pt-1 pb-4 flex flex-col gap-2 flex-1">
           <div className="flex items-start justify-between gap-3">
             <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
             {!isFull ? (
