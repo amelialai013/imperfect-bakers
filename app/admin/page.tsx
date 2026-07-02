@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { ClassSession, Booking, ClassConfig } from "@/lib/types";
 import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
+import LocationInput from "@/components/LocationInput";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -148,6 +149,7 @@ function SessionForm({
 }) {
   const [form, setForm] = useState(initial);
   const [attendeeTypes, setAttendeeTypes] = useState(initialAttendeeTypes);
+  const [locationError, setLocationError] = useState(false);
   // Derive ISO date from stored display date for the date input
   const [dateIso, setDateIso] = useState(() => displayDateToIso(initial.date));
   // Start time and duration for the time picker
@@ -229,7 +231,12 @@ function SessionForm({
   const sectionLabel = "text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-5 block";
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); onSave(form, attendeeTypes); }}>
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      if (!form.location.trim()) { setLocationError(true); return; }
+      setLocationError(false);
+      onSave(form, attendeeTypes);
+    }}>
 
       {/* ── Section 1: Class ─────────────────────────────── */}
       <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
@@ -276,7 +283,16 @@ function SessionForm({
       <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
         <span className={sectionLabel}>Venue & capacity</span>
         <div className="space-y-6">
-          <Field label="Location" name="location" value={form.location} onChange={handle} placeholder="Williamstown, Melbourne" required />
+          <div>
+            <label className={labelCls}>Location</label>
+            <LocationInput
+              value={form.location}
+              onChange={(v) => setForm((f) => ({ ...f, location: v }))}
+              placeholder="Williamstown, Melbourne"
+              error={locationError}
+            />
+            {locationError && <p className="text-xs text-red-500 mt-1.5">Please enter a location</p>}
+          </div>
           <SelectField label="Ages" name="ages" value={form.ages} onChange={(e) => {
             const val = e.target.value;
             setForm((f) => ({ ...f, ages: val }));

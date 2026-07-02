@@ -43,7 +43,7 @@ export default function Testimonials() {
       <div className="max-w-7xl mx-auto px-8">
 
         {/* Label */}
-        <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">
+        <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-10">
           Testimonials
         </span>
 
