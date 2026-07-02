@@ -93,6 +93,7 @@ export default function Home() {
           </div>
 
           {/* Feature grid */}
+          <div className="px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#e4dfd5]">
             {features.map((f) => (
               <div key={f.title} className="bg-[#faf9f6] p-8 lg:p-10 text-left">
@@ -106,6 +107,7 @@ export default function Home() {
                 <p className="text-[#6b7280] text-sm leading-relaxed">{f.desc}</p>
               </div>
             ))}
+          </div>
           </div>
 
         </div>
