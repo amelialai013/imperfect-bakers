@@ -1094,9 +1094,9 @@ export default function AdminPage() {
               { label: "Total bookings", value: totalBookings },
               { label: "Est. revenue", value: `$${totalRevenue.toLocaleString()}` },
             ].map((stat) => (
-              <div key={stat.label} className="bg-white border border-[#e8e2d9] rounded-xl px-7 py-6">
-                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-3">{stat.label}</p>
-                <p className="text-3xl font-medium text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{stat.value}</p>
+              <div key={stat.label} className="bg-white border border-[#e8e2d9] rounded-xl px-3 py-4 sm:px-7 sm:py-6">
+                <p className="text-[0.55rem] sm:text-[0.6875rem] font-semibold tracking-[0.15em] sm:tracking-[0.2em] uppercase text-[#006644] mb-2 sm:mb-3 leading-tight">{stat.label}</p>
+                <p className="text-xl sm:text-3xl font-medium text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{stat.value}</p>
               </div>
             ))}
           </div>
