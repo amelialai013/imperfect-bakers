@@ -1,5 +1,23 @@
 import { kv } from "@vercel/kv";
-import type { ClassSession, Booking } from "./types";
+import type { ClassSession, Booking, ClassConfig } from "./types";
+import { DEFAULT_CLASS_CONFIGS } from "./classDefaults";
+
+export { DEFAULT_CLASS_CONFIGS };
+
+export async function getClassConfigs(): Promise<ClassConfig[]> {
+  const configs = await Promise.all(
+    DEFAULT_CLASS_CONFIGS.map(async (def) => {
+      const stored = await kv.get<ClassConfig>(`classconfig:${def.key}`);
+      return stored ?? def;
+    })
+  );
+  return configs;
+}
+
+export async function saveClassConfig(config: ClassConfig): Promise<ClassConfig> {
+  await kv.set(`classconfig:${config.key}`, config);
+  return config;
+}
 
 // ── Sessions ──────────────────────────────────────────────
 

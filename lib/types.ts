@@ -15,6 +15,14 @@ export interface ClassSession {
   attendeeTypes?: Array<"child" | "youngAdult" | "adult">;
 }
 
+export interface ClassConfig {
+  key: string;       // stable identifier (original title)
+  title: string;     // display title (editable)
+  ages: string;      // e.g. "All ages", "Ages 12+"
+  imageUrl: string;  // hero image URL
+  description: string;
+}
+
 export interface Booking {
   id: string;
   sessionId: string;

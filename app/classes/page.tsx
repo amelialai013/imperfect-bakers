@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { getAllSessions } from "@/lib/data";
+import { getClassConfigs } from "@/lib/data";
+import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
+import type { ClassConfig } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -7,63 +9,15 @@ export const metadata = {
   title: "Classes | Imperfect Bakers",
 };
 
-const classes: { title: string; desc: string; age: string; image: string; longTitle: boolean; bgPosition?: string }[] = [
-  {
-    title: "Sweet Food",
-    desc: "Cakes, cookies, pastries and sweet treats — learn to bake with confidence.",
-    age: "All ages",
-    image: "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=900&auto=format&fit=crop&q=85",
-    longTitle: false,
-  },
-  {
-    title: "Savoury Food",
-    desc: "Pasta, pizza and hearty meals. Master the art of cooking food everyone loves.",
-    age: "All ages",
-    image: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=900&auto=format&fit=crop&q=85",
-    longTitle: false,
-  },
-  {
-    title: "Knife Skills",
-    desc: "Chop, dice and julienne like a pro. Safe, impressive techniques for the kitchen.",
-    age: "Ages 12+",
-    image: "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=900&auto=format&fit=crop&q=85",
-    longTitle: false,
-  },
-  {
-    title: "Dietary Requirement Food",
-    desc: "Gluten-free, vegan, nut-free and more. Delicious food for every dietary need.",
-    age: "All ages",
-    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&auto=format&fit=crop&q=85",
-    longTitle: true,
-  },
-  {
-    title: "Random Kitchen Fun",
-    desc: "Mystery ingredients, wild challenges, zero rules. Always a surprise, always fun.",
-    age: "All ages",
-    image: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=900&auto=format&fit=crop&q=85",
-    longTitle: false,
-  },
-  {
-    title: "Private Group Class",
-    desc: "Birthdays, hens parties, special occasions — a custom class built just for your group.",
-    age: "Celebrations",
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&auto=format&fit=crop&q=85",
-    longTitle: false,
-  },
-];
+const LONG_TITLE_KEYS = ["Dietary Requirement Food"];
 
 export default async function ClassesPage() {
-  // Build a map of classLabel → ages from live session data
-  let agesMap: Record<string, string> = {};
+  // Fetch class configs from admin (falls back to defaults)
+  let classes: ClassConfig[] = DEFAULT_CLASS_CONFIGS;
   try {
-    const sessions = await getAllSessions();
-    for (const s of sessions) {
-      if (s.classLabel && s.ages && !agesMap[s.classLabel]) {
-        agesMap[s.classLabel] = s.ages;
-      }
-    }
+    classes = await getClassConfigs();
   } catch {
-    // KV not configured — fall back to hardcoded ages
+    // KV not configured — use defaults
   }
 
   return (
@@ -86,15 +40,13 @@ export default async function ClassesPage() {
       {/* ── CLASSES GRID ─────────────────────────────────────── */}
       <section className="py-12 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {classes.map((c, i) => (
-            <Link href="/book-class" key={c.title}>
-              <div
-                className="group relative overflow-hidden cursor-pointer h-[292px] rounded-[8px]"
-              >
+          {classes.map((c) => (
+            <Link href="/book-class" key={c.key}>
+              <div className="group relative overflow-hidden cursor-pointer h-[292px] rounded-[8px]">
                 {/* Background image */}
                 <div
                   className="absolute inset-0 bg-cover transition-transform duration-700 group-hover:scale-105"
-                  style={{ backgroundImage: `url('${c.image}')`, backgroundPosition: c.bgPosition ?? "center" }}
+                  style={{ backgroundImage: `url('${c.imageUrl}')`, backgroundPosition: "center" }}
                 />
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] via-[#1a1a1a]/85 to-[#1a1a1a]/65 md:from-[#1a1a1a]/80 md:via-[#1a1a1a]/50 md:to-[#1a1a1a]/20 group-hover:from-[#1a1a1a] group-hover:via-[#1a1a1a]/85 group-hover:to-[#1a1a1a]/65 transition-all duration-500" />
@@ -103,7 +55,7 @@ export default async function ClassesPage() {
                 <div className="absolute inset-0 flex flex-col justify-between p-8 md:p-10">
                   <div>
                     <span className="text-[0.6875rem] tracking-[0.2em] font-semibold text-white/50 mb-3 block uppercase">
-                      {agesMap[c.title] ?? c.age}
+                      {c.ages}
                     </span>
                     <h2
                       className="text-white leading-tight text-2xl md:text-3xl"
@@ -111,8 +63,8 @@ export default async function ClassesPage() {
                     >
                       {c.title}
                     </h2>
-                    <p className={`text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ${c.longTitle ? "line-clamp-2" : "line-clamp-3"} md:line-clamp-none`}>
-                      {c.desc}
+                    <p className={`text-white/70 text-sm leading-relaxed mt-4 max-w-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ${LONG_TITLE_KEYS.includes(c.key) ? "line-clamp-2" : "line-clamp-3"} md:line-clamp-none`}>
+                      {c.description}
                     </p>
                   </div>
                   <div className="flex justify-end">

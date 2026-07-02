@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { ClassSession, Booking } from "@/lib/types";
+import type { ClassSession, Booking, ClassConfig } from "@/lib/types";
+import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -441,7 +442,7 @@ function storageRemove(key: string) {
 
 // ── main component ─────────────────────────────────────────────────────────────
 
-type View = "login" | "dashboard" | "add" | "edit";
+type View = "login" | "dashboard" | "add" | "edit" | "classes";
 
 export default function AdminPage() {
   const [token, setToken] = useState<string>("");
@@ -463,6 +464,9 @@ export default function AdminPage() {
   const [editTarget, setEditTarget] = useState<ClassSession | null>(null);
   const [expandedBookings, setExpandedBookings] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [classConfigs, setClassConfigs] = useState<ClassConfig[]>(DEFAULT_CLASS_CONFIGS);
+  const [classConfigsLoading, setClassConfigsLoading] = useState(false);
+  const [savingClass, setSavingClass] = useState<string | null>(null);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -472,9 +476,23 @@ export default function AdminPage() {
     setLoading(false);
   }, [token]);
 
+  const loadClassConfigs = useCallback(async () => {
+    setClassConfigsLoading(true);
+    try {
+      const res = await fetch("/api/classconfigs");
+      const data = await res.json();
+      if (Array.isArray(data)) setClassConfigs(data);
+    } catch { /* fall back to defaults */ }
+    setClassConfigsLoading(false);
+  }, []);
+
   useEffect(() => {
     if (view === "dashboard" && token) loadSessions();
   }, [view, token, loadSessions]);
+
+  useEffect(() => {
+    if (view === "classes" && token) loadClassConfigs();
+  }, [view, token, loadClassConfigs]);
 
   async function login(e: React.FormEvent) {
     e.preventDefault();
@@ -540,6 +558,21 @@ export default function AdminPage() {
     await authFetch(`/api/sessions/${id}`, token, { method: "DELETE" });
     setDeleteConfirm(null);
     await loadSessions();
+  }
+
+  async function saveClassConfigItem(config: ClassConfig) {
+    setSavingClass(config.key);
+    await authFetch("/api/classconfigs", token, {
+      method: "POST",
+      body: JSON.stringify(config),
+    });
+    setSavingClass(null);
+  }
+
+  function updateClassConfig(key: string, field: keyof ClassConfig, value: string) {
+    setClassConfigs((prev) =>
+      prev.map((c) => c.key === key ? { ...c, [field]: value } : c)
+    );
   }
 
   // ── Login ────────────────────────────────────────────────
@@ -630,6 +663,119 @@ export default function AdminPage() {
     );
   }
 
+  // ── Classes ──────────────────────────────────────────────
+
+  if (view === "classes") {
+    const inputCls = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
+    const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2";
+    return (
+      <>
+        <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+            <div>
+              <button
+                onClick={() => setView("dashboard")}
+                className="flex items-center gap-1.5 text-[#006644] hover:text-[#004d33] transition-colors text-[0.6875rem] font-semibold tracking-[0.2em] uppercase mb-5"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                </svg>
+                Dashboard
+              </button>
+              <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                Manage <em className="not-italic text-[#006644]">classes</em>
+              </h1>
+            </div>
+            <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right pb-1">
+              Update the title, age range, image and description for each class type.
+            </p>
+          </div>
+        </section>
+
+        <section className="px-8 pt-10 pb-24 bg-[#faf9f6]">
+          <div className="max-w-7xl mx-auto">
+            {classConfigsLoading ? (
+              <p className="text-[#6b7280] text-sm">Loading classes…</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {classConfigs.map((c) => (
+                  <div key={c.key} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+                    {/* Image preview */}
+                    <div
+                      className="h-40 bg-cover bg-center relative"
+                      style={{ backgroundImage: `url('${c.imageUrl}')` }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/80 to-transparent" />
+                      <div className="absolute bottom-0 left-0 p-5">
+                        <p className="text-[0.6875rem] tracking-[0.2em] font-semibold text-white/60 uppercase mb-1">{c.ages}</p>
+                        <p className="text-white font-semibold text-lg leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{c.title}</p>
+                      </div>
+                    </div>
+
+                    {/* Fields */}
+                    <div className="p-6 space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className={labelCls}>Title</label>
+                          <input
+                            type="text"
+                            value={c.title}
+                            onChange={(e) => updateClassConfig(c.key, "title", e.target.value)}
+                            className={inputCls}
+                          />
+                        </div>
+                        <div>
+                          <label className={labelCls}>Ages</label>
+                          <input
+                            type="text"
+                            value={c.ages}
+                            onChange={(e) => updateClassConfig(c.key, "ages", e.target.value)}
+                            placeholder="All ages"
+                            className={inputCls}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className={labelCls}>Image URL</label>
+                        <input
+                          type="text"
+                          value={c.imageUrl}
+                          onChange={(e) => updateClassConfig(c.key, "imageUrl", e.target.value)}
+                          placeholder="https://images.unsplash.com/…"
+                          className={inputCls}
+                        />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Description</label>
+                        <textarea
+                          value={c.description}
+                          onChange={(e) => updateClassConfig(c.key, "description", e.target.value)}
+                          rows={2}
+                          className={inputCls + " resize-none"}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Save action */}
+                    <div className="px-6 pb-5 flex justify-end">
+                      <button
+                        onClick={() => saveClassConfigItem(c)}
+                        disabled={savingClass === c.key}
+                        className="btn-primary"
+                      >
+                        {savingClass === c.key ? "Saving…" : "Save changes"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      </>
+    );
+  }
+
   // ── Dashboard ────────────────────────────────────────────
 
   const totalBookings = sessions.reduce((acc, s) => acc + (s.maxSpots - s.spotsLeft), 0);
@@ -645,6 +791,9 @@ export default function AdminPage() {
           <div className="flex items-center gap-4 pb-1 mt-8">
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
+            </button>
+            <button onClick={() => setView("classes")} className="btn-secondary">
+              Manage classes
             </button>
             <button onClick={logout} className="btn-secondary">
               Sign out
