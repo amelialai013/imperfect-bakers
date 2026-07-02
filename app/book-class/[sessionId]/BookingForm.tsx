@@ -167,7 +167,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 01 — Your details */}
         <div className="mb-12">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Your details</p>
+          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Your details</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="sm:col-span-2">
               <input
@@ -205,7 +205,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         {/* 02 — Attendees */}
         <div className="mt-[60px] mb-12">
           <div className="flex items-baseline justify-between mb-8">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
+            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
             <span className="text-sm text-[#1a1a1a]">{totalPeople} / {session.spotsLeft}</span>
           </div>
           {(() => {
@@ -228,7 +228,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 03 — Payment */}
         <div className="mt-[60px] mb-12">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
+          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
           <div className="mb-8">
             <p className="text-xs text-[#6b7280] mb-2">Include your name and class name in the reference</p>
             <p className="text-sm text-[#1a1a1a]">Transfer to <span className="font-semibold">Sarah Jasper</span></p>
@@ -275,7 +275,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 04 — Notes */}
         <div className="mt-[60px]">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
+          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
           <textarea
             name="notes"
             rows={3}

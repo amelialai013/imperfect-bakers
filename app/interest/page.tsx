@@ -81,7 +81,7 @@ export default function InterestPage() {
 
             {/* Contact Details */}
             <div>
-              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Contact details</p>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Contact details</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
                 <div className="sm:col-span-2">
@@ -136,7 +136,7 @@ export default function InterestPage() {
 
             {/* Class interests */}
             <div className="mt-[60px]">
-              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Classes of interest</p>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Classes of interest</p>
               <div className="flex flex-wrap gap-2.5 mt-3">
                 {classOptions.map((name) => {
                   const active = selected.includes(name);
@@ -161,7 +161,7 @@ export default function InterestPage() {
 
             {/* Notes */}
             <div className="mt-[60px]">
-              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Anything else?</p>
               <textarea
                 name="notes"
                 rows={3}

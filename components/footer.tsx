@@ -20,7 +20,7 @@ export default function Footer() {
             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
               Building confidence in the kitchen, one imperfect masterpiece at a time. Because the best food is made with love — and a little chaos.
             </p>
-            <p className="mt-6 text-xs tracking-widest uppercase text-white">@imperfectbakers</p>
+            <p className="mt-6 text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white">@imperfectbakers</p>
           </div>
 
           {/* Spacer */}
@@ -28,7 +28,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="md:col-span-3">
-            <h4 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-5">Navigate</h4>
+            <h4 className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-5">Navigate</h4>
             <ul className="space-y-3 text-sm">
               {[
                 { label: "Home",              href: "/" },
@@ -48,7 +48,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="mt-[28px] md:mt-0 md:col-span-3">
-            <h4 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-5">Get in touch</h4>
+            <h4 className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-5">Get in touch</h4>
             <a
               href="mailto:imperfectbakers@outlook.com"
               className="text-sm text-white/60 hover:text-white transition-colors block mb-4 break-all"
