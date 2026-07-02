@@ -891,7 +891,7 @@ export default function AdminPage() {
                 Manage <em className="not-italic text-[#006644]">classes</em>
               </h1>
             </div>
-            <div className="pb-1 md:mt-12">
+            <div className="pb-1 mt-12">
               <button onClick={() => setAddingClass(true)} className="btn-primary group">
                 New class <span>+</span>
               </button>
