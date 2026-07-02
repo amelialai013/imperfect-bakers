@@ -730,16 +730,18 @@ export default function AdminPage() {
             <form onSubmit={login} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoFocus
-                  className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm focus:outline-none focus:border-[#006644] bg-white"
-                />
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoFocus
+                    className="flex-1 border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm focus:outline-none focus:border-[#006644] bg-white"
+                  />
+                  <button type="submit" className="btn-primary shrink-0">Sign in</button>
+                </div>
               </div>
               {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
-              <button type="submit" className="btn-primary">Sign in</button>
             </form>
           </div>
         </section>
