@@ -800,9 +800,6 @@ export default function AdminPage() {
                 Manage <em className="not-italic text-[#006644]">classes</em>
               </h1>
             </div>
-            <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right pb-1">
-              Update the title, age range, image and description for each class type.
-            </p>
           </div>
         </section>
 
@@ -910,7 +907,7 @@ export default function AdminPage() {
           <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
             Admin <em className="not-italic text-[#006644]">dashboard</em>
           </h1>
-          <div className="flex items-center gap-4 pb-1 mt-8">
+          <div className="flex items-center gap-4 pb-1 mt-12">
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
@@ -1020,7 +1017,7 @@ export default function AdminPage() {
                         ) : (
                           <button
                             onClick={() => setDeleteConfirm(s.id)}
-                            className="text-xs text-[#c8c0b4] hover:text-red-400 transition-colors px-4 py-1"
+                            className="text-xs text-[#6b7280] hover:text-red-500 transition-colors px-4 py-1"
                           >
                             Delete
                           </button>
