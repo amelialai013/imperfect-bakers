@@ -48,6 +48,48 @@
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* ── iOS Safari 100vh fix ───────────────────────────────────
+   100vh on iOS Safari includes the browser chrome (address bar),
+   so the hero section bleeds below the visible viewport.
+   svh (small viewport height) was introduced in Safari 15.4 and
+   correctly excludes the browser chrome. We use a fallback for
+   older browsers.
+─────────────────────────────────────────────────────────── */
+.hero-height {
+  height: calc(100vh - 80px);           /* fallback for Safari < 15.4 */
+  height: calc(100svh - 80px);          /* Safari 15.4+, Chrome 108+  */
+}
+
+/* ── color-mix() fallback for Safari < 16.2 ────────────────
+   Tailwind v4 generates color-mix(in oklab, ...) for opacity
+   utilities (e.g. text-white/60). Safari < 16.2 doesn't support
+   color-mix, so those colours render as fully transparent.
+   This @supports block adds explicit rgba() fallbacks for every
+   opacity utility used across the site.
+─────────────────────────────────────────────────────────── */
+@supports not (color: color-mix(in oklab, white, transparent)) {
+  .text-white\/40  { color: rgba(255, 255, 255, 0.4) !important; }
+  .text-white\/50  { color: rgba(255, 255, 255, 0.5) !important; }
+  .text-white\/60  { color: rgba(255, 255, 255, 0.6) !important; }
+  .text-white\/70  { color: rgba(255, 255, 255, 0.7) !important; }
+  .bg-white\/10    { background-color: rgba(255, 255, 255, 0.1) !important; }
+  .bg-white\/20    { background-color: rgba(255, 255, 255, 0.2) !important; }
+  .border-white\/30 { border-color: rgba(255, 255, 255, 0.3) !important; }
+  /* Dark overlay glassmorphism */
+  .bg-\[\#1a1a1a\]\/40 { background-color: rgba(26, 26, 26, 0.4) !important; }
+  .bg-\[\#1a1a1a\]\/60 { background-color: rgba(26, 26, 26, 0.6) !important; }
+  /* Green tints */
+  .bg-\[\#006644\]\/8  { background-color: rgba(0, 102, 68, 0.08) !important; }
+  .text-\[\#006644\]\/60 { color: rgba(0, 102, 68, 0.6) !important; }
+  .text-\[\#006644\]\/70 { color: rgba(0, 102, 68, 0.7) !important; }
+  /* Red tint */
+  .bg-red-50\/40   { background-color: rgba(254, 242, 242, 0.4) !important; }
+  /* Hero gradient overlay (uses /90 and /50) */
+  .from-\[\#faf9f6\]   { --tw-gradient-from: #faf9f6; }
+  .via-\[\#faf9f6\]\/90 { --tw-gradient-via: rgba(250, 249, 246, 0.9); }
+  .to-\[\#faf9f6\]\/50  { --tw-gradient-to: rgba(250, 249, 246, 0.5); }
+}
+
 :root {
   --green-deep:  #006644;
   --green-mid:   #005c3f;

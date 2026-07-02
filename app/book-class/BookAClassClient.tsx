@@ -4,11 +4,23 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import type { ClassSession } from "@/lib/types";
 
+const MONTH_INDEX: Record<string, number> = {
+  January: 0, February: 1, March: 2, April: 3,
+  May: 4, June: 5, July: 6, August: 7,
+  September: 8, October: 9, November: 10, December: 11,
+};
+
 // Parse "Saturday 18 July 2026" → Date
+// Safari rejects "18 July 2026" passed to new Date(), so we parse manually.
 function parseDisplayDate(dateStr: string): Date {
   const parts = dateStr.split(" "); // ["Saturday", "18", "July", "2026"]
   if (parts.length === 4) {
-    return new Date(`${parts[1]} ${parts[2]} ${parts[3]}`);
+    const month = MONTH_INDEX[parts[2]];
+    const day = parseInt(parts[1], 10);
+    const year = parseInt(parts[3], 10);
+    if (month !== undefined && !isNaN(day) && !isNaN(year)) {
+      return new Date(year, month, day);
+    }
   }
   return new Date(dateStr);
 }
@@ -275,13 +287,13 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           <div className="sm:hidden flex items-stretch">
             {/* Date stamp */}
             <div className={`flex flex-col items-center justify-center px-4 shrink-0 ${isFull ? "bg-[#e8e4de]" : "bg-[#006644]"}`} style={{ minWidth: "62px" }}>
-              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-white/60 leading-none mb-1.5">
+              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase leading-none mb-1.5" style={{ color: "rgba(255,255,255,0.6)" }}>
                 {dateParts(s.date).mon}
               </span>
               <span className="text-2xl font-bold text-white leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {dateParts(s.date).day}
               </span>
-              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-white/60 leading-none mt-1.5">
+              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase leading-none mt-1.5" style={{ color: "rgba(255,255,255,0.6)" }}>
                 {dateParts(s.date).dow}
               </span>
             </div>

@@ -39,8 +39,24 @@ function isoToDisplayDate(iso: string): string {
 }
 
 // Convert display date back to ISO for the date input
+// Safari rejects "Saturday 18 July 2026" passed to new Date(), so we parse manually.
+const MONTH_IDX: Record<string, number> = {
+  January: 0, February: 1, March: 2, April: 3,
+  May: 4, June: 5, July: 6, August: 7,
+  September: 8, October: 9, November: 10, December: 11,
+};
 function displayDateToIso(display: string): string {
   if (!display) return "";
+  // "Saturday 18 July 2026" → "2026-07-18"
+  const parts = display.split(" ");
+  if (parts.length === 4) {
+    const month = MONTH_IDX[parts[2]];
+    const day = parseInt(parts[1], 10);
+    const year = parseInt(parts[3], 10);
+    if (month !== undefined && !isNaN(day) && !isNaN(year)) {
+      return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    }
+  }
   const d = new Date(display);
   if (isNaN(d.getTime())) return "";
   return d.toISOString().split("T")[0];

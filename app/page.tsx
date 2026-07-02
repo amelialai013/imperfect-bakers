@@ -7,7 +7,8 @@ export default function Home() {
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative h-[calc(100vh-80px)] min-h-[560px] flex flex-col justify-end pb-32 md:pb-40 overflow-hidden">
+      {/* iOS Safari: 100vh includes browser chrome so we use min-h-screen with svh override in CSS */}
+      <section className="relative hero-height min-h-[560px] flex flex-col justify-end pb-32 md:pb-40 overflow-hidden">
         {/* Background image — animates independently so text stays still */}
         <div
           className="absolute inset-0 hero-bg"
@@ -55,7 +56,7 @@ export default function Home() {
 
           {/* Section header */}
           <span className="section-label block">Our philosophy</span>
-          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "flex-end" }}>
             <h2
               className="text-4xl md:text-5xl text-[#006644] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}

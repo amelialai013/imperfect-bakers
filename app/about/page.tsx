@@ -115,10 +115,10 @@ export default function AboutPage() {
             className="text-5xl md:text-6xl text-white leading-tight mb-6"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
-            <span className="text-white/40">Ready to{" "}<br className="md:hidden" />get your</span><br />
+            <span style={{ color: "rgba(255,255,255,0.4)" }}>Ready to{" "}<br className="md:hidden" />get your</span><br />
             hands dirty?
           </h2>
-          <p className="text-white/60 text-base leading-relaxed max-w-sm mx-auto mb-12">
+          <p className="text-base leading-relaxed max-w-sm mx-auto mb-12" style={{ color: "rgba(255,255,255,0.6)" }}>
             Browse upcoming classes or register your interest — we&apos;d love to have you in the kitchen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
