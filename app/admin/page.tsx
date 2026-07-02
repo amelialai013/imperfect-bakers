@@ -1038,7 +1038,7 @@ export default function AdminPage() {
 
                     {/* Save / Revert actions */}
                     {!c.hidden && (
-                      <div className="px-6 pb-5 flex items-center justify-end gap-3">
+                      <div className="px-6 pb-5 flex flex-wrap items-center justify-end gap-3">
                         {isClassDirty(c.key) && (
                           <button onClick={() => revertClassConfig(c.key)} className="btn-secondary">
                             Revert
