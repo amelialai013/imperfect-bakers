@@ -18,6 +18,49 @@ function authFetch(url: string, token: string, opts: RequestInit = {}) {
 
 // ── empty session form ────────────────────────────────────────────────────────
 
+const CLASS_TYPES = [
+  "Sweet Food",
+  "Savoury Food",
+  "Knife Skills",
+  "Dietary Requirement Food",
+  "Random Kitchen Fun",
+  "Private Group Class",
+];
+
+// Convert ISO date (2026-07-18) → "Saturday 18 July 2026"
+function isoToDisplayDate(iso: string): string {
+  if (!iso) return "";
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("en-AU", {
+    weekday: "long", day: "numeric", month: "long", year: "numeric",
+  });
+}
+
+// Convert display date back to ISO for the date input
+function displayDateToIso(display: string): string {
+  if (!display) return "";
+  const d = new Date(display);
+  if (isNaN(d.getTime())) return "";
+  return d.toISOString().split("T")[0];
+}
+
+// Format start time + duration hours → "1 – 4pm"
+function formatTimeRange(start: string, durationHours: number): string {
+  if (!start) return "";
+  const [hStr, mStr] = start.split(":");
+  const startH = parseInt(hStr, 10);
+  const startM = parseInt(mStr, 10);
+  const totalEndMins = startH * 60 + startM + Math.round(durationHours * 60);
+  const endH = Math.floor(totalEndMins / 60);
+  const endM = totalEndMins % 60;
+  const fmt = (h: number, m: number) => {
+    const period = h >= 12 ? "pm" : "am";
+    const h12 = h % 12 === 0 ? 12 : h % 12;
+    return m === 0 ? `${h12}${period}` : `${h12}:${String(m).padStart(2, "0")}${period}`;
+  };
+  return `${fmt(startH, startM)} – ${fmt(endH, endM)}`;
+}
+
 const emptyForm = {
   classLabel: "",
   sessionName: "",
@@ -47,7 +90,7 @@ function Field({
   label: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   type?: string;
   placeholder?: string;
   required?: boolean;
@@ -104,7 +147,48 @@ function SessionForm({
 }) {
   const [form, setForm] = useState(initial);
   const [attendeeTypes, setAttendeeTypes] = useState(initialAttendeeTypes);
-  const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  // Derive ISO date from stored display date for the date input
+  const [dateIso, setDateIso] = useState(() => displayDateToIso(initial.date));
+  // Start time and duration for the time picker
+  const [startTime, setStartTime] = useState(() => {
+    // Try to parse existing time like "1 – 4pm" → start "13:00"
+    if (initial.time) {
+      const m = initial.time.match(/^(\d+)(?::(\d+))?(am|pm)/i);
+      if (m) {
+        let h = parseInt(m[1], 10);
+        const mins = m[2] ? parseInt(m[2], 10) : 0;
+        if (m[3].toLowerCase() === "pm" && h !== 12) h += 12;
+        if (m[3].toLowerCase() === "am" && h === 12) h = 0;
+        return `${String(h).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+      }
+    }
+    return "";
+  });
+  const [duration, setDuration] = useState(() => {
+    // Parse duration from "1 – 4pm" → 3
+    if (initial.time) {
+      const parts = initial.time.split("–");
+      if (parts.length === 2) {
+        const getH = (s: string) => {
+          const m = s.trim().match(/(\d+)(?::(\d+))?(am|pm)?/i);
+          if (!m) return 0;
+          let h = parseInt(m[1], 10);
+          const period = m[3]?.toLowerCase();
+          if (period === "pm" && h !== 12) h += 12;
+          if (period === "am" && h === 12) h = 0;
+          return h;
+        };
+        const diff = getH(parts[1]) - getH(parts[0]);
+        return String(diff > 0 ? diff : 3);
+      }
+    }
+    return "3";
+  });
+
+  const cls = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
+  const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2";
+
+  const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   function toggleAttendeeType(key: "child" | "youngAdult" | "adult") {
@@ -112,6 +196,15 @@ function SessionForm({
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
   }
+
+  // Keep form.date and form.time in sync with picker state
+  useEffect(() => {
+    setForm((f) => ({ ...f, date: isoToDisplayDate(dateIso) }));
+  }, [dateIso]);
+
+  useEffect(() => {
+    setForm((f) => ({ ...f, time: formatTimeRange(startTime, parseInt(duration, 10) || 3) }));
+  }, [startTime, duration]);
 
   return (
     <form
@@ -122,10 +215,71 @@ function SessionForm({
       className="space-y-4"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Field label="Class type" name="classLabel" value={form.classLabel} onChange={handle} placeholder="Sweet Food" required />
+        {/* Class type — dropdown */}
+        <div>
+          <label className={labelCls}>Class type <span className="text-[#006644]">*</span></label>
+          <div className="relative">
+            <select
+              name="classLabel"
+              value={form.classLabel}
+              onChange={handle}
+              required
+              className={cls + " appearance-none pr-8 cursor-pointer"}
+            >
+              <option value="">Select class type…</option>
+              {CLASS_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+            <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+
         <Field label="Session name" name="sessionName" value={form.sessionName} onChange={handle} placeholder="e.g. Delicious Dinner (optional)" />
-        <Field label="Date" name="date" value={form.date} onChange={handle} placeholder="Saturday 18 July 2026" required />
-        <Field label="Time" name="time" value={form.time} onChange={handle} placeholder="1 – 4pm" required />
+
+        {/* Date — native date picker */}
+        <div>
+          <label className={labelCls}>Date <span className="text-[#006644]">*</span></label>
+          <input
+            type="date"
+            value={dateIso}
+            onChange={(e) => setDateIso(e.target.value)}
+            required
+            className={cls}
+          />
+          {form.date && <p className="text-xs text-[#6b7280] mt-1">{form.date}</p>}
+        </div>
+
+        {/* Time — start + duration */}
+        <div>
+          <label className={labelCls}>Time <span className="text-[#006644]">*</span></label>
+          <div className="flex gap-2">
+            <input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+              className={cls}
+            />
+            <div className="relative shrink-0 w-36">
+              <select
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                className={cls + " appearance-none pr-8 cursor-pointer"}
+              >
+                {[1,1.5,2,2.5,3,3.5,4,4.5,5].map((h) => (
+                  <option key={h} value={String(h)}>{h}h</option>
+                ))}
+              </select>
+              <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+          {form.time && <p className="text-xs text-[#6b7280] mt-1">{form.time}</p>}
+        </div>
+
+        {/* Location — plain text (Google Places requires API key in .env.local) */}
         <Field label="Location" name="location" value={form.location} onChange={handle} placeholder="Williamstown, Melbourne" required />
         <Field label="Ages" name="ages" value={form.ages} onChange={handle} placeholder="All ages" required />
         <Field label="Price per person ($)" name="price" value={form.price} onChange={handle} type="number" placeholder="150" required />
