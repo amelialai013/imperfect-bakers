@@ -66,8 +66,8 @@ export default async function BookAClassPage() {
         </div>
         {/* Photo half */}
         <div
-          className="bg-cover bg-top min-h-[200px] md:min-h-[256px]"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&auto=format&fit=crop&q=85')" }}
+          className="bg-cover min-h-[200px] md:min-h-[256px]"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&auto=format&fit=crop&q=85')", backgroundPosition: "center 20%" }}
         />
       </div>
     </>
