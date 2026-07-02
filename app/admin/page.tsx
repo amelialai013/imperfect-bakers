@@ -266,14 +266,29 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
   );
 }
 
+// ── storage helpers (Safari-safe) ─────────────────────────────────────────────
+
+function storageGet(key: string): string {
+  if (typeof window === "undefined") return "";
+  try { return localStorage.getItem(key) ?? ""; } catch {}
+  try { return sessionStorage.getItem(key) ?? ""; } catch {}
+  return "";
+}
+function storageSet(key: string, value: string) {
+  try { localStorage.setItem(key, value); return; } catch {}
+  try { sessionStorage.setItem(key, value); } catch {}
+}
+function storageRemove(key: string) {
+  try { localStorage.removeItem(key); } catch {}
+  try { sessionStorage.removeItem(key); } catch {}
+}
+
 // ── main component ─────────────────────────────────────────────────────────────
 
 type View = "login" | "dashboard" | "add" | "edit";
 
 export default function AdminPage() {
-  const [token, setToken] = useState<string>(() =>
-    typeof window !== "undefined" ? (localStorage.getItem("ib_admin_token") ?? "") : ""
-  );
+  const [token, setToken] = useState<string>(() => storageGet("ib_admin_token"));
   const [view, setView] = useState<View>(token ? "dashboard" : "login");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -309,13 +324,13 @@ export default function AdminPage() {
       return;
     }
     const { token: t } = await res.json();
-    localStorage.setItem("ib_admin_token", t);
+    storageSet("ib_admin_token", t);
     setToken(t);
     setView("dashboard");
   }
 
   function logout() {
-    localStorage.removeItem("ib_admin_token");
+    storageRemove("ib_admin_token");
     setToken("");
     setView("login");
     setSessions([]);
