@@ -739,7 +739,7 @@ export default function AdminPage() {
                 />
               </div>
               {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
-              <button type="submit" className="btn-primary w-full justify-center">Sign in</button>
+              <button type="submit" className="btn-primary">Sign in</button>
             </form>
           </div>
         </section>
