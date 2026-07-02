@@ -115,8 +115,7 @@ export default function AboutPage() {
             className="text-5xl md:text-6xl text-white leading-tight mb-6"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
-            <span className="text-white/40">Ready to</span><br />
-            <span className="text-white/40">get your</span><br />
+            <span className="text-white/40">Ready to<br className="md:hidden" />get your</span><br />
             hands dirty?
           </h2>
           <p className="text-white/60 text-base leading-relaxed max-w-sm mx-auto mb-12">
