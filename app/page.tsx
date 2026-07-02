@@ -74,20 +74,22 @@ export default function Home() {
 
       {/* ── WHY IMPERFECT BAKERS ──────────────────────────────── */}
       <section className="pt-16 pb-28 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-7xl mx-auto">
 
           {/* Section header */}
-          <span className="section-label block">Our philosophy</span>
-          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
-            <h2
-              className="text-4xl md:text-5xl text-[#006644] leading-tight"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              Why <span className="text-[#1a1a1a]">Imperfect</span> Bakers?
-            </h2>
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto text-left">
-              We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
-            </p>
+          <div className="px-8">
+            <span className="section-label block">Our philosophy</span>
+            <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
+              <h2
+                className="text-4xl md:text-5xl text-[#006644] leading-tight"
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+              >
+                Why <span className="text-[#1a1a1a]">Imperfect</span> Bakers?
+              </h2>
+              <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto text-left">
+                We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
+              </p>
+            </div>
           </div>
 
           {/* Feature grid */}
@@ -105,6 +107,7 @@ export default function Home() {
               </div>
             ))}
           </div>
+
         </div>
       </section>
 
