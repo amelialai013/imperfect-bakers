@@ -646,7 +646,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               + Add session
             </button>
-            <button onClick={logout} className="text-sm text-[#6b7280] hover:text-[#1a1a1a] transition-colors">
+            <button onClick={logout} className="btn-secondary">
               Sign out
             </button>
           </div>
