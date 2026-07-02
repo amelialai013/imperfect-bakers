@@ -57,16 +57,18 @@ export default function InterestPage() {
               <div>
                 <input type="tel" placeholder="Phone" className={inputClass} />
               </div>
-              <div className="sm:col-span-2 relative inline-flex mt-6">
-                <select className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]">
-                  <option value="">Experience level</option>
-                  <option value="complete_beginner">Complete beginner</option>
-                  <option value="some_experience">Some experience</option>
-                  <option value="confident_cook">Confident cook</option>
-                </select>
-                <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-                </svg>
+              <div className="sm:col-span-2 mt-6">
+                <div className="relative inline-flex">
+                  <select className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-4 pr-9 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]">
+                    <option value="">Experience level</option>
+                    <option value="complete_beginner">Complete beginner</option>
+                    <option value="some_experience">Some experience</option>
+                    <option value="confident_cook">Confident cook</option>
+                  </select>
+                  <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </div>
             </div>
             </div>
