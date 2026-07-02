@@ -59,7 +59,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
           <div className="hidden sm:flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[46px]">
             <button
               onClick={() => setView("grid")}
-              className={`px-3 h-full transition-colors ${view === "grid" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
+              className={`px-5 h-full transition-colors ${view === "grid" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
               aria-label="Grid view"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,7 +69,7 @@ export default function BookAClassClient({ sessions }: { sessions: ClassSession[
             <div className="w-px h-4 bg-[#e4dfd5]" />
             <button
               onClick={() => setView("list")}
-              className={`px-3 h-full transition-colors ${view === "list" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
+              className={`px-5 h-full transition-colors ${view === "list" ? "text-[#006644]" : "text-[#c8c0b4] hover:text-[#6b7280]"}`}
               aria-label="List view"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -295,7 +295,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         }`}
       >
         <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
-        <div className="p-4 flex flex-col gap-2 flex-1">
+        <div className="px-4 pt-3 pb-4 flex flex-col gap-2 flex-1">
           <div className="flex items-start justify-between gap-3">
             <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
             {!isFull ? (
