@@ -288,8 +288,17 @@ function storageRemove(key: string) {
 type View = "login" | "dashboard" | "add" | "edit";
 
 export default function AdminPage() {
-  const [token, setToken] = useState<string>(() => storageGet("ib_admin_token"));
-  const [view, setView] = useState<View>(token ? "dashboard" : "login");
+  const [token, setToken] = useState<string>("");
+  const [view, setView] = useState<View>("login");
+
+  // Hydrate token from storage after mount to avoid SSR/client mismatch
+  useEffect(() => {
+    const stored = storageGet("ib_admin_token");
+    if (stored) {
+      setToken(stored);
+      setView("dashboard");
+    }
+  }, []);
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [sessions, setSessions] = useState<ClassSession[]>([]);
