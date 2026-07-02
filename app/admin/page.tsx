@@ -1039,11 +1039,6 @@ export default function AdminPage() {
                     {/* Save / Revert actions */}
                     {!c.hidden && (
                       <div className="px-6 pb-5 flex flex-wrap items-center justify-end gap-3">
-                        {isClassDirty(c.key) && (
-                          <button onClick={() => revertClassConfig(c.key)} className="btn-secondary">
-                            Revert
-                          </button>
-                        )}
                         <button
                           onClick={() => saveClassConfigItem(c)}
                           disabled={savingClass === c.key}
@@ -1051,6 +1046,11 @@ export default function AdminPage() {
                         >
                           {savingClass === c.key ? "Saving…" : "Save changes"}
                         </button>
+                        {isClassDirty(c.key) && (
+                          <button onClick={() => revertClassConfig(c.key)} className="btn-secondary">
+                            Revert
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
