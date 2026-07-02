@@ -281,7 +281,33 @@ function SessionForm({
 
         {/* Location — plain text (Google Places requires API key in .env.local) */}
         <Field label="Location" name="location" value={form.location} onChange={handle} placeholder="Williamstown, Melbourne" required />
-        <Field label="Ages" name="ages" value={form.ages} onChange={handle} placeholder="All ages" required />
+        {/* Ages — dropdown with auto attendee type sync */}
+        <div>
+          <label className={labelCls}>Ages <span className="text-[#006644]">*</span></label>
+          <div className="relative">
+            <select
+              name="ages"
+              value={form.ages}
+              onChange={(e) => {
+                const val = e.target.value;
+                setForm((f) => ({ ...f, ages: val }));
+                if (val === "All ages") {
+                  setAttendeeTypes(["child", "youngAdult", "adult"]);
+                } else if (val === "18+ yrs") {
+                  setAttendeeTypes((prev) => prev.filter((k) => k !== "child"));
+                }
+              }}
+              required
+              className={cls + " appearance-none pr-8 cursor-pointer"}
+            >
+              <option value="All ages">All ages</option>
+              <option value="18+ yrs">18+ yrs</option>
+            </select>
+            <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
         <Field label="Price per person ($)" name="price" value={form.price} onChange={handle} type="number" placeholder="150" required />
         <Field label="Max spots" name="maxSpots" value={form.maxSpots} onChange={handle} type="number" placeholder="15" required />
       </div>
