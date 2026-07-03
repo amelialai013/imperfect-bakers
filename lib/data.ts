@@ -134,6 +134,8 @@ export async function createBooking(
   const booking: Booking = {
     ...data,
     id,
+    actionToken: crypto.randomUUID(),
+    status: "pending",
     createdAt: new Date().toISOString(),
     cancelled: false,
   };
@@ -146,6 +148,17 @@ export async function createBooking(
   });
 
   return { booking, session: updatedSession! };
+}
+
+export async function updateBookingStatus(
+  id: string,
+  status: "confirmed" | "declined"
+): Promise<Booking | null> {
+  const booking = await kv.get<Booking>(`booking:${id}`);
+  if (!booking) return null;
+  const updated: Booking = { ...booking, status, actionedAt: new Date().toISOString() };
+  await kv.set(`booking:${id}`, updated);
+  return updated;
 }
 
 export async function cancelBooking(id: string): Promise<void> {

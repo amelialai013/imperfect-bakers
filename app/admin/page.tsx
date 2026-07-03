@@ -363,7 +363,7 @@ function SessionForm({
 
 function BookingsPanel({ sessionId, token }: { sessionId: string; token: string }) {
   const [bookings, setBookings] = useState<Booking[] | null>(null);
-  const [cancelling, setCancelling] = useState<string | null>(null);
+  const [acting, setActing] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const res = await authFetch(`/api/sessions/${sessionId}`, token, { method: "PATCH" });
@@ -371,16 +371,23 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
     setBookings(data);
   }, [sessionId, token]);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  useEffect(() => { load(); }, [load]);
+
+  async function act(id: string, status: "confirmed" | "declined") {
+    const verb = status === "confirmed" ? "confirm" : "decline";
+    if (!confirm(`${verb.charAt(0).toUpperCase() + verb.slice(1)} this booking?${status === "declined" ? " The spot will be returned." : ""}`)) return;
+    setActing(id);
+    setBookings((prev) => prev ? prev.map((b) => b.id === id ? { ...b, status } : b) : prev);
+    await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status }) });
+    setActing(null);
+  }
 
   async function cancel(id: string) {
     if (!confirm("Cancel this booking? The spot will be returned.")) return;
-    setCancelling(id);
+    setActing(id);
     await authFetch(`/api/bookings/${id}`, token, { method: "DELETE" });
     await load();
-    setCancelling(null);
+    setActing(null);
   }
 
   if (!bookings) return <p className="text-[#6b7280] text-sm py-4">Loading bookings…</p>;
@@ -390,18 +397,57 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
   const active = bookings.filter((b) => !b.cancelled);
   const cancelled = bookings.filter((b) => b.cancelled);
 
+  function StatusBadge({ status }: { status?: string }) {
+    if (status === "confirmed") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>;
+    if (status === "declined") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-red-50 text-red-500 border border-red-200">Declined</span>;
+    return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Pending</span>;
+  }
+
   return (
     <div className="mt-4 space-y-2">
       {active.map((b) => (
-        <div key={b.id} className="bg-white border border-[#e4dfd5] rounded-[6px] px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-1 text-sm">
-            <div>
-              <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Name</p>
-              <p className="font-medium text-[#1a1a1a]">{b.name}</p>
+        <div key={b.id} className="bg-white border border-[#e4dfd5] rounded-[6px] px-5 py-4 space-y-3">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="font-medium text-[#1a1a1a] text-sm">{b.name}</p>
+              <StatusBadge status={b.status} />
             </div>
+            {(!b.status || b.status === "pending") && (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => act(b.id, "confirmed")}
+                  disabled={acting === b.id}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50"
+                >
+                  ✓ Confirm
+                </button>
+                <button
+                  onClick={() => act(b.id, "declined")}
+                  disabled={acting === b.id}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50"
+                >
+                  ✗ Decline
+                </button>
+              </div>
+            )}
+            {b.status && b.status !== "pending" && (
+              <button
+                onClick={() => cancel(b.id)}
+                disabled={acting === b.id}
+                className="shrink-0 text-xs text-red-500 border border-red-200 rounded-[6px] px-3 py-1.5 hover:bg-red-50 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-1 text-sm">
             <div>
               <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Email</p>
               <p className="text-[#6b7280] break-all">{b.email}</p>
+            </div>
+            <div>
+              <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Phone</p>
+              <p className="text-[#6b7280]">{b.phone}</p>
             </div>
             <div>
               <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Attendees</p>
@@ -428,13 +474,6 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
               </div>
             )}
           </div>
-          <button
-            onClick={() => cancel(b.id)}
-            disabled={cancelling === b.id}
-            className="shrink-0 text-xs text-red-500 border border-red-200 rounded-[6px] px-3 py-1.5 hover:bg-red-50 transition-colors disabled:opacity-50"
-          >
-            {cancelling === b.id ? "Cancelling…" : "Cancel booking"}
-          </button>
         </div>
       ))}
       {cancelled.length > 0 && (
@@ -490,9 +529,9 @@ function storageRemove(key: string) {
 
 // ── main component ─────────────────────────────────────────────────────────────
 
-type View = "login" | "dashboard" | "add" | "edit" | "classes" | "interests";
+type View = "login" | "dashboard" | "add" | "edit" | "classes";
 
-function MoreMenu({ onManageClasses, onInterests, onLogout }: { onManageClasses: () => void; onInterests: () => void; onLogout: () => void }) {
+function MoreMenu({ onManageClasses, onLogout }: { onManageClasses: () => void; onLogout: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
@@ -509,16 +548,6 @@ function MoreMenu({ onManageClasses, onInterests, onLogout }: { onManageClasses:
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[180px]">
-            <button
-              onClick={() => { setOpen(false); onInterests(); }}
-              className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
-            >
-              <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-              </svg>
-              Interest registrations
-            </button>
-            <div className="h-px bg-[#e8e2d9]" />
             <button
               onClick={() => { setOpen(false); onManageClasses(); }}
               className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
@@ -1338,12 +1367,6 @@ export default function AdminPage() {
     );
   }
 
-  // ── Interest registrations ───────────────────────────────
-
-  if (view === "interests") {
-    return <InterestsView token={token} onBack={() => setView("dashboard")} />;
-  }
-
   // ── Dashboard ────────────────────────────────────────────
 
   const totalBookings = sessions.reduce((acc, s) => acc + (s.maxSpots - s.spotsLeft), 0);
@@ -1360,7 +1383,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <MoreMenu onManageClasses={() => setView("classes")} onInterests={() => setView("interests")} onLogout={logout} />
+            <MoreMenu onManageClasses={() => setView("classes")} onLogout={logout} />
           </div>
         </div>
       </section>

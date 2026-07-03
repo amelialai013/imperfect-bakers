@@ -1,35 +1,62 @@
-import { NextResponse } from "next/server";
-import { cancelBooking, updateBookingStatus, getSession, getSessionBookings } from "@/lib/data";
-import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
+import { updateBookingStatus, getSession, cancelBooking } from "@/lib/data";
 import type { Booking } from "@/lib/types";
+
+export const dynamic = "force-dynamic";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!checkAdminToken(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { id } = await params;
-  await cancelBooking(id);
-  return NextResponse.json({ ok: true });
+function htmlPage(title: string, emoji: string, heading: string, body: string, color: string) {
+  return new Response(
+    `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>${title} — Imperfect Bakers</title>
+    <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#faf9f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+    .card{background:#fff;border:1px solid #e4dfd5;border-radius:16px;padding:48px 40px;max-width:440px;width:100%;text-align:center}
+    .emoji{font-size:48px;margin-bottom:20px}
+    h1{font-size:24px;font-weight:600;color:#1a1a1a;margin-bottom:12px}
+    p{font-size:15px;color:#6b7280;line-height:1.6;margin-bottom:24px}
+    a{display:inline-block;padding:12px 28px;background:${color};color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600}</style>
+    </head><body><div class="card"><div class="emoji">${emoji}</div><h1>${heading}</h1><p>${body}</p>
+    <a href="${BASE_URL}/admin">Back to dashboard</a></div></body></html>`,
+    { headers: { "Content-Type": "text/html" } }
+  );
 }
 
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!checkAdminToken(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { id } = await params;
-  const { status } = await req.json() as { status: "confirmed" | "declined" };
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+  const action = searchParams.get("action");
+  const token = searchParams.get("token");
 
-  if (!["confirmed", "declined"].includes(status)) {
-    return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+  if (!id || !action || !token || !["confirm", "decline"].includes(action)) {
+    return htmlPage("Invalid link", "⚠️", "Invalid link", "This link is missing required parameters.", "#6b7280");
   }
 
   const booking = await kv.get<Booking>(`booking:${id}`);
-  if (!booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!booking) {
+    return htmlPage("Not found", "🔍", "Booking not found", "This booking could not be found.", "#6b7280");
+  }
 
-  await updateBookingStatus(id, status);
+  if (booking.actionToken !== token) {
+    return htmlPage("Invalid link", "🔒", "Invalid link", "This confirmation link is not valid.", "#6b7280");
+  }
+
+  if (booking.status === "confirmed" || booking.status === "declined") {
+    return htmlPage(
+      "Already actioned", booking.status === "confirmed" ? "✅" : "❌",
+      `Already ${booking.status}`,
+      `This booking has already been ${booking.status}. No further action is needed.`,
+      "#6b7280"
+    );
+  }
+
+  const newStatus = action === "confirm" ? "confirmed" : "declined";
+  await updateBookingStatus(id, newStatus);
 
   // If declining, return spots to session
-  if (status === "declined") {
+  if (action === "decline") {
     await cancelBooking(id);
+    // cancelBooking sets cancelled:true — restore status so it shows as declined not cancelled
     const updated = await kv.get<Booking>(`booking:${id}`);
     if (updated) await kv.set(`booking:${id}`, { ...updated, status: "declined", cancelled: false });
   }
@@ -38,9 +65,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const sessionName = session?.sessionName ?? "your class";
   const sessionDate = session?.date ?? "";
 
-  // Send customer email
   try {
-    if (status === "confirmed") {
+    if (action === "confirm") {
       await sendEmail({
         to: booking.email,
         subject: `You're confirmed! — ${sessionName}`,
@@ -97,10 +123,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       });
     }
   } catch (err) {
-    console.error("Customer booking email failed:", err);
+    console.error("Customer email failed:", err);
   }
 
-  return NextResponse.json({ ok: true, status });
+  if (action === "confirm") {
+    return htmlPage("Confirmed!", "✅", `${booking.name} is confirmed!`, `A confirmation email has been sent to ${booking.email}.`, "#006644");
+  } else {
+    return htmlPage("Declined", "❌", "Booking declined", `A notification has been sent to ${booking.email} and their spot has been released.`, "#374151");
+  }
 }
 
 async function sendEmail({ to, subject, html }: { to: string; subject: string; html: string }) {

@@ -41,4 +41,7 @@ export interface Booking {
   paymentOther?: string;
   notes: string;
   cancelled: boolean;
+  status?: "pending" | "confirmed" | "declined";
+  actionToken?: string;
+  actionedAt?: string;
 }
