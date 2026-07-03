@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createBooking, getSession } from "@/lib/data";
+import type { Booking, ClassSession } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
 
@@ -27,18 +28,11 @@ export async function POST(req: Request) {
   return NextResponse.json({ id: booking.id }, { status: 201 });
 }
 
-async function sendAdminEmail(
-  booking: Awaited<ReturnType<typeof createBooking>> extends { booking: infer B } ? B : never,
-  session: Awaited<ReturnType<typeof getSession>>
-) {
+async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
 
-  const { id, actionToken, name, email, phone, counts, totalPeople, paymentStatus, notes } = booking as {
-    id: string; actionToken: string; name: string; email: string; phone: string;
-    counts: { child: number; youngAdult: number; adult: number };
-    totalPeople: number; paymentStatus: string; notes: string;
-  };
+  const { id, actionToken, name, email, phone, counts, totalPeople, paymentStatus, notes } = booking;
 
   const confirmUrl = `${BASE_URL}/api/bookings/action?id=${id}&action=confirm&token=${actionToken}`;
   const declineUrl = `${BASE_URL}/api/bookings/action?id=${id}&action=decline&token=${actionToken}`;
