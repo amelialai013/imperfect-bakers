@@ -529,9 +529,9 @@ function storageRemove(key: string) {
 
 // ── main component ─────────────────────────────────────────────────────────────
 
-type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings";
+type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests";
 
-function MoreMenu({ onManageClasses, onAllBookings, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onLogout: () => void }) {
+function MoreMenu({ onManageClasses, onAllBookings, onInterests, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onLogout: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
@@ -556,6 +556,16 @@ function MoreMenu({ onManageClasses, onAllBookings, onLogout }: { onManageClasse
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
               Manage bookings
+            </button>
+            <div className="h-px bg-[#e8e2d9]" />
+            <button
+              onClick={() => { setOpen(false); onInterests(); }}
+              className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
+            >
+              <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              Registered interest
             </button>
             <div className="h-px bg-[#e8e2d9]" />
             <button
@@ -714,7 +724,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                 {pendingCount} pending
               </span>
             )}
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1416,6 +1426,10 @@ export default function AdminPage() {
     return <AllBookingsView token={token} onBack={() => setView("dashboard")} onManageClasses={() => setView("classes")} onLogout={logout} />;
   }
 
+  if (view === "interests") {
+    return <InterestsView token={token} onBack={() => setView("dashboard")} />;
+  }
+
   // ── Classes ──────────────────────────────────────────────
 
   if (view === "classes") {
@@ -1527,7 +1541,7 @@ export default function AdminPage() {
               <button onClick={() => setAddingClass(true)} className="btn-primary group">
                 New class <span>+</span>
               </button>
-              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onLogout={logout} />
+              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onLogout={logout} />
             </div>
           </div>
         </section>
@@ -1712,7 +1726,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onLogout={logout} />
+            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onLogout={logout} />
           </div>
         </div>
       </section>
