@@ -281,7 +281,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                         strokeLinecap="round"
                       />
                     </svg>
-                    <span className="text-[0.55rem] font-semibold text-[#1a1a1a] relative z-10">{pct}%</span>
+                    <span className="text-[0.55rem] font-semibold text-[#1a1a1a] relative z-10">{s.maxSpots - s.spotsLeft}/{s.maxSpots}</span>
                   </div>
                 );
               })()}
