@@ -1918,7 +1918,7 @@ export default function AdminPage() {
               </svg>
             </div>
             <p className="text-sm font-medium text-[#7a4f00] flex-1">
-              You have <span className="font-bold">{pendingCount} pending {pendingCount === 1 ? "request" : "requests"}</span>.
+              You have <span className="font-bold">{pendingCount} pending {pendingCount === 1 ? "request" : "requests"}</span>
             </p>
             <button
               onClick={() => setView("bookings")}
