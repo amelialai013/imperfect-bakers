@@ -1,23 +1,16 @@
 @import "tailwindcss";
 
 @keyframes page-enter {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { transform: translateY(14px); }
+  to   { transform: translateY(0); }
 }
 
 .page-enter {
-  animation: page-enter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  /* Safari: 'both' fill-mode can leave hit-testing frozen at opacity:0.
-     Use 'forwards' instead and set initial opacity directly so the element
-     starts invisible but pointer-events are never blocked after the animation. */
-  opacity: 0;
-  pointer-events: auto;
+  /* Animate transform only — never opacity.
+     Safari freezes pointer-event hit-testing on elements inside
+     opacity-based CSS animations, making buttons and links unclickable.
+     A transform-only transition has no such side-effect. */
+  animation: page-enter 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 /* ── Homepage hero animations ──────────────────────────────── */
