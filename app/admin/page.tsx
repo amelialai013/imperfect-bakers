@@ -826,6 +826,14 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         >
                           Cancel
                         </button>
+                      ) : b.status === "declined" ? (
+                        <button
+                          onPointerDown={(e) => { e.preventDefault(); permanentDelete(b.id); }}
+                          disabled={acting === b.id}
+                          className="text-xs text-red-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                        >
+                          Delete record
+                        </button>
                       ) : null}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-2 text-sm">
