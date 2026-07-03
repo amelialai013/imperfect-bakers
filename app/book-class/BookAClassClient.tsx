@@ -386,7 +386,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span>{s.location}</span>
             </div>
           </div>
-          <div className={`h-px my-1 ${isFull ? "bg-[#c8c0b4]/30" : "bg-[#e8e2d9]"}`} />
+          <div className={`h-px my-3 ${isFull ? "bg-[#c8c0b4]/30" : "bg-[#e8e2d9]"}`} />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[#1a1a1a] text-lg font-semibold leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
