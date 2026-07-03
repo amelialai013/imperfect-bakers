@@ -71,7 +71,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
           <select
             value={activeClass}
             onChange={(e) => setActiveClass(e.target.value)}
-            className="appearance-none bg-white border border-[#e4dfd5] rounded-full text-sm font-medium text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] pl-4 pr-9"
+            className="appearance-none bg-white border border-[#e4dfd5] rounded-full text-sm font-medium text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] pl-5 pr-9"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             <option value="All">All classes</option>
