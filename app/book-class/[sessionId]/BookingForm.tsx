@@ -337,7 +337,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
       <div className="lg:sticky lg:top-28">
         <div className="bg-[#006644] rounded-2xl py-6 px-8 text-white flex flex-col">
           <div>
-            <span className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-white/40">{session.classLabel}</span>
+            <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40">{session.classLabel}</span>
             <h3 className="text-lg font-medium leading-snug mt-2 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {session.sessionName || session.classLabel}
             </h3>
