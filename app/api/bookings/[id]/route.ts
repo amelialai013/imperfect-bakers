@@ -40,7 +40,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
             <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
               <p style="font-size:16px;margin-bottom:16px">Hi ${booking.name},</p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
-                Your booking for <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""} has been cancelled.
+                Your booking for <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""} has sadly been cancelled due to insufficient registrations or unforeseen circumstances.
               </p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
                 Your spot has been released and you won't be charged. If you'd like to try a different session, feel free to browse our other classes below.
