@@ -262,7 +262,7 @@ function SessionForm({
             <option value="">Select class type…</option>
             {CLASS_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
           </SelectField>
-          <Field label="Session name (optional)" name="sessionName" value={form.sessionName} onChange={handle} placeholder="e.g. Delicious Dinner" />
+          <Field label="Session name" name="sessionName" value={form.sessionName} onChange={handle} placeholder="e.g. Delicious Dinner" required />
         </div>
       </div>
 
@@ -713,12 +713,12 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
         <div className="max-w-7xl mx-auto">
 
           {/* Upcoming / Past toggle */}
-          <div className="flex gap-1 mb-5 bg-[#f0ece4] rounded-full p-1">
+          <div className="inline-flex gap-1 mb-5 bg-[#f0ece4] rounded-full p-1">
             {(["upcoming", "past"] as const).map((t) => (
               <button
                 key={t}
                 onPointerDown={(e) => { e.preventDefault(); setTimeFilter(t); }}
-                className={`flex-1 text-center px-5 py-1.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
+                className={`px-5 py-2 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
                   timeFilter === t
                     ? "bg-white text-[#1a1a1a] shadow-sm"
                     : "text-[#6b7280] hover:text-[#1a1a1a]"
