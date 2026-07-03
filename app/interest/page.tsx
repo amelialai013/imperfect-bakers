@@ -242,7 +242,7 @@ export default function InterestPage() {
                 )}
               </button>
               <div className="text-left sm:text-right">
-                <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#c4bdb3] mb-1">Or reach out directly</span>
+                <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-1">Or reach out directly</span>
                 <a
                   href="mailto:imperfectbakers@outlook.com"
                   className="text-sm text-[#1a1a1a] hover:text-[#006644] transition-colors duration-200"
