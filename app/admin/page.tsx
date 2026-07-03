@@ -683,7 +683,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
   const pendingCount = timeRows.filter((b) => !b.status || b.status === "pending").length;
   const filtered = timeRows.filter((b) => {
     if (filter === "cancelled") return b.cancelled;
-    if (filter === "all") return !b.cancelled;
+    if (filter === "all") return true;
     if (filter === "pending") return !b.cancelled && (!b.status || b.status === "pending");
     return !b.cancelled && b.status === filter;
   });
@@ -747,8 +747,8 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                 { key: "declined",  label: "Declined"  },
                 { key: "cancelled", label: "Cancelled" },
               ] as { key: typeof filter; label: string }[]).map(({ key: f, label }) => {
-              const count = f === "cancelled" ? timeRows.filter((b) => b.cancelled).length
-                : f === "all" ? timeRows.filter((b) => !b.cancelled).length
+              const count = f === "all" ? timeRows.length
+                : f === "cancelled" ? timeRows.filter((b) => b.cancelled).length
                 : f === "pending" ? timeRows.filter((b) => !b.cancelled && (!b.status || b.status === "pending")).length
                 : timeRows.filter((b) => !b.cancelled && b.status === f).length;
               return (
@@ -801,7 +801,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         >
                           Delete record
                         </button>
-                      ) : ((!b.status || b.status === "pending") ? (
+                      ) : (!b.status || b.status === "pending") ? (
                         <div className="flex gap-2">
                           <button
                             onPointerDown={(e) => { e.preventDefault(); act(b.id, "confirmed"); }}
@@ -818,7 +818,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                             ✗ Decline
                           </button>
                         </div>
-                      ) : (
+                      ) : b.status === "confirmed" ? (
                         <button
                           onPointerDown={(e) => { e.preventDefault(); cancel(b.id); }}
                           disabled={acting === b.id}
@@ -826,7 +826,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         >
                           Cancel
                         </button>
-                      ))}
+                      ) : null}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-2 text-sm">
 
