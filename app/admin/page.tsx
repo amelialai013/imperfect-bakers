@@ -694,6 +694,7 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
           {/* Filter pills */}
           <div className="flex flex-wrap gap-2 mb-6">
             {(["pending", "all", "confirmed", "declined"] as const).map((f) => {
+              const label = f.charAt(0).toUpperCase() + f.slice(1);
               const count = f === "all" ? rows.length
                 : f === "pending" ? rows.filter((b) => !b.status || b.status === "pending").length
                 : rows.filter((b) => b.status === f).length;
@@ -701,13 +702,13 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
                 <button
                   key={f}
                   onPointerDown={(e) => { e.preventDefault(); setFilter(f); }}
-                  className={`px-4 py-1.5 text-xs font-semibold tracking-[0.1em] uppercase rounded-full border transition-colors duration-200 cursor-pointer ${
+                  className={`px-5 py-2.5 text-sm font-medium rounded-full border transition-colors duration-200 cursor-pointer select-none ${
                     filter === f
                       ? "bg-[#006644] border-[#006644] text-white"
-                      : "bg-white border-[#e4dfd5] text-[#6b7280] hover:border-[#006644] hover:text-[#006644]"
+                      : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
                   }`}
                 >
-                  {f} ({count})
+                  {label} ({count})
                 </button>
               );
             })}
