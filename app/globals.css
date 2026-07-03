@@ -1,17 +1,8 @@
 @import "tailwindcss";
 
-@keyframes page-enter {
-  from { transform: translateY(14px); }
-  to   { transform: translateY(0); }
-}
-
-.page-enter {
-  /* Animate transform only — never opacity.
-     Safari freezes pointer-event hit-testing on elements inside
-     opacity-based CSS animations, making buttons and links unclickable.
-     A transform-only transition has no such side-effect. */
-  animation: page-enter 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-}
+/* page-enter animation is now handled in JS (components/page-transition.tsx)
+   to ensure Safari releases the GPU compositing layer after the animation,
+   which otherwise intercepts all mouse events site-wide. */
 
 /* ── Homepage hero animations ──────────────────────────────── */
 @keyframes hero-bg-zoom {
