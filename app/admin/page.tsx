@@ -774,14 +774,17 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
                       <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
                       <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}</p>
                     </div>
-                    <StatusBadge status={b.status} />
+                    {b.cancelled
+                      ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
+                      : <StatusBadge status={b.status} />
+                    }
                   </div>
 
                   {/* Booking details */}
                   <div className="px-5 py-4 space-y-3">
                     <div className="flex items-center justify-between gap-3 flex-wrap">
                       <p className="font-medium text-[#1a1a1a]">{b.name}</p>
-                      {(!b.status || b.status === "pending") ? (
+                      {!b.cancelled && ((!b.status || b.status === "pending") ? (
                         <div className="flex gap-2">
                           <button
                             onPointerDown={(e) => { e.preventDefault(); act(b.id, "confirmed"); }}
@@ -806,7 +809,7 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
                         >
                           Cancel
                         </button>
-                      )}
+                      ))}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-2 text-sm">
                       <div>
