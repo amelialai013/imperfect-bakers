@@ -1889,8 +1889,8 @@ export default function AdminPage() {
 
   // ── Dashboard ────────────────────────────────────────────
 
-  const totalBookings = sessions.reduce((acc, s) => acc + (s.maxSpots - s.spotsLeft), 0);
-  const totalRevenue = sessions.reduce((acc, s) => acc + (s.maxSpots - s.spotsLeft) * s.price, 0);
+  const totalBookings = sessions.reduce((acc, s) => acc + Math.max(0, s.maxSpots - s.spotsLeft), 0);
+  const totalRevenue = sessions.reduce((acc, s) => acc + Math.max(0, s.maxSpots - s.spotsLeft) * s.price, 0);
 
   return (
     <>
@@ -1961,7 +1961,7 @@ export default function AdminPage() {
           ) : (
             <div className="space-y-3">
               {sessions.map((s) => {
-                const booked = s.maxSpots - s.spotsLeft;
+                const booked = Math.max(0, s.maxSpots - s.spotsLeft);
                 const pct = Math.round((booked / s.maxSpots) * 100);
                 const isFull = s.spotsLeft === 0;
                 const showBookings = expandedBookings === s.id;

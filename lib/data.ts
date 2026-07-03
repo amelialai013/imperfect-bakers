@@ -168,7 +168,7 @@ export async function cancelBooking(id: string): Promise<void> {
   const session = await getSession(booking.sessionId);
   if (session) {
     await updateSession(booking.sessionId, {
-      spotsLeft: session.spotsLeft + booking.totalPeople,
+      spotsLeft: Math.min(session.spotsLeft + booking.totalPeople, session.maxSpots),
     });
   }
 }
