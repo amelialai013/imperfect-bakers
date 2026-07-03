@@ -272,7 +272,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 const r = 22;
                 const circ = 2 * Math.PI * r;
                 return (
-                  <div className="relative flex items-center justify-center w-10 h-10 shrink-0">
+                  <div className="relative flex items-center justify-center w-14 h-14 shrink-0">
                     <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
                       <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#e8e2d9"} strokeWidth="9" />
                       <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#006644"} strokeWidth="9"
@@ -281,7 +281,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                         strokeLinecap="round"
                       />
                     </svg>
-                    <span className="text-[0.55rem] font-semibold text-[#1a1a1a] relative z-10">{s.maxSpots - s.spotsLeft}/{s.maxSpots}</span>
+                    <span className="text-xs font-semibold text-[#1a1a1a] relative z-10">{s.maxSpots - s.spotsLeft}/{s.maxSpots}</span>
                   </div>
                 );
               })()}
