@@ -297,53 +297,69 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             </div>
           </div>
 
-          {/* Mobile layout: date stamp + content */}
-          <div className="sm:hidden flex items-stretch">
-            {/* Date stamp */}
-            <div className={`flex flex-col items-center justify-center px-4 shrink-0 ${isFull ? "bg-[#e8e4de]" : "bg-[#006644]"}`} style={{ minWidth: "62px" }}>
-              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase leading-none mb-1.5" style={{ color: "rgba(255,255,255,0.6)" }}>
-                {dateParts(s.date).mon}
-              </span>
-              <span className="text-2xl font-bold text-white leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                {dateParts(s.date).day}
-              </span>
-              <span className="text-[0.55rem] font-semibold tracking-[0.15em] uppercase leading-none mt-1.5" style={{ color: "rgba(255,255,255,0.6)" }}>
-                {dateParts(s.date).dow}
-              </span>
+          {/* Mobile layout: grid card style */}
+          <div className="sm:hidden p-4 flex flex-col gap-3">
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
+              {!isFull ? (
+                <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2.5 py-0.5 shrink-0">{s.spotsLeft} left</span>
+              ) : (
+                <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-2.5 py-0.5 shrink-0">Full</span>
+              )}
             </div>
-            {/* Content */}
-            <div className="flex-1 min-w-0 px-4 py-3.5 flex flex-col justify-between gap-1.5">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <span className="text-[0.58rem] font-semibold tracking-[0.18em] uppercase text-[#006644] truncate block">{s.classLabel}</span>
-                  <h3 className="text-[#1a1a1a] text-sm font-medium leading-snug mt-0.5" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                    {s.sessionName || s.classLabel}
-                  </h3>
-                </div>
-                {!isFull ? (
-                  <span className="text-[0.6rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2 py-0.5 shrink-0 mt-[6px]">{s.spotsLeft} left</span>
-                ) : (
-                  <span className="text-[0.6rem] font-medium text-red-400 bg-red-50 rounded-full px-2 py-0.5 shrink-0 mt-[6px]">Full</span>
-                )}
+            <div className="-mt-[5.5px]">
+              <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                {s.sessionName || s.classLabel}
+              </h3>
+            </div>
+            <div className="space-y-2 flex-1">
+              <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{s.date}</span>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="text-[0.65rem] text-[#6b7280] shrink-0">{s.time}</span>
-                  {s.location && (
-                    <span className="text-[0.58rem] font-medium tracking-wide text-[#006644]/60 bg-[#006644]/8 rounded px-1.5 py-0.5 truncate">
-                      {s.location.split(",")[0]}
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-2 shrink-0 ml-3">
-                  <p className="text-[#1a1a1a] text-sm font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
-                  {!isFull && (
-                    <svg className="w-3.5 h-3.5 text-[#006644] transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                    </svg>
-                  )}
-                </div>
+              <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{s.time}</span>
               </div>
+              <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>{s.location}</span>
+              </div>
+            </div>
+            {(() => {
+              const booked = s.maxSpots - s.spotsLeft;
+              const pct = s.maxSpots > 0 ? Math.round((booked / s.maxSpots) * 100) : 0;
+              return (
+                <div className="my-1">
+                  <div className="flex items-center mb-1.5">
+                    <p className="text-xs text-[#6b7280]">{`${booked}/${s.maxSpots} reservations`}</p>
+                  </div>
+                  <div className={`h-1.5 w-full rounded-full ${isFull ? "bg-[#c8c0b4]/30" : "bg-[#e8e2d9]"}`}>
+                    <div className={`h-full rounded-full transition-all duration-500 ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              );
+            })()}
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[#1a1a1a] text-lg font-semibold leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
+                <p className="text-[#6b7280] text-xs mt-0.5">per person</p>
+              </div>
+              {!isFull && (
+                <div className="flex items-center gap-1.5 text-[#006644] text-sm font-medium">
+                  <span>Book</span>
+                  <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              )}
             </div>
           </div>
         </article>
