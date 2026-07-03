@@ -10,7 +10,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.v
 export async function GET(req: Request) {
   if (!checkAdminToken(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
-    const sessionIds = await kv.lrange<string>("sessions", 0, -1);
+    const sessionIds = await kv.lrange<string>("sessions:all", 0, -1);
     const allBookings: Booking[] = [];
     await Promise.all((sessionIds ?? []).map(async (id) => {
       const bookings = await getSessionBookings(id);
