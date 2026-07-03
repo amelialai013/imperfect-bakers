@@ -430,7 +430,7 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
                 </button>
               </div>
             )}
-            {b.status && b.status !== "pending" && (
+            {b.status === "confirmed" && (
               <button
                 onClick={() => cancel(b.id)}
                 disabled={acting === b.id}
@@ -1918,7 +1918,7 @@ export default function AdminPage() {
               </svg>
             </div>
             <p className="text-sm font-medium text-[#7a4f00] flex-1">
-              You have <span className="font-bold">{pendingCount} pending booking {pendingCount === 1 ? "request" : "requests"}</span> waiting for your review.
+              You have <span className="font-bold">{pendingCount} pending {pendingCount === 1 ? "request" : "requests"}</span>.
             </p>
             <button
               onClick={() => setView("bookings")}
