@@ -84,7 +84,7 @@ export async function GET(req: Request) {
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
                 We'll be in touch with any final details closer to the date. We can't wait to cook with you! 🧁
               </p>
-              <p style="font-size:14px;color:#6b7280">See you in the kitchen,<br><strong style="color:#006644">Chef Sarah & the Imperfect Bakers team</strong></p>
+              <p style="font-size:14px;color:#6b7280;margin-bottom:12px">See you in the kitchen,</p><p style="font-size:14px;margin:0"><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
                 <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse our classes</a>
               </div>
@@ -113,7 +113,7 @@ export async function GET(req: Request) {
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
                 We'd love to have you join us for a future session — check out what's coming up below!
               </p>
-              <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah & the Imperfect Bakers team</strong></p>
+              <p style="font-size:14px;color:#6b7280;margin-bottom:12px">Warmly,</p><p style="font-size:14px;margin:0"><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
                 <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse upcoming classes</a>
               </div>

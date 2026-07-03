@@ -121,7 +121,7 @@ export async function GET(req: Request) {
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
                 In the meantime, feel free to browse our upcoming sessions — something new might pop up that's perfect for you.
               </p>
-              <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah & the Imperfect Bakers team</strong></p>
+              <p style="font-size:14px;color:#6b7280;margin-bottom:12px">Warmly,</p><p style="font-size:14px;margin:0"><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
                 <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#1a1a1a;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse upcoming classes</a>
               </div>
