@@ -109,7 +109,7 @@ export default function InterestPage() {
             <p className="text-[#6b7280] text-sm leading-relaxed mb-3 max-w-sm">
               Thanks for registering your interest. We&apos;ll reach out as soon as a relevant session opens up.
             </p>
-            <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
+            <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm font-semibold">
               Can&apos;t find the email? Check your spam or junk folder.
             </p>
             <a href="/classes" className="btn-secondary">Browse our classes</a>
