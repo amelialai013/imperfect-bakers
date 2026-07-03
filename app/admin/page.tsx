@@ -1150,14 +1150,16 @@ export default function AdminPage() {
       if (!res.ok) return;
       const data = await res.json() as Booking[];
       const count = data.filter((b) => !b.cancelled && (!b.status || b.status === "pending")).length;
-      if (count > pendingCount) setAlertDismissed(false);
-      setPendingCount(count);
+      setPendingCount((prev) => {
+        if (count > prev) setAlertDismissed(false);
+        return count;
+      });
     } catch { /* ignore */ }
-  }, [token, pendingCount]);
+  }, [token]);
 
   useEffect(() => {
     if (view === "dashboard" && token) { loadSessions(); loadPendingCount(); }
-  }, [view, token, loadSessions]);
+  }, [view, token, loadSessions, loadPendingCount]);
 
   useEffect(() => {
     if (view === "classes" && token) loadClassConfigs();

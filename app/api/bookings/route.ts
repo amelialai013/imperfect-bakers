@@ -1,8 +1,26 @@
 import { NextResponse } from "next/server";
-import { createBooking, getSession } from "@/lib/data";
+import { createBooking, getSession, getSessionBookings } from "@/lib/data";
+import { checkAdminToken } from "@/lib/auth";
+import { kv } from "@vercel/kv";
 import type { Booking, ClassSession } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
+
+// GET all bookings across all sessions (admin only)
+export async function GET(req: Request) {
+  if (!checkAdminToken(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const sessionIds = await kv.lrange<string>("sessions", 0, -1);
+    const allBookings: Booking[] = [];
+    await Promise.all((sessionIds ?? []).map(async (id) => {
+      const bookings = await getSessionBookings(id);
+      allBookings.push(...bookings);
+    }));
+    return NextResponse.json(allBookings);
+  } catch {
+    return NextResponse.json([], { status: 200 });
+  }
+}
 
 export async function POST(req: Request) {
   const body = await req.json();
