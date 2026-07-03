@@ -38,14 +38,13 @@ export async function POST(req: Request) {
 
   const { booking, session } = result;
 
-  // Send emails — non-blocking
-  Promise.allSettled([
+  // Send emails — awaited so serverless function doesn't terminate before they fire
+  const [admin, customer] = await Promise.allSettled([
     sendAdminEmail(booking, session),
     sendCustomerRequestEmail(booking, session),
-  ]).then(([admin, customer]) => {
-    if (admin.status === "rejected") console.error("Admin booking email failed:", admin.reason);
-    if (customer.status === "rejected") console.error("Customer request email failed:", customer.reason);
-  });
+  ]);
+  if (admin.status === "rejected") console.error("Admin booking email failed:", admin.reason);
+  if (customer.status === "rejected") console.error("Customer request email failed:", customer.reason);
 
   return NextResponse.json({ id: booking.id }, { status: 201 });
 }

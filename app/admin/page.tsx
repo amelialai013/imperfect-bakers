@@ -1735,9 +1735,12 @@ export default function AdminPage() {
             </p>
             <button
               onClick={() => setView("bookings")}
-              className="shrink-0 text-sm font-semibold text-white bg-[#f5a623] hover:bg-[#e09515] px-4 py-2 rounded-full transition-colors"
+              className="btn-primary btn-sm shrink-0 flex items-center gap-1.5"
             >
-              Review now →
+              Review now
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
             <button
               onClick={() => setAlertDismissed(true)}
