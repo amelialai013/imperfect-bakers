@@ -144,7 +144,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   if (submitted) {
     return (
       <div className="max-w-xl">
-        <h2 className="text-3xl text-[#1a1a1a] mb-4 leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+        <h2 className="text-3xl text-[#006644] mb-4 leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
           You&apos;re on the list!
         </h2>
         <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
