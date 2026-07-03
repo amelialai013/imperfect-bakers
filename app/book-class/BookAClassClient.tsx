@@ -236,7 +236,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           <div className="hidden sm:flex px-4 pt-[9px] pb-4 gap-6">
             <div className="flex-1 min-w-0">
               <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
-              <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mt-[9.5px]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mt-[2px]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
               </h3>
               {s.location && (
@@ -390,7 +390,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1 shrink-0">Full</span>
             )}
           </div>
-          <div className="-mt-[4px]">
+          <div className="-mt-[6px]">
             <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {s.sessionName || s.classLabel}
             </h3>
