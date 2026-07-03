@@ -265,11 +265,26 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               </span>
             </div>
             <div className="flex items-center gap-4 shrink-0 self-center mt-[4px]">
-              {!isFull ? (
-                <span className="text-[0.65rem] font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2.5 py-1">{s.spotsLeft} left</span>
-              ) : (
-                <span className="text-[0.65rem] font-medium text-red-400 bg-red-50 rounded-full px-2.5 py-1">Full</span>
-              )}
+              {/* Occupancy ring */}
+              {(() => {
+                const booked = s.maxSpots - s.spotsLeft;
+                const pct = s.maxSpots > 0 ? Math.round((booked / s.maxSpots) * 100) : 0;
+                const r = 22;
+                const circ = 2 * Math.PI * r;
+                return (
+                  <div className="relative flex items-center justify-center w-10 h-10 shrink-0">
+                    <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
+                      <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#e8e2d9"} strokeWidth="9" />
+                      <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#006644"} strokeWidth="9"
+                        strokeDasharray={circ}
+                        strokeDashoffset={circ * (1 - pct / 100)}
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <span className="text-[0.55rem] font-semibold text-[#1a1a1a] relative z-10">{pct}%</span>
+                  </div>
+                );
+              })()}
               <p className="text-[#1a1a1a] text-lg font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
               {!isFull && (
                 <div className="flex items-center gap-1 text-[#006644] text-sm font-medium">
