@@ -359,7 +359,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-2.5 py-0.5 shrink-0">Full</span>
             )}
           </div>
-          <div className="-mt-1">
+          <div className="-mt-[6px]">
             <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {s.sessionName || s.classLabel}
             </h3>
