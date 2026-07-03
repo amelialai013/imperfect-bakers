@@ -1107,6 +1107,8 @@ export default function AdminPage() {
   const [deletingClass, setDeletingClass] = useState<string | null>(null);
   const [deleteClassConfirm, setDeleteClassConfirm] = useState<string | null>(null);
   const [classKebabOpen, setClassKebabOpen] = useState<string | null>(null);
+  const [pendingCount, setPendingCount] = useState<number>(0);
+  const [alertDismissed, setAlertDismissed] = useState(false);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -1139,8 +1141,19 @@ export default function AdminPage() {
     setClassConfigsLoading(false);
   }, []);
 
+  const loadPendingCount = useCallback(async () => {
+    try {
+      const res = await authFetch("/api/bookings", token);
+      if (!res.ok) return;
+      const data = await res.json() as Booking[];
+      const count = data.filter((b) => !b.cancelled && (!b.status || b.status === "pending")).length;
+      if (count > pendingCount) setAlertDismissed(false);
+      setPendingCount(count);
+    } catch { /* ignore */ }
+  }, [token, pendingCount]);
+
   useEffect(() => {
-    if (view === "dashboard" && token) loadSessions();
+    if (view === "dashboard" && token) { loadSessions(); loadPendingCount(); }
   }, [view, token, loadSessions]);
 
   useEffect(() => {
@@ -1702,6 +1715,37 @@ export default function AdminPage() {
           </div>
         </div>
       </section>
+
+      {/* ── Pending bookings alert ── */}
+      {pendingCount > 0 && !alertDismissed && (
+        <div className="bg-[#fff8e6] border-b border-[#f5e0a0]">
+          <div className="max-w-7xl mx-auto px-8 py-4 flex items-center gap-4">
+            <div className="w-8 h-8 rounded-full bg-[#f5a623] flex items-center justify-center shrink-0">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-[#7a4f00] flex-1">
+              You have <span className="font-bold">{pendingCount} pending booking {pendingCount === 1 ? "request" : "requests"}</span> waiting for your review.
+            </p>
+            <button
+              onClick={() => setView("bookings")}
+              className="shrink-0 text-sm font-semibold text-white bg-[#f5a623] hover:bg-[#e09515] px-4 py-2 rounded-full transition-colors"
+            >
+              Review now →
+            </button>
+            <button
+              onClick={() => setAlertDismissed(true)}
+              className="shrink-0 w-6 h-6 flex items-center justify-center text-[#7a4f00]/50 hover:text-[#7a4f00] transition-colors"
+              aria-label="Dismiss"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
 
       <section className="px-8 pt-10 pb-24 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
