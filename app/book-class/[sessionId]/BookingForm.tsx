@@ -39,7 +39,7 @@ function Counter({
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-all text-base touch-manipulation"
+          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base touch-manipulation"
         >
           −
         </button>
@@ -47,7 +47,7 @@ function Counter({
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-all text-base touch-manipulation"
+          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base touch-manipulation"
         >
           +
         </button>
@@ -258,7 +258,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 key={opt.value}
                 type="button"
                 onClick={() => { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
-                className={`px-5 py-2.5 text-sm font-medium border transition-all duration-200 rounded-full ${
+                className={`px-5 py-2.5 text-sm font-medium border transition-colors duration-200 rounded-full ${
                   paymentStatus === opt.value
                     ? "bg-[#006644] border-[#006644] text-white"
                     : fieldErrors.payment

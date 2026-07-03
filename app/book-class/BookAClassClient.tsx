@@ -226,7 +226,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         className={isFull ? "pointer-events-none" : ""}
       >
         <article
-          className={`group relative rounded-2xl overflow-hidden transition-all duration-300 ${
+          className={`group relative rounded-2xl overflow-hidden transition-[border-color,box-shadow] duration-300 ${
             isFull
               ? "bg-[#f0ece4] opacity-60 cursor-not-allowed"
               : "bg-white border border-[#e8e2d9] hover:border-[#006644] hover:shadow-[0_8px_32px_rgba(0,102,68,0.10)] cursor-pointer"
@@ -344,7 +344,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
       className={isFull ? "pointer-events-none" : ""}
     >
       <article
-        className={`group relative rounded-2xl overflow-hidden h-full flex flex-col transition-all duration-300 ${
+        className={`group relative rounded-2xl overflow-hidden h-full flex flex-col transition-[border-color,box-shadow] duration-300 ${
           isFull
             ? "bg-[#f0ece4] opacity-60 cursor-not-allowed"
             : "bg-white border border-[#e8e2d9] hover:border-[#006644] hover:shadow-[0_8px_32px_rgba(0,102,68,0.10)] cursor-pointer"

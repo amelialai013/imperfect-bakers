@@ -325,7 +325,7 @@ function SessionForm({
                 const active = attendeeTypes.includes(opt.key);
                 return (
                   <button key={opt.key} type="button" onClick={() => toggleAttendeeType(opt.key)}
-                    className={`group inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-all duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
+                    className={`group inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-colors duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
                     {opt.label} <span className={`text-sm transition-colors duration-200 ${active ? "text-white/70" : "text-[#006644]/60 group-hover:text-white/70"}`}>{opt.sub}</span>
                   </button>
                 );
@@ -672,7 +672,7 @@ function InterestsView({ token, onBack }: { token: string; onBack: () => void })
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-1.5 text-xs font-semibold tracking-[0.1em] uppercase rounded-full border transition-all duration-200 ${
+                className={`px-4 py-1.5 text-xs font-semibold tracking-[0.1em] uppercase rounded-full border transition-colors duration-200 ${
                   filter === f
                     ? "bg-[#006644] border-[#006644] text-white"
                     : "bg-white border-[#e4dfd5] text-[#6b7280] hover:border-[#006644] hover:text-[#006644]"

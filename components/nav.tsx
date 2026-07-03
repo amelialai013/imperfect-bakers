@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useScrolled } from "@/hooks/useScrolled";
 
 const links = [
@@ -14,28 +14,7 @@ const links = [
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
   const scrolled = useScrolled(10);
-
-  useEffect(() => {
-    if (open) {
-      setVisible(true);
-    } else {
-      const el = menuRef.current;
-      if (el) el.style.opacity = "0";
-      const t = setTimeout(() => setVisible(false), 250);
-      return () => clearTimeout(t);
-    }
-  }, [open]);
-
-  useEffect(() => {
-    if (visible && menuRef.current) {
-      requestAnimationFrame(() => {
-        if (menuRef.current) menuRef.current.style.opacity = "1";
-      });
-    }
-  }, [visible]);
 
   return (
     <nav className={`sticky top-0 z-[9999] bg-[#faf9f6] transition-shadow duration-300 ${scrolled ? "shadow-sm" : ""}`}>
@@ -94,10 +73,8 @@ export default function Nav() {
       </div>
 
       {/* Mobile menu — absolutely positioned so it overlays the page */}
-      {visible && (
+      {open && (
         <div
-          ref={menuRef}
-          style={{ opacity: 0, transition: "opacity 0.25s ease" }}
           className="lg:hidden absolute top-full left-0 right-0 z-50 border-t border-[#e4dfd5] bg-[#faf9f6] shadow-lg px-8 py-6 flex flex-col gap-4"
         >
           {links.map((link) => {

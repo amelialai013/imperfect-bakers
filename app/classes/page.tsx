@@ -43,13 +43,14 @@ export default async function ClassesPage() {
           {classes.map((c) => (
             <Link href={`/book-class?class=${encodeURIComponent(c.key)}`} key={c.key}>
               <div className="group relative overflow-hidden cursor-pointer h-[292px] rounded-[8px]">
-                {/* Background image */}
+                {/* Background image — no transform animation: scale() creates a
+                    GPU compositing layer in Safari that can persist and block clicks */}
                 <div
-                  className="absolute inset-0 bg-cover transition-transform duration-700 group-hover:scale-105"
+                  className="absolute inset-0 bg-cover"
                   style={{ backgroundImage: `url('${c.imageUrl}')`, backgroundPosition: "center" }}
                 />
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] via-[#1a1a1a]/85 to-[#1a1a1a]/65 md:from-[#1a1a1a]/80 md:via-[#1a1a1a]/50 md:to-[#1a1a1a]/20 group-hover:from-[#1a1a1a] group-hover:via-[#1a1a1a]/85 group-hover:to-[#1a1a1a]/65 transition-all duration-500" />
+                {/* Overlay — transition-colors only (no transform/opacity transitions) */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] via-[#1a1a1a]/85 to-[#1a1a1a]/65 md:from-[#1a1a1a]/80 md:via-[#1a1a1a]/50 md:to-[#1a1a1a]/20 group-hover:from-[#1a1a1a] group-hover:via-[#1a1a1a]/85 group-hover:to-[#1a1a1a]/65 transition-colors duration-500" />
 
                 {/* Content — top aligned */}
                 <div className="absolute inset-0 flex flex-col justify-between p-8 md:p-10">

@@ -90,7 +90,7 @@ export default function Testimonials() {
                   <button
                     key={t.name}
                     onClick={() => setActive(i)}
-                    className={`transition-all duration-300 rounded-full ${
+                    className={`transition-[width,background-color] duration-300 rounded-full ${
                       i === active
                         ? "w-6 h-1.5 bg-white"
                         : "w-1.5 h-1.5 bg-white/30"

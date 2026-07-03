@@ -204,7 +204,7 @@ export default function InterestPage() {
                       key={name}
                       type="button"
                       onClick={() => toggle(name)}
-                      className={`px-5 py-2.5 text-sm font-medium rounded-full border transition-all duration-200 ${
+                      className={`px-5 py-2.5 text-sm font-medium rounded-full border transition-colors duration-200 ${
                         active
                           ? "bg-[#006644] border-[#006644] text-white"
                           : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
