@@ -1732,7 +1732,7 @@ export default function AdminPage() {
               </p>
               <button
                 onClick={() => setView("bookings")}
-                className="flex items-center gap-1 text-sm font-semibold text-[#7a4f00] hover:text-[#5a3900] transition-colors self-start"
+                className="flex items-center gap-1 text-sm font-semibold text-[#7a4f00] underline underline-offset-2 decoration-[#7a4f00]/30 hover:decoration-[#7a4f00] transition-all self-start"
               >
                 Review now
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
