@@ -38,16 +38,16 @@ function Counter({
       <div className="flex items-center gap-4">
         <button
           type="button"
-          onClick={() => onChange(Math.max(0, value - 1))}
-          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base touch-manipulation"
+          onPointerDown={(e) => { e.preventDefault(); onChange(Math.max(0, value - 1)); }}
+          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base cursor-pointer select-none"
         >
           −
         </button>
         <span className="w-6 text-center text-base font-semibold text-[#1a1a1a] tabular-nums">{value}</span>
         <button
           type="button"
-          onClick={() => onChange(value + 1)}
-          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base touch-manipulation"
+          onPointerDown={(e) => { e.preventDefault(); onChange(value + 1); }}
+          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base cursor-pointer select-none"
         >
           +
         </button>
@@ -257,8 +257,8 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <button
                 key={opt.value}
                 type="button"
-                onClick={() => { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
-                className={`px-5 py-2.5 text-sm font-medium border transition-colors duration-200 rounded-full ${
+                onPointerDown={(e) => { e.preventDefault(); setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
+                className={`px-5 py-2.5 text-sm font-medium border transition-colors duration-200 rounded-full cursor-pointer select-none ${
                   paymentStatus === opt.value
                     ? "bg-[#006644] border-[#006644] text-white"
                     : fieldErrors.payment
