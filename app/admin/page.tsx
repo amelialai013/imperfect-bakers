@@ -985,7 +985,7 @@ export default function AdminPage() {
             <form onSubmit={login} noValidate className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2">Password</label>
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 sm:flex-row sm:gap-3 sm:items-center">
                   <input
                     type="password"
                     value={password}
@@ -995,7 +995,7 @@ export default function AdminPage() {
                     autoFocus
                     className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm focus:outline-none focus:border-[#006644] bg-white"
                   />
-                  <button type="button" onClick={doLogin} className="btn-primary w-full justify-center">Sign in</button>
+                  <button type="button" onClick={doLogin} className="btn-primary justify-center shrink-0">Sign in</button>
                 </div>
               </div>
               {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
