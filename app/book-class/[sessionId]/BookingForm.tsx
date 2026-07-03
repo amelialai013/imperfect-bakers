@@ -145,7 +145,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           You&apos;re on the list!
         </h2>
         <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
-          Please note this is not confirmation of your booking. An email will be sent to confirm your reservation as classes only run if we have enough students signed up.
+          Please note this is not confirmation of your booking — an email will be sent to confirm your reservation as classes only run if we have enough students signed up.
         </p>
         <Link href="/book-class" className="btn-secondary">Browse more classes</Link>
       </div>
