@@ -43,7 +43,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
                 Your booking for <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""} has been cancelled.
               </p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-                Your spot has been released and you won't be charged. We'd love to see you at a future session, you can browse our other classes below. Classes are likely to run if there are more than 6 students booked in, or please register your interest for a private group class!
+                Your spot has been released and you won't be charged. We'd love to see you at a future session, you can browse our other classes below. Classes are likely to run if there are more than 6 students booked in, otherwise you can register your interest for a private group class!
               </p>
               <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
