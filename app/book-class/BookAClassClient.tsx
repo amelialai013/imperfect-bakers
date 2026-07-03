@@ -401,26 +401,22 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span>{s.location}</span>
             </div>
           </div>
-          {/* Occupancy ring */}
+          {/* Occupancy bar */}
           {(() => {
             const booked = s.maxSpots - s.spotsLeft;
             const pct = s.maxSpots > 0 ? Math.round((booked / s.maxSpots) * 100) : 0;
-            const r = 22;
-            const circ = 2 * Math.PI * r;
             return (
-              <div className="flex items-center gap-3 my-1">
-                <div className="relative flex items-center justify-center w-10 h-10 shrink-0">
-                  <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
-                    <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#e8e2d9"} strokeWidth="9" />
-                    <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#006644"} strokeWidth="9"
-                      strokeDasharray={circ}
-                      strokeDashoffset={circ * (1 - pct / 100)}
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <span className="text-[0.55rem] font-semibold text-[#1a1a1a] relative z-10">{pct}%</span>
+              <div className="my-1">
+                <div className="flex items-center justify-between mb-1.5">
+                  <p className="text-[0.7rem] text-[#6b7280]">{isFull ? "Class full" : `${s.spotsLeft} spot${s.spotsLeft === 1 ? "" : "s"} remaining`}</p>
+                  <span className="text-[0.65rem] font-medium text-[#6b7280]">{pct}%</span>
                 </div>
-                <p className="text-[0.7rem] text-[#6b7280]">{isFull ? "Class full" : `${s.spotsLeft} spot${s.spotsLeft === 1 ? "" : "s"} remaining`}</p>
+                <div className={`h-1.5 w-full rounded-full ${isFull ? "bg-[#c8c0b4]/30" : "bg-[#e8e2d9]"}`}>
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`}
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
               </div>
             );
           })()}
