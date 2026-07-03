@@ -24,9 +24,9 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
         subject: `Your booking has been cancelled — ${sessionName}`,
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
-            <div style="background:#1a1a1a;padding:24px 32px;border-radius:12px 12px 0 0">
+            <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
               <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600">Booking cancelled</h1>
-              <p style="color:rgba(255,255,255,0.6);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
+              <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
             </div>
             <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
               <p style="font-size:16px;margin-bottom:16px">Hi ${booking.name},</p>
@@ -38,7 +38,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
               </p>
               <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
-                <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#1a1a1a;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse upcoming classes</a>
+                <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse upcoming classes</a>
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
               </p>
               <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah & the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
-                <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#1a1a1a;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse upcoming classes</a>
+                <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse upcoming classes</a>
               </div>
             </div>
           </div>
