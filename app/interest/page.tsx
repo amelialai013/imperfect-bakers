@@ -97,7 +97,7 @@ export default function InterestPage() {
         <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-8">
             <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              Register <em className="not-italic text-[#006644]">interest</em>
+              Register <em className="not-italic text-[#1a1a1a]">interest</em>
             </h1>
           </div>
         </section>
@@ -128,7 +128,7 @@ export default function InterestPage() {
             className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
-            Register <em className="not-italic text-[#006644]">interest</em>
+            Register <em className="not-italic text-[#1a1a1a]">interest</em>
           </h1>
           <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right pb-1 text-balance">
             Tell us what you&apos;d like to learn — we&apos;ll reach out when a spot opens up.

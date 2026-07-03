@@ -31,7 +31,7 @@ export default async function BookAClassPage({
             className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
-            Class <em className="not-italic text-[#006644]">bookings</em>
+            Class <em className="not-italic text-[#1a1a1a]">bookings</em>
           </h1>
           <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right pb-1 text-balance">
             Browse upcoming sessions and secure your spot in the kitchen.
