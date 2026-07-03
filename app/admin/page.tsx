@@ -789,45 +789,48 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
                         : <StatusBadge status={b.status} />
                       }
-                      {/* Kebab menu */}
-                      <div className="relative">
-                        <button
-                          onPointerDown={(e) => { e.preventDefault(); setKebabOpen(kebabOpen === b.id ? null : b.id); }}
-                          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
-                        >
-                          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                            <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
-                          </svg>
-                        </button>
-                        {kebabOpen === b.id && (
-                          <>
-                            <div className="fixed inset-0 z-10" onPointerDown={() => setKebabOpen(null)} />
-                            <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
-                              {(!b.cancelled && (!b.status || b.status === "pending")) && (<>
-                                <button onPointerDown={(e) => { e.preventDefault(); setKebabOpen(null); act(b.id, "confirmed"); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-2">
-                                  <span className="text-[#006644]">✓</span> Confirm
-                                </button>
-                                <div className="h-px bg-[#e8e2d9]" />
-                                <button onPointerDown={(e) => { e.preventDefault(); setKebabOpen(null); act(b.id, "declined"); }} className="w-full text-left px-4 py-3 text-sm text-[#6b7280] hover:bg-[#faf9f6] transition-colors flex items-center gap-2">
-                                  <span>✗</span> Decline
-                                </button>
-                                <div className="h-px bg-[#e8e2d9]" />
-                              </>)}
-                              {(!b.cancelled && b.status === "confirmed") && (<>
-                                <button onPointerDown={(e) => { e.preventDefault(); setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                  Cancel booking
-                                </button>
-                                <div className="h-px bg-[#e8e2d9]" />
-                              </>)}
-                              {(b.cancelled || b.status === "declined") && (
-                                <button onPointerDown={(e) => { e.preventDefault(); setKebabOpen(null); permanentDelete(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                  Delete record
-                                </button>
-                              )}
-                            </div>
-                          </>
-                        )}
-                      </div>
+                      {/* Confirm/Decline inline for pending */}
+                      {(!b.cancelled && (!b.status || b.status === "pending")) && (
+                        <div className="flex gap-2">
+                          <button onPointerDown={(e) => { e.preventDefault(); act(b.id, "confirmed"); }} className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                            ✓ Confirm
+                          </button>
+                          <button onPointerDown={(e) => { e.preventDefault(); act(b.id, "declined"); }} className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
+                            ✗ Decline
+                          </button>
+                        </div>
+                      )}
+                      {/* Kebab menu — confirmed, declined, cancelled only */}
+                      {(!b.cancelled && (!b.status || b.status === "pending")) ? null : (
+                        <div className="relative">
+                          <button
+                            onPointerDown={(e) => { e.preventDefault(); setKebabOpen(kebabOpen === b.id ? null : b.id); }}
+                            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                              <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
+                            </svg>
+                          </button>
+                          {kebabOpen === b.id && (
+                            <>
+                              <div className="fixed inset-0 z-10" onPointerDown={() => setKebabOpen(null)} />
+                              <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                                {(!b.cancelled && b.status === "confirmed") && (<>
+                                  <button onPointerDown={(e) => { e.preventDefault(); setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                    Cancel booking
+                                  </button>
+                                  <div className="h-px bg-[#e8e2d9]" />
+                                </>)}
+                                {(b.cancelled || b.status === "declined") && (
+                                  <button onPointerDown={(e) => { e.preventDefault(); setKebabOpen(null); permanentDelete(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                    Delete record
+                                  </button>
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
 
