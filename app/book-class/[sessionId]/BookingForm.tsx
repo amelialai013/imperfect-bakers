@@ -17,7 +17,6 @@ const scrollbarStyle = {
   scrollbarColor: "#c8c0b4 transparent",
 } as React.CSSProperties;
 
-
 function Counter({
   label,
   sub,
@@ -39,7 +38,7 @@ function Counter({
         <div
           role="button"
           tabIndex={0}
-          onPointerDown={(e) => { e.preventDefault(); onChange(Math.max(0, value - 1)); }}
+          onPointerDown={() => onChange(Math.max(0, value - 1))}
           onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onChange(Math.max(0, value - 1)); }}
           className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base cursor-pointer select-none"
         >
@@ -49,7 +48,7 @@ function Counter({
         <div
           role="button"
           tabIndex={0}
-          onPointerDown={(e) => { e.preventDefault(); onChange(value + 1); }}
+          onPointerDown={() => onChange(value + 1)}
           onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onChange(value + 1); }}
           className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base cursor-pointer select-none"
         >
@@ -65,9 +64,18 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [paymentStatus, setPaymentStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; phone?: string; attendees?: string; payment?: string; paymentOther?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<{
+    name?: string; email?: string; phone?: string;
+    attendees?: string; payment?: string; paymentOther?: string;
+  }>({});
 
-  const formRef = useRef<HTMLFormElement>(null);
+  // Refs to read input values without FormData (avoids Safari <form> bugs)
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const notesRef = useRef<HTMLTextAreaElement>(null);
+  const paymentOtherRef = useRef<HTMLInputElement>(null);
+
   const totalPeople = counts.child + counts.youngAdult + counts.adult;
   const isFull = session.spotsLeft === 0;
 
@@ -80,15 +88,14 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     if (fieldErrors.attendees) setFieldErrors((prev) => ({ ...prev, attendees: undefined }));
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const name = (fd.get("name") as string).trim();
-    const email = (fd.get("email") as string).trim();
+  async function handleSubmit() {
+    const name = nameRef.current?.value.trim() ?? "";
+    const email = emailRef.current?.value.trim() ?? "";
+    const phone = phoneRef.current?.value.trim() ?? "";
+    const notes = notesRef.current?.value.trim() ?? "";
+    const paymentOther = paymentOtherRef.current?.value.trim() ?? "";
 
-    // Validate all fields and collect errors
     const errors: typeof fieldErrors = {};
-    const phone = (fd.get("phone") as string).trim();
     if (!name) errors.name = "Please enter your full name";
     if (!email) errors.email = "Please enter your email address";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = "Please enter a valid email address";
@@ -97,7 +104,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     if (totalPeople < 1) errors.attendees = "Please add at least one person";
     if (totalPeople > session.spotsLeft) errors.attendees = `Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} left — you requested ${totalPeople}`;
     if (!paymentStatus) errors.payment = "Please select a payment status";
-    if (paymentStatus === "other" && !(fd.get("payment-other") as string)?.trim()) errors.paymentOther = "Please add a note";
+    if (paymentStatus === "other" && !paymentOther) errors.paymentOther = "Please add a note";
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -113,12 +120,12 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         sessionId: session.id,
         name,
         email,
-        phone: fd.get("phone") ?? "",
+        phone,
         counts,
         totalPeople,
         paymentStatus,
-        paymentOther: paymentStatus === "other" ? (fd.get("payment-other") ?? "") : "",
-        notes: fd.get("notes") ?? "",
+        paymentOther: paymentStatus === "other" ? paymentOther : "",
+        notes,
       }),
     });
     setSubmitting(false);
@@ -167,8 +174,8 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-[60px] lg:gap-20 items-start">
 
-      {/* ── Form ── */}
-      <form ref={formRef} onSubmit={handleSubmit} noValidate>
+      {/* ── Form — no <form> element to avoid Safari desktop event bugs ── */}
+      <div>
 
         {/* 01 — Your details */}
         <div className="mb-12">
@@ -176,7 +183,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="sm:col-span-2">
               <input
-                name="name"
+                ref={nameRef}
                 type="text"
                 placeholder="Full name"
                 className={fieldErrors.name ? inputErrorClass : inputClass}
@@ -186,7 +193,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             </div>
             <div>
               <input
-                name="email"
+                ref={emailRef}
                 type="email"
                 placeholder="Email"
                 className={fieldErrors.email ? inputErrorClass : inputClass}
@@ -196,7 +203,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             </div>
             <div>
               <input
-                name="phone"
+                ref={phoneRef}
                 type="tel"
                 placeholder="Phone"
                 className={fieldErrors.phone ? inputErrorClass : inputClass}
@@ -230,12 +237,9 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           })()}
           {fieldErrors.attendees && <p className="text-xs text-red-500 mt-2">{fieldErrors.attendees}</p>}
 
-          {/* Live cost total */}
           {totalPeople > 0 && (
             <div className="mt-6 flex items-center justify-between rounded-xl bg-[#006644]/8 px-5 py-4">
-              <div>
-                <p className="text-sm text-[#1a1a1a]">{totalPeople} {totalPeople === 1 ? "person" : "people"} × ${session.price}</p>
-              </div>
+              <p className="text-sm text-[#1a1a1a]">{totalPeople} {totalPeople === 1 ? "person" : "people"} × ${session.price}</p>
               <p className="text-2xl font-semibold text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 ${(totalPeople * session.price).toLocaleString()}
               </p>
@@ -263,7 +267,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 key={opt.value}
                 role="button"
                 tabIndex={0}
-                onPointerDown={(e) => { e.preventDefault(); setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
+                onPointerDown={() => { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
                 onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); } }}
                 className={`px-5 py-2.5 text-sm font-medium border transition-colors duration-200 rounded-full cursor-pointer select-none ${
                   paymentStatus === opt.value
@@ -280,7 +284,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           {paymentStatus === "other" && (
             <div className="mt-3">
               <input
-                name="payment-other"
+                ref={paymentOtherRef}
                 type="text"
                 placeholder="Add note"
                 className={fieldErrors.paymentOther ? inputErrorClass : inputClass}
@@ -296,7 +300,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         <div className="mt-[60px]">
           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Anything else?</p>
           <textarea
-            name="notes"
+            ref={notesRef}
             rows={3}
             placeholder="Dietary requirements, allergies, questions…"
             className={inputClass + " resize-none"}
@@ -305,11 +309,13 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         <div className="mt-8 pt-2 flex flex-col sm:flex-row sm:items-center gap-6">
-          <button
-            type="submit"
-            disabled={submitting}
-            onPointerDown={(e) => { e.preventDefault(); formRef.current?.requestSubmit(); }}
-            className="btn-primary group self-start"
+          <div
+            role="button"
+            tabIndex={0}
+            onPointerDown={() => { if (!submitting) handleSubmit(); }}
+            onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && !submitting) handleSubmit(); }}
+            className="btn-primary group self-start cursor-pointer select-none"
+            aria-disabled={submitting}
           >
             {submitting ? "Requesting…" : "Request reservation"}
             {!submitting && (
@@ -317,26 +323,23 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             )}
-          </button>
+          </div>
           <p className="text-xs text-[#6b7280] leading-relaxed max-w-xs">
             We confirm classes once enough students sign up — you&apos;ll hear from us soon.
           </p>
         </div>
 
-      </form>
+      </div>
 
       {/* ── Sidebar ── */}
       <div className="lg:sticky lg:top-28">
         <div className="bg-[#006644] rounded-2xl p-6 text-white flex flex-col gap-3">
-          {/* Label + title */}
           <div>
             <span className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-white/40">{session.classLabel}</span>
             <h3 className="text-lg font-medium leading-snug mt-1 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {session.sessionName || session.classLabel}
             </h3>
           </div>
-
-          {/* Metadata rows */}
           <div className="space-y-2 text-sm">
             <div className="flex items-center gap-2 text-white/70">
               <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -358,8 +361,6 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <span>{session.location}</span>
             </div>
           </div>
-
-          {/* Divider + price */}
           <div className="h-px bg-white/10 my-1" />
           <div className="flex items-baseline justify-between">
             <p className="text-2xl font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
