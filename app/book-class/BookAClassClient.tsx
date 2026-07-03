@@ -344,7 +344,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               const booked = s.maxSpots - s.spotsLeft;
               const pct = s.maxSpots > 0 ? Math.round((booked / s.maxSpots) * 100) : 0;
               return (
-                <div className="my-1">
+                <div className="my-3">
                   <div className="flex items-center mb-1.5">
                     <p className="text-xs text-[#6b7280]">{`${booked}/${s.maxSpots} reservations`}</p>
                   </div>
