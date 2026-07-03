@@ -18,24 +18,45 @@
   to   { opacity: 1; }
 }
 
+/* fill-mode: backwards — applies the 'from' keyframe during the delay so
+   elements start invisible, but after the animation ends the element returns
+   to its natural CSS style. 'both'/'forwards' would keep transform/opacity as
+   animation-fill values forever, creating persistent GPU compositing layers in
+   Safari that intercept all mouse events. */
 .hero-bg {
-  animation: hero-bg-zoom 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: hero-bg-zoom 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) backwards;
 }
 .hero-overlay {
-  animation: hero-fade-in 1.2s ease both;
+  animation: hero-fade-in 1.2s ease backwards;
 }
 .hero-title {
-  animation: hero-fade-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+  animation: hero-fade-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s backwards;
 }
 .hero-sub {
-  animation: hero-fade-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s both;
+  animation: hero-fade-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s backwards;
 }
 .hero-cta {
-  animation: hero-fade-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s both;
+  animation: hero-fade-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s backwards;
 }
 
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Feature cards entrance animation ──────────────────────
+   CSS-only, fill-mode: backwards so Safari releases the
+   compositing layer once the animation ends.
+─────────────────────────────────────────────────────────── */
+@keyframes feature-card-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.feature-card {
+  /* visible by default — no initial opacity:0 here */
+}
+.feature-cards-visible .feature-card,
+.feature-card.feature-cards-visible {
+  animation: feature-card-in 0.6s ease backwards;
+}
 
 /* ── iOS Safari 100vh fix ───────────────────────────────────
    100vh on iOS Safari includes the browser chrome (address bar),

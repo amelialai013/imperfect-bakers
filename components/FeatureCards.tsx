@@ -26,30 +26,27 @@ const features = [
 ];
 
 export default function FeatureCards() {
+  // Always visible by default — the CSS animation below is purely cosmetic.
+  // We never set opacity/transform via JS inline styles because Safari desktop
+  // keeps elements with inline transform/opacity in GPU compositing layers even
+  // after the value returns to the identity, swallowing mouse events site-wide.
   const ref = useRef<HTMLDivElement>(null);
-  // Start visible so cards always render — the observer adds the staggered
-  // fade-in animation as a progressive enhancement on browsers that support it.
-  const [visible, setVisible] = useState(true);
-  const [animated, setAnimated] = useState(false);
+  const [animClass, setAnimClass] = useState("");
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // Temporarily hide so the entrance animation can play
-    setVisible(false);
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
-          setAnimated(true);
+          setAnimClass("feature-cards-visible");
           observer.disconnect();
         }
       },
       { threshold: 0.05 }
     );
     observer.observe(el);
-    // Hard fallback: show after 600ms regardless
-    const fallback = setTimeout(() => { setVisible(true); observer.disconnect(); }, 600);
+    const fallback = setTimeout(() => setAnimClass("feature-cards-visible"), 600);
     return () => { observer.disconnect(); clearTimeout(fallback); };
   }, []);
 
@@ -58,12 +55,8 @@ export default function FeatureCards() {
       {features.map((f, i) => (
         <div
           key={f.title}
-          className="bg-[#faf9f6] p-8 lg:p-10 transition-all duration-700 ease-out"
-          style={{
-            transitionDelay: animated ? `${i * 100}ms` : "0ms",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(24px)",
-          }}
+          className={`bg-[#faf9f6] p-8 lg:p-10 feature-card ${animClass}`}
+          style={{ animationDelay: `${i * 100}ms` }}
         >
           <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-6 block">{f.number}</span>
           <h3
