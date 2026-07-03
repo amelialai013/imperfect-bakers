@@ -398,9 +398,9 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
   const cancelled = bookings.filter((b) => b.cancelled);
 
   function StatusBadge({ status }: { status?: string }) {
-    if (status === "confirmed") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>;
-    if (status === "declined") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-red-50 text-red-500 border border-red-200">Declined</span>;
-    return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Pending</span>;
+    if (status === "confirmed") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>;
+    if (status === "declined") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-red-50 text-red-500 border border-red-200">Declined</span>;
+    return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Pending</span>;
   }
 
   return (
@@ -670,9 +670,9 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
   }
 
   function StatusBadge({ status }: { status?: string }) {
-    if (status === "confirmed") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>;
-    if (status === "declined") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-red-50 text-red-500 border border-red-200">Declined</span>;
-    return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Pending</span>;
+    if (status === "confirmed") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>;
+    if (status === "declined") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-red-50 text-red-500 border border-red-200">Declined</span>;
+    return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Pending</span>;
   }
 
   const today = new Date(); today.setHours(0, 0, 0, 0);
