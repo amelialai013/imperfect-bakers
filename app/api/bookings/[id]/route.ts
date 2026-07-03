@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cancelBooking, updateBookingStatus, getSession, getSessionBookings } from "@/lib/data";
+import { cancelBooking, updateBookingStatus, getSession, getSessionBookings, updateSession } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
 import { getTemplates, sub } from "@/lib/email-templates";
@@ -12,10 +12,21 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
   const { id } = await params;
   const { searchParams } = new URL(req.url);
 
-  // Permanent delete — remove record entirely from KV (no email sent)
+  // Permanent delete — restore spots then remove record entirely from KV (no email sent)
   if (searchParams.get("permanent") === "true") {
     const booking = await kv.get<Booking>(`booking:${id}`);
-    if (booking) await kv.lrem(`session:${booking.sessionId}:bookings`, 0, id);
+    if (booking) {
+      // Return spots to session if booking was active (not already cancelled/declined)
+      if (!booking.cancelled && booking.status !== "declined") {
+        const session = await getSession(booking.sessionId);
+        if (session) {
+          await updateSession(booking.sessionId, {
+            spotsLeft: Math.min(session.spotsLeft + booking.totalPeople, session.maxSpots),
+          });
+        }
+      }
+      await kv.lrem(`session:${booking.sessionId}:bookings`, 0, id);
+    }
     await kv.del(`booking:${id}`);
     return NextResponse.json({ ok: true });
   }
