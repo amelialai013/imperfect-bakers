@@ -46,7 +46,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
                 Your spot has been released and you won't be charged. If you'd like to try a different session, feel free to browse our other classes below.
               </p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-                Sessions are likely to run if there are more than 6 students registered, otherwise you can always request for a private group class!
+                Sessions are likely to run if there are more than 6 students registered, otherwise you can always request a private group class!
               </p>
               <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
