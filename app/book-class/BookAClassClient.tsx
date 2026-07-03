@@ -424,7 +424,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             return (
               <div className="my-1">
                 <div className="flex items-center mb-1.5">
-                  <p className="text-xs text-[#6b7280]">{`${s.maxSpots - s.spotsLeft}/${s.maxSpots} reservations`}</p>
+                  <p className="text-xs text-[#1a1a1a]">{`${s.maxSpots - s.spotsLeft}/${s.maxSpots} reservations`}</p>
                 </div>
                 <div className={`h-1.5 w-full rounded-full ${isFull ? "bg-[#c8c0b4]/30" : "bg-[#e8e2d9]"}`}>
                   <div
