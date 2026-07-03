@@ -319,7 +319,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 {s.sessionName || s.classLabel}
               </h3>
             </div>
-            <div className="space-y-2 flex-1">
+            <div className="space-y-0.5 flex-1">
               <div className="flex items-center gap-2 text-xs text-[#6b7280]">
                 <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -403,7 +403,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             </h3>
             {s.description && <p className="text-[#6b7280] text-xs leading-relaxed line-clamp-2">{s.description}</p>}
           </div>
-          <div className="space-y-2 flex-1">
+          <div className="space-y-0.5 flex-1">
             <div className="flex items-center gap-2 text-xs text-[#6b7280]">
               <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
