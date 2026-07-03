@@ -138,7 +138,7 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
         </p>
         <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">${sub(tmpl.note, vars)}</p>
         <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">${sub(tmpl.closing, vars)}</p>
-        <p style="font-size:14px;color:#6b7280">Warmly,<br><br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
+        <p style="font-size:14px;color:#6b7280;margin-bottom:4px">Warmly,</p><p style="font-size:14px;margin:0"><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
         <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
           <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse our classes</a>
         </div>
