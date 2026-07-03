@@ -235,17 +235,17 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           {/* Desktop layout: single row */}
           <div className="hidden sm:flex px-4 pt-[9px] pb-4 gap-6">
             <div className="flex-1 min-w-0">
-              <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">{s.classLabel}</span>
+              <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] truncate block">{s.classLabel}</span>
               <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mt-[2px]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
               </h3>
               {s.location && (
-                <span className="flex items-center gap-1 mt-[4px] text-[#6b7280] text-xs">
+                <span className="flex items-center gap-1 mt-[4px] text-[#6b7280] text-xs min-w-0">
                   <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  {s.location}
+                  <span className="truncate">{s.location}</span>
                 </span>
               )}
             </div>
@@ -390,7 +390,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1 shrink-0">Full</span>
             )}
           </div>
-          <div className="mt-[2px]">
+          <div className="mt-2">
             <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {s.sessionName || s.classLabel}
             </h3>
