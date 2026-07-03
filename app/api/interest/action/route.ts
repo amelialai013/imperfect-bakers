@@ -165,7 +165,7 @@ async function sendCustomerEmail({ to, subject, html }: { to: string; subject: s
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "Imperfect Bakers <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>",
       to: [to],
       subject,
       html,

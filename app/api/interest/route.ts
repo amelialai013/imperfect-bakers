@@ -75,7 +75,7 @@ async function sendEmail(payload: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "Imperfect Bakers <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>",
       ...payload,
     }),
   });
