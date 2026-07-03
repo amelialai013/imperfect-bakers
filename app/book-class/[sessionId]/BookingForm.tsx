@@ -335,7 +335,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
       {/* ── Sidebar ── */}
       <div className="lg:sticky lg:top-28">
-        <div className="bg-[#006644] rounded-2xl p-4 text-white flex flex-col">
+        <div className="bg-[#006644] rounded-2xl p-6 text-white flex flex-col">
           <div>
             <span className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-white/40">{session.classLabel}</span>
             <h3 className="text-lg font-medium leading-snug mt-2 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
