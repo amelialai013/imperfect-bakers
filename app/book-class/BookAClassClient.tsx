@@ -274,8 +274,8 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 return (
                   <div className="relative flex items-center justify-center w-14 h-14 shrink-0">
                     <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
-                      <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#e8e2d9"} strokeWidth="9" />
-                      <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#006644"} strokeWidth="9"
+                      <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#e8e2d9"} strokeWidth="4" />
+                      <circle cx="28" cy="28" r={r} fill="none" stroke={isFull ? "#c8c0b4" : "#006644"} strokeWidth="4"
                         strokeDasharray={circ}
                         strokeDashoffset={circ * (1 - pct / 100)}
                         strokeLinecap="round"
