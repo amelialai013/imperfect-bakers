@@ -350,7 +350,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         }`}
       >
         <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
-        <div className="p-4 flex flex-col gap-2 flex-1">
+        <div className="p-4 flex flex-col gap-3 flex-1">
           <div className="flex items-start justify-between gap-3">
             <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
             {!isFull ? (
@@ -386,8 +386,8 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span>{s.location}</span>
             </div>
           </div>
-          <div className={`h-px my-1 ${isFull ? "bg-[#c8c0b4]/30" : "bg-[#e8e2d9]"}`} />
-          <div className="flex items-center justify-between pt-0.5">
+          <div className={`h-px ${isFull ? "bg-[#c8c0b4]/30" : "bg-[#e8e2d9]"}`} />
+          <div className="flex items-center justify-between">
             <div>
               <p className="text-[#1a1a1a] text-lg font-semibold leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
               <p className="text-[#6b7280] text-xs mt-0.5">per person</p>
