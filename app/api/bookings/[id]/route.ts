@@ -9,6 +9,15 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.v
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!checkAdminToken(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
+  const { searchParams } = new URL(req.url);
+
+  // Permanent delete — remove record entirely from KV (no email sent)
+  if (searchParams.get("permanent") === "true") {
+    const booking = await kv.get<Booking>(`booking:${id}`);
+    if (booking) await kv.lrem(`session:${booking.sessionId}:bookings`, 0, id);
+    await kv.del(`booking:${id}`);
+    return NextResponse.json({ ok: true });
+  }
 
   // Grab booking + session before cancelling so we can email the customer
   const booking = await kv.get<Booking>(`booking:${id}`);

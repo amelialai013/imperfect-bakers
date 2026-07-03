@@ -660,6 +660,14 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
     setActing(null);
   }
 
+  async function permanentDelete(id: string) {
+    if (!confirm("Permanently delete this record? This cannot be undone.")) return;
+    setActing(id);
+    await authFetch(`/api/bookings/${id}?permanent=true`, token, { method: "DELETE" });
+    await load();
+    setActing(null);
+  }
+
   function StatusBadge({ status }: { status?: string }) {
     if (status === "confirmed") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>;
     if (status === "declined") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-red-50 text-red-500 border border-red-200">Declined</span>;
@@ -785,7 +793,15 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                   <div className="px-5 py-4 space-y-3">
                     <div className="flex items-center justify-between gap-3 flex-wrap">
                       <p className="font-medium text-[#1a1a1a]">{b.name}</p>
-                      {!b.cancelled && ((!b.status || b.status === "pending") ? (
+                      {b.cancelled ? (
+                        <button
+                          onPointerDown={(e) => { e.preventDefault(); permanentDelete(b.id); }}
+                          disabled={acting === b.id}
+                          className="text-xs text-red-500 border border-red-200 rounded-[6px] px-3 py-1.5 hover:bg-red-50 transition-colors disabled:opacity-50 cursor-pointer"
+                        >
+                          Delete record
+                        </button>
+                      ) : ((!b.status || b.status === "pending") ? (
                         <div className="flex gap-2">
                           <button
                             onPointerDown={(e) => { e.preventDefault(); act(b.id, "confirmed"); }}
@@ -813,6 +829,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       ))}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-2 text-sm">
+
                       <div>
                         <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Email</p>
                         <p className="text-[#6b7280] break-all text-xs">{b.email}</p>
