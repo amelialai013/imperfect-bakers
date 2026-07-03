@@ -602,7 +602,7 @@ function parseSessionDate(display: string): Date | null {
   return null;
 }
 
-function AllBookingsView({ token, onBack }: { token: string; onBack: () => void }) {
+function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: string; onBack: () => void; onManageClasses: () => void; onLogout: () => void }) {
   const [rows, setRows] = useState<BookingWithSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
@@ -698,14 +698,15 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
               All <em className="not-italic text-[#006644]">bookings</em>
             </h1>
           </div>
-          {pendingCount > 0 && (
-            <div className="pb-1">
+          <div className="flex items-center gap-4 pb-1">
+            {pendingCount > 0 && (
               <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                 {pendingCount} pending
               </span>
-            </div>
-          )}
+            )}
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onLogout={onLogout} />
+          </div>
         </div>
       </section>
 
@@ -1373,7 +1374,7 @@ export default function AdminPage() {
   // ── All Bookings ─────────────────────────────────────────
 
   if (view === "bookings") {
-    return <AllBookingsView token={token} onBack={() => setView("dashboard")} />;
+    return <AllBookingsView token={token} onBack={() => setView("dashboard")} onManageClasses={() => setView("classes")} onLogout={logout} />;
   }
 
   // ── Classes ──────────────────────────────────────────────
