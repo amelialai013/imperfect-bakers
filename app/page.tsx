@@ -8,7 +8,7 @@ export default function Home() {
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
       {/* iOS Safari: 100vh includes browser chrome so we use min-h-screen with svh override in CSS */}
-      <section className="relative hero-height min-h-[560px] flex flex-col justify-end pb-32 md:pb-40 overflow-hidden">
+      <section className="relative hero-height min-h-[560px] flex flex-col justify-end pb-20 md:pb-28 overflow-hidden">
         {/* Background image — animates independently so text stays still */}
         <div
           className="absolute inset-0 hero-bg"
@@ -24,7 +24,7 @@ export default function Home() {
         <div className="absolute inset-0 hero-overlay bg-gradient-to-t from-[#faf9f6] via-[#faf9f6]/90 to-[#faf9f6]/50" />
 
         {/* Hero content */}
-        <div className="relative z-10 w-full px-8 max-w-7xl mx-auto mt-16">
+        <div className="relative z-10 w-full px-8 max-w-7xl mx-auto">
           <h1
             className="hero-title text-5xl md:text-7xl lg:text-8xl text-[#1a1a1a] leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
