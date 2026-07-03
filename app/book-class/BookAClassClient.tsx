@@ -381,7 +381,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         }`}
       >
         <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
-        <div className="p-4 flex flex-col gap-3 flex-1">
+        <div className="p-4 flex flex-col gap-2 flex-1">
           <div className="flex items-start justify-between gap-3">
             <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
             {!isFull ? (
@@ -390,7 +390,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1 shrink-0">Full</span>
             )}
           </div>
-          <div className="-mt-[5.5px]">
+          <div className="-mt-[4px]">
             <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {s.sessionName || s.classLabel}
             </h3>
