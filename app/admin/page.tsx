@@ -693,8 +693,12 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
 
           {/* Filter pills */}
           <div className="flex flex-wrap gap-2 mb-6">
-            {(["pending", "all", "confirmed", "declined"] as const).map((f) => {
-              const label = f.charAt(0).toUpperCase() + f.slice(1);
+            {([
+                { key: "pending",   label: "Pending"   },
+                { key: "all",       label: "All"       },
+                { key: "confirmed", label: "Confirmed" },
+                { key: "declined",  label: "Declined"  },
+              ] as { key: typeof filter; label: string }[]).map(({ key: f, label }) => {
               const count = f === "all" ? rows.length
                 : f === "pending" ? rows.filter((b) => !b.status || b.status === "pending").length
                 : rows.filter((b) => b.status === f).length;
