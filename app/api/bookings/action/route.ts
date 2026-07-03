@@ -15,7 +15,7 @@ function htmlPage(title: string, emoji: string, heading: string, body: string, c
     .emoji{font-size:48px;margin-bottom:20px}
     h1{font-size:24px;font-weight:600;color:#1a1a1a;margin-bottom:12px}
     p{font-size:15px;color:#6b7280;line-height:1.6;margin-bottom:24px}
-    a{display:inline-block;padding:12px 28px;background:${color};color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600}</style>
+    a{display:inline-block;padding:14px 32px;background:#1a1a1a;color:#fff;text-decoration:none;border-radius:9999px;font-size:15px;font-weight:600;letter-spacing:-0.01em}</style>
     </head><body><div class="card"><div class="emoji">${emoji}</div><h1>${heading}</h1><p>${body}</p>
     <a href="${BASE_URL}/admin">Back to dashboard</a></div></body></html>`,
     { headers: { "Content-Type": "text/html" } }
