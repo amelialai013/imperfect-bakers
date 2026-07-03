@@ -32,12 +32,22 @@ export default function FeatureCards() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    // Fallback: if observer never fires (Safari quirk), show after 800ms
+    const fallback = setTimeout(() => setVisible(true), 800);
+
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.15 }
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          clearTimeout(fallback);
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); clearTimeout(fallback); };
   }, []);
 
   return (
