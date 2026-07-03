@@ -1720,26 +1720,24 @@ export default function AdminPage() {
       {/* ── Pending bookings alert ── */}
       {pendingCount > 0 && (
         <div className="bg-[#fff8e6] border-b border-[#f5e0a0]">
-          <div className="max-w-7xl mx-auto px-8 py-4 flex items-start gap-4">
-            <div className="w-8 h-8 rounded-full bg-[#f5a623] flex items-center justify-center shrink-0 mt-0.5">
+          <div className="max-w-7xl mx-auto px-8 py-4 flex items-center gap-4">
+            <div className="w-8 h-8 rounded-full bg-[#f5a623] flex items-center justify-center shrink-0">
               <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-[#7a4f00]">
-                You have <span className="font-bold">{pendingCount} pending booking {pendingCount === 1 ? "request" : "requests"}</span> waiting for your review.
-              </p>
-              <button
-                onClick={() => setView("bookings")}
-                className="flex items-center gap-1 text-sm font-semibold text-[#7a4f00] underline underline-offset-2 decoration-[#7a4f00]/30 hover:decoration-[#7a4f00] transition-all self-start"
-              >
-                Review now
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+            <p className="text-sm font-medium text-[#7a4f00] flex-1">
+              You have <span className="font-bold">{pendingCount} pending booking {pendingCount === 1 ? "request" : "requests"}</span> waiting for your review.
+            </p>
+            <button
+              onClick={() => setView("bookings")}
+              className="shrink-0 flex items-center gap-1 text-sm font-semibold text-[#7a4f00] underline underline-offset-2 decoration-[#7a4f00]/30 hover:decoration-[#7a4f00] transition-all"
+            >
+              Review now
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
       )}
