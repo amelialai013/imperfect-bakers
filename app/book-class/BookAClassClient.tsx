@@ -407,9 +407,8 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             const pct = s.maxSpots > 0 ? Math.round((booked / s.maxSpots) * 100) : 0;
             return (
               <div className="my-1">
-                <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center mb-1.5">
                   <p className="text-[0.7rem] text-[#6b7280]">{`${s.maxSpots - s.spotsLeft}/${s.maxSpots} reservations`}</p>
-                  <span className="text-[0.65rem] font-medium text-[#6b7280]">{pct}%</span>
                 </div>
                 <div className={`h-1.5 w-full rounded-full ${isFull ? "bg-[#c8c0b4]/30" : "bg-[#e8e2d9]"}`}>
                   <div
