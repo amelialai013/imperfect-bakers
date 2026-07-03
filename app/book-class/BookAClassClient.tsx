@@ -71,7 +71,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
           <select
             value={activeClass}
             onChange={(e) => setActiveClass(e.target.value)}
-            className="appearance-none bg-white border border-[#e4dfd5] rounded-full text-sm text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] pl-4 pr-9"
+            className="appearance-none bg-white border border-[#e4dfd5] rounded-full text-sm font-medium text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] pl-4 pr-9"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             <option value="All">All classes</option>
@@ -114,7 +114,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
           {/* Date sort toggle */}
           <button
             onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
-            className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[46px] w-[148px] justify-center"
+            className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm font-medium text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[46px] w-[148px] justify-center"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             {sortOrder === "desc" ? (
