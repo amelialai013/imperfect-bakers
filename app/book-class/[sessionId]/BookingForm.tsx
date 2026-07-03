@@ -335,14 +335,14 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
       {/* ── Sidebar ── */}
       <div className="lg:sticky lg:top-28">
-        <div className="bg-[#006644] rounded-2xl p-6 text-white flex flex-col gap-3">
+        <div className="bg-[#006644] rounded-2xl p-4 text-white flex flex-col">
           <div>
             <span className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-white/40">{session.classLabel}</span>
-            <h3 className="text-lg font-medium leading-snug mt-1 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            <h3 className="text-lg font-medium leading-snug mt-2 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {session.sessionName || session.classLabel}
             </h3>
           </div>
-          <div className="space-y-2 text-sm">
+          <div className="space-y-2 text-sm mt-2">
             <div className="flex items-center gap-2 text-white/70">
               <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -363,7 +363,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <span>{session.location}</span>
             </div>
           </div>
-          <div className="h-px bg-white/10 my-1" />
+          <div className="h-px bg-white/10 my-4" />
           <div className="flex items-baseline justify-between">
             <p className="text-2xl font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               ${session.price}
