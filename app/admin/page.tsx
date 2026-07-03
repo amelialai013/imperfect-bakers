@@ -324,7 +324,7 @@ function SessionForm({
               {ATTENDEE_OPTIONS.map((opt) => {
                 const active = attendeeTypes.includes(opt.key);
                 return (
-                  <button key={opt.key} type="button" onClick={() => toggleAttendeeType(opt.key)}
+                  <button key={opt.key} type="button" onPointerDown={(e) => { e.preventDefault(); toggleAttendeeType(opt.key); }}
                     className={`group inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-colors duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
                     {opt.label} <span className={`text-sm transition-colors duration-200 ${active ? "text-white/70" : "text-[#006644]/60 group-hover:text-white/70"}`}>{opt.sub}</span>
                   </button>
@@ -353,7 +353,7 @@ function SessionForm({
         <button type="submit" disabled={saving} className="btn-primary">
           {saving ? "Saving…" : "Save session"}
         </button>
-        <button type="button" onClick={onCancel} className="btn-secondary">
+        <button type="button" onPointerDown={(e) => { e.preventDefault(); onCancel(); }} className="btn-secondary">
           Cancel
         </button>
       </div>
@@ -1024,7 +1024,7 @@ export default function AdminPage() {
                     autoFocus
                     className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm focus:outline-none focus:border-[#006644] bg-white"
                   />
-                  <button type="button" onClick={doLogin} className="btn-primary justify-center shrink-0">Sign in</button>
+                  <button type="button" onPointerDown={(e) => { e.preventDefault(); doLogin(); }} className="btn-primary justify-center shrink-0">Sign in</button>
                 </div>
               </div>
               {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
