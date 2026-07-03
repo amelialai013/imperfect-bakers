@@ -106,8 +106,11 @@ export default function InterestPage() {
             <h2 className="text-3xl text-[#006644] mb-4 leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               We&apos;ll be in touch!
             </h2>
-            <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
+            <p className="text-[#6b7280] text-sm leading-relaxed mb-3 max-w-sm">
               Thanks for registering your interest. We&apos;ll reach out as soon as a relevant session opens up.
+            </p>
+            <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
+              Can&apos;t find the email? Check your spam or junk folder.
             </p>
             <a href="/classes" className="btn-secondary">Browse our classes</a>
           </div>

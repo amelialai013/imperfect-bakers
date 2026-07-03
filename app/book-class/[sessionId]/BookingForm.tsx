@@ -147,8 +147,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         <h2 className="text-3xl text-[#006644] mb-4 leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
           You&apos;re on the list!
         </h2>
-        <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
+        <p className="text-[#6b7280] text-sm leading-relaxed mb-3 max-w-sm">
           Please note this is not confirmation of your booking — an email will be sent to confirm your reservation as classes only run if we have enough students signed up.
+        </p>
+        <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
+          Can&apos;t find the email? Check your spam or junk folder.
         </p>
         <Link href="/book-class" className="btn-secondary">Browse more classes</Link>
       </div>
