@@ -174,7 +174,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-[60px] lg:gap-20 items-start">
+    <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-[60px] xl:gap-20 items-start">
 
       {/* ── Form — no <form> element to avoid Safari desktop event bugs ── */}
       <div>
@@ -334,7 +334,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
       </div>
 
       {/* ── Sidebar ── */}
-      <div className="lg:sticky lg:top-28">
+      <div className="xl:sticky xl:top-28">
         <div className="bg-[#006644] rounded-2xl p-6 text-white flex flex-col">
           <div>
             <span className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-white/40">{session.classLabel}</span>
