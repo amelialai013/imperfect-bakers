@@ -12,7 +12,12 @@
 }
 
 .page-enter {
-  animation: page-enter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: page-enter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  /* Safari: 'both' fill-mode can leave hit-testing frozen at opacity:0.
+     Use 'forwards' instead and set initial opacity directly so the element
+     starts invisible but pointer-events are never blocked after the animation. */
+  opacity: 0;
+  pointer-events: auto;
 }
 
 /* ── Homepage hero animations ──────────────────────────────── */
