@@ -797,7 +797,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         <button
                           onPointerDown={(e) => { e.preventDefault(); permanentDelete(b.id); }}
                           disabled={acting === b.id}
-                          className="text-xs text-red-500 border border-red-200 rounded-[6px] px-3 py-1.5 hover:bg-red-50 transition-colors disabled:opacity-50 cursor-pointer"
+                          className="text-xs text-red-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
                         >
                           Delete record
                         </button>
