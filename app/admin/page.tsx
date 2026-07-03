@@ -588,11 +588,26 @@ function MoreMenu({ onManageClasses, onAllBookings, onLogout }: { onManageClasse
 
 type BookingWithSession = Booking & { sessionName: string; sessionDate: string; sessionTime: string };
 
+// Parse "Saturday 4 July 2026" → Date (reuses MONTH_IDX already defined above)
+function parseSessionDate(display: string): Date | null {
+  const parts = display.split(" ");
+  if (parts.length === 4) {
+    const month = MONTH_IDX[parts[2]];
+    const day = parseInt(parts[1], 10);
+    const year = parseInt(parts[3], 10);
+    if (month !== undefined && !isNaN(day) && !isNaN(year)) {
+      return new Date(year, month, day);
+    }
+  }
+  return null;
+}
+
 function AllBookingsView({ token, onBack }: { token: string; onBack: () => void }) {
   const [rows, setRows] = useState<BookingWithSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined">("pending");
+  const [timeFilter, setTimeFilter] = useState<"upcoming" | "past">("upcoming");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -652,8 +667,14 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
     return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Pending</span>;
   }
 
-  const pendingCount = rows.filter((b) => !b.status || b.status === "pending").length;
-  const filtered = rows.filter((b) => {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const timeRows = rows.filter((b) => {
+    const d = parseSessionDate(b.sessionDate);
+    if (!d) return true; // can't parse → include in both
+    return timeFilter === "upcoming" ? d >= today : d < today;
+  });
+  const pendingCount = timeRows.filter((b) => !b.status || b.status === "pending").length;
+  const filtered = timeRows.filter((b) => {
     if (filter === "all") return true;
     if (filter === "pending") return !b.status || b.status === "pending";
     return b.status === filter;
@@ -691,7 +712,24 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
       <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
 
-          {/* Filter pills */}
+          {/* Upcoming / Past toggle */}
+          <div className="flex gap-1 mb-5 bg-[#f0ece4] rounded-full p-1 w-fit">
+            {(["upcoming", "past"] as const).map((t) => (
+              <button
+                key={t}
+                onPointerDown={(e) => { e.preventDefault(); setTimeFilter(t); }}
+                className={`px-5 py-1.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
+                  timeFilter === t
+                    ? "bg-white text-[#1a1a1a] shadow-sm"
+                    : "text-[#6b7280] hover:text-[#1a1a1a]"
+                }`}
+              >
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Status filter pills */}
           <div className="flex flex-wrap gap-2 mb-6">
             {([
                 { key: "pending",   label: "Pending"   },
@@ -699,9 +737,9 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
                 { key: "confirmed", label: "Confirmed" },
                 { key: "declined",  label: "Declined"  },
               ] as { key: typeof filter; label: string }[]).map(({ key: f, label }) => {
-              const count = f === "all" ? rows.length
-                : f === "pending" ? rows.filter((b) => !b.status || b.status === "pending").length
-                : rows.filter((b) => b.status === f).length;
+              const count = f === "all" ? timeRows.length
+                : f === "pending" ? timeRows.filter((b) => !b.status || b.status === "pending").length
+                : timeRows.filter((b) => b.status === f).length;
               return (
                 <button
                   key={f}
@@ -722,7 +760,7 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
             <p className="text-[#6b7280] text-sm">Loading bookings…</p>
           ) : filtered.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-[#6b7280]">{filter === "all" ? "No bookings yet." : `No ${filter} bookings.`}</p>
+              <p className="text-[#6b7280]">{filter === "all" ? `No ${timeFilter} bookings.` : `No ${filter} ${timeFilter} bookings.`}</p>
             </div>
           ) : (
             <div className="space-y-3">
