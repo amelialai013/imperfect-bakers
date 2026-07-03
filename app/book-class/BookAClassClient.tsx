@@ -235,7 +235,14 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           {/* Desktop layout: single row */}
           <div className="hidden sm:flex px-4 pt-[9px] pb-4 gap-6">
             <div className="flex-1 min-w-0">
-              <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] truncate block">{s.classLabel}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] truncate">{s.classLabel}</span>
+                {!isFull ? (
+                  <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1 shrink-0">{s.spotsLeft} left</span>
+                ) : (
+                  <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1 shrink-0">Full</span>
+                )}
+              </div>
               <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mt-[2px]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
               </h3>
