@@ -733,8 +733,8 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
           {/* Status filter pills */}
           <div className="flex flex-wrap gap-2 mb-6">
             {([
-                { key: "pending",   label: "Pending"   },
                 { key: "all",       label: "All"       },
+                { key: "pending",   label: "Pending"   },
                 { key: "confirmed", label: "Confirmed" },
                 { key: "declined",  label: "Declined"  },
                 { key: "cancelled", label: "Cancelled" },
