@@ -43,10 +43,12 @@ export async function POST(req: Request) {
     sendAdminEmail(booking, session),
     sendCustomerRequestEmail(booking, session),
   ]);
-  if (admin.status === "rejected") console.error("Admin booking email failed:", admin.reason);
-  if (customer.status === "rejected") console.error("Customer request email failed:", customer.reason);
+  const adminError = admin.status === "rejected" ? String(admin.reason) : null;
+  const customerError = customer.status === "rejected" ? String(customer.reason) : null;
+  if (adminError) console.error("Admin booking email failed:", adminError);
+  if (customerError) console.error("Customer request email failed:", customerError);
 
-  return NextResponse.json({ id: booking.id }, { status: 201 });
+  return NextResponse.json({ id: booking.id, emailErrors: { admin: adminError, customer: customerError } }, { status: 201 });
 }
 
 async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
@@ -144,19 +146,22 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
     </div>
   `;
 
+  const payload = {
+    from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>",
+    reply_to: ["imperfectbakers@gmail.com"],
+    to: [email],
+    subject: `Reservation request received — ${sessionName}`,
+    html,
+  };
+  console.log("Sending customer email to:", email, "from:", payload.from);
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>",
-      reply_to: ["imperfectbakers@gmail.com"],
-      to: [email],
-      subject: `Reservation request received — ${sessionName}`,
-      html,
-    }),
+    body: JSON.stringify(payload),
   });
+  const resBody = await res.text();
+  console.log("Resend customer email response:", res.status, resBody);
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Resend ${res.status}: ${text}`);
+    throw new Error(`Resend ${res.status}: ${resBody}`);
   }
 }
