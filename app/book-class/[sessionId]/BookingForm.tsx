@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import type { ClassSession } from "@/lib/types";
 
@@ -67,6 +67,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [submitted, setSubmitted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; phone?: string; attendees?: string; payment?: string; paymentOther?: string }>({});
 
+  const formRef = useRef<HTMLFormElement>(null);
   const totalPeople = counts.child + counts.youngAdult + counts.adult;
   const isFull = session.spotsLeft === 0;
 
@@ -167,7 +168,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-[60px] lg:gap-20 items-start">
 
       {/* ── Form ── */}
-      <form onSubmit={handleSubmit} noValidate>
+      <form ref={formRef} onSubmit={handleSubmit} noValidate>
 
         {/* 01 — Your details */}
         <div className="mb-12">
@@ -304,7 +305,12 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         <div className="mt-8 pt-2 flex flex-col sm:flex-row sm:items-center gap-6">
-          <button type="submit" disabled={submitting} className="btn-primary group self-start">
+          <button
+            type="submit"
+            disabled={submitting}
+            onPointerDown={(e) => { e.preventDefault(); formRef.current?.requestSubmit(); }}
+            className="btn-primary group self-start"
+          >
             {submitting ? "Requesting…" : "Request reservation"}
             {!submitting && (
               <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
