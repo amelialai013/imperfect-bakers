@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import type { ClassSession } from "@/lib/types";
 
@@ -76,6 +76,10 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const notesRef = useRef<HTMLTextAreaElement>(null);
   const paymentOtherRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (submitted) window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [submitted]);
+
   const totalPeople = counts.child + counts.youngAdult + counts.adult;
   const isFull = session.spotsLeft === 0;
 
@@ -135,7 +139,6 @@ export default function BookingForm({ session }: { session: ClassSession }) {
       return;
     }
     setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   if (submitted) {
