@@ -916,7 +916,7 @@ const EXP_LABELS: Record<string, string> = {
   confident_cook: "Confident cook",
 };
 
-function InterestsView({ token, onBack }: { token: string; onBack: () => void }) {
+function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onManageClasses: () => void; onLogout: () => void }) {
   const [interests, setInterests] = useState<InterestEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -962,8 +962,9 @@ function InterestsView({ token, onBack }: { token: string; onBack: () => void })
               Interest <em className="not-italic text-[#006644]">registrations</em>
             </h1>
           </div>
-          <div className="pb-1">
+          <div className="flex items-center gap-4 pb-1 mt-12">
             <span className="text-sm text-[#6b7280]">{interests.length} {interests.length === 1 ? "registration" : "registrations"}</span>
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1391,7 +1392,7 @@ export default function AdminPage() {
   }
 
   if (view === "interests") {
-    return <InterestsView token={token} onBack={() => setView("dashboard")} />;
+    return <InterestsView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onManageClasses={() => setView("classes")} onLogout={logout} />;
   }
 
   // ── Classes ──────────────────────────────────────────────
