@@ -354,9 +354,9 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           <div className="flex items-start justify-between gap-3">
             <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
             {!isFull ? (
-              <span className="text-[0.6rem] font-medium tracking-wide text-[#6b7280] bg-[#f5f2ed] rounded-full px-2 py-0.5 shrink-0">{s.spotsLeft} left</span>
+              <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-2.5 py-0.5 shrink-0">{s.spotsLeft} left</span>
             ) : (
-              <span className="text-[0.6rem] font-medium tracking-wide text-red-400 bg-red-50 rounded-full px-2 py-0.5 shrink-0">Full</span>
+              <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-2.5 py-0.5 shrink-0">Full</span>
             )}
           </div>
           <div className="-mt-1">
