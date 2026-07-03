@@ -119,3 +119,11 @@ async function sendCustomerEmail(
   }
   return res.json();
 }
+
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (!checkAdminToken(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { id } = await params;
+  await kv.lrem("interests:all", 0, id);
+  await kv.del(`interest:${id}`);
+  return NextResponse.json({ ok: true });
+}
