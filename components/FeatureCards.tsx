@@ -27,26 +27,29 @@ const features = [
 
 export default function FeatureCards() {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  // Start visible so cards always render — the observer adds the staggered
+  // fade-in animation as a progressive enhancement on browsers that support it.
+  const [visible, setVisible] = useState(true);
+  const [animated, setAnimated] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    // Fallback: if observer never fires (Safari quirk), show after 800ms
-    const fallback = setTimeout(() => setVisible(true), 800);
-
+    // Temporarily hide so the entrance animation can play
+    setVisible(false);
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          clearTimeout(fallback);
           setVisible(true);
+          setAnimated(true);
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.05 }
     );
     observer.observe(el);
+    // Hard fallback: show after 600ms regardless
+    const fallback = setTimeout(() => { setVisible(true); observer.disconnect(); }, 600);
     return () => { observer.disconnect(); clearTimeout(fallback); };
   }, []);
 
@@ -57,7 +60,7 @@ export default function FeatureCards() {
           key={f.title}
           className="bg-[#faf9f6] p-8 lg:p-10 transition-all duration-700 ease-out"
           style={{
-            transitionDelay: `${i * 100}ms`,
+            transitionDelay: animated ? `${i * 100}ms` : "0ms",
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(24px)",
           }}
