@@ -216,7 +216,6 @@ function shortDate(date: string) {
 
 function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view: "grid" | "list" }) {
   const isFull = s.spotsLeft === 0;
-  const spotsPercent = Math.round(((s.maxSpots - s.spotsLeft) / s.maxSpots) * 100);
 
   if (view === "list") {
     return (
@@ -387,11 +386,6 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <span>{s.location}</span>
             </div>
           </div>
-          {!isFull && (
-            <div className="h-0.5 bg-[#f0ece4] rounded-full overflow-hidden my-3">
-              <div className="h-full bg-[#006644] rounded-full" style={{ width: `${spotsPercent}%` }} />
-            </div>
-          )}
           <div className="flex items-center justify-between pt-0.5">
             <div>
               <p className="text-[#1a1a1a] text-lg font-semibold leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
