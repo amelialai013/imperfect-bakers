@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
+import { getTemplates, sub } from "@/lib/email-templates";
 
 export const dynamic = "force-dynamic";
 
@@ -131,6 +132,9 @@ async function sendCustomerEmail(entry: Record<string, unknown>) {
   const { name, email, classes } = entry as { name: string; email: string; classes: string[] };
   const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "your selected classes";
 
+  const tmpl = (await getTemplates()).interest_received;
+  const vars = { name, classes: classesText };
+
   const html = `
     <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
       <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -142,9 +146,7 @@ async function sendCustomerEmail(entry: Record<string, unknown>) {
         <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
           Thanks for registering your interest in <strong>${classesText}</strong>. We've got your details and will be in touch as soon as a relevant session opens up.
         </p>
-        <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-          In the meantime, feel free to browse our upcoming classes — there may already be something perfect for you!
-        </p>
+        <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">${sub(tmpl.next_steps, vars)}</p>
         <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
         <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
           <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse our classes</a>
@@ -153,7 +155,7 @@ async function sendCustomerEmail(entry: Record<string, unknown>) {
     </div>
   `;
 
-  await sendEmail({ to: [email], subject: `Interest registered — ${classesText}`, html });
+  await sendEmail({ to: [email], subject: sub(tmpl.subject, vars), html });
 }
 
 async function sendToSheets(entry: Record<string, unknown>) {

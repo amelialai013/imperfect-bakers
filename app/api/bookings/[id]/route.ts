@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cancelBooking, updateBookingStatus, getSession, getSessionBookings } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
+import { getTemplates, sub } from "@/lib/email-templates";
 import type { Booking } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
@@ -28,9 +29,11 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     const sessionName = session?.sessionName ?? "your class";
     const sessionDate = session?.date ?? "";
     try {
+      const tmpl = (await getTemplates()).booking_cancelled;
+      const vars = { name: booking.name, sessionName, sessionDate };
       await sendEmail({
         to: booking.email,
-        subject: `Your booking has been cancelled — ${sessionName}`,
+        subject: sub(tmpl.subject, vars),
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
             <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -42,12 +45,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
                 Your booking for <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""} has sadly been cancelled due to insufficient registrations or unforeseen circumstances.
               </p>
-              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-                Your spot has been released and you won't be charged. If you'd like to try a different session, feel free to browse our other classes below.
-              </p>
-              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-                Sessions are likely to run if there are more than 6 students registered, otherwise you can always request a private group class!
-              </p>
+              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">${sub(tmpl.release, vars)}</p>
+              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">${sub(tmpl.future, vars)}</p>
               <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
                 <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse upcoming classes</a>
@@ -91,10 +90,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   // Send customer email
   try {
+    const templates = await getTemplates();
+    const vars = { name: booking.name, sessionName, sessionDate };
     if (status === "confirmed") {
+      const tmpl = templates.booking_confirmed;
       await sendEmail({
         to: booking.email,
-        subject: `You're confirmed! — ${sessionName}`,
+        subject: sub(tmpl.subject, vars),
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
             <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -106,10 +108,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
                 Great news — your booking for <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""} is confirmed!
               </p>
-              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-                We'll be in touch with any final details closer to the date. We can't wait to cook with you! 🧁
-              </p>
-              <p style="font-size:14px;color:#6b7280">See you in the kitchen,<br><strong style="color:#006644">Chef Sarah & the Imperfect Bakers team</strong></p>
+              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">${sub(tmpl.details, vars)}</p>
+              <p style="font-size:14px;color:#6b7280">See you in the kitchen,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
                 <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse our classes</a>
               </div>
@@ -118,9 +118,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         `,
       });
     } else {
+      const tmpl = templates.booking_declined;
       await sendEmail({
         to: booking.email,
-        subject: `Re: Your booking at Imperfect Bakers`,
+        subject: sub(tmpl.subject, vars),
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
             <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -132,13 +133,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
                 Thank you so much for booking <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""}.
               </p>
-              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-                Unfortunately we're unable to accommodate your booking at this time. Your spot has been released and you won't be charged.
-              </p>
-              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-                We'd love to have you join us for a future session — check out what's coming up below!
-              </p>
-              <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah & the Imperfect Bakers team</strong></p>
+              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">${sub(tmpl.reason, vars)}</p>
+              <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">${sub(tmpl.invite, vars)}</p>
+              <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
               <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
                 <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse upcoming classes</a>
               </div>

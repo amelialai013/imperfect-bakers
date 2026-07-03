@@ -529,9 +529,9 @@ function storageRemove(key: string) {
 
 // ── main component ─────────────────────────────────────────────────────────────
 
-type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests";
+type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests" | "emailTemplates";
 
-function MoreMenu({ onManageClasses, onAllBookings, onInterests, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onLogout: () => void }) {
+function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onLogout: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
@@ -576,6 +576,16 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onLogout }: { o
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
               Manage classes
+            </button>
+            <div className="h-px bg-[#e8e2d9]" />
+            <button
+              onClick={() => { setOpen(false); onEmailTemplates(); }}
+              className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
+            >
+              <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Email templates
             </button>
             <div className="h-px bg-[#e8e2d9]" />
             <button
@@ -724,7 +734,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                 {pendingCount} pending
               </span>
             )}
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -963,7 +973,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1051,6 +1061,201 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
               ))}
             </div>
           )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ── Email Templates ──────────────────────────────────────────────────────────
+
+type TemplateField = { key: string; label: string; hint: string };
+
+const TEMPLATE_DEFS: {
+  key: string;
+  title: string;
+  description: string;
+  subjectHint: string;
+  fields: TemplateField[];
+}[] = [
+  {
+    key: "booking_request",
+    title: "Reservation request received",
+    description: "Sent to the customer when they submit a booking request.",
+    subjectHint: "Available: {{sessionName}}",
+    fields: [
+      { key: "note", label: "Note paragraph", hint: "Appears after the session details. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+      { key: "closing", label: "Closing paragraph", hint: "Final note before the sign-off." },
+    ],
+  },
+  {
+    key: "booking_confirmed",
+    title: "Booking confirmed",
+    description: "Sent when you confirm a booking request.",
+    subjectHint: "Available: {{sessionName}}",
+    fields: [
+      { key: "details", label: "Details paragraph", hint: "Appears after the confirmation. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+    ],
+  },
+  {
+    key: "booking_declined",
+    title: "Booking declined",
+    description: "Sent when you decline a booking request.",
+    subjectHint: "Available: {{sessionName}}",
+    fields: [
+      { key: "reason", label: "Reason paragraph", hint: "Why the booking was declined." },
+      { key: "invite", label: "Invite paragraph", hint: "Encouragement to rebook." },
+    ],
+  },
+  {
+    key: "booking_cancelled",
+    title: "Booking cancelled",
+    description: "Sent when you cancel an existing booking.",
+    subjectHint: "Available: {{sessionName}}",
+    fields: [
+      { key: "release", label: "Release paragraph", hint: "Explains the spot release. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+      { key: "future", label: "Future paragraph", hint: "Encouragement to find another session." },
+    ],
+  },
+  {
+    key: "interest_received",
+    title: "Interest registration received",
+    description: "Sent when someone submits the register interest form.",
+    subjectHint: "Available: {{classes}}",
+    fields: [
+      { key: "next_steps", label: "Next steps paragraph", hint: "What happens next. Available: {{name}}, {{classes}}" },
+    ],
+  },
+];
+
+function EmailTemplatesView({ token, onBack }: { token: string; onBack: () => void }) {
+  const [templates, setTemplates] = useState<Record<string, Record<string, string>>>({});
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState<string | null>(null);
+  const [saved, setSaved] = useState<string | null>(null);
+  const [active, setActive] = useState(TEMPLATE_DEFS[0].key);
+
+  useEffect(() => {
+    authFetch("/api/email-templates", token)
+      .then((r) => r.json())
+      .then((data) => { setTemplates(data); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, [token]);
+
+  function update(templateKey: string, fieldKey: string, value: string) {
+    setTemplates((prev) => ({
+      ...prev,
+      [templateKey]: { ...(prev[templateKey] ?? {}), [fieldKey]: value },
+    }));
+  }
+
+  async function save(templateKey: string) {
+    setSaving(templateKey);
+    try {
+      await authFetch("/api/email-templates", token, {
+        method: "PATCH",
+        body: JSON.stringify({ [templateKey]: templates[templateKey] }),
+      });
+      setSaved(templateKey);
+      setTimeout(() => setSaved(null), 2000);
+    } catch { /* silent */ }
+    setSaving(null);
+  }
+
+  const activeDef = TEMPLATE_DEFS.find((d) => d.key === active)!;
+  const activeData = templates[active] ?? {};
+
+  return (
+    <>
+      <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto px-8">
+          <button onClick={onBack} className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+            </svg>
+            Admin dashboard
+          </button>
+          <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            Email <em className="not-italic text-[#006644]">templates</em>
+          </h1>
+        </div>
+      </section>
+
+      <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+
+          {/* Sidebar nav */}
+          <div className="lg:w-64 shrink-0">
+            <div className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+              {TEMPLATE_DEFS.map((def, i) => (
+                <button
+                  key={def.key}
+                  onClick={() => setActive(def.key)}
+                  className={`w-full text-left px-5 py-4 text-sm transition-colors flex items-center gap-3 ${i > 0 ? "border-t border-[#e8e2d9]" : ""} ${active === def.key ? "bg-[#006644]/5 text-[#006644] font-medium" : "text-[#1a1a1a] hover:bg-[#faf9f6]"}`}
+                >
+                  <svg className={`w-3.5 h-3.5 shrink-0 ${active === def.key ? "text-[#006644]" : "text-[#9ca3af]"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  {def.title}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Editor */}
+          <div className="flex-1 min-w-0">
+            {loading ? (
+              <p className="text-[#6b7280] text-sm">Loading templates…</p>
+            ) : (
+              <div className="bg-white border border-[#e8e2d9] rounded-xl p-8">
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{activeDef.title}</h2>
+                  <p className="text-sm text-[#6b7280]">{activeDef.description}</p>
+                </div>
+
+                <div className="space-y-6">
+                  {/* Subject */}
+                  <div>
+                    <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#006644] mb-2">Subject line</label>
+                    <input
+                      type="text"
+                      value={activeData.subject ?? ""}
+                      onChange={(e) => update(active, "subject", e.target.value)}
+                      className="w-full border border-[#e4dfd5] rounded-lg px-4 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] bg-white transition-colors"
+                    />
+                    <p className="text-xs text-[#9ca3af] mt-1.5">{activeDef.subjectHint}</p>
+                  </div>
+
+                  {/* Body fields */}
+                  {activeDef.fields.map((field) => (
+                    <div key={field.key}>
+                      <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#006644] mb-2">{field.label}</label>
+                      <textarea
+                        rows={4}
+                        value={activeData[field.key] ?? ""}
+                        onChange={(e) => update(active, field.key, e.target.value)}
+                        className="w-full border border-[#e4dfd5] rounded-lg px-4 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-y"
+                      />
+                      <p className="text-xs text-[#9ca3af] mt-1.5">{field.hint}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 flex items-center gap-4">
+                  <button
+                    onClick={() => save(active)}
+                    disabled={saving === active}
+                    className="btn-primary disabled:opacity-50"
+                  >
+                    {saving === active ? "Saving…" : "Save changes"}
+                  </button>
+                  {saved === active && (
+                    <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </>
@@ -1398,6 +1603,10 @@ export default function AdminPage() {
     return <InterestsView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onManageClasses={() => setView("classes")} onLogout={logout} />;
   }
 
+  if (view === "emailTemplates") {
+    return <EmailTemplatesView token={token} onBack={() => setView("dashboard")} />;
+  }
+
   // ── Classes ──────────────────────────────────────────────
 
   if (view === "classes") {
@@ -1509,7 +1718,7 @@ export default function AdminPage() {
               <button onClick={() => setAddingClass(true)} className="btn-primary group">
                 New class <span>+</span>
               </button>
-              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onLogout={logout} />
+              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onLogout={logout} />
             </div>
           </div>
         </section>
@@ -1694,7 +1903,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onLogout={logout} />
+            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onLogout={logout} />
           </div>
         </div>
       </section>

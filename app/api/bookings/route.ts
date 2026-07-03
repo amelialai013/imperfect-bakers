@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createBooking, getSession, getSessionBookings } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
+import { getTemplates, sub } from "@/lib/email-templates";
 import type { Booking, ClassSession } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
@@ -121,6 +122,9 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
   const sessionDate = session?.date ?? "";
   const sessionTime = session?.time ?? "";
 
+  const tmpl = (await getTemplates()).booking_request;
+  const vars = { name, sessionName, sessionDate, sessionTime, totalPeople: String(totalPeople) };
+
   const html = `
     <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
       <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -132,12 +136,8 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
         <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
           Thanks for requesting a spot in <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}${sessionTime ? ` at ${sessionTime}` : ""}</strong>` : ""} for <strong>${totalPeople} ${totalPeople === 1 ? "person" : "people"}</strong>.
         </p>
-        <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
-          Please note that <strong>this is not a confirmed booking</strong>. We run our classes once we have enough students signed up, so we'll be in touch to let you know whether the class is going ahead.
-        </p>
-        <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
-          You'll receive a separate email confirming your reservation once the class is finalised. In the meantime, feel free to reach out if you have any questions!
-        </p>
+        <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">${sub(tmpl.note, vars)}</p>
+        <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">${sub(tmpl.closing, vars)}</p>
         <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
         <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
           <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse our classes</a>
@@ -146,22 +146,18 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
     </div>
   `;
 
-  const payload = {
-    from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>",
-    reply_to: ["imperfectbakers@gmail.com"],
-    to: [email],
-    subject: `Reservation request received — ${sessionName}`,
-    html,
-  };
-  console.log("Sending customer email to:", email, "from:", payload.from);
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>",
+      reply_to: ["imperfectbakers@gmail.com"],
+      to: [email],
+      subject: sub(tmpl.subject, vars),
+      html,
+    }),
   });
   const resBody = await res.text();
-  console.log("Resend customer email response:", res.status, resBody);
-  if (!res.ok) {
-    throw new Error(`Resend ${res.status}: ${resBody}`);
-  }
+  console.log("Resend customer request email response:", res.status, resBody);
+  if (!res.ok) throw new Error(`Resend ${res.status}: ${resBody}`);
 }
