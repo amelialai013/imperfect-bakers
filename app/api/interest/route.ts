@@ -43,12 +43,14 @@ export async function POST(req: Request) {
     await kv.set(`interest:${id}`, entry);
     await kv.rpush("interests:all", id);
 
-    // Fire admin notification email + sheets in parallel — don't fail the response
-    const [emailResult, sheetsResult] = await Promise.allSettled([
+    // Send emails + sheets — awaited so serverless function doesn't terminate before they fire
+    const [adminResult, customerResult, sheetsResult] = await Promise.allSettled([
       sendAdminEmail(entry),
+      sendCustomerEmail(entry),
       sendToSheets(entry),
     ]);
-    if (emailResult.status === "rejected") console.error("sendAdminEmail failed:", emailResult.reason);
+    if (adminResult.status === "rejected") console.error("sendAdminEmail failed:", adminResult.reason);
+    if (customerResult.status === "rejected") console.error("sendCustomerEmail failed:", customerResult.reason);
     if (sheetsResult.status === "rejected") console.error("sendToSheets failed:", sheetsResult.reason);
 
     return NextResponse.json({ ok: true });
@@ -123,6 +125,35 @@ async function sendAdminEmail(entry: Record<string, unknown>) {
     subject: `New interest: ${name} — ${classesText}`,
     html,
   });
+}
+
+async function sendCustomerEmail(entry: Record<string, unknown>) {
+  const { name, email, classes } = entry as { name: string; email: string; classes: string[] };
+  const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "your selected classes";
+
+  const html = `
+    <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
+      <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
+        <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600">You're on the interest list! 🎉</h1>
+        <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
+      </div>
+      <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
+        <p style="font-size:16px;margin-bottom:16px">Hi ${name}! 👋</p>
+        <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
+          Thanks for registering your interest in <strong>${classesText}</strong>. We've got your details and will be in touch as soon as a relevant session opens up.
+        </p>
+        <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:24px">
+          In the meantime, feel free to browse our upcoming classes — there may already be something perfect for you!
+        </p>
+        <p style="font-size:14px;color:#6b7280">Warmly,<br><strong style="color:#006644">Chef Sarah &amp; the Imperfect Bakers team</strong></p>
+        <div style="margin-top:32px;border-top:1px solid #e4dfd5;padding-top:20px">
+          <a href="${BASE_URL}/classes" style="display:inline-block;padding:12px 24px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">Browse our classes</a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  await sendEmail({ to: [email], subject: `Interest registered — ${classesText}`, html });
 }
 
 async function sendToSheets(entry: Record<string, unknown>) {

@@ -963,7 +963,6 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <span className="text-sm text-[#6b7280]">{interests.length} {interests.length === 1 ? "registration" : "registrations"}</span>
             <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onLogout={onLogout} />
           </div>
         </div>
@@ -971,6 +970,10 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
 
       <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
+          {!loading && interests.length > 0 && (
+            <p className="text-sm text-[#6b7280] mb-6">{interests.length} {interests.length === 1 ? "registration" : "registrations"}</p>
+          )}
+
           {loading ? (
             <p className="text-[#6b7280] text-sm">Loading registrations…</p>
           ) : interests.length === 0 ? (
