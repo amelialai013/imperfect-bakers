@@ -73,7 +73,7 @@ async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
     </div>
   `;
 
-  await fetch("https://api.resend.com/emails", {
+  const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -83,4 +83,8 @@ async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
       html,
     }),
   });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Resend ${res.status}: ${text}`);
+  }
 }
