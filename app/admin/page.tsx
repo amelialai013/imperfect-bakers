@@ -713,7 +713,7 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
         <div className="max-w-7xl mx-auto">
 
           {/* Upcoming / Past toggle */}
-          <div className="inline-flex gap-1 mb-5 bg-[#f0ece4] rounded-full p-0.5">
+          <div className="inline-flex gap-1 mb-5 bg-[#f0ece4] rounded-full p-1">
             {(["upcoming", "past"] as const).map((t) => (
               <button
                 key={t}
