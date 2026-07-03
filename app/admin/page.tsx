@@ -707,7 +707,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               All <em className="not-italic text-[#006644]">bookings</em>
             </h1>
           </div>
-          <div className="flex items-center gap-4 pb-1">
+          <div className="flex items-center gap-4 pb-1 mt-12">
             {pendingCount > 0 && (
               <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
