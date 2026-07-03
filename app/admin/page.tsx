@@ -1710,12 +1710,12 @@ export default function AdminPage() {
                     {/* Session body */}
                     <div className="px-7 pt-6 pb-5 flex flex-col sm:flex-row sm:items-center gap-5">
                       {/* Occupancy ring */}
-                      <div className="shrink-0 hidden sm:flex flex-col items-center justify-center w-14 h-14 rounded-full border-2 border-[#e8e2d9] relative">
+                      <div className="shrink-0 hidden sm:flex flex-col items-center justify-center w-14 h-14 rounded-full relative">
                         <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
-                          <circle cx="28" cy="28" r="24" fill="none" stroke="#e8e2d9" strokeWidth="3" />
-                          <circle cx="28" cy="28" r="24" fill="none" stroke="#006644" strokeWidth="3"
-                            strokeDasharray={`${2 * Math.PI * 24}`}
-                            strokeDashoffset={`${2 * Math.PI * 24 * (1 - pct / 100)}`}
+                          <circle cx="28" cy="28" r="22" fill="none" stroke="#e8e2d9" strokeWidth="6" />
+                          <circle cx="28" cy="28" r="22" fill="none" stroke="#006644" strokeWidth="6"
+                            strokeDasharray={`${2 * Math.PI * 22}`}
+                            strokeDashoffset={`${2 * Math.PI * 22 * (1 - pct / 100)}`}
                             strokeLinecap="round"
                           />
                         </svg>
