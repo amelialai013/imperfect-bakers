@@ -141,9 +141,8 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   if (submitted) {
     return (
       <div className="max-w-xl">
-        <p className="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-[#006644] mb-6">Booking received</p>
         <h2 className="text-3xl text-[#1a1a1a] mb-4 leading-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-          You&apos;re on the list.
+          You&apos;re on the list!
         </h2>
         <p className="text-[#6b7280] text-sm leading-relaxed mb-10 max-w-sm">
           We confirm classes once we have enough students signed up. A confirmation email will be on its way shortly.
