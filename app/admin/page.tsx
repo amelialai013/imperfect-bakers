@@ -606,7 +606,7 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
   const [rows, setRows] = useState<BookingWithSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
-  const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined">("pending");
+  const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined" | "cancelled">("pending");
   const [timeFilter, setTimeFilter] = useState<"upcoming" | "past">("upcoming");
 
   const load = useCallback(async () => {
@@ -622,7 +622,6 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
           const bRes = await authFetch(`/api/sessions/${s.id}`, token, { method: "PATCH" });
           const bookings: Booking[] = await bRes.json();
           return (Array.isArray(bookings) ? bookings : [])
-            .filter((b) => !b.cancelled)
             .map((b) => ({
               ...b,
               sessionName: s.sessionName || s.classLabel,
@@ -675,9 +674,10 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
   });
   const pendingCount = timeRows.filter((b) => !b.status || b.status === "pending").length;
   const filtered = timeRows.filter((b) => {
-    if (filter === "all") return true;
-    if (filter === "pending") return !b.status || b.status === "pending";
-    return b.status === filter;
+    if (filter === "cancelled") return b.cancelled;
+    if (filter === "all") return !b.cancelled;
+    if (filter === "pending") return !b.cancelled && (!b.status || b.status === "pending");
+    return !b.cancelled && b.status === filter;
   });
 
   return (
@@ -713,12 +713,12 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
         <div className="max-w-7xl mx-auto">
 
           {/* Upcoming / Past toggle */}
-          <div className="flex gap-1 mb-5 bg-[#f0ece4] rounded-full p-1 w-fit">
+          <div className="flex gap-1 mb-5 bg-[#f0ece4] rounded-full p-1">
             {(["upcoming", "past"] as const).map((t) => (
               <button
                 key={t}
                 onPointerDown={(e) => { e.preventDefault(); setTimeFilter(t); }}
-                className={`px-5 py-1.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
+                className={`flex-1 text-center px-5 py-1.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
                   timeFilter === t
                     ? "bg-white text-[#1a1a1a] shadow-sm"
                     : "text-[#6b7280] hover:text-[#1a1a1a]"
@@ -736,10 +736,12 @@ function AllBookingsView({ token, onBack }: { token: string; onBack: () => void 
                 { key: "all",       label: "All"       },
                 { key: "confirmed", label: "Confirmed" },
                 { key: "declined",  label: "Declined"  },
+                { key: "cancelled", label: "Cancelled" },
               ] as { key: typeof filter; label: string }[]).map(({ key: f, label }) => {
-              const count = f === "all" ? timeRows.length
-                : f === "pending" ? timeRows.filter((b) => !b.status || b.status === "pending").length
-                : timeRows.filter((b) => b.status === f).length;
+              const count = f === "cancelled" ? timeRows.filter((b) => b.cancelled).length
+                : f === "all" ? timeRows.filter((b) => !b.cancelled).length
+                : f === "pending" ? timeRows.filter((b) => !b.cancelled && (!b.status || b.status === "pending")).length
+                : timeRows.filter((b) => !b.cancelled && b.status === f).length;
               return (
                 <button
                   key={f}

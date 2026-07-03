@@ -111,9 +111,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         subject: `Re: Your booking at Imperfect Bakers`,
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
-            <div style="background:#1a1a1a;padding:24px 32px;border-radius:12px 12px 0 0">
-              <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600">About your booking</h1>
-              <p style="color:rgba(255,255,255,0.6);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
+            <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
+              <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600">Booking declined</h1>
+              <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
             </div>
             <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
               <p style="font-size:16px;margin-bottom:16px">Hi ${booking.name},</p>
