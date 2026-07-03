@@ -123,6 +123,7 @@ async function sendAdminEmail(entry: Record<string, unknown>) {
 
   await sendEmail({
     to: ["imperfectbakers@gmail.com"],
+    cc: ["amelai@deloitte.com.au"],
     subject: `New interest: ${name} — ${classesText}`,
     html,
   });

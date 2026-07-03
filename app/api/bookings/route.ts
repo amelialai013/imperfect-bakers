@@ -103,6 +103,7 @@ async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
     body: JSON.stringify({
       from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>", reply_to: ["imperfectbakers@gmail.com"],
       to: ["imperfectbakers@gmail.com"],
+      cc: ["amelai@deloitte.com.au"],
       subject: `New booking: ${name} — ${sessionName} (${sessionDate})`,
       html,
     }),
