@@ -792,10 +792,10 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       {/* Confirm/Decline inline for pending */}
                       {(!b.cancelled && (!b.status || b.status === "pending")) && (
                         <div className="flex gap-2">
-                          <button onPointerDown={(e) => { e.preventDefault(); act(b.id, "confirmed"); }} className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                          <button onPointerDown={(e) => { e.preventDefault(); act(b.id, "confirmed"); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
                             ✓ Confirm
                           </button>
-                          <button onPointerDown={(e) => { e.preventDefault(); act(b.id, "declined"); }} className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
+                          <button onPointerDown={(e) => { e.preventDefault(); act(b.id, "declined"); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
                             ✗ Decline
                           </button>
                         </div>
