@@ -235,7 +235,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           {/* Desktop layout: single row */}
           <div className="hidden sm:flex px-4 pt-[9px] pb-4 gap-6">
             <div className="flex-1 min-w-0">
-              <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
+              <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">{s.classLabel}</span>
               <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mt-[2px]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                 {s.sessionName || s.classLabel}
               </h3>
@@ -300,7 +300,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           {/* Mobile layout: grid card style */}
           <div className="sm:hidden p-4 flex flex-col gap-3">
             <div className="flex items-start justify-between gap-3">
-              <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644]">{s.classLabel}</span>
+              <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">{s.classLabel}</span>
               {!isFull ? (
                 <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1 shrink-0">{s.spotsLeft} left</span>
               ) : (
@@ -383,7 +383,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
         <div className="p-4 flex flex-col flex-1">
           <div className="flex items-center justify-between gap-3">
-            <span className="text-[0.6rem] font-semibold tracking-[0.18em] uppercase text-[#006644] leading-none">{s.classLabel}</span>
+            <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] leading-none">{s.classLabel}</span>
             {!isFull ? (
               <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1 shrink-0">{s.spotsLeft} left</span>
             ) : (
