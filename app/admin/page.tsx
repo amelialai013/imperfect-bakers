@@ -1794,7 +1794,7 @@ export default function AdminPage() {
 
                     {/* Progress bar */}
                     <div className="px-7 pb-0">
-                      <div className="h-px bg-[#e8e2d9] rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-[#e8e2d9] rounded-full overflow-hidden">
                         <div className="h-full bg-[#006644] rounded-full transition-all" style={{ width: `${pct}%` }} />
                       </div>
                     </div>
