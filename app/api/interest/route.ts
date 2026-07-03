@@ -114,11 +114,6 @@ async function sendAdminEmail(entry: Record<string, unknown>) {
           <tr><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:13px;color:#6b7280">Classes</td><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:14px">${classesText}</td></tr>
           <tr><td style="padding:10px 0;font-size:13px;color:#6b7280;vertical-align:top">Notes</td><td style="padding:10px 0;font-size:14px">${notes || "—"}</td></tr>
         </table>
-        <div style="margin-top:32px;display:flex;gap:12px">
-          <a href="${confirmUrl}" style="display:inline-block;padding:14px 28px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600">✓ Confirm</a>
-          <a href="${declineUrl}" style="display:inline-block;padding:14px 28px;background:#fff;color:#1a1a1a;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600;border:1px solid #e4dfd5">✗ Decline</a>
-        </div>
-        <p style="margin-top:16px;font-size:12px;color:#9ca3af">Clicking Confirm or Decline will immediately send an automated response to ${name} at ${email}.</p>
       </div>
     </div>
   `;
