@@ -86,6 +86,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const notesRef = useRef<HTMLTextAreaElement>(null);
   const paymentOtherRef = useRef<HTMLInputElement>(null);
 
+  // Section refs for scroll-to-error
+  const attendeesSectionRef = useRef<HTMLDivElement>(null);
+  const paymentSectionRef = useRef<HTMLDivElement>(null);
+  const experienceSectionRef = useRef<HTMLDivElement>(null);
+
   const totalPeople = counts.child + counts.youngAdult + counts.adult;
 
   useEffect(() => {
@@ -149,6 +154,20 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
+      // Scroll to the first error field
+      requestAnimationFrame(() => {
+        const scrollTo = (el: HTMLElement | null) => {
+          if (!el) return;
+          const top = el.getBoundingClientRect().top + window.scrollY - 120;
+          window.scrollTo({ top, behavior: "smooth" });
+        };
+        if (errors.name) scrollTo(nameRef.current);
+        else if (errors.email) scrollTo(emailRef.current);
+        else if (errors.phone) scrollTo(phoneRef.current);
+        else if (errors.attendees) scrollTo(attendeesSectionRef.current);
+        else if (errors.participants) scrollTo(experienceSectionRef.current);
+        else if (errors.payment || errors.paymentOther) scrollTo(paymentSectionRef.current);
+      });
       return;
     }
 
@@ -258,7 +277,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         {/* 02 — Attendees */}
-        <div className="mt-[60px]">
+        <div className="mt-[60px]" ref={attendeesSectionRef}>
           <div className="flex items-baseline justify-between mb-4">
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
             <span className="text-sm text-[#1a1a1a]">{totalPeople} / {session.spotsLeft}</span>
@@ -291,7 +310,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         {/* 03 — Payment */}
-        <div className="mt-10 mb-12">
+        <div className="mt-10 mb-12" ref={paymentSectionRef}>
           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
           <div className="mb-8">
             <p className="text-xs text-[#6b7280] mb-2">Include your name and class name in the reference</p>
@@ -339,7 +358,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
         {/* 04 — Experience */}
         {totalPeople > 0 && (
-          <div className="mt-[60px] mb-12">
+          <div className="mt-[60px] mb-12" ref={experienceSectionRef}>
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Experience</p>
             <div className="flex flex-col gap-6">
               {participants.map((p, i) => {
@@ -348,7 +367,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                   <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:items-end">
                     <div>
                       {participantTypes[i] && (
-                        <p className="text-xs text-[#6b7280] mb-1">{participantTypes[i]}</p>
+                        <p className="text-sm text-[#1a1a1a] mb-1">{participantTypes[i]}</p>
                       )}
                       <input
                         type="text"
