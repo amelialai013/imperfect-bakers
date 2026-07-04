@@ -277,11 +277,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         {totalPeople > 0 && (
           <div className="mt-[60px] mb-12">
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Experience</p>
-            <div className="divide-y divide-[#f0ece4]">
+            <div className="flex flex-col gap-2">
               {participants.map((p, i) => {
                 const nameErr = fieldErrors.participants?.[i];
                 return (
-                  <div key={i} className="py-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <input
                         type="text"
