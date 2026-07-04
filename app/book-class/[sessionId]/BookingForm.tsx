@@ -35,25 +35,23 @@ function Counter({
         <p className="text-xs text-[#6b7280] mt-0.5">{sub}</p>
       </div>
       <div className="flex items-center gap-4">
-        <div
-          role="button"
-          tabIndex={0}
-          onPointerDown={() => onChange(Math.max(0, value - 1))}
-          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onChange(Math.max(0, value - 1)); }}
-          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base cursor-pointer select-none"
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(0, value - 1))}
+          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base"
+          aria-label={`Decrease ${label}`}
         >
           −
-        </div>
+        </button>
         <span className="w-6 text-center text-base font-semibold text-[#1a1a1a] tabular-nums">{value}</span>
-        <div
-          role="button"
-          tabIndex={0}
-          onPointerDown={() => onChange(value + 1)}
-          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onChange(value + 1); }}
-          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base cursor-pointer select-none"
+        <button
+          type="button"
+          onClick={() => onChange(value + 1)}
+          className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base"
+          aria-label={`Increase ${label}`}
         >
           +
-        </div>
+        </button>
       </div>
     </div>
   );
@@ -268,13 +266,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               { value: "within-week", label: "Paying this week" },
               { value: "other", label: "Other" },
             ].map((opt) => (
-              <div
+              <button
                 key={opt.value}
-                role="button"
-                tabIndex={0}
-                onPointerDown={() => { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
-                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); } }}
-                className={`px-5 py-2.5 text-sm font-medium border transition-colors duration-200 rounded-full cursor-pointer select-none ${
+                type="button"
+                onClick={() => { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
+                className={`px-5 py-2.5 text-sm font-medium border transition-colors duration-200 rounded-full ${
                   paymentStatus === opt.value
                     ? "bg-[#006644] border-[#006644] text-white"
                     : fieldErrors.payment
@@ -283,7 +279,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 }`}
               >
                 {opt.label}
-              </div>
+              </button>
             ))}
           </div>
           {paymentStatus === "other" && (
@@ -314,13 +310,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         <div className="mt-8 pt-2 flex flex-col sm:flex-row sm:items-center gap-6">
-          <div
-            role="button"
-            tabIndex={0}
-            onPointerDown={() => { if (!submitting) handleSubmit(); }}
-            onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && !submitting) handleSubmit(); }}
-            className="btn-primary group self-start cursor-pointer select-none"
-            aria-disabled={submitting}
+          <button
+            type="button"
+            onClick={() => { if (!submitting) handleSubmit(); }}
+            disabled={submitting}
+            className="btn-primary group self-start"
           >
             {submitting ? "Requesting…" : "Request reservation"}
             {!submitting && (
@@ -328,7 +322,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             )}
-          </div>
+          </button>
           <p className="text-xs text-[#6b7280] leading-relaxed max-w-xs">
             We confirm classes once enough students sign up — you&apos;ll hear from us soon.
           </p>

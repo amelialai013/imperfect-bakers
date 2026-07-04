@@ -101,7 +101,7 @@ async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>", reply_to: ["imperfectbakers@gmail.com"],
+      from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <hello@imperfectbakers.com>", reply_to: ["imperfectbakers@gmail.com"],
       to: ["imperfectbakers@gmail.com"],
       subject: `New booking: ${name} — ${sessionName} (${sessionDate})`,
       html,
@@ -150,7 +150,7 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <hello@imperfectbakers.com>",
       reply_to: ["imperfectbakers@gmail.com"],
       to: [email],
       subject: sub(tmpl.subject, vars),
