@@ -68,9 +68,12 @@ export default function Testimonials() {
           <div>
             {/* Mobile carousel */}
             <div className="md:hidden relative overflow-hidden" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+              {/* will-change: transform during animation so Safari promotes to GPU layer;
+                  reverts to 'auto' once translateX is 0% so the layer is released
+                  and doesn't intercept mouse events on dot buttons below */}
               <div
                 className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${active * 100}%)` }}
+                style={{ transform: `translateX(-${active * 100}%)`, willChange: active === 0 ? "auto" : "transform" }}
               >
                 {rest.map((t) => (
                   <div key={t.name} className="w-full shrink-0">

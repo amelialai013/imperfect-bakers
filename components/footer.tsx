@@ -50,10 +50,10 @@ export default function Footer() {
           <div className="mt-[28px] md:mt-0 md:col-span-3">
             <h4 className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-5">Get in touch</h4>
             <a
-              href="mailto:imperfectbakers@outlook.com"
+              href="mailto:imperfectbakers@gmail.com"
               className="text-sm text-white/60 hover:text-white transition-colors block mb-4 break-all"
             >
-              imperfectbakers@outlook.com
+              imperfectbakers@gmail.com
             </a>
             <p className="text-xs text-white/40 leading-relaxed">
               Follow along on social for behind-the-scenes kitchen moments.

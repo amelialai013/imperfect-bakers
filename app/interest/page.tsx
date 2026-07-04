@@ -215,7 +215,7 @@ export default function InterestPage() {
                         ? "bg-[#006644] border-[#006644] text-white"
                         : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
                     }`}
-                    style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+                    style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif", WebkitAppearance: "none", appearance: "none", touchAction: "manipulation", position: "relative", zIndex: 1 }}
                   >
                     {name}
                   </button>
@@ -244,6 +244,7 @@ export default function InterestPage() {
               onClick={() => { if (!submitting) handleSubmit(); }}
               disabled={submitting}
               className="btn-primary group shrink-0 self-start"
+              style={{ WebkitAppearance: "none", appearance: "none", touchAction: "manipulation", position: "relative", zIndex: 1 }}
             >
               {submitting ? "Submitting…" : "Register interest"}
               {!submitting && (
