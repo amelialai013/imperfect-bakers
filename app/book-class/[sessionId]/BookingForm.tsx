@@ -335,7 +335,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               {participants.map((p, i) => {
                 const nameErr = fieldErrors.participants?.[i];
                 return (
-                  <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:items-end">
                     <div>
                       {participantTypes[i] && (
                         <p className="text-xs text-[#6b7280] mb-1">{participantTypes[i]}</p>
