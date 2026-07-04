@@ -194,7 +194,7 @@ export default function InterestPage() {
                 {fieldErrors.phone && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.phone}</p>}
               </div>
 
-              <div className="sm:col-span-2 mt-4">
+              <div className="sm:col-span-2">
                 <div className="relative">
                   <select
                     ref={experienceRef}
