@@ -274,7 +274,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         {/* 03 — Payment */}
-        <div className="mt-[60px] mb-12">
+        <div className="mt-10 mb-12">
           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
           <div className="mb-8">
             <p className="text-xs text-[#6b7280] mb-2">Include your name and class name in the reference</p>
