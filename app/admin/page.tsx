@@ -843,7 +843,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                   </svg>
                 </div>
                 {moveError && <p className="text-xs text-red-500 mb-4">{moveError}</p>}
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
                   <button
                     onClick={moveBooking}
                     disabled={!moveSessionId || moving}
