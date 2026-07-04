@@ -927,17 +927,16 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               {filtered.map((b) => (
                 <div key={b.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
                   {/* Session label */}
-                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] flex items-center justify-between gap-3 flex-wrap">
-                    <div>
-                      <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
-                      <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}</p>
-                    </div>
-                    <div className="flex items-center gap-2 flex-wrap">
+                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] relative pr-12">
+                    {/* Session info */}
+                    <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
+                    <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}</p>
+                    {/* Status badge + confirm/decline */}
+                    <div className="flex items-center gap-2 flex-wrap mt-2">
                       {b.cancelled
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
                         : <StatusBadge status={b.status} />
                       }
-                      {/* Confirm/Decline inline for pending */}
                       {(!b.cancelled && (!b.status || b.status === "pending")) && (
                         <div className="flex gap-2">
                           <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
@@ -948,7 +947,9 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           </button>
                         </div>
                       )}
-                      {/* Kebab menu — all bookings */}
+                    </div>
+                    {/* Kebab menu — always top-right */}
+                    <div className="absolute top-3 right-3">
                       <div className="relative">
                           <button
                             onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
