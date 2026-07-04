@@ -965,7 +965,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                                 {!b.cancelled && (
                                 <>
                                   <button onClick={() => { setKebabOpen(null); setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
-                                    Move classes
+                                    Change class
                                   </button>
                                   <div className="h-px bg-[#e8e2d9]" />
                                 </>
