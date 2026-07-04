@@ -427,7 +427,7 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
               <StatusBadge status={b.status} />
             </div>
             {(!b.status || b.status === "pending") && (
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 <button
                   onClick={() => act(b.id, "confirmed")}
                   disabled={acting === b.id}
@@ -932,7 +932,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
                       <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}</p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       {b.cancelled
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
                         : <StatusBadge status={b.status} />
