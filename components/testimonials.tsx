@@ -129,7 +129,7 @@ export default function Testimonials() {
         {/* Leave a review CTA */}
         <div className="mt-14 pt-10 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <p className="text-white/60 text-sm leading-relaxed max-w-xs">
-            Had a great experience? Your review helps other families find us.
+            Had a great experience? Your review<br />helps other families find us.
           </p>
           <a
             href="https://g.page/r/Cb4c_UFoAOGvEBM/review"
