@@ -849,7 +849,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                     disabled={!moveSessionId || moving}
                     className="btn-primary disabled:opacity-50"
                   >
-                    {moving ? "Moving…" : "Move booking"}
+                    {moving ? "Moving…" : "Change booking"}
                   </button>
                   <button
                     onClick={() => { setMoveTarget(null); setMoveSessionId(""); setMoveError(""); }}
