@@ -324,7 +324,7 @@ function SessionForm({
               {ATTENDEE_OPTIONS.map((opt) => {
                 const active = attendeeTypes.includes(opt.key);
                 return (
-                  <button key={opt.key} type="button" onPointerDown={(e) => { e.preventDefault(); toggleAttendeeType(opt.key); }}
+                  <button key={opt.key} type="button" onClick={() => toggleAttendeeType(opt.key)}
                     className={`group inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-colors duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
                     {opt.label} <span className={`text-sm transition-colors duration-200 ${active ? "text-white/70" : "text-[#006644]/60 group-hover:text-white/70"}`}>{opt.sub}</span>
                   </button>
@@ -353,7 +353,7 @@ function SessionForm({
         <button type="submit" disabled={saving} className="btn-primary">
           {saving ? "Saving…" : "Save session"}
         </button>
-        <button type="button" onPointerDown={(e) => { e.preventDefault(); onCancel(); }} className="btn-secondary">
+        <button type="button" onClick={onCancel} className="btn-secondary">
           Cancel
         </button>
       </div>
@@ -747,7 +747,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
             {(["upcoming", "past"] as const).map((t) => (
               <button
                 key={t}
-                onPointerDown={(e) => { e.preventDefault(); setTimeFilter(t); }}
+                onClick={() => setTimeFilter(t)}
                 className={`px-5 py-2.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
                   timeFilter === t
                     ? "bg-white text-[#1a1a1a] shadow-sm"
@@ -775,7 +775,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               return (
                 <button
                   key={f}
-                  onPointerDown={(e) => { e.preventDefault(); setFilter(f); }}
+                  onClick={() => setFilter(f)}
                   className={`px-5 py-2.5 text-sm font-medium rounded-full border transition-colors duration-200 cursor-pointer select-none ${
                     filter === f
                       ? "bg-[#006644] border-[#006644] text-white"
@@ -812,10 +812,10 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       {/* Confirm/Decline inline for pending */}
                       {(!b.cancelled && (!b.status || b.status === "pending")) && (
                         <div className="flex gap-2">
-                          <button onPointerDown={(e) => { e.preventDefault(); act(b.id, "confirmed"); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                          <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
                             ✓ Confirm
                           </button>
-                          <button onPointerDown={(e) => { e.preventDefault(); act(b.id, "declined"); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
+                          <button onClick={() => act(b.id, "declined")} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
                             ✗ Decline
                           </button>
                         </div>
@@ -824,7 +824,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       {(!b.cancelled && (!b.status || b.status === "pending")) ? null : (
                         <div className="relative">
                           <button
-                            onPointerDown={(e) => { e.preventDefault(); setKebabOpen(kebabOpen === b.id ? null : b.id); }}
+                            onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
                             className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
                           >
                             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -833,16 +833,16 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           </button>
                           {kebabOpen === b.id && (
                             <>
-                              <div className="fixed inset-0 z-10" onPointerDown={() => setKebabOpen(null)} />
+                              <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
                               <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
                                 {(!b.cancelled && b.status === "confirmed") && (<>
-                                  <button onPointerDown={(e) => { e.preventDefault(); setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                  <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                                     Cancel booking
                                   </button>
                                   <div className="h-px bg-[#e8e2d9]" />
                                 </>)}
                                 {(b.cancelled || b.status === "declined") && (
-                                  <button onPointerDown={(e) => { e.preventDefault(); setKebabOpen(null); permanentDelete(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                  <button onClick={() => { setKebabOpen(null); permanentDelete(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                                     Delete record
                                   </button>
                                 )}
@@ -1529,7 +1529,7 @@ export default function AdminPage() {
                     autoFocus
                     className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm focus:outline-none focus:border-[#006644] bg-white"
                   />
-                  <button type="button" onPointerDown={(e) => { e.preventDefault(); doLogin(); }} className="btn-primary justify-center shrink-0">Sign in</button>
+                  <button type="button" onClick={doLogin} className="btn-primary justify-center shrink-0">Sign in</button>
                 </div>
               </div>
               {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
