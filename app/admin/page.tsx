@@ -799,9 +799,17 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               </svg>
               Admin dashboard
             </button>
-            <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              All <em className="not-italic text-[#006644]">bookings</em>
-            </h1>
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                All <em className="not-italic text-[#006644]">bookings</em>
+              </h1>
+              {pendingCount > 0 && (
+                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  {pendingCount} pending
+                </span>
+              )}
+            </div>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
             <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} align="right" />
@@ -879,12 +887,6 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                 </button>
               ))}
             </div>
-            {pendingCount > 0 && (
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                {pendingCount} pending
-              </span>
-            )}
           </div>
 
           {/* Status filter pills */}
@@ -939,10 +941,10 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       }
                       {(!b.cancelled && (!b.status || b.status === "pending")) && (
                         <div className="flex gap-2">
-                          <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                          <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
                             ✓ Confirm
                           </button>
-                          <button onClick={() => act(b.id, "declined")} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
+                          <button onClick={() => act(b.id, "declined")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
                             ✗ Decline
                           </button>
                         </div>
