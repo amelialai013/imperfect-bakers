@@ -40,6 +40,7 @@ function Counter({
           onClick={() => onChange(Math.max(0, value - 1))}
           className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base"
           aria-label={`Decrease ${label}`}
+          style={{ WebkitAppearance: "none", appearance: "none", cursor: "pointer", touchAction: "manipulation", position: "relative", zIndex: 1 }}
         >
           −
         </button>
@@ -49,6 +50,7 @@ function Counter({
           onClick={() => onChange(value + 1)}
           className="w-11 h-11 bg-[#f5f2ed] rounded-lg flex items-center justify-center text-[#6b7280] hover:bg-[#006644] hover:text-white transition-colors text-base"
           aria-label={`Increase ${label}`}
+          style={{ WebkitAppearance: "none", appearance: "none", cursor: "pointer", touchAction: "manipulation", position: "relative", zIndex: 1 }}
         >
           +
         </button>
@@ -178,7 +180,9 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-[60px] lg:gap-20 items-start">
 
       {/* ── Form — no <form> element to avoid Safari desktop event bugs ── */}
-      <div>
+      {/* isolation: isolate creates a new stacking context so the sticky sidebar's
+          compositing layer (a Safari quirk) cannot intercept click events here */}
+      <div style={{ isolation: "isolate", position: "relative" }}>
 
         {/* 01 — Your details */}
         <div className="mb-12">
@@ -315,6 +319,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             onClick={() => { if (!submitting) handleSubmit(); }}
             disabled={submitting}
             className="btn-primary group self-start"
+            style={{ WebkitAppearance: "none", appearance: "none", cursor: submitting ? "default" : "pointer", touchAction: "manipulation", position: "relative", zIndex: 1 }}
           >
             {submitting ? "Requesting…" : "Request reservation"}
             {!submitting && (

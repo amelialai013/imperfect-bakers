@@ -141,6 +141,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Safari desktop button fix ─────────────────────────────────────────────
+   Safari applies -webkit-appearance: button which can prevent flex/grid
+   display from taking effect and causes buttons to be unresponsive to clicks.
+   We also add cursor: pointer and touch-action: manipulation globally so
+   all <button> elements are reliably interactive on Safari desktop & mobile.
+────────────────────────────────────────────────────────────────────────── */
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Heading base weight — matches original site (DM Sans 700) */
 @layer base {
   h1, h2, h3, h4 {
