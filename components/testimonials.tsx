@@ -125,6 +125,26 @@ export default function Testimonials() {
           </div>
 
         </div>
+
+        {/* Leave a review CTA */}
+        <div className="mt-14 pt-10 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <p className="text-white/60 text-sm leading-relaxed max-w-xs">
+            Had a great experience? Your review helps other families find us.
+          </p>
+          <a
+            href="https://g.page/r/Cb4c_UFoAOGvEBM/review"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-tertiary group self-start sm:self-auto"
+            style={{ WebkitAppearance: "none", appearance: "none", touchAction: "manipulation" }}
+          >
+            Leave a review
+            <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
       </div>
     </section>
   );
