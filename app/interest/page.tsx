@@ -2,6 +2,14 @@
 
 import { useState, useRef, useEffect } from "react";
 
+type ExperienceLevel = { value: string; label: string };
+
+const DEFAULT_LEVELS: ExperienceLevel[] = [
+  { value: "beginner", label: "New to cooking — please guide me through everything" },
+  { value: "intermediate", label: "Some experience — happy to receive tips along the way" },
+  { value: "expert", label: "Confident cook — only step in if I ask" },
+];
+
 const classOptions = [
   "Sweet Food",
   "Savoury Food",
@@ -25,6 +33,7 @@ type FieldErrors = {
 
 export default function InterestPage() {
   const [selected, setSelected] = useState<string[]>([]);
+  const [levels, setLevels] = useState<ExperienceLevel[]>(DEFAULT_LEVELS);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -40,6 +49,13 @@ export default function InterestPage() {
   useEffect(() => {
     if (submitted) window.scrollTo({ top: 0, behavior: "smooth" });
   }, [submitted]);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => { if (data.experienceLevels?.length) setLevels(data.experienceLevels); })
+      .catch(() => {});
+  }, []);
 
   const toggle = (name: string) =>
     setSelected((prev) =>
@@ -186,9 +202,9 @@ export default function InterestPage() {
                     style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
                   >
                     <option value="">Experience level</option>
-                    <option value="complete_beginner">Complete beginner</option>
-                    <option value="some_experience">Some experience</option>
-                    <option value="confident_cook">Confident cook</option>
+                    {levels.map((l) => (
+                      <option key={l.value} value={l.value}>{l.label}</option>
+                    ))}
                   </select>
                   <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
