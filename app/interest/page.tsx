@@ -245,7 +245,7 @@ export default function InterestPage() {
 
           {/* Notes */}
           <div className="mt-[60px]">
-            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Anything else?</p>
+            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Notes</p>
             <textarea
               ref={notesRef}
               rows={3}
