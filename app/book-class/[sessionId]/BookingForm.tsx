@@ -8,9 +8,9 @@ type Counts = { child: number; youngAdult: number; adult: number };
 type Participant = { name: string; level: string };
 
 const LEVELS = [
-  { value: "beginner", label: "Beginner — never cooked, love lots of help" },
-  { value: "intermediate", label: "Intermediate — some cooking, open to tips" },
-  { value: "expert", label: "Expert — experienced, want to perfect my craft" },
+  { value: "beginner", label: "New to cooking — please guide me through everything" },
+  { value: "intermediate", label: "Some experience — happy to receive tips along the way" },
+  { value: "expert", label: "Confident cook — only step in if I ask" },
 ];
 
 const inputClass =
