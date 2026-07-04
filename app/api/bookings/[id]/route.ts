@@ -77,7 +77,46 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!checkAdminToken(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
-  const { status } = await req.json() as { status: "confirmed" | "declined" };
+  const body = await req.json() as { status?: "confirmed" | "declined"; newSessionId?: string };
+
+  // ── Move booking to a different session ───────────────────────────────────
+  if (body.newSessionId) {
+    const booking = await kv.get<Booking>(`booking:${id}`);
+    if (!booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    const oldSessionId = booking.sessionId;
+    const newSessionId = body.newSessionId;
+
+    if (oldSessionId === newSessionId) return NextResponse.json({ ok: true });
+
+    const [oldSession, newSession] = await Promise.all([
+      getSession(oldSessionId),
+      getSession(newSessionId),
+    ]);
+
+    if (!newSession) return NextResponse.json({ error: "Target session not found" }, { status: 404 });
+    if (newSession.spotsLeft < booking.totalPeople) {
+      return NextResponse.json({ error: `Not enough spots in target session (${newSession.spotsLeft} left)` }, { status: 409 });
+    }
+
+    // Move booking record to new session in KV
+    await Promise.all([
+      kv.set(`booking:${id}`, { ...booking, sessionId: newSessionId }),
+      kv.lrem(`session:${oldSessionId}:bookings`, 0, id),
+      kv.rpush(`session:${newSessionId}:bookings`, id),
+      // Return spot to old session, consume spot in new session
+      oldSession && !booking.cancelled && booking.status !== "declined"
+        ? updateSession(oldSessionId, { spotsLeft: Math.min(oldSession.spotsLeft + booking.totalPeople, oldSession.maxSpots) })
+        : Promise.resolve(),
+      !booking.cancelled && booking.status !== "declined"
+        ? updateSession(newSessionId, { spotsLeft: newSession.spotsLeft - booking.totalPeople })
+        : Promise.resolve(),
+    ]);
+
+    return NextResponse.json({ ok: true });
+  }
+
+  const { status } = body as { status: "confirmed" | "declined" };
 
   if (!["confirmed", "declined"].includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });

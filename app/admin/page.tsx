@@ -646,11 +646,16 @@ function parseSessionDate(display: string): Date | null {
 
 function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: string; onBack: () => void; onManageClasses: () => void; onLogout: () => void }) {
   const [rows, setRows] = useState<BookingWithSession[]>([]);
+  const [allSessions, setAllSessions] = useState<ClassSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
   const [kebabOpen, setKebabOpen] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined" | "cancelled">("pending");
   const [timeFilter, setTimeFilter] = useState<"upcoming" | "past">("upcoming");
+  const [moveTarget, setMoveTarget] = useState<BookingWithSession | null>(null);
+  const [moveSessionId, setMoveSessionId] = useState<string>("");
+  const [moving, setMoving] = useState(false);
+  const [moveError, setMoveError] = useState<string>("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -658,6 +663,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
       // Fetch all sessions
       const sessRes = await authFetch("/api/sessions", token);
       const sessions: ClassSession[] = await sessRes.json();
+      setAllSessions(Array.isArray(sessions) ? sessions : []);
 
       // Fetch bookings for each session in parallel
       const perSession = await Promise.all(
@@ -711,6 +717,26 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
     setActing(null);
   }
 
+  async function moveBooking() {
+    if (!moveTarget || !moveSessionId) return;
+    setMoving(true);
+    setMoveError("");
+    const res = await authFetch(`/api/bookings/${moveTarget.id}`, token, {
+      method: "PATCH",
+      body: JSON.stringify({ newSessionId: moveSessionId }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      setMoveError(data.error ?? "Something went wrong");
+      setMoving(false);
+      return;
+    }
+    setMoveTarget(null);
+    setMoveSessionId("");
+    setMoving(false);
+    await load();
+  }
+
   function StatusBadge({ status }: { status?: string }) {
     if (status === "confirmed") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>;
     if (status === "declined") return <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-red-50 text-red-500 border border-red-200">Declined</span>;
@@ -750,12 +776,6 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            {pendingCount > 0 && (
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                {pendingCount} pending
-              </span>
-            )}
             <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} />
           </div>
         </div>
@@ -764,21 +784,79 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
       <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
 
-          {/* Upcoming / Past toggle */}
-          <div className="inline-flex gap-1 mb-5 bg-[#f0ece4] rounded-full p-1">
-            {(["upcoming", "past"] as const).map((t) => (
-              <button
-                key={t}
-                onClick={() => setTimeFilter(t)}
-                className={`px-5 py-2.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
-                  timeFilter === t
-                    ? "bg-white text-[#1a1a1a] shadow-sm"
-                    : "text-[#6b7280] hover:text-[#1a1a1a]"
-                }`}
-              >
-                {t.charAt(0).toUpperCase() + t.slice(1)}
-              </button>
-            ))}
+          {/* Move booking modal */}
+          {moveTarget && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+              <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => { setMoveTarget(null); setMoveSessionId(""); setMoveError(""); }} />
+              <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 z-10">
+                <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                  Move to a different class
+                </h2>
+                <p className="text-sm text-[#6b7280] mb-6">
+                  Moving <strong>{moveTarget.name}</strong> ({moveTarget.totalPeople} {moveTarget.totalPeople === 1 ? "person" : "people"}) from <strong>{moveTarget.sessionName}</strong>.
+                </p>
+                <div className="relative mb-4">
+                  <select
+                    value={moveSessionId}
+                    onChange={(e) => { setMoveSessionId(e.target.value); setMoveError(""); }}
+                    className="w-full border border-[#e4dfd5] rounded-lg px-4 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] bg-white appearance-none cursor-pointer pr-10"
+                  >
+                    <option value="">Select a class…</option>
+                    {allSessions
+                      .filter((s) => s.id !== moveTarget.sessionId && s.spotsLeft >= moveTarget.totalPeople)
+                      .map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.sessionName || s.classLabel} — {s.date} ({s.spotsLeft} spots left)
+                        </option>
+                      ))}
+                  </select>
+                  <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                {moveError && <p className="text-xs text-red-500 mb-4">{moveError}</p>}
+                <div className="flex gap-3">
+                  <button
+                    onClick={moveBooking}
+                    disabled={!moveSessionId || moving}
+                    className="btn-primary disabled:opacity-50"
+                  >
+                    {moving ? "Moving…" : "Move booking"}
+                  </button>
+                  <button
+                    onClick={() => { setMoveTarget(null); setMoveSessionId(""); setMoveError(""); }}
+                    className="btn-secondary"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Upcoming / Past toggle + pending badge */}
+          <div className="flex items-center gap-3 mb-5">
+            <div className="inline-flex gap-1 bg-[#f0ece4] rounded-full p-1">
+              {(["upcoming", "past"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTimeFilter(t)}
+                  className={`px-5 py-2.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
+                    timeFilter === t
+                      ? "bg-white text-[#1a1a1a] shadow-sm"
+                      : "text-[#6b7280] hover:text-[#1a1a1a]"
+                  }`}
+                >
+                  {t.charAt(0).toUpperCase() + t.slice(1)}
+                </button>
+              ))}
+            </div>
+            {pendingCount > 0 && (
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                {pendingCount} pending
+              </span>
+            )}
           </div>
 
           {/* Status filter pills */}
@@ -842,6 +920,15 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           </button>
                         </div>
                       )}
+                      {/* Move to class — always available for non-cancelled */}
+                      {(!b.cancelled && (!b.status || b.status === "pending")) && (
+                        <button
+                          onClick={() => { setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-[#006644] hover:text-[#006644] transition-colors"
+                        >
+                          ⇄ Move
+                        </button>
+                      )}
                       {/* Kebab menu — confirmed, declined, cancelled only */}
                       {(!b.cancelled && (!b.status || b.status === "pending")) ? null : (
                         <div className="relative">
@@ -857,7 +944,15 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                             <>
                               <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
                               <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
-                                {(!b.cancelled && b.status === "confirmed") && (<>
+                                {!b.cancelled && (
+                                <>
+                                  <button onClick={() => { setKebabOpen(null); setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                                    Move to class
+                                  </button>
+                                  <div className="h-px bg-[#e8e2d9]" />
+                                </>
+                              )}
+                              {(!b.cancelled && b.status === "confirmed") && (<>
                                   <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                                     Cancel booking
                                   </button>
