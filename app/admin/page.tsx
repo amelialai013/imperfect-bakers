@@ -823,7 +823,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                 <p className="text-sm text-[#6b7280] mb-6">
                   Moving <strong>{moveTarget.name}</strong> ({moveTarget.totalPeople} {moveTarget.totalPeople === 1 ? "person" : "people"}) from <strong>{moveTarget.sessionName}</strong>.
                 </p>
-                <div className="relative mb-4">
+                <div className="relative mb-12">
                   <select
                     value={moveSessionId}
                     onChange={(e) => { setMoveSessionId(e.target.value); setMoveError(""); }}
