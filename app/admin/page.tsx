@@ -929,12 +929,14 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               {filtered.map((b) => (
                 <div key={b.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
                   {/* Session label */}
-                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] relative pr-12">
+                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] flex items-center justify-between gap-3 flex-wrap">
                     {/* Session info */}
-                    <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
-                    <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}</p>
-                    {/* Status badge + confirm/decline */}
-                    <div className="flex items-center gap-2 flex-wrap mt-2">
+                    <div>
+                      <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
+                      <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}</p>
+                    </div>
+                    {/* Right side: badge + confirm/decline + kebab */}
+                    <div className="flex items-center gap-2 flex-wrap">
                       {b.cancelled
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
                         : <StatusBadge status={b.status} />
@@ -949,23 +951,21 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           </button>
                         </div>
                       )}
-                    </div>
-                    {/* Kebab menu — always top-right */}
-                    <div className="absolute top-3 right-3">
+                      {/* Kebab menu */}
                       <div className="relative">
-                          <button
-                            onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
-                            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
-                          >
-                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                              <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
-                            </svg>
-                          </button>
-                          {kebabOpen === b.id && (
-                            <>
-                              <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
-                              <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
-                                {!b.cancelled && (
+                        <button
+                          onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
+                          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                            <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
+                          </svg>
+                        </button>
+                        {kebabOpen === b.id && (
+                          <>
+                            <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
+                            <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                              {!b.cancelled && (
                                 <>
                                   <button onClick={() => { setKebabOpen(null); setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
                                     Change class
@@ -974,19 +974,19 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                                 </>
                               )}
                               {(!b.cancelled && b.status === "confirmed") && (<>
-                                  <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                    Cancel booking
-                                  </button>
-                                  <div className="h-px bg-[#e8e2d9]" />
-                                </>)}
-                                {(b.cancelled || b.status === "declined") && (
-                                  <button onClick={() => { setKebabOpen(null); permanentDelete(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                    Delete record
-                                  </button>
-                                )}
-                              </div>
-                            </>
-                          )}
+                                <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                  Cancel booking
+                                </button>
+                                <div className="h-px bg-[#e8e2d9]" />
+                              </>)}
+                              {(b.cancelled || b.status === "declined") && (
+                                <button onClick={() => { setKebabOpen(null); permanentDelete(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                  Delete record
+                                </button>
+                              )}
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
