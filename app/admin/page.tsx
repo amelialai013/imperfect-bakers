@@ -556,7 +556,7 @@ function storageRemove(key: string) {
 type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests" | "emailTemplates" | "settings";
 type ExperienceLevel = { value: string; label: string };
 
-function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void }) {
+function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onLogout, align = "left" }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void; align?: "left" | "right" }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
@@ -572,7 +572,7 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]">
+          <div className={`absolute ${align === "right" ? "right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]`}>
             <button
               onClick={() => { setOpen(false); onAllBookings(); }}
               className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
@@ -2017,7 +2017,7 @@ export default function AdminPage() {
               <button onClick={() => setAddingClass(true)} className="btn-primary group">
                 New class <span>+</span>
               </button>
-              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />
+              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} align="right" />
             </div>
           </div>
         </section>
@@ -2202,7 +2202,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />
+            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} align="right" />
           </div>
         </div>
       </section>
