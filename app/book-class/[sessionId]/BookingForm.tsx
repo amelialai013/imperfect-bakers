@@ -241,7 +241,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         {/* 02 — Attendees */}
-        <div className="mt-[60px] mb-12">
+        <div className="mt-[60px]">
           <div className="flex items-baseline justify-between mb-4">
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">Attendees</p>
             <span className="text-sm text-[#1a1a1a]">{totalPeople} / {session.spotsLeft}</span>
