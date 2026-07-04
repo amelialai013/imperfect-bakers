@@ -949,8 +949,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         </div>
                       )}
                       {/* Kebab menu — all bookings */}
-                      {(true) ? (
-                        <div className="relative">
+                      <div className="relative">
                           <button
                             onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
                             className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
@@ -985,8 +984,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                               </div>
                             </>
                           )}
-                        </div>
-                      )}
+                      </div>
                     </div>
                   </div>
 
