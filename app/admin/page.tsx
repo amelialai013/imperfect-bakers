@@ -650,7 +650,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
   const [kebabOpen, setKebabOpen] = useState<string | null>(null);
-  const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined" | "cancelled">("pending");
+  const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined" | "cancelled">("all");
   const [timeFilter, setTimeFilter] = useState<"upcoming" | "past">("upcoming");
   const [moveTarget, setMoveTarget] = useState<BookingWithSession | null>(null);
   const [moveSessionId, setMoveSessionId] = useState<string>("");
