@@ -4,7 +4,7 @@ import type { Booking } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
 
 function htmlPage(title: string, emoji: string, heading: string, body: string, color: string) {
   return new Response(

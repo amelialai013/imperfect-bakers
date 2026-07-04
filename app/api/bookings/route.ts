@@ -5,7 +5,7 @@ import { kv } from "@vercel/kv";
 import { getTemplates, sub } from "@/lib/email-templates";
 import type { Booking, ClassSession } from "@/lib/types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
 
 // GET all bookings across all sessions (admin only)
 export async function GET(req: Request) {
@@ -158,6 +158,5 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
     }),
   });
   const resBody = await res.text();
-  console.log("Resend customer request email response:", res.status, resBody);
   if (!res.ok) throw new Error(`Resend ${res.status}: ${resBody}`);
 }

@@ -10,7 +10,7 @@ const EXPERIENCE_LABELS: Record<string, string> = {
   confident_cook: "Confident cook",
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!checkAdminToken(req)) {

@@ -5,7 +5,7 @@ import { kv } from "@vercel/kv";
 import { getTemplates, sub } from "@/lib/email-templates";
 import type { Booking } from "@/lib/types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://imperfect-bakers.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!checkAdminToken(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
