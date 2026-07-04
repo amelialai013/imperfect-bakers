@@ -195,19 +195,19 @@ export default function InterestPage() {
               </div>
 
               <div className="sm:col-span-2 mt-4">
-                <div className="relative inline-flex">
+                <div className="relative">
                   <select
                     ref={experienceRef}
-                    className="appearance-none bg-white border border-[#e4dfd5] rounded-full pl-5 pr-9 text-sm font-medium text-[#1a1a1a] focus:outline-none focus:border-[#006644] cursor-pointer transition-colors h-[46px]"
-                    style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+                    className="w-full bg-transparent border-0 border-b border-[#c8c0b4] px-0 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] transition-colors appearance-none cursor-pointer"
+                    style={{ WebkitAppearance: "none" }}
                   >
                     <option value="">Experience level</option>
                     {levels.map((l) => (
                       <option key={l.value} value={l.value}>{l.label}</option>
                     ))}
                   </select>
-                  <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                  <svg className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </div>
