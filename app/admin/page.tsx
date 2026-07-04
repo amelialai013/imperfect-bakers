@@ -488,7 +488,7 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
               </div>
             )}
             {b.participants && b.participants.length > 0 && (
-              <div className="col-span-2 sm:col-span-4">
+              <div className="col-span-2 sm:col-span-4 mt-3">
                 <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
                 <div className="space-y-0.5">
                   {b.participants.map((p, i) => (
@@ -1039,7 +1039,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         </div>
                       )}
                       {b.participants && b.participants.length > 0 && (
-                        <div className="col-span-2 sm:col-span-4">
+                        <div className="col-span-2 sm:col-span-4 mt-3">
                           <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
                           <div className="space-y-0.5">
                             {b.participants.map((p, i) => (
