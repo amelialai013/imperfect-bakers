@@ -5,6 +5,13 @@ import Link from "next/link";
 import type { ClassSession } from "@/lib/types";
 
 type Counts = { child: number; youngAdult: number; adult: number };
+type Participant = { name: string; level: string };
+
+const LEVELS = [
+  { value: "beginner", label: "Beginner — never cooked, love lots of help" },
+  { value: "intermediate", label: "Intermediate — some cooking, open to tips" },
+  { value: "expert", label: "Expert — experienced, want to perfect my craft" },
+];
 
 const inputClass =
   "w-full bg-transparent border-0 border-b border-[#c8c0b4] px-0 py-3 text-sm text-[#1a1a1a] placeholder-[#6b7280] focus:outline-none focus:border-[#006644] transition-colors";
@@ -61,12 +68,13 @@ function Counter({
 
 export default function BookingForm({ session }: { session: ClassSession }) {
   const [counts, setCounts] = useState<Counts>({ child: 0, youngAdult: 0, adult: 0 });
+  const [participants, setParticipants] = useState<Participant[]>([]);
   const [paymentStatus, setPaymentStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{
     name?: string; email?: string; phone?: string;
-    attendees?: string; payment?: string; paymentOther?: string;
+    attendees?: string; participants?: string[]; payment?: string; paymentOther?: string;
   }>({});
 
   // Refs to read input values without FormData (avoids Safari <form> bugs)
@@ -76,11 +84,21 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const notesRef = useRef<HTMLTextAreaElement>(null);
   const paymentOtherRef = useRef<HTMLInputElement>(null);
 
+  const totalPeople = counts.child + counts.youngAdult + counts.adult;
+
   useEffect(() => {
     if (submitted) window.scrollTo({ top: 0, behavior: "smooth" });
   }, [submitted]);
 
-  const totalPeople = counts.child + counts.youngAdult + counts.adult;
+  // Keep participants array in sync with totalPeople
+  useEffect(() => {
+    setParticipants((prev) => {
+      if (totalPeople > prev.length) {
+        return [...prev, ...Array(totalPeople - prev.length).fill(null).map(() => ({ name: "", level: "" }))];
+      }
+      return prev.slice(0, totalPeople);
+    });
+  }, [totalPeople]);
   const isFull = session.spotsLeft === 0;
 
   function setCount(key: keyof Counts, value: number) {
@@ -107,6 +125,8 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     else if (!/^[\d\s\+\-\(\)]{7,15}$/.test(phone)) errors.phone = "Please enter a valid phone number";
     if (totalPeople < 1) errors.attendees = "Please add at least one person";
     if (totalPeople > session.spotsLeft) errors.attendees = `Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} left — you requested ${totalPeople}`;
+    const participantErrors = participants.map((p) => (!p.name.trim() ? "Please enter a name" : ""));
+    if (participantErrors.some(Boolean)) errors.participants = participantErrors;
     if (!paymentStatus) errors.payment = "Please select a payment status";
     if (paymentStatus === "other" && !paymentOther) errors.paymentOther = "Please add a note";
 
@@ -127,6 +147,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         phone,
         counts,
         totalPeople,
+        participants,
         paymentStatus,
         paymentOther: paymentStatus === "other" ? paymentOther : "",
         notes,
@@ -252,7 +273,60 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           )}
         </div>
 
-        {/* 03 — Payment */}
+        {/* 03 — Experience */}
+        {totalPeople > 0 && (
+          <div className="mt-[60px] mb-12">
+            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Experience</p>
+            <div className="divide-y divide-[#f0ece4]">
+              {participants.map((p, i) => {
+                const nameErr = fieldErrors.participants?.[i];
+                return (
+                  <div key={i} className="py-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder={`Participant ${i + 1} name`}
+                        value={p.name}
+                        className={nameErr ? inputErrorClass : inputClass}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setParticipants((prev) => prev.map((x, j) => j === i ? { ...x, name: val } : x));
+                          if (nameErr) setFieldErrors((prev) => {
+                            const errs = [...(prev.participants ?? [])];
+                            errs[i] = "";
+                            return { ...prev, participants: errs };
+                          });
+                        }}
+                      />
+                      {nameErr && <p className="text-xs text-red-500 mt-1.5">{nameErr}</p>}
+                    </div>
+                    <div className="relative">
+                      <select
+                        value={p.level}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setParticipants((prev) => prev.map((x, j) => j === i ? { ...x, level: val } : x));
+                        }}
+                        className="w-full bg-transparent border-0 border-b border-[#c8c0b4] px-0 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] transition-colors appearance-none cursor-pointer"
+                        style={{ WebkitAppearance: "none" }}
+                      >
+                        <option value="" disabled>Experience level</option>
+                        {LEVELS.map((l) => (
+                          <option key={l.value} value={l.value}>{l.label}</option>
+                        ))}
+                      </select>
+                      <svg className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* 04 — Payment */}
         <div className="mt-[60px] mb-12">
           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
           <div className="mb-8">
@@ -299,7 +373,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           {fieldErrors.payment && <p className="text-xs text-red-500 mt-2">{fieldErrors.payment}</p>}
         </div>
 
-        {/* 04 — Notes */}
+        {/* 05 — Notes */}
         <div className="mt-[60px]">
           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Anything else?</p>
           <textarea
