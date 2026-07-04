@@ -34,6 +34,7 @@ type FieldErrors = {
 export default function InterestPage() {
   const [selected, setSelected] = useState<string[]>([]);
   const [levels, setLevels] = useState<ExperienceLevel[]>(DEFAULT_LEVELS);
+  const [experienceValue, setExperienceValue] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -198,8 +199,10 @@ export default function InterestPage() {
                 <div className="relative">
                   <select
                     ref={experienceRef}
-                    className="w-full bg-transparent border-0 border-b border-[#c8c0b4] px-0 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] transition-colors appearance-none cursor-pointer"
-                    style={{ WebkitAppearance: "none" }}
+                    value={experienceValue}
+                    onChange={(e) => setExperienceValue(e.target.value)}
+                    className="w-full bg-transparent border-0 border-b border-[#c8c0b4] px-0 py-3 text-sm focus:outline-none focus:border-[#006644] transition-colors appearance-none cursor-pointer"
+                    style={{ WebkitAppearance: "none", color: experienceValue ? "#1a1a1a" : "#6b7280" }}
                   >
                     <option value="">Experience level</option>
                     {levels.map((l) => (
