@@ -431,14 +431,14 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
                 <button
                   onClick={() => act(b.id, "confirmed")}
                   disabled={acting === b.id}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50"
                 >
                   ✓ Confirm
                 </button>
                 <button
                   onClick={() => act(b.id, "declined")}
                   disabled={acting === b.id}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50"
                 >
                   ✗ Decline
                 </button>
