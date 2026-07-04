@@ -180,9 +180,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-[60px] lg:gap-20 items-start">
 
       {/* ── Form — no <form> element to avoid Safari desktop event bugs ── */}
-      {/* isolation: isolate creates a new stacking context so the sticky sidebar's
-          compositing layer (a Safari quirk) cannot intercept click events here */}
-      <div style={{ isolation: "isolate", position: "relative" }}>
+      <div>
 
         {/* 01 — Your details */}
         <div className="mb-12">
@@ -336,7 +334,12 @@ export default function BookingForm({ session }: { session: ClassSession }) {
       </div>
 
       {/* ── Sidebar ── */}
-      <div className="lg:sticky lg:top-28">
+      {/* pointer-events: none is the definitive Safari fix:
+          sticky elements create a GPU compositing layer whose hit-test area
+          bleeds across the full grid row in Safari, swallowing all button clicks
+          in the left column. The sidebar is display-only — nothing in it is
+          interactive — so disabling pointer events here has zero UX impact. */}
+      <div className="lg:sticky lg:top-28" style={{ pointerEvents: "none" }}>
         <div className="bg-[#006644] rounded-2xl py-6 px-8 text-white flex flex-col">
           <div>
             <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40">{session.classLabel}</span>

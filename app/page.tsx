@@ -8,10 +8,7 @@ export default function Home() {
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
       {/* iOS Safari: 100vh includes browser chrome so we use min-h-screen with svh override in CSS */}
-      {/* pb-8 on mobile keeps all hero content above the fold on small phones;
-          sm:pb-14 gives breathing room on larger phones/small tablets;
-          md:pb-28 restores the original spacious desktop layout */}
-      <section className="relative hero-height min-h-[560px] flex flex-col justify-end pb-8 sm:pb-14 md:pb-28 overflow-hidden">
+      <section className="relative hero-height min-h-[560px] flex flex-col justify-end pb-20 md:pb-28 overflow-hidden">
         {/* Background image — animates independently so text stays still */}
         <div
           className="absolute inset-0 hero-bg"
@@ -28,23 +25,19 @@ export default function Home() {
 
         {/* Hero content */}
         <div className="relative z-10 w-full px-8 max-w-7xl mx-auto">
-          {/* text-4xl on mobile prevents the title from taking too many lines
-              and pushing the CTA buttons below the fold on small screens */}
           <h1
-            className="hero-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-[#1a1a1a] leading-[1.05] mb-4 md:mb-8 tracking-tight"
+            className="hero-title text-5xl md:text-7xl lg:text-8xl text-[#1a1a1a] leading-[1.05] mb-8 tracking-tight"
             style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
           >
             Messy hands,<br />
             <em className="not-italic text-[#006644]">delicious</em> food
           </h1>
 
-          <p className="hero-sub text-[#6b7280] text-base md:text-lg max-w-lg leading-relaxed mb-6 md:mb-10">
+          <p className="hero-sub text-[#6b7280] text-base md:text-lg max-w-lg leading-relaxed mb-10">
             A joyful, hands-on cooking school where you build real kitchen confidence — one imperfect dish at a time.
           </p>
 
-          {/* flex-col on mobile so buttons don't wrap and push each other below fold;
-              sm:flex-row restores the side-by-side layout on larger screens */}
-          <div className="hero-cta flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <div className="hero-cta flex flex-wrap gap-4">
             <Link href="/classes" className="btn-primary group">
               Explore classes
               <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
