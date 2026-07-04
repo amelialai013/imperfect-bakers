@@ -84,9 +84,8 @@ export default async function ClassesPage() {
       </section>
 
       {/* ── GOOGLE REVIEWS CTA ───────────────────────────────── */}
-      {/* TODO: Replace GOOGLE_REVIEW_URL with your Google Business Profile review link */}
       {(() => {
-        const GOOGLE_REVIEW_URL = "https://g.page/r/YOUR_PLACE_ID/review";
+        const GOOGLE_REVIEW_URL = "https://g.page/r/Cb4c_UFoAOGvEBM/review";
         return (
           <section className="pt-12 pb-24 bg-[#faf9f6]">
             <div className="max-w-3xl mx-auto px-8 text-center">
