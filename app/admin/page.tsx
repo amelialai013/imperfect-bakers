@@ -818,7 +818,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => { setMoveTarget(null); setMoveSessionId(""); setMoveError(""); }} />
               <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 z-10">
                 <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                  Move to a different class
+                  Change class
                 </h2>
                 <p className="text-sm text-[#6b7280] mb-6">
                   Moving <strong>{moveTarget.name}</strong> ({moveTarget.totalPeople} {moveTarget.totalPeople === 1 ? "person" : "people"}) from <strong>{moveTarget.sessionName}</strong>.
