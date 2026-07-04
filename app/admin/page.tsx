@@ -454,7 +454,7 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
               </button>
             )}
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-1 text-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
             <div>
               <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Email</p>
               <p className="text-[#6b7280] break-all">{b.email}</p>
@@ -1004,7 +1004,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                     <div className="flex items-center gap-3 flex-wrap">
                       <p className="font-medium text-[#1a1a1a]">{b.name}</p>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-2 text-sm">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
 
                       <div>
                         <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Email</p>
