@@ -386,6 +386,16 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         </div>
 
         <div className="mt-8 pt-2 flex flex-col gap-6">
+          {/* Confirmation notice */}
+          <div className="flex gap-3 rounded-xl border border-[#006644]/20 bg-[#006644]/6 px-5 py-4">
+            <svg className="w-4 h-4 text-[#006644] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-sm text-[#1a1a1a] leading-relaxed">
+              <span className="font-semibold">Heads up —</span> we run classes once we have enough students signed up. A confirmation email will be sent once your class is confirmed. We&apos;ll be in touch soon.
+            </p>
+          </div>
+
           <button
             type="button"
             onClick={() => { if (!submitting) handleSubmit(); }}
@@ -400,16 +410,6 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               </svg>
             )}
           </button>
-
-          {/* Confirmation notice */}
-          <div className="flex gap-3 rounded-xl border border-[#006644]/20 bg-[#006644]/6 px-5 py-4">
-            <svg className="w-4 h-4 text-[#006644] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-sm text-[#1a1a1a] leading-relaxed">
-              <span className="font-semibold">Heads up —</span> we run classes once we have enough students signed up. A confirmation email will be sent once your class is confirmed. We&apos;ll be in touch soon.
-            </p>
-          </div>
         </div>
 
       </div>
