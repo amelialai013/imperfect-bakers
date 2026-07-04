@@ -420,14 +420,15 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
   return (
     <div className="mt-4 space-y-2">
       {active.map((b) => (
-        <div key={b.id} className="bg-white border border-[#e4dfd5] rounded-[6px] px-5 py-4 space-y-3">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div key={b.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+          {/* Header — name, badge, actions */}
+          <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-2 flex-wrap">
               <p className="font-medium text-[#1a1a1a] text-sm">{b.name}</p>
               <StatusBadge status={b.status} />
             </div>
-            {(!b.status || b.status === "pending") && (
-              <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap">
+              {(!b.status || b.status === "pending") && (<>
                 <button
                   onClick={() => act(b.id, "confirmed")}
                   disabled={acting === b.id}
@@ -442,18 +443,20 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
                 >
                   ✗ Decline
                 </button>
-              </div>
-            )}
-            {b.status === "confirmed" && (
-              <button
-                onClick={() => cancel(b.id)}
-                disabled={acting === b.id}
-                className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-full hover:bg-red-50 transition-colors disabled:opacity-50"
-              >
-                Cancel
-              </button>
-            )}
+              </>)}
+              {b.status === "confirmed" && (
+                <button
+                  onClick={() => cancel(b.id)}
+                  disabled={acting === b.id}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-full hover:bg-red-50 transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </div>
+          {/* Body */}
+          <div className="px-5 py-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
             <div>
               <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Email</p>
@@ -497,6 +500,7 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
                 </div>
               </div>
             )}
+          </div>
           </div>
         </div>
       ))}
