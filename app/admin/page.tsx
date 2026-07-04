@@ -473,6 +473,16 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
                 <p className="text-[#6b7280] text-xs">{b.notes}</p>
               </div>
             )}
+            {Array.isArray((b as Booking & { participants?: {name:string;level:string}[] }).participants) && (b as Booking & { participants?: {name:string;level:string}[] }).participants!.length > 0 && (
+              <div className="col-span-2 sm:col-span-4">
+                <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
+                <div className="space-y-0.5">
+                  {(b as Booking & { participants?: {name:string;level:string}[] }).participants!.map((p, i) => (
+                    <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${p.level}` : ""}</p>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ))}
@@ -529,9 +539,10 @@ function storageRemove(key: string) {
 
 // ── main component ─────────────────────────────────────────────────────────────
 
-type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests" | "emailTemplates";
+type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests" | "emailTemplates" | "settings";
+type ExperienceLevel = { value: string; label: string };
 
-function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onLogout: () => void }) {
+function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
@@ -586,6 +597,17 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               Email templates
+            </button>
+            <div className="h-px bg-[#e8e2d9]" />
+            <button
+              onClick={() => { setOpen(false); onSettings(); }}
+              className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
+            >
+              <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Settings
             </button>
             <div className="h-px bg-[#e8e2d9]" />
             <button
@@ -734,7 +756,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                 {pendingCount} pending
               </span>
             )}
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -893,6 +915,16 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           <p className="text-[#6b7280] text-xs">{b.notes}</p>
                         </div>
                       )}
+                      {Array.isArray((b as Booking & { participants?: {name:string;level:string}[] }).participants) && (b as Booking & { participants?: {name:string;level:string}[] }).participants!.length > 0 && (
+                        <div className="col-span-2 sm:col-span-4">
+                          <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
+                          <div className="space-y-0.5">
+                            {(b as Booking & { participants?: {name:string;level:string}[] }).participants!.map((p, i) => (
+                              <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${p.level}` : ""}</p>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -973,7 +1005,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1252,6 +1284,146 @@ function EmailTemplatesView({ token, onBack }: { token: string; onBack: () => vo
                   {saved === active && (
                     <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>
                   )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ── Settings ─────────────────────────────────────────────────────────────────
+
+function SettingsView({ token, onBack }: { token: string; onBack: () => void }) {
+  const [levels, setLevels] = useState<ExperienceLevel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const DEFAULT_LEVELS: ExperienceLevel[] = [
+    { value: "beginner", label: "New to cooking — please guide me through everything" },
+    { value: "intermediate", label: "Some experience — happy to receive tips along the way" },
+    { value: "expert", label: "Confident cook — only step in if I ask" },
+  ];
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        setLevels(data.experienceLevels?.length ? data.experienceLevels : DEFAULT_LEVELS);
+        setLoading(false);
+      })
+      .catch(() => { setLevels(DEFAULT_LEVELS); setLoading(false); });
+  }, []);
+
+  function updateLevel(i: number, field: "value" | "label", val: string) {
+    setLevels((prev) => prev.map((l, j) => j === i ? { ...l, [field]: val } : l));
+    setSaved(false);
+  }
+
+  function addLevel() {
+    setLevels((prev) => [...prev, { value: `level_${Date.now()}`, label: "" }]);
+    setSaved(false);
+  }
+
+  function removeLevel(i: number) {
+    setLevels((prev) => prev.filter((_, j) => j !== i));
+    setSaved(false);
+  }
+
+  async function save() {
+    setSaving(true);
+    try {
+      await authFetch("/api/settings", token, {
+        method: "PATCH",
+        body: JSON.stringify({ experienceLevels: levels }),
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch { /* silent */ }
+    setSaving(false);
+  }
+
+  const inputCls = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
+
+  return (
+    <>
+      <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto px-8">
+          <button onClick={onBack} className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+            </svg>
+            Admin dashboard
+          </button>
+          <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+            Site <em className="not-italic text-[#006644]">settings</em>
+          </h1>
+        </div>
+      </section>
+
+      <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white border border-[#e8e2d9] rounded-xl p-8">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Experience level options
+            </h2>
+            <p className="text-sm text-[#6b7280] mb-8">
+              These options appear in the booking form&apos;s Experience section, letting each participant describe how much guidance they&apos;d like.
+            </p>
+
+            {loading ? (
+              <p className="text-[#6b7280] text-sm">Loading…</p>
+            ) : (
+              <div className="space-y-4">
+                {levels.map((l, i) => (
+                  <div key={i} className="flex gap-3 items-start">
+                    <div className="flex-1 space-y-2">
+                      <input
+                        type="text"
+                        value={l.label}
+                        onChange={(e) => updateLevel(i, "label", e.target.value)}
+                        placeholder="Option label shown to customer…"
+                        className={inputCls}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeLevel(i)}
+                      disabled={levels.length <= 1}
+                      className="mt-3 text-[#6b7280] hover:text-red-500 transition-colors disabled:opacity-30"
+                      title="Remove option"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={addLevel}
+                  className="inline-flex items-center gap-2 text-sm text-[#006644] font-medium hover:text-[#004d33] transition-colors mt-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add option
+                </button>
+
+                <div className="pt-4 flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={save}
+                    disabled={saving}
+                    className="btn-primary disabled:opacity-50"
+                  >
+                    {saving ? "Saving…" : "Save changes"}
+                  </button>
+                  {saved && <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>}
                 </div>
               </div>
             )}
@@ -1607,6 +1779,10 @@ export default function AdminPage() {
     return <EmailTemplatesView token={token} onBack={() => setView("dashboard")} />;
   }
 
+  if (view === "settings") {
+    return <SettingsView token={token} onBack={() => setView("dashboard")} />;
+  }
+
   // ── Classes ──────────────────────────────────────────────
 
   if (view === "classes") {
@@ -1718,7 +1894,7 @@ export default function AdminPage() {
               <button onClick={() => setAddingClass(true)} className="btn-primary group">
                 New class <span>+</span>
               </button>
-              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onLogout={logout} />
+              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />
             </div>
           </div>
         </section>
@@ -1903,7 +2079,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onLogout={logout} />
+            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />
           </div>
         </div>
       </section>

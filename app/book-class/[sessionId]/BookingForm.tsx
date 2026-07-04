@@ -6,8 +6,9 @@ import type { ClassSession } from "@/lib/types";
 
 type Counts = { child: number; youngAdult: number; adult: number };
 type Participant = { name: string; level: string };
+type ExperienceLevel = { value: string; label: string };
 
-const LEVELS = [
+const DEFAULT_LEVELS: ExperienceLevel[] = [
   { value: "beginner", label: "New to cooking — please guide me through everything" },
   { value: "intermediate", label: "Some experience — happy to receive tips along the way" },
   { value: "expert", label: "Confident cook — only step in if I ask" },
@@ -69,6 +70,7 @@ function Counter({
 export default function BookingForm({ session }: { session: ClassSession }) {
   const [counts, setCounts] = useState<Counts>({ child: 0, youngAdult: 0, adult: 0 });
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [levels, setLevels] = useState<ExperienceLevel[]>(DEFAULT_LEVELS);
   const [paymentStatus, setPaymentStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -89,6 +91,14 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   useEffect(() => {
     if (submitted) window.scrollTo({ top: 0, behavior: "smooth" });
   }, [submitted]);
+
+  // Fetch experience levels from admin settings (falls back to defaults)
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => { if (data.experienceLevels?.length) setLevels(data.experienceLevels); })
+      .catch(() => {});
+  }, []);
 
   // Keep participants array in sync with totalPeople
   useEffect(() => {
@@ -368,7 +378,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                         style={{ WebkitAppearance: "none" }}
                       >
                         <option value="" disabled>Experience level</option>
-                        {LEVELS.map((l) => (
+                        {levels.map((l) => (
                           <option key={l.value} value={l.value}>{l.label}</option>
                         ))}
                       </select>
