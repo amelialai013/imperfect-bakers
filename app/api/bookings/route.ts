@@ -25,13 +25,13 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { sessionId, name, email, phone, counts, totalPeople, paymentStatus, paymentOther, notes } = body;
+  const { sessionId, name, email, phone, counts, totalPeople, paymentStatus, paymentOther, notes, participants } = body;
 
   if (!sessionId || !name || !email || totalPeople < 1) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
   }
 
-  const result = await createBooking({ sessionId, name, email, phone, counts, totalPeople, paymentStatus, paymentOther, notes });
+  const result = await createBooking({ sessionId, name, email, phone, counts, totalPeople, paymentStatus, paymentOther, notes, participants });
 
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: 409 });

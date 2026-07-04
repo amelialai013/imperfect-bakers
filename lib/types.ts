@@ -40,6 +40,7 @@ export interface Booking {
   paymentStatus: string;
   paymentOther?: string;
   notes: string;
+  participants?: Array<{ name: string; level: string }>;
   cancelled: boolean;
   status?: "pending" | "confirmed" | "declined";
   actionToken?: string;

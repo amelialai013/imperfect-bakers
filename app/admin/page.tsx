@@ -473,11 +473,11 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
                 <p className="text-[#6b7280] text-xs">{b.notes}</p>
               </div>
             )}
-            {Array.isArray((b as Booking & { participants?: {name:string;level:string}[] }).participants) && (b as Booking & { participants?: {name:string;level:string}[] }).participants!.length > 0 && (
+            {b.participants && b.participants.length > 0 && (
               <div className="col-span-2 sm:col-span-4">
                 <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
                 <div className="space-y-0.5">
-                  {(b as Booking & { participants?: {name:string;level:string}[] }).participants!.map((p, i) => (
+                  {b.participants.map((p, i) => (
                     <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${p.level}` : ""}</p>
                   ))}
                 </div>
@@ -1010,11 +1010,11 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           <p className="text-[#6b7280] text-xs">{b.notes}</p>
                         </div>
                       )}
-                      {Array.isArray((b as Booking & { participants?: {name:string;level:string}[] }).participants) && (b as Booking & { participants?: {name:string;level:string}[] }).participants!.length > 0 && (
+                      {b.participants && b.participants.length > 0 && (
                         <div className="col-span-2 sm:col-span-4">
                           <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
                           <div className="space-y-0.5">
-                            {(b as Booking & { participants?: {name:string;level:string}[] }).participants!.map((p, i) => (
+                            {b.participants.map((p, i) => (
                               <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${p.level}` : ""}</p>
                             ))}
                           </div>
