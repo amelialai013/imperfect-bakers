@@ -482,7 +482,7 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
               )}
             </div>
             {b.notes && (
-              <div className="col-span-2 sm:col-span-4">
+              <div className="col-span-2 sm:col-span-4 mt-3">
                 <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Notes</p>
                 <p className="text-[#6b7280] text-xs">{b.notes}</p>
               </div>
@@ -1033,7 +1033,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         )}
                       </div>
                       {b.notes && (
-                        <div className="col-span-2 sm:col-span-4">
+                        <div className="col-span-2 sm:col-span-4 mt-3">
                           <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Notes</p>
                           <p className="text-[#6b7280] text-xs">{b.notes}</p>
                         </div>
