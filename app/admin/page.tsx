@@ -948,17 +948,8 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           </button>
                         </div>
                       )}
-                      {/* Move to class — always available for non-cancelled */}
-                      {(!b.cancelled && (!b.status || b.status === "pending")) && (
-                        <button
-                          onClick={() => { setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-[#006644] hover:text-[#006644] transition-colors"
-                        >
-                          ⇄ Move
-                        </button>
-                      )}
-                      {/* Kebab menu — confirmed, declined, cancelled only */}
-                      {(!b.cancelled && (!b.status || b.status === "pending")) ? null : (
+                      {/* Kebab menu — all bookings */}
+                      {(true) ? (
                         <div className="relative">
                           <button
                             onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
