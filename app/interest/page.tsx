@@ -158,7 +158,7 @@ export default function InterestPage() {
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Contact details</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-              <div className="sm:col-span-2">
+              <div>
                 <input
                   ref={nameRef}
                   type="text"
@@ -194,7 +194,7 @@ export default function InterestPage() {
                 {fieldErrors.phone && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.phone}</p>}
               </div>
 
-              <div className="sm:col-span-2">
+              <div>
                 <div className="relative">
                   <select
                     ref={experienceRef}
