@@ -8,7 +8,7 @@ export default function Home() {
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
       {/* iOS Safari: 100vh includes browser chrome so we use min-h-screen with svh override in CSS */}
-      <section className="relative hero-height min-h-[560px] flex flex-col justify-end pb-12 md:pb-28 overflow-hidden">
+      <section className="relative hero-height min-h-0 sm:min-h-[560px] flex flex-col justify-end pb-12 md:pb-28 overflow-hidden">
         {/* Background image — animates independently so text stays still */}
         <div
           className="absolute inset-0 hero-bg"
