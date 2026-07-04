@@ -101,6 +101,13 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   }, [totalPeople]);
   const isFull = session.spotsLeft === 0;
 
+  // Build an ordered list of attendee type labels matching the participants array
+  const participantTypes: string[] = [
+    ...Array(counts.child).fill("Child"),
+    ...Array(counts.youngAdult).fill("Young Adult"),
+    ...Array(counts.adult).fill("Adult"),
+  ];
+
   function setCount(key: keyof Counts, value: number) {
     const otherTotal = Object.entries(counts)
       .filter(([k]) => k !== key)
@@ -330,6 +337,9 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 return (
                   <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
+                      {participantTypes[i] && (
+                        <p className="text-xs text-[#6b7280] mb-1">{participantTypes[i]}</p>
+                      )}
                       <input
                         type="text"
                         placeholder={`Participant ${i + 1} name`}
