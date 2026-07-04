@@ -393,7 +393,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                           const val = e.target.value;
                           setParticipants((prev) => prev.map((x, j) => j === i ? { ...x, level: val } : x));
                         }}
-                        className="w-full bg-transparent border-0 border-b border-[#c8c0b4] px-0 py-3 text-sm focus:outline-none focus:border-[#006644] transition-colors appearance-none cursor-pointer"
+                        className="w-full bg-transparent border-0 border-b border-[#c8c0b4] pl-0 pr-6 py-3 text-sm focus:outline-none focus:border-[#006644] transition-colors appearance-none cursor-pointer"
                         style={{ WebkitAppearance: "none", color: p.level ? "#1a1a1a" : "#6b7280" }}
                       >
                         <option value="" disabled>Experience level</option>
