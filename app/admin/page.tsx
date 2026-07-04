@@ -364,6 +364,20 @@ function SessionForm({
 function BookingsPanel({ sessionId, token }: { sessionId: string; token: string }) {
   const [bookings, setBookings] = useState<Booking[] | null>(null);
   const [acting, setActing] = useState<string | null>(null);
+  const [levelMap, setLevelMap] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.experienceLevels?.length) {
+          const map: Record<string, string> = {};
+          for (const l of data.experienceLevels) map[l.value] = l.label;
+          setLevelMap(map);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const load = useCallback(async () => {
     const res = await authFetch(`/api/sessions/${sessionId}`, token, { method: "PATCH" });
@@ -478,7 +492,7 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
                 <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
                 <div className="space-y-0.5">
                   {b.participants.map((p, i) => (
-                    <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${p.level}` : ""}</p>
+                    <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
                   ))}
                 </div>
               </div>
@@ -656,6 +670,20 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
   const [moveSessionId, setMoveSessionId] = useState<string>("");
   const [moving, setMoving] = useState(false);
   const [moveError, setMoveError] = useState<string>("");
+  const [levelMap, setLevelMap] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.experienceLevels?.length) {
+          const map: Record<string, string> = {};
+          for (const l of data.experienceLevels) map[l.value] = l.label;
+          setLevelMap(map);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -1015,7 +1043,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
                           <div className="space-y-0.5">
                             {b.participants.map((p, i) => (
-                              <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${p.level}` : ""}</p>
+                              <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
                             ))}
                           </div>
                         </div>
