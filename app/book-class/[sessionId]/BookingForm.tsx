@@ -273,7 +273,54 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           )}
         </div>
 
-        {/* 03 — Experience */}
+        {/* 03 — Payment */}
+        <div className="mt-[60px] mb-12">
+          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
+          <div className="mb-8">
+            <p className="text-xs text-[#6b7280] mb-2">Include your name and class name in the reference</p>
+            <p className="text-sm text-[#1a1a1a]">Transfer to <span className="font-semibold">Sarah Jasper</span></p>
+            <p className="text-sm text-[#1a1a1a] mt-0.5">BSB <span className="font-medium">733-100</span></p>
+            <p className="text-sm text-[#1a1a1a] mt-0.5">Account <span className="font-medium">759127</span></p>
+          </div>
+          <p className="text-xs text-[#6b7280] mb-3">Payment status</p>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { value: "completed", label: "Paid" },
+              { value: "within-week", label: "Paying this week" },
+              { value: "other", label: "Other" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
+                className={`px-5 py-2.5 text-sm font-medium border transition-colors duration-200 rounded-full ${
+                  paymentStatus === opt.value
+                    ? "bg-[#006644] border-[#006644] text-white"
+                    : fieldErrors.payment
+                    ? "bg-red-50 border-red-300 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
+                    : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          {paymentStatus === "other" && (
+            <div className="mt-3">
+              <input
+                ref={paymentOtherRef}
+                type="text"
+                placeholder="Add note"
+                className={fieldErrors.paymentOther ? inputErrorClass : inputClass}
+                onChange={() => fieldErrors.paymentOther && setFieldErrors((p) => ({ ...p, paymentOther: undefined }))}
+              />
+              {fieldErrors.paymentOther && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.paymentOther}</p>}
+            </div>
+          )}
+          {fieldErrors.payment && <p className="text-xs text-red-500 mt-2">{fieldErrors.payment}</p>}
+        </div>
+
+        {/* 04 — Experience */}
         {totalPeople > 0 && (
           <div className="mt-[60px] mb-12">
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Experience</p>
@@ -325,53 +372,6 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             </div>
           </div>
         )}
-
-        {/* 04 — Payment */}
-        <div className="mt-[60px] mb-12">
-          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
-          <div className="mb-8">
-            <p className="text-xs text-[#6b7280] mb-2">Include your name and class name in the reference</p>
-            <p className="text-sm text-[#1a1a1a]">Transfer to <span className="font-semibold">Sarah Jasper</span></p>
-            <p className="text-sm text-[#1a1a1a] mt-0.5">BSB <span className="font-medium">733-100</span></p>
-            <p className="text-sm text-[#1a1a1a] mt-0.5">Account <span className="font-medium">759127</span></p>
-          </div>
-          <p className="text-xs text-[#6b7280] mb-3">Payment status</p>
-          <div className="flex flex-wrap gap-2">
-            {[
-              { value: "completed", label: "Paid" },
-              { value: "within-week", label: "Paying this week" },
-              { value: "other", label: "Other" },
-            ].map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => { setPaymentStatus(opt.value); setFieldErrors((p) => ({ ...p, payment: undefined })); }}
-                className={`px-5 py-2.5 text-sm font-medium border transition-colors duration-200 rounded-full ${
-                  paymentStatus === opt.value
-                    ? "bg-[#006644] border-[#006644] text-white"
-                    : fieldErrors.payment
-                    ? "bg-red-50 border-red-300 text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
-                    : "bg-white border-[#e4dfd5] text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644]"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-          {paymentStatus === "other" && (
-            <div className="mt-3">
-              <input
-                ref={paymentOtherRef}
-                type="text"
-                placeholder="Add note"
-                className={fieldErrors.paymentOther ? inputErrorClass : inputClass}
-                onChange={() => fieldErrors.paymentOther && setFieldErrors((p) => ({ ...p, paymentOther: undefined }))}
-              />
-              {fieldErrors.paymentOther && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.paymentOther}</p>}
-            </div>
-          )}
-          {fieldErrors.payment && <p className="text-xs text-red-500 mt-2">{fieldErrors.payment}</p>}
-        </div>
 
         {/* 05 — Notes */}
         <div className="mt-[60px]">
