@@ -392,7 +392,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <p className="text-sm text-[#1a1a1a] leading-relaxed">
-              <span className="font-semibold">Heads up —</span> we run classes once we have enough students signed up. A confirmation email will be sent once your class is confirmed. We&apos;ll be in touch soon.
+              <span className="font-semibold">Heads up —</span> we run classes once we have enough students signed up. A confirmation email will be sent once your class is confirmed.
             </p>
           </div>
 
