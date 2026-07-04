@@ -1283,7 +1283,7 @@ const TEMPLATE_DEFS: {
   },
 ];
 
-function EmailTemplatesView({ token, onBack }: { token: string; onBack: () => void }) {
+function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManageClasses, onSettings, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onSettings: () => void; onLogout: () => void }) {
   const [templates, setTemplates] = useState<Record<string, Record<string, string>>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
@@ -1323,16 +1323,21 @@ function EmailTemplatesView({ token, onBack }: { token: string; onBack: () => vo
   return (
     <>
       <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
-        <div className="max-w-7xl mx-auto px-8">
-          <button onClick={onBack} className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors">
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-            </svg>
-            Admin dashboard
-          </button>
-          <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-            Email <em className="not-italic text-[#006644]">templates</em>
-          </h1>
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+          <div>
+            <button onClick={onBack} className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+              </svg>
+              Admin dashboard
+            </button>
+            <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Email <em className="not-italic text-[#006644]">templates</em>
+            </h1>
+          </div>
+          <div className="flex items-center gap-4 pb-1 mt-12">
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onLogout={onLogout} align="right" />
+          </div>
         </div>
       </section>
 
@@ -1419,7 +1424,7 @@ function EmailTemplatesView({ token, onBack }: { token: string; onBack: () => vo
 
 // ── Settings ─────────────────────────────────────────────────────────────────
 
-function SettingsView({ token, onBack }: { token: string; onBack: () => void }) {
+function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClasses, onEmailTemplates, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onLogout: () => void }) {
   const [levels, setLevels] = useState<ExperienceLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -1474,16 +1479,21 @@ function SettingsView({ token, onBack }: { token: string; onBack: () => void }) 
   return (
     <>
       <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
-        <div className="max-w-7xl mx-auto px-8">
-          <button onClick={onBack} className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors">
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-            </svg>
-            Admin dashboard
-          </button>
-          <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-            Site <em className="not-italic text-[#006644]">settings</em>
-          </h1>
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+          <div>
+            <button onClick={onBack} className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+              </svg>
+              Admin dashboard
+            </button>
+            <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Site <em className="not-italic text-[#006644]">settings</em>
+            </h1>
+          </div>
+          <div className="flex items-center gap-4 pb-1 mt-12">
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onLogout={onLogout} align="right" />
+          </div>
         </div>
       </section>
 
@@ -1899,11 +1909,11 @@ export default function AdminPage() {
   }
 
   if (view === "emailTemplates") {
-    return <EmailTemplatesView token={token} onBack={() => setView("dashboard")} />;
+    return <EmailTemplatesView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onManageClasses={() => setView("classes")} onSettings={() => setView("settings")} onLogout={logout} />;
   }
 
   if (view === "settings") {
-    return <SettingsView token={token} onBack={() => setView("dashboard")} />;
+    return <SettingsView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onManageClasses={() => setView("classes")} onEmailTemplates={() => setView("emailTemplates")} onLogout={logout} />;
   }
 
   // ── Classes ──────────────────────────────────────────────
