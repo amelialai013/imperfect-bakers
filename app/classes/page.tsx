@@ -139,7 +139,7 @@ export default async function ClassesPage() {
             >
               Looking for something more personal?
             </h2>
-            <p className="text-white/70 text-base leading-relaxed mt-4">
+            <p className="text-white/70 text-sm leading-relaxed mt-4">
               We offer private sessions for birthdays, team days, hens parties, and more. Tell us what you have in mind and we&apos;ll create something just for you.
             </p>
           </div>
