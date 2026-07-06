@@ -2553,7 +2553,7 @@ export default function AdminPage() {
             }).map((s) => s.id);
             const allExpanded = filteredIds.length > 0 && filteredIds.every((id) => expandedBookings.has(id));
             return (
-              <div className="flex items-center justify-between mb-5">
+              <div className="flex flex-wrap items-center justify-between gap-y-3 mb-5">
                 <div className="inline-flex gap-1 bg-[#f0ece4] rounded-full p-1">
                   {(["upcoming", "past"] as const).map((t) => (
                     <button
@@ -2580,7 +2580,7 @@ export default function AdminPage() {
                   <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${allExpanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
-                  {allExpanded ? "Close all" : "View all bookings"}
+                  {allExpanded ? "Collapse all bookings" : "Expand all bookings"}
                 </button>
               </div>
             );
