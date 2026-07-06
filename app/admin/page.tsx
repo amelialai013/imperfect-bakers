@@ -843,7 +843,14 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                   >
                     <option value="">Select a class…</option>
                     {allSessions
-                      .filter((s) => s.id !== moveTarget.sessionId && s.spotsLeft >= moveTarget.totalPeople)
+                      .filter((s) => {
+                        if (s.id === moveTarget.sessionId) return false;
+                        if (s.spotsLeft < moveTarget.totalPeople) return false;
+                        // Exclude past sessions
+                        const parsed = new Date(s.date);
+                        if (!isNaN(parsed.getTime()) && parsed < new Date(new Date().toDateString())) return false;
+                        return true;
+                      })
                       .map((s) => (
                         <option key={s.id} value={s.id}>
                           {s.sessionName || s.classLabel} — {s.date} ({s.spotsLeft} spots left)
