@@ -153,15 +153,18 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
           <p className="text-[#1a1a1a] font-medium mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
             No upcoming classes for {activeClass !== "All" ? <span className="text-[#006644] font-semibold">{activeClass}</span> : ""}
           </p>
-          <p className="text-[#6b7280] text-sm mb-8">Check back soon — new sessions are added regularly.</p>
-          {activeClass !== "All" && (
-            <button
-              onClick={() => setActiveClass("All")}
-              className="btn-secondary"
-            >
-              See all classes
-            </button>
-          )}
+          <p className="text-[#6b7280] text-sm mb-8">Check back soon — or register your interest and we&apos;ll reach out when a spot opens up.</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {activeClass !== "All" && (
+              <button
+                onClick={() => setActiveClass("All")}
+                className="btn-primary"
+              >
+                See all classes
+              </button>
+            )}
+            <a href="/interest" className="btn-secondary">Register interest</a>
+          </div>
         </div>
       ) : (
         /* Single render — no mobile/desktop split that can cause Safari display bugs */
