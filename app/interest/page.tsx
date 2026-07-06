@@ -29,6 +29,7 @@ type FieldErrors = {
   name?: string;
   email?: string;
   phone?: string;
+  notes?: string;
 };
 
 export default function InterestPage() {
@@ -89,6 +90,12 @@ export default function InterestPage() {
     if (!phone) errors.phone = "Please enter your phone number";
     else if (!/^[\d\s\+\-\(\)]{7,15}$/.test(phone))
       errors.phone = "Please enter a valid phone number";
+
+    // Notes required if "Other — see notes" experience level selected
+    const selectedLevel = levels.find((l) => l.value === experience);
+    if (selectedLevel && selectedLevel.label.toLowerCase().includes("see notes") && !notes) {
+      errors.notes = "Please add a note as you have selected 'Other' as an experience level";
+    }
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -256,14 +263,17 @@ export default function InterestPage() {
 
           {/* Notes */}
           <div className="mt-[60px]">
-            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Notes</p>
+            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-1">Notes</p>
+            <p className="text-xs text-[#6b7280] mb-4">We&apos;re also happy to come to you — just mention it here.</p>
             <textarea
               ref={notesRef}
               rows={3}
               placeholder="Dietary requirements, allergies, questions…"
-              className={`${inputClass} resize-none`}
+              className={`${fieldErrors.notes ? inputErrorClass : inputClass} resize-none`}
               style={{ scrollbarWidth: "thin", scrollbarColor: "#c8c0b4 transparent" } as React.CSSProperties}
+              onChange={() => fieldErrors.notes && setFieldErrors((p) => ({ ...p, notes: undefined }))}
             />
+            {fieldErrors.notes && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.notes}</p>}
           </div>
 
           {/* Submit */}
