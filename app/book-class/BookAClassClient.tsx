@@ -214,6 +214,19 @@ function shortDate(date: string) {
   return date;
 }
 
+function shortDayDate(date: string) {
+  // "Saturday 18 July 2026" → "Sat 18 July 2026"
+  const days: Record<string, string> = {
+    Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu",
+    Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
+  };
+  const parts = date.split(" "); // ["Saturday", "18", "July", "2026"]
+  if (parts.length === 4) {
+    return `${days[parts[0]] ?? parts[0]} ${parts[1]} ${parts[2]} ${parts[3]}`;
+  }
+  return date;
+}
+
 function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view: "grid" | "list" }) {
   const isFull = s.spotsLeft === 0;
 
@@ -262,7 +275,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <span className="md:hidden">{shortDate(s.date)}</span>
-                <span className="hidden md:inline">{s.date}</span>
+                <span className="hidden md:inline">{shortDayDate(s.date)}</span>
               </span>
               <span className="flex items-center gap-2">
                 <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
