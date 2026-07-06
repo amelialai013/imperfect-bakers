@@ -182,7 +182,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
             <div className="mt-8">
               <button
                 onClick={() => setActiveClass("All")}
-                className="text-sm text-[#006644] hover:underline"
+                className="btn-secondary"
               >
                 See all classes
               </button>
