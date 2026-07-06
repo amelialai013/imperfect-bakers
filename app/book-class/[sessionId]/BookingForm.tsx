@@ -393,6 +393,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                       {nameErr && <p className="text-xs text-red-500 mt-1.5">{nameErr}</p>}
                     </div>
                     <div className="relative">
+                      <p className="text-sm text-[#1a1a1a] mb-1 opacity-0 select-none" aria-hidden="true">x</p>
                       <select
                         value={p.level}
                         onChange={(e) => {
