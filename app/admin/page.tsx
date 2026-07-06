@@ -1796,7 +1796,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editTarget, setEditTarget] = useState<ClassSession | null>(null);
-  const [expandedBookings, setExpandedBookings] = useState<string | null>(null);
+  const [expandedBookings, setExpandedBookings] = useState<Set<string>>(new Set());
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [deleteSessionConfirm, setDeleteSessionConfirm] = useState<string | null>(null);
   const [classConfigs, setClassConfigs] = useState<ClassConfig[]>(DEFAULT_CLASS_CONFIGS);
@@ -2544,23 +2544,47 @@ export default function AdminPage() {
           </div>
 
           {/* Upcoming / Past toggle */}
-          {!loading && sessions.length > 0 && (
-            <div className="flex items-center gap-3 mb-5">
-              <div className="inline-flex gap-1 bg-[#f0ece4] rounded-full p-1">
-                {(["upcoming", "past"] as const).map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setDashTimeFilter(t)}
-                    className={`px-5 py-2.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
-                      dashTimeFilter === t ? "bg-white text-[#1a1a1a] shadow-sm" : "text-[#6b7280] hover:text-[#1a1a1a]"
-                    }`}
-                  >
-                    {t.charAt(0).toUpperCase() + t.slice(1)}
-                  </button>
-                ))}
+          {!loading && sessions.length > 0 && (() => {
+            const today = new Date(new Date().toDateString());
+            const filteredIds = sessions.filter((s) => {
+              const d = new Date(s.date);
+              const isPast = !isNaN(d.getTime()) && d < today;
+              return dashTimeFilter === "past" ? isPast : !isPast;
+            }).map((s) => s.id);
+            const allExpanded = filteredIds.length > 0 && filteredIds.every((id) => expandedBookings.has(id));
+            return (
+              <div className="flex items-center justify-between mb-5">
+                <div className="inline-flex gap-1 bg-[#f0ece4] rounded-full p-1">
+                  {(["upcoming", "past"] as const).map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setDashTimeFilter(t)}
+                      className={`px-5 py-2.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
+                        dashTimeFilter === t ? "bg-white text-[#1a1a1a] shadow-sm" : "text-[#6b7280] hover:text-[#1a1a1a]"
+                      }`}
+                    >
+                      {t.charAt(0).toUpperCase() + t.slice(1)}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => {
+                    if (allExpanded) {
+                      setExpandedBookings((prev) => { const next = new Set(prev); filteredIds.forEach((id) => next.delete(id)); return next; });
+                    } else {
+                      setExpandedBookings((prev) => new Set([...prev, ...filteredIds]));
+                    }
+                  }}
+                  className="text-xs font-semibold text-[#006644] hover:text-[#004d33] transition-colors flex items-center gap-1.5"
+                >
+                  <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${allExpanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                  {allExpanded ? "Close all" : "View all bookings"}
+                </button>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Sessions list */}
           {loading ? (
@@ -2581,7 +2605,7 @@ export default function AdminPage() {
                 const booked = Math.max(0, s.maxSpots - s.spotsLeft);
                 const pct = Math.round((booked / s.maxSpots) * 100);
                 const isFull = s.spotsLeft === 0;
-                const showBookings = expandedBookings === s.id;
+                const showBookings = expandedBookings.has(s.id);
 
                 return (
                   <div key={s.id} className="bg-white border border-[#e8e2d9] rounded-xl relative">
@@ -2667,7 +2691,7 @@ export default function AdminPage() {
 
                     {/* Bookings accordion trigger */}
                     <button
-                      onClick={() => setExpandedBookings(showBookings ? null : s.id)}
+                      onClick={() => setExpandedBookings((prev) => { const next = new Set(prev); showBookings ? next.delete(s.id) : next.add(s.id); return next; })}
                       className="w-full border-t border-[#e8e2d9] px-7 py-3.5 flex items-center justify-between hover:bg-[#faf9f6] transition-colors"
                     >
                       <span className="text-xs font-semibold tracking-[0.15em] uppercase text-[#006644]">
