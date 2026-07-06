@@ -345,15 +345,7 @@ function SessionForm({
             />
             {locationError && <p className="text-xs text-red-500 mt-1.5">Please enter a location</p>}
           </div>
-          <SelectField label="Ages" name="ages" value={form.ages} onChange={(e) => {
-            const val = e.target.value;
-            setForm((f) => ({ ...f, ages: val }));
-            if (val === "All ages") setAttendeeTypes(["child", "youngAdult", "adult"]);
-            else if (val === "18+ yrs") setAttendeeTypes((prev) => prev.filter((k) => k !== "child"));
-          }} required>
-            <option value="All ages">All ages</option>
-            <option value="18+ yrs">Ages 18+</option>
-          </SelectField>
+
           <div>
             <label className={labelCls}>Attendee types</label>
             <div className="flex flex-wrap gap-3 mt-1">
