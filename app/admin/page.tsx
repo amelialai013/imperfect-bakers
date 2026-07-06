@@ -116,6 +116,7 @@ function Field({
   type = "text",
   placeholder = "",
   required = false,
+  error,
 }: {
   label: string;
   name: string;
@@ -124,9 +125,11 @@ function Field({
   type?: string;
   placeholder?: string;
   required?: boolean;
+  error?: string;
 }) {
-  const cls =
-    "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
+  const baseCls =
+    "w-full border rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none bg-white transition-colors";
+  const cls = baseCls + (error ? " border-red-400 focus:border-red-500" : " border-[#e4dfd5] focus:border-[#006644]");
   return (
     <div>
       <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4">
@@ -152,6 +155,7 @@ function Field({
           className={cls}
         />
       )}
+      {error && <p className="text-xs text-red-500 mt-1.5">{error}</p>}
     </div>
   );
 }
@@ -178,6 +182,7 @@ function SessionForm({
   const [form, setForm] = useState(initial);
   const [attendeeTypes, setAttendeeTypes] = useState(initialAttendeeTypes);
   const [locationError, setLocationError] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   // Derive ISO date from stored display date for the date input
   const [dateIso, setDateIso] = useState(() => displayDateToIso(initial.date));
   // Start time and duration for the time picker
@@ -241,32 +246,42 @@ function SessionForm({
     setForm((f) => ({ ...f, time: formatTimeRange(startTime, parseInt(duration, 10) || 3) }));
   }, [startTime, duration]);
 
-  const SelectField = ({ label, name, value, onChange, required: req, children }: {
+  const SelectField = ({ label, name, value, onChange, required: req, children, error }: {
     label: string; name: string; value: string;
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    required?: boolean; children: React.ReactNode;
+    required?: boolean; children: React.ReactNode; error?: string;
   }) => (
     <div>
       <label className={labelCls}>{label}</label>
       <div className="relative">
         <select name={name} value={value} onChange={onChange} required={req}
-          className={cls + " appearance-none pr-8 cursor-pointer"}>
+          className={cls + " appearance-none pr-8 cursor-pointer" + (error ? " !border-red-400 focus:!border-red-500" : "")}>
           {children}
         </select>
         <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
         </svg>
       </div>
+      {error && <p className="text-xs text-red-500 mt-1.5">{error}</p>}
     </div>
   );
 
   const sectionLabel = "text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-5 block";
 
   return (
-    <form onSubmit={(e) => {
+    <form noValidate onSubmit={(e) => {
       e.preventDefault();
-      if (!form.location.trim()) { setLocationError(true); return; }
-      setLocationError(false);
+      const errs: Record<string, string> = {};
+      if (!form.classLabel) errs.classLabel = "Please select a class type";
+      if (!form.sessionName.trim()) errs.sessionName = "Please enter a session name";
+      if (!dateIso) errs.date = "Please select a date";
+      if (!startTime) errs.startTime = "Please select a start time";
+      if (!form.price.trim()) errs.price = "Please enter a price";
+      if (!form.maxSpots.trim()) errs.maxSpots = "Please enter max spots";
+      const locMissing = !form.location.trim();
+      setLocationError(locMissing);
+      setFieldErrors(errs);
+      if (Object.keys(errs).length > 0 || locMissing) return;
       onSave(form, attendeeTypes);
     }}>
 
@@ -274,11 +289,11 @@ function SessionForm({
       <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
         <span className={sectionLabel}>Class</span>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <SelectField label="Class type" name="classLabel" value={form.classLabel} onChange={handle} required>
+          <SelectField label="Class type" name="classLabel" value={form.classLabel} onChange={(e) => { handle(e); setFieldErrors((prev) => ({ ...prev, classLabel: "" })); }} required error={fieldErrors.classLabel}>
             <option value="">Select class type…</option>
             {CLASS_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
           </SelectField>
-          <Field label="Session name" name="sessionName" value={form.sessionName} onChange={handle} placeholder="e.g. Delicious Dinner" required />
+          <Field label="Session name" name="sessionName" value={form.sessionName} onChange={(e) => { handle(e); setFieldErrors((prev) => ({ ...prev, sessionName: "" })); }} placeholder="e.g. Delicious Dinner" required error={fieldErrors.sessionName} />
         </div>
       </div>
 
@@ -288,13 +303,14 @@ function SessionForm({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className={labelCls}>Date</label>
-            <input type="date" value={dateIso} onChange={(e) => setDateIso(e.target.value)} required className={cls} />
-            {form.date && <p className="text-xs text-[#006644]/70 mt-1.5">{form.date}</p>}
+            <input type="date" value={dateIso} onChange={(e) => { setDateIso(e.target.value); setFieldErrors((prev) => ({ ...prev, date: "" })); }} className={cls + (fieldErrors.date ? " !border-red-400 focus:!border-red-500" : "")} />
+            {fieldErrors.date && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.date}</p>}
+            {!fieldErrors.date && form.date && <p className="text-xs text-[#006644]/70 mt-1.5">{form.date}</p>}
           </div>
           <div>
             <label className={labelCls}>Time</label>
             <div className="flex gap-2">
-              <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required className={cls} />
+              <input type="time" value={startTime} onChange={(e) => { setStartTime(e.target.value); setFieldErrors((prev) => ({ ...prev, startTime: "" })); }} className={cls + (fieldErrors.startTime ? " !border-red-400 focus:!border-red-500" : "")} />
               <div className="relative shrink-0 w-32">
                 <select value={duration} onChange={(e) => setDuration(e.target.value)} className={cls + " appearance-none pr-8 cursor-pointer"}>
                   {[1,1.5,2,2.5,3,3.5,4,4.5,5].map((h) => (
@@ -306,7 +322,8 @@ function SessionForm({
                 </svg>
               </div>
             </div>
-            {form.time && <p className="text-xs text-[#006644]/70 mt-1.5">{form.time}</p>}
+            {fieldErrors.startTime && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.startTime}</p>}
+            {!fieldErrors.startTime && form.time && <p className="text-xs text-[#006644]/70 mt-1.5">{form.time}</p>}
           </div>
         </div>
       </div>
@@ -319,7 +336,7 @@ function SessionForm({
             <label className={labelCls}>Location</label>
             <LocationInput
               value={form.location}
-              onChange={(v) => setForm((f) => ({ ...f, location: v }))}
+              onChange={(v) => { setForm((f) => ({ ...f, location: v })); if (v.trim()) setLocationError(false); }}
               placeholder="Williamstown, Melbourne"
               error={locationError}
             />
@@ -349,8 +366,8 @@ function SessionForm({
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <Field label="Price per person ($)" name="price" value={form.price} onChange={handle} type="number" placeholder="150" required />
-            <Field label="Max spots" name="maxSpots" value={form.maxSpots} onChange={handle} type="number" placeholder="15" required />
+            <Field label="Price per person ($)" name="price" value={form.price} onChange={(e) => { handle(e); setFieldErrors((prev) => ({ ...prev, price: "" })); }} type="number" placeholder="150" required error={fieldErrors.price} />
+            <Field label="Max spots" name="maxSpots" value={form.maxSpots} onChange={(e) => { handle(e); setFieldErrors((prev) => ({ ...prev, maxSpots: "" })); }} type="number" placeholder="15" required error={fieldErrors.maxSpots} />
           </div>
         </div>
       </div>
@@ -1790,6 +1807,7 @@ export default function AdminPage() {
   const [addingClass, setAddingClass] = useState(false);
   const [newClass, setNewClass] = useState<Omit<ClassConfig, "key">>({ title: "", ages: "", imageUrl: "", description: "" });
   const [savingNewClass, setSavingNewClass] = useState(false);
+  const [newClassErrors, setNewClassErrors] = useState<Record<string, string>>({});
   const [deletingClass, setDeletingClass] = useState<string | null>(null);
   const [deleteClassConfirm, setDeleteClassConfirm] = useState<string | null>(null);
   const [classKebabOpen, setClassKebabOpen] = useState<string | null>(null);
@@ -1963,7 +1981,11 @@ export default function AdminPage() {
   }
 
   async function saveNewClass() {
-    if (!newClass.title.trim()) return;
+    const errs: Record<string, string> = {};
+    if (!newClass.title.trim()) errs.title = "Title is required";
+    if (!newClass.imageUrl.trim()) errs.imageUrl = "Image URL is required";
+    if (Object.keys(errs).length > 0) { setNewClassErrors(errs); return; }
+    setNewClassErrors({});
     setSavingNewClass(true);
     const key = newClass.title.trim();
     const config: ClassConfig = { key, ...newClass };
@@ -1976,6 +1998,7 @@ export default function AdminPage() {
     const data = await res.json();
     if (Array.isArray(data)) { setClassConfigs(data); setSavedClassConfigs(data); }
     setNewClass({ title: "", ages: "", imageUrl: "", description: "" });
+    setNewClassErrors({});
     setAddingClass(false);
     setSavingNewClass(false);
   }
@@ -2245,7 +2268,7 @@ export default function AdminPage() {
               <div className="bg-white border border-[#006644] rounded-xl p-6 mb-6">
                 <div className="flex items-center justify-between mb-5">
                   <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">New class</span>
-                  <button onClick={() => { setAddingClass(false); setNewClass({ title: "", ages: "", imageUrl: "", description: "" }); }} className="text-[#6b7280] hover:text-[#1a1a1a] transition-colors">
+                  <button onClick={() => { setAddingClass(false); setNewClass({ title: "", ages: "", imageUrl: "", description: "" }); setNewClassErrors({}); }} className="text-[#6b7280] hover:text-[#1a1a1a] transition-colors">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
                 </div>
@@ -2253,7 +2276,8 @@ export default function AdminPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className={labelCls}>Title</label>
-                      <input type="text" value={newClass.title} onChange={(e) => setNewClass((n) => ({ ...n, title: e.target.value }))} placeholder="e.g. Bread Baking" className={inputCls} />
+                      <input type="text" value={newClass.title} onChange={(e) => { setNewClass((n) => ({ ...n, title: e.target.value })); if (e.target.value.trim()) setNewClassErrors((p) => ({ ...p, title: "" })); }} placeholder="e.g. Bread Baking" className={inputCls + (newClassErrors.title ? " !border-red-400 focus:!border-red-500" : "")} />
+                      {newClassErrors.title && <p className="text-xs text-red-500 mt-1.5">{newClassErrors.title}</p>}
                     </div>
                     <div>
                       <label className={labelCls}>Tag</label>
@@ -2262,7 +2286,8 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <label className={labelCls}>Image URL</label>
-                    <input type="text" value={newClass.imageUrl} onChange={(e) => setNewClass((n) => ({ ...n, imageUrl: e.target.value }))} placeholder="https://images.unsplash.com/…" className={inputCls} />
+                    <input type="text" value={newClass.imageUrl} onChange={(e) => { setNewClass((n) => ({ ...n, imageUrl: e.target.value })); if (e.target.value.trim()) setNewClassErrors((p) => ({ ...p, imageUrl: "" })); }} placeholder="https://images.unsplash.com/…" className={inputCls + (newClassErrors.imageUrl ? " !border-red-400 focus:!border-red-500" : "")} />
+                    {newClassErrors.imageUrl && <p className="text-xs text-red-500 mt-1.5">{newClassErrors.imageUrl}</p>}
                   </div>
                   <div>
                     <label className={labelCls}>Description</label>
@@ -2270,7 +2295,7 @@ export default function AdminPage() {
                     <p className={`text-right text-xs mt-1 ${newClass.description.length >= 90 ? "text-red-400" : "text-[#c8c0b4]"}`}>{newClass.description.length}/100</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-3 pt-1">
-                    <button onClick={saveNewClass} disabled={savingNewClass || !newClass.title.trim()} className="btn-primary">
+                    <button onClick={saveNewClass} disabled={savingNewClass} className="btn-primary">
                       {savingNewClass ? "Saving…" : "Save class"}
                     </button>
                     <button onClick={() => { setAddingClass(false); setNewClass({ title: "", ages: "", imageUrl: "", description: "" }); }} className="btn-secondary">
