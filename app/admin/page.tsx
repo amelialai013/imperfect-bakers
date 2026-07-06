@@ -223,9 +223,13 @@ function SessionForm({
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   function toggleAttendeeType(key: "child" | "youngAdult" | "adult") {
-    setAttendeeTypes((prev) =>
-      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
-    );
+    setAttendeeTypes((prev) => {
+      const next = prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key];
+      if (next.length === 3) {
+        setForm((f) => ({ ...f, ages: "All ages" }));
+      }
+      return next;
+    });
   }
 
   // Keep form.date and form.time in sync with picker state
