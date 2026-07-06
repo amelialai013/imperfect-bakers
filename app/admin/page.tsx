@@ -2610,7 +2610,7 @@ export default function AdminPage() {
                               </button>
                               <div className="h-px bg-[#e8e2d9]" />
                               <button
-                                onClick={() => { setSessionKebabOpen(null); setEditTarget(s); setView("edit"); }}
+                                onClick={() => { setSessionKebabOpen(null); setEditTarget(s); setView("edit"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                                 className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
                               >
                                 Edit class
