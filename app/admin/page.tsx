@@ -913,8 +913,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               <div className="absolute inset-0 bg-black/40" onClick={() => setUndeclineTarget(null)} />
               <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm z-10">
                 <h2 className="text-lg font-semibold text-[#1a1a1a] mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Reinstate booking</h2>
-                <p className="text-sm text-[#6b7280] mb-1">This booking will be moved back to pending and will need to be confirmed.</p>
-                <p className="text-sm text-[#6b7280] mb-6">No email will be sent to the customer.</p>
+                <p className="text-sm text-[#6b7280] mb-6">This booking will be moved back to pending and will need to be confirmed. No email will be sent to the customer.</p>
                 <div className="flex gap-3 justify-end">
                   <button onClick={() => setUndeclineTarget(null)} className="px-4 py-2 text-sm font-medium text-[#6b7280] bg-white border border-[#e4dfd5] rounded-full hover:border-[#1a1a1a] transition-colors">
                     Cancel
