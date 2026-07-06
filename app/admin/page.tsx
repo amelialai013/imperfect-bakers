@@ -1640,6 +1640,7 @@ export default function AdminPage() {
   const [addBookingTarget, setAddBookingTarget] = useState<ClassSession | null>(null);
   const [addBookingForm, setAddBookingForm] = useState({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 });
   const [addBookingError, setAddBookingError] = useState<string>("");
+  const [addBookingFieldErrors, setAddBookingFieldErrors] = useState<{ name?: string; email?: string; attendees?: string; payment?: string }>({});
   const [addBookingSaving, setAddBookingSaving] = useState(false);
 
   const loadSessions = useCallback(async () => {
@@ -2244,10 +2245,13 @@ export default function AdminPage() {
     if (!addBookingTarget) return;
     const { name, email, phone, notes, paymentStatus, paymentOther, child, youngAdult, adult } = addBookingForm;
     const totalPeople = child + youngAdult + adult;
-    if (!name.trim()) { setAddBookingError("Name is required."); return; }
-    if (!email.trim()) { setAddBookingError("Email is required."); return; }
-    if (totalPeople < 1) { setAddBookingError("Add at least 1 attendee."); return; }
-    if (!paymentStatus) { setAddBookingError("Select a payment method."); return; }
+    const fieldErrs: { name?: string; email?: string; attendees?: string; payment?: string } = {};
+    if (!name.trim()) fieldErrs.name = "Name is required.";
+    if (!email.trim()) fieldErrs.email = "Email is required.";
+    if (totalPeople < 1) fieldErrs.attendees = "Add at least 1 attendee.";
+    if (!paymentStatus) fieldErrs.payment = "Select a payment method.";
+    if (Object.keys(fieldErrs).length > 0) { setAddBookingFieldErrors(fieldErrs); return; }
+    setAddBookingFieldErrors({});
     setAddBookingSaving(true); setAddBookingError("");
     const res = await fetch("/api/bookings", {
       method: "POST",
@@ -2445,7 +2449,14 @@ export default function AdminPage() {
                         {sessionKebabOpen === s.id && (
                           <>
                             <div className="fixed inset-0 z-10" onClick={() => setSessionKebabOpen(null)} />
-                            <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[140px]">
+                            <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                              <button
+                                onClick={() => { setSessionKebabOpen(null); setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 }); setAddBookingError(""); setAddBookingFieldErrors({}); }}
+                                className="w-full text-left px-4 py-3 text-sm text-[#006644] font-medium hover:bg-[#faf9f6] transition-colors"
+                              >
+                                + Add booking
+                              </button>
+                              <div className="h-px bg-[#e8e2d9]" />
                               <button
                                 onClick={() => { setSessionKebabOpen(null); setEditTarget(s); setView("edit"); }}
                                 className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
@@ -2477,17 +2488,9 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Footer action bar */}
-                    <div className="px-7 py-3 flex items-center justify-between">
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="text-xs text-[#6b7280]">{booked} of {s.maxSpots} spots booked</span>
-                        <button
-                          onClick={() => { setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 }); setAddBookingError(""); }}
-                          className="text-xs font-medium text-[#006644] hover:text-[#004d33] transition-colors"
-                        >
-                          + Add booking
-                        </button>
-                      </div>
+                    {/* Footer */}
+                    <div className="px-7 py-3">
+                      <span className="text-xs text-[#6b7280]">{booked} of {s.maxSpots} spots booked</span>
                     </div>
 
                     {/* Bookings accordion trigger */}
@@ -2580,11 +2583,13 @@ export default function AdminPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Full name *</label>
-                  <input value={addBookingForm.name} onChange={(e) => setAddBookingForm((f) => ({ ...f, name: e.target.value }))} placeholder="Jane Smith" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644]" />
+                  <input value={addBookingForm.name} onChange={(e) => { setAddBookingForm((f) => ({ ...f, name: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, name: undefined })); }} placeholder="Jane Smith" className={`w-full border rounded-lg px-3 py-2 text-sm focus:outline-none ${addBookingFieldErrors.name ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
+                  {addBookingFieldErrors.name && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.name}</p>}
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Email *</label>
-                  <input type="email" value={addBookingForm.email} onChange={(e) => setAddBookingForm((f) => ({ ...f, email: e.target.value }))} placeholder="jane@email.com" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644]" />
+                  <input type="email" value={addBookingForm.email} onChange={(e) => { setAddBookingForm((f) => ({ ...f, email: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, email: undefined })); }} placeholder="jane@email.com" className={`w-full border rounded-lg px-3 py-2 text-sm focus:outline-none ${addBookingFieldErrors.email ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
+                  {addBookingFieldErrors.email && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.email}</p>}
                 </div>
               </div>
               {/* Phone */}
@@ -2594,7 +2599,7 @@ export default function AdminPage() {
               </div>
               {/* Attendees */}
               <div>
-                <label className="block text-xs font-medium text-[#1a1a1a] mb-2">Attendees *</label>
+                <label className={`block text-xs font-medium mb-2 ${addBookingFieldErrors.attendees ? "text-red-500" : "text-[#1a1a1a]"}`}>Attendees *</label>
                 <div className="grid grid-cols-3 gap-3">
                   {([["child", "Child"], ["youngAdult", "Young Adult"], ["adult", "Adult"]] as const).map(([key, label]) => (
                     <div key={key} className="flex items-center justify-between border border-[#e4dfd5] rounded-lg px-3 py-2">
@@ -2607,16 +2612,18 @@ export default function AdminPage() {
                     </div>
                   ))}
                 </div>
+                {addBookingFieldErrors.attendees && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.attendees}</p>}
               </div>
               {/* Payment */}
               <div>
                 <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Payment *</label>
-                <select value={addBookingForm.paymentStatus} onChange={(e) => setAddBookingForm((f) => ({ ...f, paymentStatus: e.target.value }))} className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644] bg-white">
+                <select value={addBookingForm.paymentStatus} onChange={(e) => { setAddBookingForm((f) => ({ ...f, paymentStatus: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, payment: undefined })); }} className={`w-full border rounded-lg px-3 py-2 text-sm focus:outline-none bg-white ${addBookingFieldErrors.payment ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`}>
                   <option value="">Select payment method…</option>
                   <option value="completed">Paid in full</option>
                   <option value="within-week">Paying this week</option>
                   <option value="other">Other</option>
                 </select>
+                {addBookingFieldErrors.payment && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.payment}</p>}
               </div>
               {addBookingForm.paymentStatus === "other" && (
                 <div>
