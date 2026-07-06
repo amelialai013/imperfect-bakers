@@ -247,7 +247,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 {s.sessionName || s.classLabel}
               </h3>
               {s.location && (
-                <span className="flex items-center gap-1 mt-3 text-[#6b7280] text-xs min-w-0">
+                <span className="flex items-center gap-2 mt-3 text-[#6b7280] text-sm min-w-0">
                   <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -257,15 +257,15 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               )}
             </div>
             <div className="flex items-center gap-5 text-sm text-[#6b7280] shrink-0 self-center mt-[4px]">
-              <span className="flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="flex items-center gap-2">
+                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <span className="md:hidden">{shortDate(s.date)}</span>
                 <span className="hidden md:inline">{s.date}</span>
               </span>
-              <span className="flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="flex items-center gap-2">
+                <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 {s.time}
@@ -319,20 +319,20 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 {s.sessionName || s.classLabel}
               </h3>
             </div>
-            <div className="space-y-0.5 flex-1">
-              <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+            <div className="space-y-1 flex-1">
+              <div className="flex items-center gap-2 text-sm text-[#6b7280]">
                 <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <span>{s.date}</span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+              <div className="flex items-center gap-2 text-sm text-[#6b7280]">
                 <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span>{s.time}</span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+              <div className="flex items-center gap-2 text-sm text-[#6b7280]">
                 <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -403,20 +403,20 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             </h3>
             {s.description && <p className="text-[#6b7280] text-xs leading-relaxed line-clamp-2">{s.description}</p>}
           </div>
-          <div className="space-y-0.5 flex-1">
-            <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+          <div className="space-y-1 flex-1">
+            <div className="flex items-center gap-2 text-sm text-[#6b7280]">
               <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               <span>{s.date}</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+            <div className="flex items-center gap-2 text-sm text-[#6b7280]">
               <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>{s.time}</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-[#6b7280]">
+            <div className="flex items-center gap-2 text-sm text-[#6b7280]">
               <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
