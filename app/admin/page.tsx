@@ -1630,6 +1630,7 @@ export default function AdminPage() {
   const [deletingClass, setDeletingClass] = useState<string | null>(null);
   const [deleteClassConfirm, setDeleteClassConfirm] = useState<string | null>(null);
   const [classKebabOpen, setClassKebabOpen] = useState<string | null>(null);
+  const [sessionKebabOpen, setSessionKebabOpen] = useState<string | null>(null);
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [dashTimeFilter, setDashTimeFilter] = useState<"upcoming" | "past">("upcoming");
   const [dashMoveTarget, setDashMoveTarget] = useState<(Booking & { sessionName: string }) | null>(null);
@@ -2385,7 +2386,7 @@ export default function AdminPage() {
                 const showBookings = expandedBookings === s.id;
 
                 return (
-                  <div key={s.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+                  <div key={s.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden relative">
 
                     {/* Session body */}
                     <div className="px-7 pt-6 pb-5 flex flex-col sm:flex-row sm:items-center gap-5">
@@ -2430,6 +2431,52 @@ export default function AdminPage() {
                       </div>
                     </div>
 
+                    {/* Kebab — top-right of card */}
+                    <div className="absolute top-3 right-3">
+                      <div className="relative">
+                        <button
+                          onClick={() => setSessionKebabOpen(sessionKebabOpen === s.id ? null : s.id)}
+                          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                            <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
+                          </svg>
+                        </button>
+                        {sessionKebabOpen === s.id && (
+                          <>
+                            <div className="fixed inset-0 z-10" onClick={() => setSessionKebabOpen(null)} />
+                            <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[140px]">
+                              <button
+                                onClick={() => { setSessionKebabOpen(null); setEditTarget(s); setView("edit"); }}
+                                className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
+                              >
+                                Edit class
+                              </button>
+                              <div className="h-px bg-[#e8e2d9]" />
+                              {deleteConfirm === s.id ? (
+                                <>
+                                  <button onClick={() => { setSessionKebabOpen(null); deleteSession(s.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                    Confirm delete
+                                  </button>
+                                  <div className="h-px bg-[#e8e2d9]" />
+                                  <button onClick={() => setDeleteConfirm(null)} className="w-full text-left px-4 py-3 text-sm text-[#6b7280] hover:bg-[#faf9f6] transition-colors">
+                                    Cancel
+                                  </button>
+                                </>
+                              ) : (
+                                <button
+                                  onClick={() => setDeleteConfirm(s.id)}
+                                  className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                                >
+                                  Delete class
+                                </button>
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
                     {/* Footer action bar */}
                     <div className="px-7 py-3 flex items-center justify-between">
                       <div className="flex items-center justify-between gap-3">
@@ -2440,31 +2487,6 @@ export default function AdminPage() {
                         >
                           + Add booking
                         </button>
-                      </div>
-                      <div className="flex items-center divide-x divide-[#e8e2d9]">
-                        <button
-                          onClick={() => { setEditTarget(s); setView("edit"); }}
-                          className="text-xs text-[#6b7280] hover:text-[#006644] transition-colors px-4 py-1"
-                        >
-                          Edit
-                        </button>
-                        {deleteConfirm === s.id ? (
-                          <>
-                            <button onClick={() => deleteSession(s.id)} className="text-xs text-red-500 hover:text-red-600 transition-colors px-4 py-1">
-                              Confirm delete
-                            </button>
-                            <button onClick={() => setDeleteConfirm(null)} className="text-xs text-[#6b7280] hover:text-[#1a1a1a] transition-colors px-4 py-1">
-                              Cancel
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            onClick={() => setDeleteConfirm(s.id)}
-                            className="text-xs text-[#6b7280] hover:text-red-500 transition-colors px-4 py-1"
-                          >
-                            Delete
-                          </button>
-                        )}
                       </div>
                     </div>
 
