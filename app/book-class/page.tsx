@@ -42,7 +42,7 @@ export default async function BookAClassPage({
       {/* ── CLASS BROWSER ────────────────────────────────────── */}
       <section className="pt-10 pb-20 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto px-8">
-          <BookAClassClient sessions={sessions} initialClass={initialClass} />
+          <BookAClassClient key={initialClass ?? "all"} sessions={sessions} initialClass={initialClass} />
 
         </div>
       </section>
