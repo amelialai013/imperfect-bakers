@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import type { ClassSession, Booking, ClassConfig } from "@/lib/types";
 import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
 import LocationInput from "@/components/LocationInput";
+import ImageUpload from "@/components/ImageUpload";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -172,12 +173,14 @@ function SessionForm({
   onSave,
   onCancel,
   saving,
+  token,
 }: {
   initial: FormState;
   initialAttendeeTypes: Array<"child" | "youngAdult" | "adult">;
   onSave: (data: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">) => void;
   onCancel: () => void;
   saving: boolean;
+  token: string;
 }) {
   const [form, setForm] = useState(initial);
   const [attendeeTypes, setAttendeeTypes] = useState(initialAttendeeTypes);
@@ -377,7 +380,10 @@ function SessionForm({
         <span className={sectionLabel}>Content</span>
         <div className="space-y-4">
           <Field label="Description (optional)" name="description" value={form.description} onChange={handle} type="textarea" placeholder="Short description of the session…" />
-          <Field label="Image URL (optional)" name="imageUrl" value={form.imageUrl} onChange={handle} placeholder="https://images.unsplash.com/…" />
+          <div>
+            <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4">Image (optional)</label>
+            <ImageUpload value={form.imageUrl} onChange={(url) => setForm((f) => ({ ...f, imageUrl: url }))} token={token} />
+          </div>
         </div>
       </div>
 
@@ -2120,6 +2126,7 @@ export default function AdminPage() {
               onSave={saveSession}
               onCancel={() => { setView("dashboard"); setEditTarget(null); }}
               saving={saving}
+              token={token}
             />
           </div>
         </section>
@@ -2285,9 +2292,13 @@ export default function AdminPage() {
                     </div>
                   </div>
                   <div>
-                    <label className={labelCls}>Image URL</label>
-                    <input type="text" value={newClass.imageUrl} onChange={(e) => { setNewClass((n) => ({ ...n, imageUrl: e.target.value })); if (e.target.value.trim()) setNewClassErrors((p) => ({ ...p, imageUrl: "" })); }} placeholder="https://images.unsplash.com/…" className={inputCls + (newClassErrors.imageUrl ? " !border-red-400 focus:!border-red-500" : "")} />
-                    {newClassErrors.imageUrl && <p className="text-xs text-red-500 mt-1.5">{newClassErrors.imageUrl}</p>}
+                    <label className={labelCls}>Image</label>
+                    <ImageUpload
+                      value={newClass.imageUrl}
+                      onChange={(url) => { setNewClass((n) => ({ ...n, imageUrl: url })); if (url) setNewClassErrors((p) => ({ ...p, imageUrl: "" })); }}
+                      token={token}
+                      error={newClassErrors.imageUrl}
+                    />
                   </div>
                   <div>
                     <label className={labelCls}>Description</label>
@@ -2381,13 +2392,11 @@ export default function AdminPage() {
                         </div>
                       </div>
                       <div>
-                        <label className={labelCls}>Image URL</label>
-                        <input
-                          type="text"
+                        <label className={labelCls}>Image</label>
+                        <ImageUpload
                           value={c.imageUrl}
-                          onChange={(e) => updateClassConfig(c.key, "imageUrl", e.target.value)}
-                          placeholder="https://images.unsplash.com/…"
-                          className={inputCls}
+                          onChange={(url) => updateClassConfig(c.key, "imageUrl", url)}
+                          token={token}
                         />
                       </div>
                       <div>
