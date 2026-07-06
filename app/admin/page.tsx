@@ -1636,6 +1636,10 @@ export default function AdminPage() {
   const [dashMoveSessionId, setDashMoveSessionId] = useState<string>("");
   const [dashMoveError, setDashMoveError] = useState<string>("");
   const [dashMoving, setDashMoving] = useState(false);
+  const [addBookingTarget, setAddBookingTarget] = useState<ClassSession | null>(null);
+  const [addBookingForm, setAddBookingForm] = useState({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 });
+  const [addBookingError, setAddBookingError] = useState<string>("");
+  const [addBookingSaving, setAddBookingSaving] = useState(false);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -2235,6 +2239,37 @@ export default function AdminPage() {
 
   // ── Dashboard ────────────────────────────────────────────
 
+  async function submitAddBooking() {
+    if (!addBookingTarget) return;
+    const { name, email, phone, notes, paymentStatus, paymentOther, child, youngAdult, adult } = addBookingForm;
+    const totalPeople = child + youngAdult + adult;
+    if (!name.trim()) { setAddBookingError("Name is required."); return; }
+    if (!email.trim()) { setAddBookingError("Email is required."); return; }
+    if (totalPeople < 1) { setAddBookingError("Add at least 1 attendee."); return; }
+    if (!paymentStatus) { setAddBookingError("Select a payment method."); return; }
+    setAddBookingSaving(true); setAddBookingError("");
+    const res = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: addBookingTarget.id,
+        name: name.trim(), email: email.trim(), phone: phone.trim(),
+        counts: { child, youngAdult, adult },
+        totalPeople, paymentStatus, paymentOther, notes,
+        status: "confirmed",
+      }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setAddBookingError(data.error ?? "Failed to add booking. Please try again.");
+      setAddBookingSaving(false); return;
+    }
+    setAddBookingTarget(null);
+    setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 });
+    setAddBookingSaving(false);
+    await loadSessions();
+  }
+
   async function dashDoMove() {
     if (!dashMoveTarget || !dashMoveSessionId) return;
     setDashMoving(true);
@@ -2395,9 +2430,17 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Footer action bar — Edit + Delete only */}
+                    {/* Footer action bar */}
                     <div className="px-7 py-3 flex items-center justify-between">
-                      <span className="text-xs text-[#6b7280]">{booked} of {s.maxSpots} spots booked</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-[#6b7280]">{booked} of {s.maxSpots} spots booked</span>
+                        <button
+                          onClick={() => { setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 }); setAddBookingError(""); }}
+                          className="text-xs font-medium text-[#006644] hover:text-[#004d33] transition-colors"
+                        >
+                          + Add booking
+                        </button>
+                      </div>
                       <div className="flex items-center divide-x divide-[#e8e2d9]">
                         <button
                           onClick={() => { setEditTarget(s); setView("edit"); }}
@@ -2497,6 +2540,81 @@ export default function AdminPage() {
                 {dashMoving ? "Moving…" : "Change booking"}
               </button>
               <button onClick={() => { setDashMoveTarget(null); setDashMoveSessionId(""); setDashMoveError(""); }} className="btn-secondary">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add booking modal */}
+      {addBookingTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setAddBookingTarget(null)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 z-10 my-4">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Add booking</h2>
+            <p className="text-sm text-[#6b7280] mb-6">Manually add a booking to <strong className="text-[#1a1a1a]">{addBookingTarget.sessionName || addBookingTarget.classLabel}</strong>.</p>
+
+            <div className="space-y-4">
+              {/* Name + Email */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Full name *</label>
+                  <input value={addBookingForm.name} onChange={(e) => setAddBookingForm((f) => ({ ...f, name: e.target.value }))} placeholder="Jane Smith" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644]" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Email *</label>
+                  <input type="email" value={addBookingForm.email} onChange={(e) => setAddBookingForm((f) => ({ ...f, email: e.target.value }))} placeholder="jane@email.com" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644]" />
+                </div>
+              </div>
+              {/* Phone */}
+              <div>
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Phone</label>
+                <input value={addBookingForm.phone} onChange={(e) => setAddBookingForm((f) => ({ ...f, phone: e.target.value }))} placeholder="0400 000 000" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644]" />
+              </div>
+              {/* Attendees */}
+              <div>
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-2">Attendees *</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {([["child", "Child"], ["youngAdult", "Young Adult"], ["adult", "Adult"]] as const).map(([key, label]) => (
+                    <div key={key} className="flex items-center justify-between border border-[#e4dfd5] rounded-lg px-3 py-2">
+                      <span className="text-xs text-[#6b7280]">{label}</span>
+                      <div className="flex items-center gap-2">
+                        <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: Math.max(0, f[key] - 1) }))} className="w-5 h-5 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-xs font-bold hover:bg-[#e4dfd5]">−</button>
+                        <span className="text-sm font-medium w-4 text-center">{addBookingForm[key]}</span>
+                        <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: f[key] + 1 }))} className="w-5 h-5 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-xs font-bold hover:bg-[#e4dfd5]">+</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Payment */}
+              <div>
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Payment *</label>
+                <select value={addBookingForm.paymentStatus} onChange={(e) => setAddBookingForm((f) => ({ ...f, paymentStatus: e.target.value }))} className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644] bg-white">
+                  <option value="">Select payment method…</option>
+                  <option value="completed">Paid in full</option>
+                  <option value="within-week">Paying this week</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              {addBookingForm.paymentStatus === "other" && (
+                <div>
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Payment details</label>
+                  <input value={addBookingForm.paymentOther} onChange={(e) => setAddBookingForm((f) => ({ ...f, paymentOther: e.target.value }))} placeholder="e.g. Cash on the day" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644]" />
+                </div>
+              )}
+              {/* Notes */}
+              <div>
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Notes</label>
+                <textarea value={addBookingForm.notes} onChange={(e) => setAddBookingForm((f) => ({ ...f, notes: e.target.value }))} rows={2} placeholder="Any notes…" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644] resize-none" />
+              </div>
+            </div>
+
+            {addBookingError && <p className="text-xs text-red-500 mt-3">{addBookingError}</p>}
+            <div className="flex gap-3 flex-wrap mt-6">
+              <button onClick={submitAddBooking} disabled={addBookingSaving} className="btn-primary disabled:opacity-50">
+                {addBookingSaving ? "Adding…" : "Add booking"}
+              </button>
+              <button onClick={() => setAddBookingTarget(null)} className="btn-secondary">Cancel</button>
             </div>
           </div>
         </div>
