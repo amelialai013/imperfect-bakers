@@ -116,14 +116,26 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ ok: true });
   }
 
-  const { status } = body as { status: "confirmed" | "declined" };
+  const { status } = body as { status: "confirmed" | "declined" | "pending" };
 
-  if (!["confirmed", "declined"].includes(status)) {
+  if (!["confirmed", "declined", "pending"].includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
   const booking = await kv.get<Booking>(`booking:${id}`);
   if (!booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  // Reinstating a declined booking — restore spot to session and clear status
+  if (status === "pending") {
+    const session = await getSession(booking.sessionId);
+    if (session) {
+      await updateSession(booking.sessionId, {
+        spotsLeft: Math.min(session.spotsLeft + booking.totalPeople, session.maxSpots),
+      });
+    }
+    await kv.set(`booking:${id}`, { ...booking, status: "pending", cancelled: false });
+    return NextResponse.json({ ok: true, status: "pending" });
+  }
 
   await updateBookingStatus(id, status);
 
