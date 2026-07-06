@@ -361,7 +361,7 @@ function SessionForm({
   );
 }
 
-function BookingsPanel({ sessionId, token }: { sessionId: string; token: string }) {
+function BookingsPanel({ sessionId, token, isPast }: { sessionId: string; token: string; isPast?: boolean }) {
   const [bookings, setBookings] = useState<Booking[] | null>(null);
   const [acting, setActing] = useState<string | null>(null);
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
@@ -401,6 +401,14 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
     setActing(id);
     await authFetch(`/api/bookings/${id}`, token, { method: "DELETE" });
     await load();
+    setActing(null);
+  }
+
+  async function deleteRecord(id: string) {
+    if (!confirm("Permanently delete this booking record?")) return;
+    setActing(id);
+    setBookings((prev) => prev ? prev.filter((b) => b.id !== id) : prev);
+    await authFetch(`/api/bookings/${id}`, token, { method: "DELETE" });
     setActing(null);
   }
 
@@ -444,13 +452,22 @@ function BookingsPanel({ sessionId, token }: { sessionId: string; token: string 
                   ✗ Decline
                 </button>
               </>)}
-              {b.status === "confirmed" && (
+              {b.status === "confirmed" && !isPast && (
                 <button
                   onClick={() => cancel(b.id)}
                   disabled={acting === b.id}
                   className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-full hover:bg-red-50 transition-colors disabled:opacity-50"
                 >
                   Cancel
+                </button>
+              )}
+              {isPast && (
+                <button
+                  onClick={() => deleteRecord(b.id)}
+                  disabled={acting === b.id}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-full hover:bg-red-50 transition-colors disabled:opacity-50"
+                >
+                  Delete record
                 </button>
               )}
             </div>
@@ -2401,7 +2418,7 @@ export default function AdminPage() {
                     {/* Bookings panel */}
                     {showBookings && (
                       <div className="border-t border-[#e8e2d9] px-7 pb-6 pt-4">
-                        <BookingsPanel sessionId={s.id} token={token} />
+                        <BookingsPanel sessionId={s.id} token={token} isPast={dashTimeFilter === "past"} />
                       </div>
                     )}
                   </div>
