@@ -464,15 +464,16 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
                           </button>
                           <div className="h-px bg-[#e8e2d9]" />
                         </>)}
-                        {b.status === "confirmed" && !isPast && (<>
+                        {b.status === "confirmed" && !isPast && (
                           <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                             Cancel booking
                           </button>
-                          <div className="h-px bg-[#e8e2d9]" />
-                        </>)}
-                        <button onClick={() => { setKebabOpen(null); deleteRecord(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                          Delete record
-                        </button>
+                        )}
+                        {b.status === "declined" && (
+                          <button onClick={() => { setKebabOpen(null); deleteRecord(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                            Delete record
+                          </button>
+                        )}
                       </div>
                     </>
                   )}
