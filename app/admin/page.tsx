@@ -1777,6 +1777,7 @@ export default function AdminPage() {
   const [editTarget, setEditTarget] = useState<ClassSession | null>(null);
   const [expandedBookings, setExpandedBookings] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [deleteSessionConfirm, setDeleteSessionConfirm] = useState<string | null>(null);
   const [classConfigs, setClassConfigs] = useState<ClassConfig[]>(DEFAULT_CLASS_CONFIGS);
   const [savedClassConfigs, setSavedClassConfigs] = useState<ClassConfig[]>(DEFAULT_CLASS_CONFIGS);
   const [classConfigsLoading, setClassConfigsLoading] = useState(false);
@@ -2615,24 +2616,12 @@ export default function AdminPage() {
                                 Edit class
                               </button>
                               <div className="h-px bg-[#e8e2d9]" />
-                              {deleteConfirm === s.id ? (
-                                <>
-                                  <button onClick={() => { setSessionKebabOpen(null); deleteSession(s.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                    Confirm delete
-                                  </button>
-                                  <div className="h-px bg-[#e8e2d9]" />
-                                  <button onClick={() => setDeleteConfirm(null)} className="w-full text-left px-4 py-3 text-sm text-[#6b7280] hover:bg-[#faf9f6] transition-colors">
-                                    Cancel
-                                  </button>
-                                </>
-                              ) : (
-                                <button
-                                  onClick={() => setDeleteConfirm(s.id)}
-                                  className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                >
-                                  Delete class
-                                </button>
-                              )}
+                              <button
+                                onClick={() => { setSessionKebabOpen(null); setDeleteSessionConfirm(s.id); }}
+                                className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                              >
+                                Delete class
+                              </button>
                             </div>
                           </>
                         )}
@@ -2713,6 +2702,40 @@ export default function AdminPage() {
                 {dashMoving ? "Moving…" : "Change booking"}
               </button>
               <button onClick={() => { setDashMoveTarget(null); setDashMoveSessionId(""); setDashMoveError(""); }} className="btn-secondary">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete session confirmation modal */}
+      {deleteSessionConfirm && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setDeleteSessionConfirm(null)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
+            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5">
+              <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] text-center mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Delete session?
+            </h2>
+            <p className="text-sm text-[#6b7280] text-center mb-8 leading-relaxed">
+              This will permanently remove the session and cannot be undone.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => { const id = deleteSessionConfirm; setDeleteSessionConfirm(null); deleteSession(id); }}
+                className="w-full py-3 rounded-full bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors"
+              >
+                Yes, delete session
+              </button>
+              <button
+                onClick={() => setDeleteSessionConfirm(null)}
+                className="w-full py-3 rounded-full border border-[#e4dfd5] text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
