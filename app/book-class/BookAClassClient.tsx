@@ -131,7 +131,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
             >
               <option value="asc">Earliest first</option>
               <option value="desc">Latest first</option>
-              <option value="popular">Filling up fast</option>
+              <option value="popular">Most popular</option>
             </select>
             <svg className="pointer-events-none absolute right-3 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
