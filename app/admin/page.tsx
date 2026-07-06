@@ -139,7 +139,7 @@ function Field({
           onChange={onChange}
           placeholder={placeholder}
           rows={3}
-          className={cls + " resize-none"}
+          className={cls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"}
         />
       ) : (
         <input
@@ -2266,7 +2266,7 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <label className={labelCls}>Description</label>
-                    <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value }))} rows={2} placeholder="Short description…" className={inputCls + " resize-none"} />
+                    <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value }))} rows={2} placeholder="Short description…" className={inputCls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"} />
                   </div>
                   <div className="flex flex-wrap items-center gap-3 pt-1">
                     <button onClick={saveNewClass} disabled={savingNewClass || !newClass.title.trim()} className="btn-primary">
@@ -2370,7 +2370,7 @@ export default function AdminPage() {
                           value={c.description}
                           onChange={(e) => updateClassConfig(c.key, "description", e.target.value)}
                           rows={2}
-                          className={inputCls + " resize-none"}
+                          className={inputCls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"}
                         />
                       </div>
                     </div>
