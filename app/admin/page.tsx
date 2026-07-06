@@ -2512,7 +2512,7 @@ export default function AdminPage() {
                                 onClick={() => { setSessionKebabOpen(null); setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 }); setAddBookingError(""); setAddBookingFieldErrors({}); }}
                                 className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
                               >
-                                + Add booking
+                                Add manual booking
                               </button>
                               <div className="h-px bg-[#e8e2d9]" />
                               <button
