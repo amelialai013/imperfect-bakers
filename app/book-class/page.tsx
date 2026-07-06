@@ -60,7 +60,7 @@ export default async function BookAClassPage({
               Can&apos;t find what you&apos;re looking for?
             </h2>
             <p className="text-[#1a1a1a] text-sm leading-relaxed mt-4">
-              We love doing private sessions — birthdays, team days, hens parties, and more. We&apos;ll come to you, or host you in our kitchen. Just tell us what you have in mind.
+              We love doing private sessions — birthdays, team days, hens parties, and more. We&apos;d love to come to you, just tell us what you have in mind.
             </p>
           </div>
           <Link href="/interest" className="btn-primary group self-start">
