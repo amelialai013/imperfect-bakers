@@ -232,6 +232,8 @@ function SessionForm({
 
   function toggleAttendeeType(key: "child" | "youngAdult" | "adult") {
     setAttendeeTypes((prev) => {
+      // Prevent deselecting the last active type
+      if (prev.includes(key) && prev.length === 1) return prev;
       const next = prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key];
       if (next.length === 3) {
         setForm((f) => ({ ...f, ages: "All ages" }));
@@ -281,7 +283,6 @@ function SessionForm({
       if (!startTime) errs.startTime = "Please select a start time";
       if (!form.price.trim()) errs.price = "Please enter a price";
       if (!form.maxSpots.trim()) errs.maxSpots = "Please enter max spots";
-      if (attendeeTypes.length === 0) errs.attendeeTypes = "Please select at least one attendee type";
       const locMissing = !form.location.trim();
       setLocationError(locMissing);
       setFieldErrors(errs);
@@ -353,14 +354,13 @@ function SessionForm({
               {ATTENDEE_OPTIONS.map((opt) => {
                 const active = attendeeTypes.includes(opt.key);
                 return (
-                  <button key={opt.key} type="button" onClick={() => { toggleAttendeeType(opt.key); setFieldErrors((prev) => ({ ...prev, attendeeTypes: "" })); }}
+                  <button key={opt.key} type="button" onClick={() => toggleAttendeeType(opt.key)}
                     className={`group inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-colors duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
                     {opt.label} <span className={`text-sm transition-colors duration-200 ${active ? "text-white/70" : "text-[#006644]/60 group-hover:text-white/70"}`}>{opt.sub}</span>
                   </button>
                 );
               })}
             </div>
-            {fieldErrors.attendeeTypes && <p className="text-xs text-red-500 mt-2">{fieldErrors.attendeeTypes}</p>}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <Field label="Price per person ($)" name="price" value={form.price} onChange={(e) => { handle(e); setFieldErrors((prev) => ({ ...prev, price: "" })); }} type="number" placeholder="150" required error={fieldErrors.price} />
