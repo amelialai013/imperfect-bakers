@@ -263,8 +263,7 @@ export default function InterestPage() {
 
           {/* Notes */}
           <div className="mt-[60px]">
-            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-1">Notes</p>
-            <p className="text-xs text-[#6b7280] mb-4">We&apos;re also happy to come to you — just mention it here.</p>
+            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Notes</p>
             <textarea
               ref={notesRef}
               rows={3}
@@ -274,6 +273,16 @@ export default function InterestPage() {
               onChange={() => fieldErrors.notes && setFieldErrors((p) => ({ ...p, notes: undefined }))}
             />
             {fieldErrors.notes && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.notes}</p>}
+          </div>
+
+          {/* Come-to-you callout */}
+          <div className="flex gap-3 rounded-xl border border-[#006644]/20 bg-[#006644]/6 px-5 py-4">
+            <svg className="w-5 h-5 text-[#006644] shrink-0 mt-[2px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-sm text-[#1a1a1a] leading-relaxed">
+              <span className="font-semibold">Did you know?</span>{" "}We&apos;re happy to come to you — just mention it in the notes above.
+            </p>
           </div>
 
           {/* Submit */}
