@@ -2619,7 +2619,7 @@ export default function AdminPage() {
                           <span>{s.location}</span>
                           <span>${s.price}/person</span>
                           {s.attendeeTypes && s.attendeeTypes.length > 0 && (
-                            <span>{s.attendeeTypes.map((t: string) => t === "youngAdult" ? "Young Adult" : t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}</span>
+                            <span>{s.attendeeTypes.length === 3 ? "All ages" : s.attendeeTypes.map((t: string) => t === "youngAdult" ? "Young Adult" : t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}</span>
                           )}
                         </div>
                       </div>
