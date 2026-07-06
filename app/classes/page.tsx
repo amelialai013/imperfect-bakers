@@ -140,7 +140,7 @@ export default async function ClassesPage() {
               Looking for something more personal?
             </h2>
             <p className="text-white/70 text-sm leading-relaxed mt-4">
-              We love doing private sessions — birthdays, team days, hens parties, and more. We&apos;d love to come to you, just tell us what you have in mind.
+              We love doing private sessions — birthdays, team days, hens parties, and more. We&apos;re very happy to come to you, just tell us what you have in mind.
             </p>
           </div>
           <Link href="/interest" className="btn-tertiary group self-start">
