@@ -562,8 +562,25 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
           </summary>
           <div className="mt-2 space-y-2">
             {cancelled.map((b) => (
-              <div key={b.id} className="bg-[#faf9f6] border border-[#e4dfd5] rounded-[6px] px-5 py-3 opacity-50 text-sm">
-                <span className="line-through">{b.name}</span> · {b.email} · {b.totalPeople} person{b.totalPeople > 1 ? "s" : ""}
+              <div key={b.id} className="bg-[#faf9f6] border border-[#e4dfd5] rounded-[6px] px-5 py-3 text-sm flex items-center justify-between gap-3">
+                <span className="opacity-50 line-through">{b.name}</span>
+                <div className="relative">
+                  <button onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#e8e2d9] text-[#6b7280] transition-colors cursor-pointer">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                      <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
+                    </svg>
+                  </button>
+                  {kebabOpen === b.id && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
+                      <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                        <button onClick={() => { setKebabOpen(null); setUndeclinePanelTarget(b.id); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                          Reinstate booking
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -1095,6 +1112,12 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                                 <div className="h-px bg-[#e8e2d9]" />
                               </>)}
                               {(!b.cancelled && b.status === "declined") && (<>
+                                <button onClick={() => { setKebabOpen(null); setUndeclineTarget(b); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                                  Reinstate booking
+                                </button>
+                                <div className="h-px bg-[#e8e2d9]" />
+                              </>)}
+                              {b.cancelled && (<>
                                 <button onClick={() => { setKebabOpen(null); setUndeclineTarget(b); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
                                   Reinstate booking
                                 </button>
