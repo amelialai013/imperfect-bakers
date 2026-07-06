@@ -233,7 +233,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         >
           <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
           {/* Desktop layout: single row */}
-          <div className="hidden sm:flex px-6 pt-4 pb-4 gap-6">
+          <div className="hidden sm:flex px-6 pt-6 pb-6 gap-6">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] truncate">{s.classLabel}</span>
@@ -344,7 +344,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               const booked = s.maxSpots - s.spotsLeft;
               const pct = s.maxSpots > 0 ? Math.round((booked / s.maxSpots) * 100) : 0;
               return (
-                <div className="my-3">
+                <div className="my-6">
                   <div className="flex items-center mb-1.5">
                     <p className="text-xs text-[#6b7280]">{`${booked}/${s.maxSpots} reservations`}</p>
                   </div>
@@ -355,9 +355,9 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               );
             })()}
             <div className="flex items-center justify-between">
-              <div>
+              <div className="flex items-baseline gap-1.5">
                 <p className="text-[#1a1a1a] text-lg font-semibold leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
-                <p className="text-[#6b7280] text-xs mt-0.5">per person</p>
+                <p className="text-[#6b7280] text-xs">per person</p>
               </div>
               {!isFull && (
                 <div className="flex items-center gap-1.5 text-[#006644] text-sm font-medium">
