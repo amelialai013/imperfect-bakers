@@ -2630,7 +2630,7 @@ export default function AdminPage() {
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-y-auto">
           <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setAddBookingTarget(null)} />
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 z-10 my-4">
-            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Add booking</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Add manual booking</h2>
             <p className="text-sm text-[#6b7280] mb-6">Manually add a booking to <strong className="text-[#1a1a1a]">{addBookingTarget.sessionName || addBookingTarget.classLabel}</strong>.</p>
 
             <div className="space-y-4">
