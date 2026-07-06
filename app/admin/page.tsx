@@ -644,7 +644,7 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
               <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-              Manage classes
+              Class settings
             </button>
             <div className="h-px bg-[#e8e2d9]" />
             <button
@@ -1019,7 +1019,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           <>
                             <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
                             <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
-                              {!b.cancelled && (
+                              {(!b.cancelled && b.status !== "declined") && (
                                 <>
                                   <button onClick={() => { setKebabOpen(null); setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
                                     Change class
