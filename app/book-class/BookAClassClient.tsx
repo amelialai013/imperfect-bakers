@@ -238,9 +238,9 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
               <div className="flex items-center gap-2">
                 <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] truncate">{s.classLabel}</span>
                 {!isFull ? (
-                  <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1 shrink-0">{s.spotsLeft} left</span>
+                  <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1.5 shrink-0">{s.spotsLeft} left</span>
                 ) : (
-                  <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1 shrink-0">Full</span>
+                  <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1.5 shrink-0">Full</span>
                 )}
               </div>
               <h3 className="text-[#1a1a1a] text-lg font-medium leading-snug mt-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
@@ -309,9 +309,9 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             <div className="flex items-start justify-between gap-3">
               <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">{s.classLabel}</span>
               {!isFull ? (
-                <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1 shrink-0">{s.spotsLeft} left</span>
+                <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1.5 shrink-0">{s.spotsLeft} left</span>
               ) : (
-                <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1 shrink-0">Full</span>
+                <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1.5 shrink-0">Full</span>
               )}
             </div>
             <div className="-mt-[5.5px]">
@@ -392,9 +392,9 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
           <div className="flex items-center justify-between gap-3">
             <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] leading-none truncate">{s.classLabel}</span>
             {!isFull ? (
-              <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1 shrink-0">{s.spotsLeft} left</span>
+              <span className="text-xs font-medium text-[#6b7280] bg-[#f5f2ed] rounded-full px-3 py-1.5 shrink-0">{s.spotsLeft} left</span>
             ) : (
-              <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1 shrink-0">Full</span>
+              <span className="text-xs font-medium text-red-400 bg-red-50 rounded-full px-3 py-1.5 shrink-0">Full</span>
             )}
           </div>
           <div className="mt-2">
