@@ -156,7 +156,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
       const lvl = levels.find((l) => l.value === p.level);
       return lvl && lvl.label.toLowerCase().includes("see notes");
     });
-    if (hasOtherLevel && !notes) errors.notes = "Please add a note to describe your experience level";
+    if (hasOtherLevel && !notes) errors.notes = "Please add a note as you have selected 'Other' as an experience level";
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
