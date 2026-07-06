@@ -27,7 +27,7 @@ function parseDisplayDate(dateStr: string): Date {
 
 export default function BookAClassClient({ sessions, initialClass }: { sessions: ClassSession[]; initialClass?: string }) {
   const [activeClass, setActiveClass] = useState<string>(initialClass ?? "All");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "popular">("asc");
   const [view, setView] = useState<"grid" | "list">("grid");
 
   // Filter out past sessions
@@ -46,6 +46,13 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
       ? upcomingSessions
       : upcomingSessions.filter((s) => s.classLabel === activeClass);
     result = [...result].sort((a, b) => {
+      if (sortOrder === "popular") {
+        const bookedA = a.maxSpots - a.spotsLeft;
+        const bookedB = b.maxSpots - b.spotsLeft;
+        const pctA = a.maxSpots > 0 ? bookedA / a.maxSpots : 0;
+        const pctB = b.maxSpots > 0 ? bookedB / b.maxSpots : 0;
+        return pctB - pctA;
+      }
       const da = parseDisplayDate(a.date).getTime();
       const db = parseDisplayDate(b.date).getTime();
       return sortOrder === "asc" ? da - db : db - da;
@@ -111,23 +118,25 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
             </button>
           </div>
 
-          {/* Date sort toggle */}
-          <button
-            onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
-            className="flex items-center gap-2 bg-white border border-[#e4dfd5] rounded-full pl-4 pr-4 text-sm font-medium text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors shrink-0 h-[46px] w-[148px] justify-center"
-            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-          >
-            {sortOrder === "desc" ? (
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-              </svg>
-            ) : (
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 4l4 4m0 0l4-4m-4 4V8" />
-              </svg>
-            )}
-            <span>{sortOrder === "asc" ? "Earliest first" : "Latest first"}</span>
-          </button>
+          {/* Sort select */}
+          <div className="relative flex items-center">
+            <svg className="pointer-events-none absolute left-4 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 4l4 4m0 0l4-4m-4 4V8" />
+            </svg>
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc" | "popular")}
+              className="appearance-none bg-white border border-[#e4dfd5] rounded-full text-sm font-medium text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] pl-9 pr-9 hover:border-[#006644]"
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+            >
+              <option value="asc">Earliest first</option>
+              <option value="desc">Latest first</option>
+              <option value="popular">Filling up fast</option>
+            </select>
+            <svg className="pointer-events-none absolute right-3 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
 
           </div>{/* end grouped */}
 
