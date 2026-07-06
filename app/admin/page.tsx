@@ -101,8 +101,6 @@ const emptyForm = {
   price: "",
   maxSpots: "",
   ages: "All ages",
-  description: "",
-  imageUrl: "",
 };
 
 type FormState = typeof emptyForm;
@@ -173,14 +171,12 @@ function SessionForm({
   onSave,
   onCancel,
   saving,
-  token,
 }: {
   initial: FormState;
   initialAttendeeTypes: Array<"child" | "youngAdult" | "adult">;
   onSave: (data: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">) => void;
   onCancel: () => void;
   saving: boolean;
-  token: string;
 }) {
   const [form, setForm] = useState(initial);
   const [attendeeTypes, setAttendeeTypes] = useState(initialAttendeeTypes);
@@ -369,17 +365,6 @@ function SessionForm({
         </div>
       </div>
 
-      {/* ── Section 4: Content ───────────────────────────── */}
-      <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-6">
-        <span className={sectionLabel}>Content</span>
-        <div className="space-y-4">
-          <Field label="Description (optional)" name="description" value={form.description} onChange={handle} type="textarea" placeholder="Short description of the session…" />
-          <div>
-            <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4">Image (optional)</label>
-            <ImageUpload value={form.imageUrl} onChange={(url) => setForm((f) => ({ ...f, imageUrl: url }))} token={token} />
-          </div>
-        </div>
-      </div>
 
       {/* ── Actions ──────────────────────────────────────── */}
       <div className="flex items-center gap-3">
@@ -1918,8 +1903,6 @@ export default function AdminPage() {
       price: Number(form.price),
       maxSpots: Number(form.maxSpots),
       ages: form.ages,
-      description: form.description,
-      imageUrl: form.imageUrl,
       attendeeTypes,
     };
 
@@ -2087,8 +2070,6 @@ export default function AdminPage() {
           price: String(editTarget.price),
           maxSpots: String(editTarget.maxSpots),
           ages: editTarget.ages,
-          description: editTarget.description ?? "",
-          imageUrl: editTarget.imageUrl ?? "",
         }
       : emptyForm;
 
@@ -2120,7 +2101,6 @@ export default function AdminPage() {
               onSave={saveSession}
               onCancel={() => { setView("dashboard"); setEditTarget(null); }}
               saving={saving}
-              token={token}
             />
           </div>
         </section>
