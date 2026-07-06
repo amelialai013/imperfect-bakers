@@ -29,6 +29,7 @@ type FieldErrors = {
   name?: string;
   email?: string;
   phone?: string;
+  experience?: string;
   notes?: string;
 };
 
@@ -90,6 +91,7 @@ export default function InterestPage() {
     if (!phone) errors.phone = "Please enter your phone number";
     else if (!/^[\d\s\+\-\(\)]{7,15}$/.test(phone))
       errors.phone = "Please enter a valid phone number";
+    if (!experience) errors.experience = "Please select an experience level";
 
     // Notes required if "Other — see notes" experience level selected
     const selectedLevel = levels.find((l) => l.value === experience);
@@ -218,8 +220,8 @@ export default function InterestPage() {
                   <select
                     ref={experienceRef}
                     value={experienceValue}
-                    onChange={(e) => setExperienceValue(e.target.value)}
-                    className="w-full bg-transparent border-0 border-b border-[#c8c0b4] pl-0 pr-6 py-3 text-sm focus:outline-none focus:border-[#006644] transition-colors appearance-none cursor-pointer"
+                    onChange={(e) => { setExperienceValue(e.target.value); if (fieldErrors.experience) setFieldErrors((p) => ({ ...p, experience: undefined })); }}
+                    className={`w-full bg-transparent border-0 border-b ${fieldErrors.experience ? "border-red-400 focus:border-red-500" : "border-[#c8c0b4] focus:border-[#006644]"} pl-0 pr-6 py-3 text-sm focus:outline-none transition-colors appearance-none cursor-pointer`}
                     style={{ WebkitAppearance: "none", color: experienceValue ? "#1a1a1a" : "#6b7280" }}
                   >
                     <option value="">Experience level</option>
@@ -231,6 +233,7 @@ export default function InterestPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
+                {fieldErrors.experience && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.experience}</p>}
               </div>
 
             </div>
