@@ -2428,13 +2428,6 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Progress bar */}
-                    <div className="px-7 pb-0">
-                      <div className="h-1.5 bg-[#e8e2d9] rounded-full overflow-hidden">
-                        <div className="h-full bg-[#006644] rounded-full transition-all" style={{ width: `${pct}%` }} />
-                      </div>
-                    </div>
-
                     {/* Kebab — top-right of card */}
                     <div className="absolute top-3 right-3">
                       <div className="relative">
