@@ -2481,10 +2481,7 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Footer */}
-                    <div className="px-7 py-3">
-                      <span className="text-xs text-[#6b7280]">{booked} of {s.maxSpots} spots booked</span>
-                    </div>
+
 
                     {/* Bookings accordion trigger */}
                     <button
