@@ -2258,7 +2258,7 @@ export default function AdminPage() {
                       {newClassErrors.title && <p className="text-xs text-red-500 mt-1.5">{newClassErrors.title}</p>}
                     </div>
                     <div>
-                      <label className={labelCls}>Tag</label>
+                      <label className={labelCls}>Tag <span className="normal-case font-normal tracking-normal text-[#6b7280]">(optional)</span></label>
                       <input type="text" value={newClass.ages} onChange={(e) => setNewClass((n) => ({ ...n, ages: e.target.value }))} placeholder="All ages" className={inputCls} />
                     </div>
                   </div>
@@ -2272,7 +2272,7 @@ export default function AdminPage() {
                     />
                   </div>
                   <div>
-                    <label className={labelCls}>Description</label>
+                    <label className={labelCls}>Description <span className="normal-case font-normal tracking-normal text-[#6b7280]">(optional)</span></label>
                     <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value.slice(0, 100) }))} rows={2} placeholder="Short description…" maxLength={100} className={inputCls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"} />
                     <p className={`text-right text-xs mt-1 ${newClass.description.length >= 90 ? "text-red-400" : "text-[#c8c0b4]"}`}>{newClass.description.length}/100</p>
                   </div>
@@ -2352,7 +2352,7 @@ export default function AdminPage() {
                           />
                         </div>
                         <div>
-                          <label className={labelCls}>Tag</label>
+                          <label className={labelCls}>Tag <span className="normal-case font-normal tracking-normal text-[#6b7280]">(optional)</span></label>
                           <input
                             type="text"
                             value={c.ages}
@@ -2371,7 +2371,7 @@ export default function AdminPage() {
                         />
                       </div>
                       <div>
-                        <label className={labelCls}>Description</label>
+                        <label className={labelCls}>Description <span className="normal-case font-normal tracking-normal text-[#6b7280]">(optional)</span></label>
                         <textarea
                           value={c.description}
                           onChange={(e) => updateClassConfig(c.key, "description", e.target.value.slice(0, 100))}
@@ -2552,7 +2552,7 @@ export default function AdminPage() {
                       setExpandedBookings((prev) => new Set([...prev, ...filteredIds]));
                     }
                   }}
-                  className="btn-secondary btn-sm flex items-center gap-2"
+                  className="text-sm font-medium text-[#006644] hover:text-[#004d33] transition-colors flex items-center gap-1.5"
                 >
                   <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${allExpanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
