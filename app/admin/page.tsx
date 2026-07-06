@@ -63,6 +63,18 @@ function displayDateToIso(display: string): string {
 }
 
 // Format start time + duration hours → "1 – 4pm"
+function shortDayDate(date: string): string {
+  const days: Record<string, string> = {
+    Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu",
+    Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
+  };
+  const parts = date.split(" ");
+  if (parts.length === 4) {
+    return `${days[parts[0]] ?? parts[0]} ${parts[1]} ${parts[2]} ${parts[3]}`;
+  }
+  return date;
+}
+
 function formatTimeRange(start: string, durationHours: number): string {
   if (!start) return "";
   const [hStr, mStr] = start.split(":");
@@ -879,7 +891,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       })
                       .map((s) => (
                         <option key={s.id} value={s.id}>
-                          {s.sessionName || s.classLabel} — {s.date} ({s.spotsLeft} spots left)
+                          {s.sessionName || s.classLabel} — {shortDayDate(s.date)} ({s.spotsLeft} spots left)
                         </option>
                       ))}
                   </select>
@@ -2472,7 +2484,7 @@ export default function AdminPage() {
                           )}
                         </div>
                         <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-[#6b7280]">
-                          <span>{s.date}</span>
+                          <span>{shortDayDate(s.date)}</span>
                           <span>{s.time}</span>
                           <span>{s.location}</span>
                           <span>${s.price}/person</span>
@@ -2594,7 +2606,7 @@ export default function AdminPage() {
                   return true;
                 }).map((s) => (
                   <option key={s.id} value={s.id}>
-                    {s.sessionName || s.classLabel} — {s.date} ({s.spotsLeft} spots left)
+                    {s.sessionName || s.classLabel} — {shortDayDate(s.date)} ({s.spotsLeft} spots left)
                   </option>
                 ))}
               </select>
