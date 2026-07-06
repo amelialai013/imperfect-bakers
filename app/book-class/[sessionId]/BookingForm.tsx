@@ -76,7 +76,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [submitted, setSubmitted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{
     name?: string; email?: string; phone?: string;
-    attendees?: string; participants?: string[]; payment?: string; paymentOther?: string; notes?: string;
+    attendees?: string; participants?: string[]; participantLevels?: string[]; payment?: string; paymentOther?: string; notes?: string;
   }>({});
 
   // Refs to read input values without FormData (avoids Safari <form> bugs)
@@ -149,6 +149,8 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     if (totalPeople > session.spotsLeft) errors.attendees = `Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} left — you requested ${totalPeople}`;
     const participantErrors = participants.map((p) => (!p.name.trim() ? "Please enter a name" : ""));
     if (participantErrors.some(Boolean)) errors.participants = participantErrors;
+    const participantLevelErrors = participants.map((p) => (!p.level ? "Please select an experience level" : ""));
+    if (participantLevelErrors.some(Boolean)) errors.participantLevels = participantLevelErrors;
     if (!paymentStatus) errors.payment = "Please select a payment status";
     if (paymentStatus === "other" && !paymentOther) errors.paymentOther = "Please add a note";
     // Notes required if any participant selected an "Other — see notes" experience level
@@ -369,6 +371,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             <div className="flex flex-col gap-6">
               {participants.map((p, i) => {
                 const nameErr = fieldErrors.participants?.[i];
+                const levelErr = fieldErrors.participantLevels?.[i];
                 return (
                   <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:items-start">
                     <div>
@@ -399,8 +402,13 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                         onChange={(e) => {
                           const val = e.target.value;
                           setParticipants((prev) => prev.map((x, j) => j === i ? { ...x, level: val } : x));
+                          if (levelErr) setFieldErrors((prev) => {
+                            const errs = [...(prev.participantLevels ?? [])];
+                            errs[i] = "";
+                            return { ...prev, participantLevels: errs };
+                          });
                         }}
-                        className="w-full bg-transparent border-0 border-b border-[#c8c0b4] pl-0 pr-6 py-3 text-sm focus:outline-none focus:border-[#006644] transition-colors appearance-none cursor-pointer"
+                        className={`w-full bg-transparent border-0 border-b ${levelErr ? "border-red-400 focus:border-red-500" : "border-[#c8c0b4] focus:border-[#006644]"} pl-0 pr-6 py-3 text-sm focus:outline-none transition-colors appearance-none cursor-pointer`}
                         style={{ WebkitAppearance: "none", color: p.level ? "#1a1a1a" : "#6b7280" }}
                       >
                         <option value="" disabled>Experience level</option>
@@ -411,6 +419,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                       <svg className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
+                      {levelErr && <p className="text-xs text-red-500 mt-1.5">{levelErr}</p>}
                     </div>
                   </div>
                 );
