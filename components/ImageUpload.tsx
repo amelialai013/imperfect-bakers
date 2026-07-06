@@ -5,36 +5,55 @@ import { useRef, useState } from "react";
 interface Props {
   value: string;
   onChange: (url: string) => void;
-  token: string;
+  token?: string;
   error?: string;
 }
 
-export default function ImageUpload({ value, onChange, token, error }: Props) {
+// Compress + resize image client-side → returns base64 data URL
+function compressImage(file: File, maxPx = 1200, quality = 0.82): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) { reject(new Error("Canvas unavailable")); return; }
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.src = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+export default function ImageUpload({ value, onChange, error }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [uploadError, setUploadError] = useState("");
 
   async function handleFile(file: File) {
     setUploadError("");
-    setUploading(true);
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: form,
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setUploadError(data.error ?? "Upload failed");
-      } else {
-        onChange(data.url);
-      }
-    } catch {
-      setUploadError("Upload failed — please try again");
+    if (!file.type.startsWith("image/")) {
+      setUploadError("File must be an image");
+      return;
     }
-    setUploading(false);
+    setProcessing(true);
+    try {
+      const dataUrl = await compressImage(file);
+      onChange(dataUrl);
+    } catch {
+      setUploadError("Could not process image — please try again");
+    }
+    setProcessing(false);
   }
 
   const borderCls = error
@@ -51,7 +70,6 @@ export default function ImageUpload({ value, onChange, token, error }: Props) {
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) handleFile(file);
-          // Reset so the same file can be re-selected
           e.target.value = "";
         }}
       />
@@ -69,10 +87,10 @@ export default function ImageUpload({ value, onChange, token, error }: Props) {
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              disabled={uploading}
+              disabled={processing}
               className="bg-white text-[#1a1a1a] text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-[#006644] hover:text-white transition-colors"
             >
-              {uploading ? "Uploading…" : "Change"}
+              {processing ? "Processing…" : "Change"}
             </button>
             <button
               type="button"
@@ -88,7 +106,7 @@ export default function ImageUpload({ value, onChange, token, error }: Props) {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          disabled={uploading}
+          disabled={processing}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             e.preventDefault();
@@ -96,10 +114,10 @@ export default function ImageUpload({ value, onChange, token, error }: Props) {
             if (file) handleFile(file);
           }}
           className={`w-full border-2 border-dashed rounded-[6px] px-4 py-8 flex flex-col items-center gap-2 transition-colors cursor-pointer ${borderCls} ${
-            uploading ? "opacity-60" : "hover:border-[#006644]"
+            processing ? "opacity-60" : "hover:border-[#006644]"
           }`}
         >
-          {uploading ? (
+          {processing ? (
             <svg className="w-5 h-5 text-[#006644] animate-spin" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
@@ -110,9 +128,9 @@ export default function ImageUpload({ value, onChange, token, error }: Props) {
             </svg>
           )}
           <span className="text-sm text-[#6b7280]">
-            {uploading ? "Uploading…" : "Upload image"}
+            {processing ? "Processing…" : "Upload image"}
           </span>
-          <span className="text-xs text-[#c8c0b4]">JPG, PNG, WebP — max 5MB</span>
+          <span className="text-xs text-[#c8c0b4]">JPG, PNG, WebP</span>
         </button>
       )}
 
