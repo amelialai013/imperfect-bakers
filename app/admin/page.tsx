@@ -1605,6 +1605,7 @@ export default function AdminPage() {
   const [deleteClassConfirm, setDeleteClassConfirm] = useState<string | null>(null);
   const [classKebabOpen, setClassKebabOpen] = useState<string | null>(null);
   const [pendingCount, setPendingCount] = useState<number>(0);
+  const [dashTimeFilter, setDashTimeFilter] = useState<"upcoming" | "past">("upcoming");
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -2265,6 +2266,25 @@ export default function AdminPage() {
             ))}
           </div>
 
+          {/* Upcoming / Past toggle */}
+          {!loading && sessions.length > 0 && (
+            <div className="flex items-center gap-3 mb-5">
+              <div className="inline-flex gap-1 bg-[#f0ece4] rounded-full p-1">
+                {(["upcoming", "past"] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setDashTimeFilter(t)}
+                    className={`px-5 py-2.5 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer select-none ${
+                      dashTimeFilter === t ? "bg-white text-[#1a1a1a] shadow-sm" : "text-[#6b7280] hover:text-[#1a1a1a]"
+                    }`}
+                  >
+                    {t.charAt(0).toUpperCase() + t.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Sessions list */}
           {loading ? (
             <p className="text-[#6b7280] text-sm">Loading sessions…</p>
@@ -2275,7 +2295,12 @@ export default function AdminPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {sessions.map((s) => {
+              {sessions.filter((s) => {
+                const d = new Date(s.date);
+                const today = new Date(new Date().toDateString());
+                const isPast = !isNaN(d.getTime()) && d < today;
+                return dashTimeFilter === "past" ? isPast : !isPast;
+              }).map((s) => {
                 const booked = Math.max(0, s.maxSpots - s.spotsLeft);
                 const pct = Math.round((booked / s.maxSpots) * 100);
                 const isFull = s.spotsLeft === 0;
