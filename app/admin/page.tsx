@@ -378,6 +378,7 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
   const [acting, setActing] = useState<string | null>(null);
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
   const [kebabOpen, setKebabOpen] = useState<string | null>(null);
+  const [undeclinePanelTarget, setUndeclinePanelTarget] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -423,6 +424,14 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
     setBookings((prev) => prev ? prev.filter((b) => b.id !== id) : prev);
     await authFetch(`/api/bookings/${id}`, token, { method: "DELETE" });
     setActing(null);
+  }
+
+  async function undeclinePanel(id: string) {
+    setActing(id);
+    setBookings((prev) => prev ? prev.map((b) => b.id === id ? { ...b, status: "pending" } : b) : prev);
+    await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status: "pending" }) });
+    setActing(null);
+    setUndeclinePanelTarget(null);
   }
 
   if (!bookings) return <p className="text-[#6b7280] text-sm py-4">Loading bookings…</p>;
@@ -481,11 +490,15 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
                             Cancel booking
                           </button>
                         )}
-                        {b.status === "declined" && (
+                        {b.status === "declined" && (<>
+                          <button onClick={() => { setKebabOpen(null); setUndeclinePanelTarget(b.id); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                            Reinstate booking
+                          </button>
+                          <div className="h-px bg-[#e8e2d9]" />
                           <button onClick={() => { setKebabOpen(null); deleteRecord(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                             Delete record
                           </button>
-                        )}
+                        </>)}
                       </div>
                     </>
                   )}
@@ -555,6 +568,26 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
             ))}
           </div>
         </details>
+      )}
+
+      {/* Reinstate booking confirmation modal */}
+      {undeclinePanelTarget && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setUndeclinePanelTarget(null)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Reinstate booking</h2>
+            <p className="text-sm text-[#6b7280] mb-1">This booking will be moved back to pending and will need to be confirmed.</p>
+            <p className="text-sm text-[#6b7280] mb-6">No email will be sent to the customer.</p>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setUndeclinePanelTarget(null)} className="px-4 py-2 text-sm font-medium text-[#6b7280] bg-white border border-[#e4dfd5] rounded-full hover:border-[#1a1a1a] transition-colors">
+                Cancel
+              </button>
+              <button onClick={() => undeclinePanel(undeclinePanelTarget)} className="px-4 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                Reinstate booking
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -712,6 +745,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
   const [moveSessionId, setMoveSessionId] = useState<string>("");
   const [moving, setMoving] = useState(false);
   const [moveError, setMoveError] = useState<string>("");
+  const [undeclineTarget, setUndeclineTarget] = useState<BookingWithSession | null>(null);
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -785,6 +819,17 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
     await authFetch(`/api/bookings/${id}?permanent=true`, token, { method: "DELETE" });
     await load();
     setActing(null);
+  }
+
+  async function undecline(id: string) {
+    setActing(id);
+    await authFetch(`/api/bookings/${id}`, token, {
+      method: "PATCH",
+      body: JSON.stringify({ status: "pending" }),
+    });
+    await load();
+    setActing(null);
+    setUndeclineTarget(null);
   }
 
   async function moveBooking() {
@@ -861,6 +906,26 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
 
       <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
+
+          {/* Reinstate booking confirmation modal */}
+          {undeclineTarget && (
+            <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-black/40" onClick={() => setUndeclineTarget(null)} />
+              <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm z-10">
+                <h2 className="text-lg font-semibold text-[#1a1a1a] mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Reinstate booking</h2>
+                <p className="text-sm text-[#6b7280] mb-1">This booking will be moved back to pending and will need to be confirmed.</p>
+                <p className="text-sm text-[#6b7280] mb-6">No email will be sent to the customer.</p>
+                <div className="flex gap-3 justify-end">
+                  <button onClick={() => setUndeclineTarget(null)} className="px-4 py-2 text-sm font-medium text-[#6b7280] bg-white border border-[#e4dfd5] rounded-full hover:border-[#1a1a1a] transition-colors">
+                    Cancel
+                  </button>
+                  <button onClick={() => undecline(undeclineTarget.id)} className="px-4 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                    Reinstate booking
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Move booking modal */}
           {moveTarget && (
@@ -1028,6 +1093,12 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                               {(!b.cancelled && b.status === "confirmed") && (<>
                                 <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                                   Cancel booking
+                                </button>
+                                <div className="h-px bg-[#e8e2d9]" />
+                              </>)}
+                              {(!b.cancelled && b.status === "declined") && (<>
+                                <button onClick={() => { setKebabOpen(null); setUndeclineTarget(b); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                                  Reinstate booking
                                 </button>
                                 <div className="h-px bg-[#e8e2d9]" />
                               </>)}
