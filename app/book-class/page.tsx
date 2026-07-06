@@ -59,7 +59,7 @@ export default async function BookAClassPage({
             >
               Can&apos;t find what you&apos;re looking for?
             </h2>
-            <p className="text-[#6b7280] text-lg leading-relaxed mt-4">
+            <p className="text-[#6b7280] text-base leading-relaxed mt-4">
               We offer private sessions for birthdays, team days, hens parties, and more. Tell us what you have in mind and we&apos;ll create something just for you.
             </p>
           </div>
