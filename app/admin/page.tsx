@@ -2303,7 +2303,7 @@ export default function AdminPage() {
                     <button onClick={saveNewClass} disabled={savingNewClass} className="btn-primary">
                       {savingNewClass ? "Saving…" : "Save class"}
                     </button>
-                    <button onClick={() => { setAddingClass(false); setNewClass({ title: "", ages: "", imageUrl: "", description: "" }); }} className="btn-secondary">
+                    <button onClick={() => { setAddingClass(false); setNewClass({ title: "", ages: "", imageUrl: "", description: "" }); setNewClassErrors({}); }} className="btn-secondary">
                       Cancel
                     </button>
                   </div>
