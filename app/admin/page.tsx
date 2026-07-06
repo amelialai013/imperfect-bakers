@@ -2404,7 +2404,7 @@ export default function AdminPage() {
                             strokeLinecap="round"
                           />
                         </svg>
-                        <span className="text-[0.65rem] font-semibold text-[#1a1a1a] relative z-10">{booked}/{s.maxSpots}</span>
+                        <span className="text-xs font-semibold text-[#1a1a1a] relative z-10">{booked}/{s.maxSpots}</span>
                       </div>
 
                       {/* Session info */}
