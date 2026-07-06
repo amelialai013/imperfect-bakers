@@ -891,7 +891,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       })
                       .map((s) => (
                         <option key={s.id} value={s.id}>
-                          {s.sessionName || s.classLabel} — {shortDayDate(s.date)} ({s.spotsLeft} spots left)
+                          {s.sessionName || s.classLabel} — {s.date} ({s.spotsLeft} spots left)
                         </option>
                       ))}
                   </select>
@@ -2484,7 +2484,7 @@ export default function AdminPage() {
                           )}
                         </div>
                         <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-[#6b7280]">
-                          <span>{shortDayDate(s.date)}</span>
+                          <span>{s.date}</span>
                           <span>{s.time}</span>
                           <span>{s.location}</span>
                           <span>${s.price}/person</span>
@@ -2606,7 +2606,7 @@ export default function AdminPage() {
                   return true;
                 }).map((s) => (
                   <option key={s.id} value={s.id}>
-                    {s.sessionName || s.classLabel} — {shortDayDate(s.date)} ({s.spotsLeft} spots left)
+                    {s.sessionName || s.classLabel} — {s.date} ({s.spotsLeft} spots left)
                   </option>
                 ))}
               </select>
