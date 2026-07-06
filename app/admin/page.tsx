@@ -2455,7 +2455,7 @@ export default function AdminPage() {
                 const showBookings = expandedBookings === s.id;
 
                 return (
-                  <div key={s.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden relative">
+                  <div key={s.id} className="bg-white border border-[#e8e2d9] rounded-xl relative">
 
                     {/* Session body */}
                     <div className="px-7 pt-6 pb-5 flex flex-col sm:flex-row sm:items-center gap-5">
@@ -2507,7 +2507,7 @@ export default function AdminPage() {
                         {sessionKebabOpen === s.id && (
                           <>
                             <div className="fixed inset-0 z-10" onClick={() => setSessionKebabOpen(null)} />
-                            <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                            <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
                               <button
                                 onClick={() => { setSessionKebabOpen(null); setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 }); setAddBookingError(""); setAddBookingFieldErrors({}); }}
                                 className="w-full text-left px-4 py-3 text-sm text-[#006644] font-medium hover:bg-[#faf9f6] transition-colors"
