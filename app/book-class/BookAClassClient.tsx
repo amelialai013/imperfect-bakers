@@ -305,7 +305,10 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                   </div>
                 );
               })()}
-              <p className="text-[#1a1a1a] text-lg font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
+              <div className="flex items-baseline gap-1.5">
+                <p className="text-[#1a1a1a] text-lg font-semibold" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
+                <p className="text-[#6b7280] text-xs">per person</p>
+              </div>
               {!isFull && (
                 <div className="flex items-center gap-1 text-[#006644] text-sm font-medium">
                   <span className="hidden md:inline">Book</span>
@@ -337,7 +340,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
                 <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <span>{s.date}</span>
+                <span>{shortDayDate(s.date)}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-[#6b7280]">
                 <svg className="w-3 h-3 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
