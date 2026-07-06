@@ -1589,7 +1589,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
               Experience level options
             </h2>
             <p className="text-sm text-[#6b7280] mb-8">
-              These options appear in the booking form&apos;s Experience section, letting each participant describe how much guidance they&apos;d like.
+              These options appear in the booking form&apos;s Experience section and the interest registration form, letting each participant describe how much guidance they&apos;d like.
             </p>
 
             {loading ? (
