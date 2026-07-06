@@ -443,9 +443,9 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
             );
           })()}
           <div className="flex items-center justify-between">
-            <div>
+            <div className="flex items-baseline gap-1.5">
               <p className="text-[#1a1a1a] text-lg font-semibold leading-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>${s.price}</p>
-              <p className="text-[#6b7280] text-xs mt-0.5">per person</p>
+              <p className="text-[#6b7280] text-xs">per person</p>
             </div>
             {!isFull && (
               <div className="flex items-center gap-1.5 text-[#006644] text-sm font-medium">
