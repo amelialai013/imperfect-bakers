@@ -489,8 +489,8 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             </div>
           </div>
           <div className="h-px bg-white/10" style={{ marginTop: 24, marginBottom: 24 }} />
-          <div className="flex items-baseline justify-between">
-            <p className="text-2xl font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+          <div className="flex items-baseline gap-1.5">
+            <p className="text-lg font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               ${session.price}
             </p>
             <p className="text-xs text-white/40">per person</p>
