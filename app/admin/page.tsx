@@ -2510,7 +2510,7 @@ export default function AdminPage() {
                             <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
                               <button
                                 onClick={() => { setSessionKebabOpen(null); setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 }); setAddBookingError(""); setAddBookingFieldErrors({}); }}
-                                className="w-full text-left px-4 py-3 text-sm text-[#006644] font-medium hover:bg-[#faf9f6] transition-colors"
+                                className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
                               >
                                 + Add booking
                               </button>
