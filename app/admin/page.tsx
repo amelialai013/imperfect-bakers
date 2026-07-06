@@ -437,38 +437,19 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
               <StatusBadge status={b.status} />
             </div>
             <div className="flex items-center gap-2 flex-wrap">
+              {/* Pending: inline confirm/decline */}
               {(!b.status || b.status === "pending") && (<>
-                <button
-                  onClick={() => act(b.id, "confirmed")}
-                  disabled={acting === b.id}
-                  className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50"
-                >
+                <button onClick={() => act(b.id, "confirmed")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50">
                   ✓ Confirm
                 </button>
-                <button
-                  onClick={() => act(b.id, "declined")}
-                  disabled={acting === b.id}
-                  className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50"
-                >
+                <button onClick={() => act(b.id, "declined")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50">
                   ✗ Decline
                 </button>
               </>)}
-              {b.status === "confirmed" && !isPast && (
-                <button
-                  onClick={() => cancel(b.id)}
-                  disabled={acting === b.id}
-                  className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-full hover:bg-red-50 transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-              )}
-              {/* Kebab for confirmed (change class) and declined (delete record) */}
-              {(b.status === "confirmed" || b.status === "declined") && onChangeClass && (
+              {/* Kebab — always shown for non-pending */}
+              {(b.status === "confirmed" || b.status === "declined") && (
                 <div className="relative">
-                  <button
-                    onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
-                    className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
-                  >
+                  <button onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer">
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
                       <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
                     </svg>
@@ -477,14 +458,18 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
                     <>
                       <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
                       <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
-                        {b.status === "confirmed" && (
-                          <>
-                            <button onClick={() => { setKebabOpen(null); onChangeClass({ ...b, sessionName: sessionName ?? "" }); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
-                              Change class
-                            </button>
-                            <div className="h-px bg-[#e8e2d9]" />
-                          </>
-                        )}
+                        {b.status === "confirmed" && !isPast && onChangeClass && (<>
+                          <button onClick={() => { setKebabOpen(null); onChangeClass({ ...b, sessionName: sessionName ?? "" }); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                            Change class
+                          </button>
+                          <div className="h-px bg-[#e8e2d9]" />
+                        </>)}
+                        {b.status === "confirmed" && !isPast && (<>
+                          <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                            Cancel booking
+                          </button>
+                          <div className="h-px bg-[#e8e2d9]" />
+                        </>)}
                         <button onClick={() => { setKebabOpen(null); deleteRecord(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                           Delete record
                         </button>
