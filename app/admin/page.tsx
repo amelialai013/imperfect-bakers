@@ -100,7 +100,6 @@ const emptyForm = {
   location: "",
   price: "",
   maxSpots: "",
-  ages: "All ages",
 };
 
 type FormState = typeof emptyForm;
@@ -1902,7 +1901,6 @@ export default function AdminPage() {
       location: form.location,
       price: Number(form.price),
       maxSpots: Number(form.maxSpots),
-      ages: form.ages,
       attendeeTypes,
     };
 
@@ -2069,7 +2067,6 @@ export default function AdminPage() {
           location: editTarget.location,
           price: String(editTarget.price),
           maxSpots: String(editTarget.maxSpots),
-          ages: editTarget.ages,
         }
       : emptyForm;
 
@@ -2555,7 +2552,7 @@ export default function AdminPage() {
                       setExpandedBookings((prev) => new Set([...prev, ...filteredIds]));
                     }
                   }}
-                  className="btn-secondary flex items-center gap-2"
+                  className="btn-secondary btn-sm flex items-center gap-2"
                 >
                   <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${allExpanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -2621,7 +2618,9 @@ export default function AdminPage() {
                           <span>{s.time}</span>
                           <span>{s.location}</span>
                           <span>${s.price}/person</span>
-                          <span>{s.ages}</span>
+                          {s.attendeeTypes && s.attendeeTypes.length > 0 && (
+                            <span>{s.attendeeTypes.map((t: string) => t === "youngAdult" ? "Young Adult" : t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}</span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -2659,7 +2658,7 @@ export default function AdminPage() {
                                 onClick={() => { setSessionKebabOpen(null); setDeleteSessionConfirm(s.id); }}
                                 className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
                               >
-                                Delete class
+                                Delete session
                               </button>
                             </div>
                           </>
