@@ -1257,6 +1257,9 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
 // ── Email Templates ──────────────────────────────────────────────────────────
 
 type TemplateField = { key: string; label: string; hint: string };
+type TemplateStructureItem =
+  | { type: "fixed"; text: string }
+  | { type: "field"; key: string; label: string; hint: string };
 
 const TEMPLATE_DEFS: {
   key: string;
@@ -1264,6 +1267,7 @@ const TEMPLATE_DEFS: {
   description: string;
   subjectHint: string;
   fields: TemplateField[];
+  structure: TemplateStructureItem[];
 }[] = [
   {
     key: "booking_request",
@@ -1271,8 +1275,15 @@ const TEMPLATE_DEFS: {
     description: "Sent to the customer when they submit a booking request.",
     subjectHint: "Available: {{sessionName}}",
     fields: [
-      { key: "note", label: "Note paragraph", hint: "Appears after the session details. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+      { key: "note", label: "Note paragraph", hint: "Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
       { key: "closing", label: "Closing paragraph", hint: "Final note before the sign-off." },
+    ],
+    structure: [
+      { type: "fixed", text: "Hi {{name}}! 👋" },
+      { type: "fixed", text: "Thanks for requesting a spot in {{sessionName}} on {{sessionDate}} for {{totalPeople}} people." },
+      { type: "field", key: "note", label: "Note paragraph", hint: "Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+      { type: "field", key: "closing", label: "Closing paragraph", hint: "Final note before the sign-off." },
+      { type: "fixed", text: "Warmly, Chef Sarah & the Imperfect Bakers team" },
     ],
   },
   {
@@ -1281,7 +1292,13 @@ const TEMPLATE_DEFS: {
     description: "Sent when you confirm a booking request.",
     subjectHint: "Available: {{sessionName}}",
     fields: [
-      { key: "details", label: "Details paragraph", hint: "Appears after the confirmation. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+      { key: "details", label: "Details paragraph", hint: "Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+    ],
+    structure: [
+      { type: "fixed", text: "Hi {{name}}! 👋" },
+      { type: "fixed", text: "Great news — your booking for {{sessionName}} on {{sessionDate}} is confirmed!" },
+      { type: "field", key: "details", label: "Details paragraph", hint: "Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+      { type: "fixed", text: "See you in the kitchen, Chef Sarah & the Imperfect Bakers team" },
     ],
   },
   {
@@ -1290,8 +1307,16 @@ const TEMPLATE_DEFS: {
     description: "Sent when you decline a booking request.",
     subjectHint: "Available: {{sessionName}}",
     fields: [
-      { key: "reason", label: "Reason paragraph", hint: "Why the booking was declined." },
+      { key: "reason", label: "Reason paragraph", hint: "Why the booking was declined. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
       { key: "invite", label: "Invite paragraph", hint: "Encouragement to rebook." },
+    ],
+    structure: [
+      { type: "fixed", text: "Hi {{name}}," },
+      { type: "fixed", text: "Thank you so much for booking {{sessionName}} on {{sessionDate}}." },
+      { type: "fixed", text: "Unfortunately we're unable to accommodate your booking at this time. Your spot has been released and you won't be charged." },
+      { type: "field", key: "reason", label: "Reason paragraph", hint: "Why the booking was declined. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+      { type: "field", key: "invite", label: "Invite paragraph", hint: "Encouragement to rebook." },
+      { type: "fixed", text: "Warmly, Chef Sarah & the Imperfect Bakers team" },
     ],
   },
   {
@@ -1303,6 +1328,13 @@ const TEMPLATE_DEFS: {
       { key: "release", label: "Release paragraph", hint: "Explains the spot release. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
       { key: "future", label: "Future paragraph", hint: "Encouragement to find another session." },
     ],
+    structure: [
+      { type: "fixed", text: "Hi {{name}}," },
+      { type: "fixed", text: "Your booking for {{sessionName}} on {{sessionDate}} has sadly been cancelled due to insufficient registrations or unforeseen circumstances." },
+      { type: "field", key: "release", label: "Release paragraph", hint: "Explains the spot release. Available: {{name}}, {{sessionName}}, {{sessionDate}}" },
+      { type: "field", key: "future", label: "Future paragraph", hint: "Encouragement to find another session." },
+      { type: "fixed", text: "Warmly, Chef Sarah & the Imperfect Bakers team" },
+    ],
   },
   {
     key: "interest_received",
@@ -1311,6 +1343,12 @@ const TEMPLATE_DEFS: {
     subjectHint: "Available: {{classes}}",
     fields: [
       { key: "next_steps", label: "Next steps paragraph", hint: "What happens next. Available: {{name}}, {{classes}}" },
+    ],
+    structure: [
+      { type: "fixed", text: "Hi {{name}}! 👋" },
+      { type: "fixed", text: "Thanks for registering your interest in {{classes}}. We've got your details and will be in touch as soon as a relevant session opens up." },
+      { type: "field", key: "next_steps", label: "Next steps paragraph", hint: "What happens next. Available: {{name}}, {{classes}}" },
+      { type: "fixed", text: "Warmly, Chef Sarah & the Imperfect Bakers team" },
     ],
   },
 ];
@@ -1418,19 +1456,34 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
                     <p className="text-xs text-[#9ca3af] mt-1.5">{activeDef.subjectHint}</p>
                   </div>
 
-                  {/* Body fields */}
-                  {activeDef.fields.map((field) => (
-                    <div key={field.key}>
-                      <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#006644] mb-2">{field.label}</label>
-                      <textarea
-                        rows={4}
-                        value={activeData[field.key] ?? ""}
-                        onChange={(e) => update(active, field.key, e.target.value)}
-                        className="w-full border border-[#e4dfd5] rounded-lg px-4 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-y"
-                      />
-                      <p className="text-xs text-[#9ca3af] mt-1.5">{field.hint}</p>
+                  {/* Full email structure */}
+                  <div>
+                    <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#006644] mb-3">Email body</label>
+                    <div className="border border-[#e4dfd5] rounded-xl overflow-hidden divide-y divide-[#e4dfd5]">
+                      {activeDef.structure.map((item, i) =>
+                        item.type === "fixed" ? (
+                          <div key={i} className="px-4 py-3 bg-[#faf9f6] flex items-start gap-2.5">
+                            <svg className="w-3.5 h-3.5 text-[#9ca3af] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            <p className="text-sm text-[#6b7280] leading-relaxed">{item.text}</p>
+                          </div>
+                        ) : (
+                          <div key={i} className="px-4 py-3 bg-white">
+                            <label className="block text-xs font-medium text-[#006644] mb-1.5">{item.label} <span className="text-[#9ca3af] font-normal">(editable)</span></label>
+                            <textarea
+                              rows={3}
+                              value={activeData[item.key] ?? ""}
+                              onChange={(e) => update(active, item.key, e.target.value)}
+                              placeholder={`Enter ${item.label.toLowerCase()}…`}
+                              className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-y"
+                            />
+                            <p className="text-xs text-[#9ca3af] mt-1">{item.hint}</p>
+                          </div>
+                        )
+                      )}
                     </div>
-                  ))}
+                  </div>
                 </div>
 
                 <div className="mt-8 flex items-center gap-4">
