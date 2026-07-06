@@ -990,8 +990,8 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         )}
                       </div>
                     </div>
-                    {/* Kebab — always anchored top-right */}
-                    <div className="absolute top-3 right-3">
+                    {/* Kebab — always anchored top-right (hidden for pending) */}
+                    {(b.cancelled || b.status === "confirmed" || b.status === "declined") && <div className="absolute top-3 right-3">
                       <div className="relative">
                         <button
                           onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
@@ -1028,7 +1028,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           </>
                         )}
                       </div>
-                    </div>
+                    </div>}
                   </div>
 
                   {/* Booking details */}
