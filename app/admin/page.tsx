@@ -852,7 +852,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
 
           {/* Move booking modal */}
           {moveTarget && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+            <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
               <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => { setMoveTarget(null); setMoveSessionId(""); setMoveError(""); }} />
               <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 z-10">
                 <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
@@ -1975,7 +1975,7 @@ export default function AdminPage() {
       <>
         {/* ── Delete class confirmation modal ── */}
         {deleteClassConfirm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
             <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
             <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
               <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5">
@@ -2016,7 +2016,7 @@ export default function AdminPage() {
 
         {/* ── Unsaved changes modal ── */}
         {unsavedWarning && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
             <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
             <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
               <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center mx-auto mb-5">
@@ -2506,7 +2506,7 @@ export default function AdminPage() {
 
       {/* Change class modal */}
       {dashMoveTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
           <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => { setDashMoveTarget(null); setDashMoveSessionId(""); setDashMoveError(""); }} />
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 z-10">
             <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Change class</h2>
@@ -2547,7 +2547,7 @@ export default function AdminPage() {
 
       {/* Add booking modal */}
       {addBookingTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-y-auto">
           <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setAddBookingTarget(null)} />
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 z-10 my-4">
             <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Add booking</h2>
