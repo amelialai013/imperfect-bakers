@@ -430,13 +430,10 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
     <div className="mt-4 space-y-2">
       {active.map((b) => (
         <div key={b.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
-          {/* Header — name, badge, actions */}
+          {/* Header — name, actions, badge + kebab */}
           <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-2 flex-wrap">
               <p className="font-medium text-[#1a1a1a] text-sm">{b.name}</p>
-              <StatusBadge status={b.status} />
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
               {/* Pending: inline confirm/decline */}
               {(!b.status || b.status === "pending") && (<>
                 <button onClick={() => act(b.id, "confirmed")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50">
@@ -446,6 +443,10 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
                   ✗ Decline
                 </button>
               </>)}
+            </div>
+            {/* Badge + Kebab on the right */}
+            <div className="flex items-center gap-2">
+              <StatusBadge status={b.status} />
               {/* Kebab — always shown for non-pending */}
               {(b.status === "confirmed" || b.status === "declined") && (
                 <div className="relative">
@@ -482,6 +483,7 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
             </div>
           </div>
           {/* Body */}
+
           <div className="px-5 py-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
             <div>
@@ -966,32 +968,30 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               {filtered.map((b) => (
                 <div key={b.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
                   {/* Session label */}
-                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] relative pr-12">
-                    {/* Session info + badge + confirm/decline — flow naturally */}
+                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] relative pr-36">
+                    {/* Session info + confirm/decline — flow naturally */}
                     <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
                       <div>
                         <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
                         <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}</p>
                       </div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {b.cancelled
-                          ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
-                          : <StatusBadge status={b.status} />
-                        }
-                        {(!b.cancelled && (!b.status || b.status === "pending")) && (
-                          <div className="flex gap-2">
-                            <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
-                              ✓ Confirm
-                            </button>
-                            <button onClick={() => act(b.id, "declined")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
-                              ✗ Decline
-                            </button>
-                          </div>
-                        )}
-                      </div>
+                      {(!b.cancelled && (!b.status || b.status === "pending")) && (
+                        <div className="flex gap-2">
+                          <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                            ✓ Confirm
+                          </button>
+                          <button onClick={() => act(b.id, "declined")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
+                            ✗ Decline
+                          </button>
+                        </div>
+                      )}
                     </div>
-                    {/* Kebab — always anchored top-right */}
-                    <div className="absolute top-3 right-3">
+                    {/* Badge + Kebab — anchored top-right */}
+                    <div className="absolute top-3 right-3 flex items-center gap-2">
+                      {b.cancelled
+                        ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
+                        : <StatusBadge status={b.status} />
+                      }
                       <div className="relative">
                         <button
                           onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
