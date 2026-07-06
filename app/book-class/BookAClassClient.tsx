@@ -92,8 +92,28 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
         </div>
 
 
-          {/* Grid/List + Sort — grouped so they wrap together */}
+          {/* Sort + Grid/List — grouped so they wrap together */}
           <div className="flex items-center gap-2">
+
+          {/* Sort select */}
+          <div className="relative flex items-center">
+            <svg className="pointer-events-none absolute left-4 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 4l4 4m0 0l4-4m-4 4V8" />
+            </svg>
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc" | "popular")}
+              className="appearance-none bg-white border border-[#e4dfd5] rounded-full text-sm font-medium text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] pl-9 pr-9 hover:border-[#006644]"
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+            >
+              <option value="asc">Earliest first</option>
+              <option value="desc">Latest first</option>
+              <option value="popular">Most popular</option>
+            </select>
+            <svg className="pointer-events-none absolute right-3 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
 
           {/* Grid / List toggle — hidden on mobile */}
           <div className="hidden sm:flex items-center border border-[#e4dfd5] rounded-full overflow-hidden bg-white h-[46px]">
@@ -116,26 +136,6 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-          </div>
-
-          {/* Sort select */}
-          <div className="relative flex items-center">
-            <svg className="pointer-events-none absolute left-4 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 4l4 4m0 0l4-4m-4 4V8" />
-            </svg>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc" | "popular")}
-              className="appearance-none bg-white border border-[#e4dfd5] rounded-full text-sm font-medium text-[#1a1a1a] focus:outline-none cursor-pointer transition-colors h-[46px] pl-9 pr-9 hover:border-[#006644]"
-              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-            >
-              <option value="asc">Earliest first</option>
-              <option value="desc">Latest first</option>
-              <option value="popular">Most popular</option>
-            </select>
-            <svg className="pointer-events-none absolute right-3 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
           </div>
 
           </div>{/* end grouped */}
