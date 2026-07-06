@@ -361,10 +361,11 @@ function SessionForm({
   );
 }
 
-function BookingsPanel({ sessionId, token, isPast }: { sessionId: string; token: string; isPast?: boolean }) {
+function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }: { sessionId: string; sessionName?: string; token: string; isPast?: boolean; onChangeClass?: (b: Booking & { sessionName: string }) => void }) {
   const [bookings, setBookings] = useState<Booking[] | null>(null);
   const [acting, setActing] = useState<string | null>(null);
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
+  const [kebabOpen, setKebabOpen] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -435,7 +436,7 @@ function BookingsPanel({ sessionId, token, isPast }: { sessionId: string; token:
               <p className="font-medium text-[#1a1a1a] text-sm">{b.name}</p>
               <StatusBadge status={b.status} />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
               {(!b.status || b.status === "pending") && (<>
                 <button
                   onClick={() => act(b.id, "confirmed")}
@@ -461,14 +462,36 @@ function BookingsPanel({ sessionId, token, isPast }: { sessionId: string; token:
                   Cancel
                 </button>
               )}
-              {isPast && (
-                <button
-                  onClick={() => deleteRecord(b.id)}
-                  disabled={acting === b.id}
-                  className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-full hover:bg-red-50 transition-colors disabled:opacity-50"
-                >
-                  Delete record
-                </button>
+              {/* Kebab for confirmed (change class) and declined (delete record) */}
+              {(b.status === "confirmed" || b.status === "declined") && onChangeClass && (
+                <div className="relative">
+                  <button
+                    onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
+                    className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                      <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
+                    </svg>
+                  </button>
+                  {kebabOpen === b.id && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
+                      <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                        {b.status === "confirmed" && (
+                          <>
+                            <button onClick={() => { setKebabOpen(null); onChangeClass({ ...b, sessionName: sessionName ?? "" }); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                              Change class
+                            </button>
+                            <div className="h-px bg-[#e8e2d9]" />
+                          </>
+                        )}
+                        <button onClick={() => { setKebabOpen(null); deleteRecord(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                          Delete record
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               )}
             </div>
           </div>
@@ -1623,6 +1646,10 @@ export default function AdminPage() {
   const [classKebabOpen, setClassKebabOpen] = useState<string | null>(null);
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [dashTimeFilter, setDashTimeFilter] = useState<"upcoming" | "past">("upcoming");
+  const [dashMoveTarget, setDashMoveTarget] = useState<(Booking & { sessionName: string }) | null>(null);
+  const [dashMoveSessionId, setDashMoveSessionId] = useState<string>("");
+  const [dashMoveError, setDashMoveError] = useState<string>("");
+  const [dashMoving, setDashMoving] = useState(false);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -2222,6 +2249,19 @@ export default function AdminPage() {
 
   // ── Dashboard ────────────────────────────────────────────
 
+  async function dashDoMove() {
+    if (!dashMoveTarget || !dashMoveSessionId) return;
+    setDashMoving(true);
+    const res = await authFetch(`/api/bookings/${dashMoveTarget.id}`, token, {
+      method: "PATCH",
+      body: JSON.stringify({ newSessionId: dashMoveSessionId }),
+    });
+    if (!res.ok) { setDashMoveError("Failed to change class. Please try again."); setDashMoving(false); return; }
+    setDashMoveTarget(null); setDashMoveSessionId(""); setDashMoveError("");
+    setDashMoving(false);
+    await loadSessions();
+  }
+
   const totalBookings = sessions.reduce((acc, s) => acc + Math.max(0, s.maxSpots - s.spotsLeft), 0);
   const totalRevenue = sessions.reduce((acc, s) => acc + Math.max(0, s.maxSpots - s.spotsLeft) * s.price, 0);
 
@@ -2418,7 +2458,13 @@ export default function AdminPage() {
                     {/* Bookings panel */}
                     {showBookings && (
                       <div className="border-t border-[#e8e2d9] px-7 pb-6 pt-4">
-                        <BookingsPanel sessionId={s.id} token={token} isPast={dashTimeFilter === "past"} />
+                        <BookingsPanel
+                          sessionId={s.id}
+                          sessionName={s.sessionName || s.classLabel}
+                          token={token}
+                          isPast={dashTimeFilter === "past"}
+                          onChangeClass={(b) => { setDashMoveTarget(b); setDashMoveSessionId(""); setDashMoveError(""); }}
+                        />
                       </div>
                     )}
                   </div>
@@ -2428,6 +2474,47 @@ export default function AdminPage() {
           )}
         </div>
       </section>
+
+      {/* Change class modal */}
+      {dashMoveTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => { setDashMoveTarget(null); setDashMoveSessionId(""); setDashMoveError(""); }} />
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 z-10">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Change class</h2>
+            <p className="text-sm text-[#6b7280] mb-6">Moving <strong className="text-[#1a1a1a]">{dashMoveTarget.name}</strong> ({dashMoveTarget.totalPeople} {dashMoveTarget.totalPeople === 1 ? "person" : "people"}) from <strong className="text-[#1a1a1a]">{dashMoveTarget.sessionName}</strong>.</p>
+            <div className="relative mb-6">
+              <select
+                value={dashMoveSessionId}
+                onChange={(e) => { setDashMoveSessionId(e.target.value); setDashMoveError(""); }}
+                className="w-full border border-[#e4dfd5] rounded-lg px-4 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] bg-white appearance-none cursor-pointer pr-10"
+              >
+                <option value="">Select a class…</option>
+                {sessions.filter((s) => {
+                  if (s.id === dashMoveTarget.sessionId) return false;
+                  if (s.spotsLeft < dashMoveTarget.totalPeople) return false;
+                  const d = new Date(s.date);
+                  if (!isNaN(d.getTime()) && d < new Date(new Date().toDateString())) return false;
+                  return true;
+                }).map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.sessionName || s.classLabel} — {s.date} ({s.spotsLeft} spots left)
+                  </option>
+                ))}
+              </select>
+              <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+            {dashMoveError && <p className="text-xs text-red-500 mb-4">{dashMoveError}</p>}
+            <div className="flex gap-3 flex-wrap">
+              <button onClick={dashDoMove} disabled={!dashMoveSessionId || dashMoving} className="btn-primary disabled:opacity-50">
+                {dashMoving ? "Moving…" : "Change booking"}
+              </button>
+              <button onClick={() => { setDashMoveTarget(null); setDashMoveSessionId(""); setDashMoveError(""); }} className="btn-secondary">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
