@@ -2432,7 +2432,7 @@ export default function AdminPage() {
 
                     {/* Footer action bar */}
                     <div className="px-7 py-3 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center justify-between gap-3">
                         <span className="text-xs text-[#6b7280]">{booked} of {s.maxSpots} spots booked</span>
                         <button
                           onClick={() => { setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 }); setAddBookingError(""); }}
