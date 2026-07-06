@@ -10,7 +10,7 @@ const DEFAULT_LEVELS: ExperienceLevel[] = [
   { value: "expert", label: "Confident cook — only step in if I ask" },
 ];
 
-const classOptions = [
+const FALLBACK_CLASS_OPTIONS = [
   "Sweet Food",
   "Savoury Food",
   "Knife Skills",
@@ -33,6 +33,7 @@ type FieldErrors = {
 
 export default function InterestPage() {
   const [selected, setSelected] = useState<string[]>([]);
+  const [classOptions, setClassOptions] = useState<string[]>(FALLBACK_CLASS_OPTIONS);
   const [levels, setLevels] = useState<ExperienceLevel[]>(DEFAULT_LEVELS);
   const [experienceValue, setExperienceValue] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
@@ -55,6 +56,16 @@ export default function InterestPage() {
     fetch("/api/settings")
       .then((r) => r.json())
       .then((data) => { if (data.experienceLevels?.length) setLevels(data.experienceLevels); })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/classconfigs")
+      .then((r) => r.json())
+      .then((configs: { title: string; hidden?: boolean }[]) => {
+        const names = configs.filter((c) => !c.hidden).map((c) => c.title);
+        if (names.length) setClassOptions(names);
+      })
       .catch(() => {});
   }, []);
 

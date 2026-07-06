@@ -2266,8 +2266,8 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <label className={labelCls}>Description</label>
-                    <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value.slice(0, 120) }))} rows={2} placeholder="Short description…" maxLength={120} className={inputCls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"} />
-                    <p className={`text-right text-xs mt-1 ${newClass.description.length >= 110 ? "text-red-400" : "text-[#c8c0b4]"}`}>{newClass.description.length}/120</p>
+                    <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value.slice(0, 100) }))} rows={2} placeholder="Short description…" maxLength={100} className={inputCls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"} />
+                    <p className={`text-right text-xs mt-1 ${newClass.description.length >= 90 ? "text-red-400" : "text-[#c8c0b4]"}`}>{newClass.description.length}/100</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-3 pt-1">
                     <button onClick={saveNewClass} disabled={savingNewClass || !newClass.title.trim()} className="btn-primary">
@@ -2323,7 +2323,7 @@ export default function AdminPage() {
                                   onClick={() => { setClassKebabOpen(null); setDeleteClassConfirm(c.key); }}
                                   className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
                                 >
-                                  Delete
+                                  Delete class
                                 </button>
                               )}
                             </div>
@@ -2369,12 +2369,12 @@ export default function AdminPage() {
                         <label className={labelCls}>Description</label>
                         <textarea
                           value={c.description}
-                          onChange={(e) => updateClassConfig(c.key, "description", e.target.value.slice(0, 120))}
+                          onChange={(e) => updateClassConfig(c.key, "description", e.target.value.slice(0, 100))}
                           rows={2}
-                          maxLength={120}
+                          maxLength={100}
                           className={inputCls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"}
                         />
-                        <p className={`text-right text-xs mt-1 ${c.description.length >= 110 ? "text-red-400" : "text-[#c8c0b4]"}`}>{c.description.length}/120</p>
+                        <p className={`text-right text-xs mt-1 ${c.description.length >= 90 ? "text-red-400" : "text-[#c8c0b4]"}`}>{c.description.length}/100</p>
                       </div>
                     </div>
 
