@@ -76,7 +76,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [submitted, setSubmitted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{
     name?: string; email?: string; phone?: string;
-    attendees?: string; participants?: string[]; payment?: string; paymentOther?: string;
+    attendees?: string; participants?: string[]; payment?: string; paymentOther?: string; notes?: string;
   }>({});
 
   // Refs to read input values without FormData (avoids Safari <form> bugs)
@@ -151,6 +151,12 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     if (participantErrors.some(Boolean)) errors.participants = participantErrors;
     if (!paymentStatus) errors.payment = "Please select a payment status";
     if (paymentStatus === "other" && !paymentOther) errors.paymentOther = "Please add a note";
+    // Notes required if any participant selected an "Other — see notes" experience level
+    const hasOtherLevel = participants.some((p) => {
+      const lvl = levels.find((l) => l.value === p.level);
+      return lvl && lvl.label.toLowerCase().includes("see notes");
+    });
+    if (hasOtherLevel && !notes) errors.notes = "Please add a note to describe your experience level";
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -419,9 +425,11 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             ref={notesRef}
             rows={3}
             placeholder="Dietary requirements, allergies, questions…"
-            className={inputClass + " resize-none"}
+            className={(fieldErrors.notes ? inputErrorClass : inputClass) + " resize-none"}
             style={scrollbarStyle}
+            onChange={() => fieldErrors.notes && setFieldErrors((p) => ({ ...p, notes: undefined }))}
           />
+          {fieldErrors.notes && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.notes}</p>}
         </div>
 
         <div className="mt-8 pt-2 flex flex-col gap-6">
