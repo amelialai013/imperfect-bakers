@@ -246,7 +246,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         >
           <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
           {/* Desktop layout: single row */}
-          <div className="hidden sm:flex px-6 pt-5 pb-6 gap-6">
+          <div className="hidden sm:flex px-6 pt-4 pb-6 gap-6">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] truncate">{s.classLabel}</span>
@@ -404,7 +404,7 @@ function SessionCard({ s, view }: { s: import("@/lib/types").ClassSession; view:
         }`}
       >
         <div className={`h-1 w-full ${isFull ? "bg-[#c8c0b4]" : "bg-[#006644]"}`} />
-        <div className="pt-5 px-6 pb-6 flex flex-col flex-1">
+        <div className="pt-4 px-6 pb-6 flex flex-col flex-1">
           <div className="flex items-center justify-between gap-3">
             <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] leading-none truncate">{s.classLabel}</span>
             {!isFull ? (
