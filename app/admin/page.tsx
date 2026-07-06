@@ -2809,7 +2809,7 @@ export default function AdminPage() {
               {/* Notes */}
               <div>
                 <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Notes</label>
-                <textarea value={addBookingForm.notes} onChange={(e) => setAddBookingForm((f) => ({ ...f, notes: e.target.value }))} rows={2} placeholder="Any notes…" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644] resize-none" />
+                <textarea value={addBookingForm.notes} onChange={(e) => setAddBookingForm((f) => ({ ...f, notes: e.target.value }))} rows={2} placeholder="Any notes…" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644] resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]" />
               </div>
             </div>
 
