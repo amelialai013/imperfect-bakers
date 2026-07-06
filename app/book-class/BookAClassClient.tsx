@@ -160,7 +160,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
                 onClick={() => setActiveClass("All")}
                 className="btn-primary"
               >
-                View all classes
+                View all sessions
               </button>
             )}
             <a href="/interest" className="btn-secondary">Register interest</a>
@@ -184,7 +184,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
                 onClick={() => setActiveClass("All")}
                 className="btn-secondary"
               >
-                View all classes
+                View all sessions
               </button>
             </div>
           )}
