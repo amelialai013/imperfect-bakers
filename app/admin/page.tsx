@@ -544,14 +544,14 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             </div>
             <div>
               <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
+              {sessionPrice != null && (
+                <p className="text-[#1a1a1a] text-xs font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
+              )}
               <p className="text-[#6b7280] text-xs">
                 {b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}
               </p>
               {b.paymentStatus === "other" && b.paymentOther && (
                 <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
-              )}
-              {sessionPrice != null && (
-                <p className="text-[#1a1a1a] text-xs font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
               )}
             </div>
             {b.notes && (
@@ -1212,14 +1212,14 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       </div>
                       <div>
                         <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
+                        {b.sessionPrice != null && (
+                          <p className="text-[#1a1a1a] text-xs font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                        )}
                         <p className="text-[#6b7280] text-xs">
                           {b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}
                         </p>
                         {b.paymentStatus === "other" && b.paymentOther && (
                           <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
-                        )}
-                        {b.sessionPrice != null && (
-                          <p className="text-[#1a1a1a] text-xs font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
                         )}
                       </div>
                       {b.notes && (
