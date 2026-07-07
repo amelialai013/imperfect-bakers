@@ -2130,12 +2130,12 @@ export default function AdminPage() {
   const [addBookingFieldErrors, setAddBookingFieldErrors] = useState<{ name?: string; email?: string; attendees?: string; payment?: string }>({});
   const [addBookingSaving, setAddBookingSaving] = useState(false);
 
-  // Lock body scroll whenever any modal is open
+  // Lock body scroll whenever any overlay modal is open
   useEffect(() => {
-    const anyOpen = !!(editTarget || deleteConfirm || deleteSessionConfirm || deleteClassConfirm || dashMoveTarget || addBookingTarget);
+    const anyOpen = !!(deleteConfirm || deleteSessionConfirm || deleteClassConfirm || dashMoveTarget || addBookingTarget);
     document.body.style.overflow = anyOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [editTarget, deleteConfirm, deleteSessionConfirm, deleteClassConfirm, dashMoveTarget, addBookingTarget]);
+  }, [deleteConfirm, deleteSessionConfirm, deleteClassConfirm, dashMoveTarget, addBookingTarget]);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
