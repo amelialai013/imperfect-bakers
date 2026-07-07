@@ -551,7 +551,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
                 <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
               )}
               {sessionPrice != null && (
-                <p className="text-[#1a1a1a] text-xs font-medium mt-2">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                <p className="text-[#1a1a1a] text-xs font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
               )}
             </div>
             {b.notes && (
@@ -1219,7 +1219,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
                         )}
                         {b.sessionPrice != null && (
-                          <p className="text-[#1a1a1a] text-xs font-medium mt-2">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                          <p className="text-[#1a1a1a] text-xs font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
                         )}
                       </div>
                       {b.notes && (
