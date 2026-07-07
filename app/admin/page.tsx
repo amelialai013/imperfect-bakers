@@ -3177,11 +3177,11 @@ export default function AdminPage() {
             {/* Footer — sticky */}
             <div className="px-6 py-4 border-t border-[#f0ece4] shrink-0">
               {addBookingError && <p className="text-xs text-red-500 mb-3">{addBookingError}</p>}
-              <div className="flex gap-3">
-                <button onClick={submitAddBooking} disabled={addBookingSaving} className="btn-primary flex-1 disabled:opacity-50">
+              <div className="flex flex-wrap gap-3">
+                <button onClick={submitAddBooking} disabled={addBookingSaving} className="btn-primary flex-1 min-w-[120px] disabled:opacity-50">
                   {addBookingSaving ? "Adding…" : "Add booking"}
                 </button>
-                <button onClick={() => setAddBookingTarget(null)} className="btn-secondary flex-1">Cancel</button>
+                <button onClick={() => setAddBookingTarget(null)} className="btn-secondary flex-1 min-w-[120px]">Cancel</button>
               </div>
             </div>
           </div>
