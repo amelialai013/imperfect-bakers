@@ -12,7 +12,8 @@ const MONTH_INDEX: Record<string, number> = {
 
 // Parse "Saturday 18 July 2026" → Date
 // Safari rejects "18 July 2026" passed to new Date(), so we parse manually.
-function parseDisplayDate(dateStr: string): Date {
+function parseDisplayDate(dateStr: string | undefined): Date {
+  if (!dateStr) return new Date(0);
   const parts = dateStr.split(" "); // ["Saturday", "18", "July", "2026"]
   if (parts.length === 4) {
     const month = MONTH_INDEX[parts[2]];
@@ -34,7 +35,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
   const upcomingSessions = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return sessions.filter((s) => parseDisplayDate(s.date) >= today);
+    return sessions.filter((s) => s.date && s.classLabel && parseDisplayDate(s.date) >= today);
   }, [sessions]);
 
   const classLabels = useMemo(() => {
