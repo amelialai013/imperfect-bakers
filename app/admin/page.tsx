@@ -1639,7 +1639,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
   const [savedTestimonials, setSavedTestimonials] = useState(false);
   const [testimonialErrors, setTestimonialErrors] = useState<{ quote?: string; name?: string; role?: string }[]>([{}, {}, {}, {}]);
 
-  const QUOTE_LIMITS = [250, 200, 200, 200];
+  const QUOTE_LIMITS = [225, 150, 150, 150];
 
   const DEFAULT_LEVELS: ExperienceLevel[] = [
     { value: "beginner", label: "New to cooking — please guide me through everything" },
