@@ -57,6 +57,7 @@ export default function Footer() {
                 { label: "Our classes",       href: "/classes" },
                 { label: "Book a class",      href: "/book-class" },
                 { label: "Register interest", href: "/interest" },
+                { label: "Booking policy",    href: "/policy" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="text-white/60 hover:text-white transition-colors">
