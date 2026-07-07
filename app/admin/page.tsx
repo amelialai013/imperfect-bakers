@@ -545,14 +545,14 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
               {sessionPrice != null && (
-                <p className="text-[#1a1a1a] text-xs font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                <p className="text-[#1a1a1a] font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
               )}
-              <p className="text-[#6b7280] text-xs">
-                {b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}
-              </p>
-              {b.paymentStatus === "other" && b.paymentOther && (
-                <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
-              )}
+              <div className="text-[#6b7280] text-xs mt-1 space-y-0.5">
+                <p>{b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}</p>
+                {b.paymentStatus === "other" && b.paymentOther && (
+                  <p className="italic">{b.paymentOther}</p>
+                )}
+              </div>
             </div>
             {b.notes && (
               <div className="col-span-2 sm:col-span-4 mt-3">
@@ -1209,14 +1209,14 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
                         {b.sessionPrice != null && (
-                          <p className="text-[#1a1a1a] text-xs font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                          <p className="text-[#1a1a1a] font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
                         )}
-                        <p className="text-[#6b7280] text-xs">
-                          {b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}
-                        </p>
-                        {b.paymentStatus === "other" && b.paymentOther && (
-                          <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
-                        )}
+                        <div className="text-[#6b7280] text-xs mt-1 space-y-0.5">
+                          <p>{b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}</p>
+                          {b.paymentStatus === "other" && b.paymentOther && (
+                            <p className="italic">{b.paymentOther}</p>
+                          )}
+                        </div>
                       </div>
                       {b.notes && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
@@ -1409,7 +1409,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
                                 onClick={() => { setInterestKebabOpen(null); setNotifyTarget(e); setNotifyError(""); }}
                                 className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
                               >
-                                Notify — classes available
+                                Send availability email
                               </button>
                               <div className="h-px bg-[#e8e2d9]" />
                               <button
