@@ -1619,11 +1619,23 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
 
 // ── Settings ─────────────────────────────────────────────────────────────────
 
+type Testimonial = { quote: string; name: string; role: string };
+
+const DEFAULT_TESTIMONIALS: Testimonial[] = [
+  { quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.", name: "Sarah M.", role: "Knife Skills" },
+  { quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real.", name: "James R.", role: "Savoury Food" },
+  { quote: "The random kitchen fun class was a total game-changer. My son taught me how to make pasta from scratch. I'll never forget his little face.", name: "Laura K.", role: "Random Kitchen Fun" },
+];
+
 function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClasses, onEmailTemplates, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onLogout: () => void }) {
   const [levels, setLevels] = useState<ExperienceLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(DEFAULT_TESTIMONIALS);
+  const [savingTestimonials, setSavingTestimonials] = useState(false);
+  const [savedTestimonials, setSavedTestimonials] = useState(false);
+  const [classOptions, setClassOptions] = useState<string[]>([]);
 
   const DEFAULT_LEVELS: ExperienceLevel[] = [
     { value: "beginner", label: "New to cooking — please guide me through everything" },
@@ -1636,10 +1648,36 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
       .then((r) => r.json())
       .then((data) => {
         setLevels(data.experienceLevels?.length ? data.experienceLevels : DEFAULT_LEVELS);
+        if (data.testimonials?.length) setTestimonials(data.testimonials);
         setLoading(false);
       })
       .catch(() => { setLevels(DEFAULT_LEVELS); setLoading(false); });
+    fetch("/api/classconfigs")
+      .then((r) => r.json())
+      .then((configs: { title: string; hidden?: boolean }[]) => {
+        const names = configs.filter((c) => !c.hidden).map((c) => c.title);
+        if (names.length) setClassOptions(names);
+      })
+      .catch(() => {});
   }, []);
+
+  function updateTestimonial(i: number, field: keyof Testimonial, val: string) {
+    setTestimonials((prev) => prev.map((t, j) => j === i ? { ...t, [field]: val } : t));
+    setSavedTestimonials(false);
+  }
+
+  async function saveTestimonials() {
+    setSavingTestimonials(true);
+    try {
+      await authFetch("/api/settings", token, {
+        method: "PATCH",
+        body: JSON.stringify({ testimonials }),
+      });
+      setSavedTestimonials(true);
+      setTimeout(() => setSavedTestimonials(false), 2500);
+    } catch { /* silent */ }
+    setSavingTestimonials(false);
+  }
 
   function updateLevel(i: number, field: "value" | "label", val: string) {
     setLevels((prev) => prev.map((l, j) => j === i ? { ...l, [field]: val } : l));
@@ -1693,7 +1731,73 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
       </section>
 
       <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto space-y-6">
+
+          {/* Testimonials card */}
+          <div className="bg-white border border-[#e8e2d9] rounded-xl p-8">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Testimonials
+            </h2>
+            <p className="text-sm text-[#6b7280] mb-8">
+              These three quotes appear on the home page. Update them any time to reflect your latest reviews.
+            </p>
+            <div className="space-y-8">
+              {testimonials.map((t, i) => (
+                <div key={i} className="space-y-3">
+                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280]">Quote {i + 1}{i === 0 ? " — featured (large)" : ""}</p>
+                  <textarea
+                    value={t.quote}
+                    onChange={(e) => updateTestimonial(i, "quote", e.target.value)}
+                    rows={3}
+                    placeholder="Quote…"
+                    className={inputCls + " resize-none"}
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      value={t.name}
+                      onChange={(e) => updateTestimonial(i, "name", e.target.value)}
+                      placeholder="Author name"
+                      className={inputCls}
+                    />
+                    <div className="relative">
+                      <select
+                        value={t.role}
+                        onChange={(e) => updateTestimonial(i, "role", e.target.value)}
+                        className={inputCls + " appearance-none pr-8 cursor-pointer"}
+                        style={{ WebkitAppearance: "none" }}
+                      >
+                        <option value="">Select class…</option>
+                        {classOptions.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                        {/* Keep current value selectable even if not in list */}
+                        {t.role && !classOptions.includes(t.role) && (
+                          <option value={t.role}>{t.role}</option>
+                        )}
+                      </select>
+                      <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="pt-6 flex items-center gap-4">
+              <button
+                type="button"
+                onClick={saveTestimonials}
+                disabled={savingTestimonials}
+                className="btn-primary disabled:opacity-50"
+              >
+                {savingTestimonials ? "Saving…" : "Save testimonials"}
+              </button>
+              {savedTestimonials && <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>}
+            </div>
+          </div>
+
+          {/* Experience levels card */}
           <div className="bg-white border border-[#e8e2d9] rounded-xl p-8">
             <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               Experience level options

@@ -1,7 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const testimonials = [
+type Testimonial = { quote: string; name: string; role: string };
+
+const DEFAULT_TESTIMONIALS: Testimonial[] = [
   {
     quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.",
     name: "Sarah M.",
@@ -20,9 +22,20 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
-  const [featured, ...rest] = testimonials;
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(DEFAULT_TESTIMONIALS);
   const [active, setActive] = useState(0);
   const touchStartX = React.useRef<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.testimonials?.length) setTestimonials(data.testimonials);
+      })
+      .catch(() => {});
+  }, []);
+
+  const [featured, ...rest] = testimonials;
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -68,15 +81,12 @@ export default function Testimonials() {
           <div>
             {/* Mobile carousel */}
             <div className="md:hidden relative overflow-hidden" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-              {/* will-change: transform during animation so Safari promotes to GPU layer;
-                  reverts to 'auto' once translateX is 0% so the layer is released
-                  and doesn't intercept mouse events on dot buttons below */}
               <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${active * 100}%)`, willChange: active === 0 ? "auto" : "transform" }}
               >
-                {rest.map((t) => (
-                  <div key={t.name} className="w-full shrink-0">
+                {rest.map((t, i) => (
+                  <div key={i} className="w-full shrink-0">
                     <p className="text-white/70 text-base leading-relaxed mb-6">
                       &ldquo;{t.quote}&rdquo;
                     </p>
@@ -91,7 +101,7 @@ export default function Testimonials() {
               <div className="flex items-center gap-2 mt-8">
                 {rest.map((t, i) => (
                   <button
-                    key={t.name}
+                    key={i}
                     onClick={() => setActive(i)}
                     className={`transition-[width,background-color] duration-300 rounded-full ${
                       i === active
@@ -107,7 +117,7 @@ export default function Testimonials() {
             {/* Desktop stacked */}
             <div className="hidden md:flex md:flex-col">
               {rest.map((t, i) => (
-                <React.Fragment key={t.name}>
+                <React.Fragment key={i}>
                   {i > 0 && (
                     <div className="w-full border-t border-white/10 my-8" />
                   )}

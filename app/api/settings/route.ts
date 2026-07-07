@@ -12,8 +12,17 @@ export const DEFAULT_EXPERIENCE_LEVELS: ExperienceLevel[] = [
   { value: "expert", label: "Confident cook — only step in if I ask" },
 ];
 
+export type Testimonial = { quote: string; name: string; role: string };
+
+export const DEFAULT_TESTIMONIALS: Testimonial[] = [
+  { quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.", name: "Sarah M.", role: "Knife Skills" },
+  { quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real.", name: "James R.", role: "Savoury Food" },
+  { quote: "The random kitchen fun class was a total game-changer. My son taught me how to make pasta from scratch. I'll never forget his little face.", name: "Laura K.", role: "Random Kitchen Fun" },
+];
+
 export type SiteSettings = {
   experienceLevels: ExperienceLevel[];
+  testimonials?: Testimonial[];
 };
 
 export async function getSettings(): Promise<SiteSettings> {
