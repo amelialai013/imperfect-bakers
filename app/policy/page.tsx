@@ -88,16 +88,10 @@ export default function PolicyPage() {
                   {s.items && (
                     <div className="space-y-3 mt-1">
                       {s.items.map((item, j) => (
-                        <div key={j} className="flex gap-3">
-                          <div
-                            className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${j === 0 ? "bg-[#006644]" : "bg-[#c8c0b4]"}`}
-                            style={{ marginTop: "0.4rem" }}
-                          />
-                          <p className="text-sm text-[#6b7280] leading-relaxed">
-                            <span className="font-medium text-[#1a1a1a]">{item.highlight} — </span>
-                            {item.text}
-                          </p>
-                        </div>
+                        <p key={j} className="text-sm text-[#6b7280] leading-relaxed">
+                          <span className="font-medium text-[#1a1a1a]">{item.highlight} — </span>
+                          {item.text}
+                        </p>
                       ))}
                     </div>
                   )}
