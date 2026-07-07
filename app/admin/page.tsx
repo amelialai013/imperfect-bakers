@@ -655,10 +655,31 @@ function storageRemove(key: string) {
 type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests" | "emailTemplates" | "settings";
 type ExperienceLevel = { value: string; label: string };
 
-function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onLogout, align = "left" }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void; align?: "left" | "right" }) {
+function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void; align?: "left" | "right" }) {
   const [open, setOpen] = useState(false);
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const [menuAlign, setMenuAlign] = useState<"left" | "right">("left");
+
+  // Detect whether we're the second button in a row (same offsetTop as previous sibling)
+  React.useEffect(() => {
+    function check() {
+      const el = wrapperRef.current;
+      if (!el) return;
+      const prev = el.previousElementSibling as HTMLElement | null;
+      if (prev && prev.getBoundingClientRect().top === el.getBoundingClientRect().top) {
+        setMenuAlign("right");
+      } else {
+        setMenuAlign("left");
+      }
+    }
+    check();
+    const ro = new ResizeObserver(check);
+    if (wrapperRef.current) ro.observe(document.body);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={wrapperRef}>
       <button
         onClick={() => setOpen((o) => !o)}
         className="btn-secondary flex items-center gap-2"
@@ -671,7 +692,7 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className={`absolute ${align === "right" ? "right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]`}>
+          <div className={`absolute ${menuAlign === "right" ? "right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]`}>
             <button
               onClick={() => { setOpen(false); onAllBookings(); }}
               className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
@@ -924,7 +945,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
             </div>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} align="right" />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1273,7 +1294,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} align="right" />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1519,7 +1540,7 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onLogout={onLogout} align="right" />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1792,7 +1813,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onLogout={onLogout} align="right" />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -2535,7 +2556,7 @@ export default function AdminPage() {
               <button onClick={() => setAddingClass(true)} className="btn-primary group">
                 New class <span>+</span>
               </button>
-              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} align="right" />
+              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />
             </div>
           </div>
         </section>
@@ -2774,7 +2795,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} align="right" />
+            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />
           </div>
         </div>
       </section>
