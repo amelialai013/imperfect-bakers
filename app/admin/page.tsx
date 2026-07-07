@@ -2852,7 +2852,7 @@ export default function AdminPage() {
             }).map((s) => s.id);
             const allExpanded = filteredIds.length > 0 && filteredIds.every((id) => expandedBookings.has(id));
             return (
-              <div className="flex flex-wrap items-center justify-between gap-y-3 mt-16 mb-8">
+              <div className="flex flex-wrap items-center justify-between gap-y-3 mb-8" style={{ marginTop: "4rem" }}>
                 <div className="inline-flex gap-1 bg-[#f0ece4] rounded-full p-1">
                   {(["upcoming", "past"] as const).map((t) => (
                     <button
