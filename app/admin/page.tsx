@@ -3145,7 +3145,7 @@ export default function AdminPage() {
                 <label className={`block text-xs font-medium mb-2 ${addBookingFieldErrors.attendees ? "text-red-500" : "text-[#1a1a1a]"}`}>Attendees *</label>
                 <div className="flex flex-col gap-2">
                   {([["child", "Child (7–17)"], ["youngAdult", "Young Adult (18–34)"], ["adult", "Adult (35+)"]] as const).map(([key, label]) => (
-                    <div key={key} className="flex items-center justify-between border border-[#e4dfd5] rounded-lg px-4 py-3">
+                    <div key={key} className="flex items-center justify-between gap-2 border border-[#e4dfd5] rounded-lg px-4 py-3">
                       <span className="text-sm text-[#1a1a1a]">{label}</span>
                       <div className="flex items-center gap-3">
                         <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: Math.max(0, f[key] - 1) }))} className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-sm font-bold hover:bg-[#e4dfd5] transition-colors">−</button>
