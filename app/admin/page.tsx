@@ -1637,7 +1637,6 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
   const [savingTestimonials, setSavingTestimonials] = useState(false);
   const [savedTestimonials, setSavedTestimonials] = useState(false);
   const [testimonialErrors, setTestimonialErrors] = useState<{ quote?: string; name?: string; role?: string }[]>([{}, {}, {}]);
-  const [classOptions, setClassOptions] = useState<string[]>([]);
 
   const QUOTE_LIMITS = [160, 200, 200];
 
@@ -1656,13 +1655,6 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
         setLoading(false);
       })
       .catch(() => { setLevels(DEFAULT_LEVELS); setLoading(false); });
-    fetch("/api/classconfigs")
-      .then((r) => r.json())
-      .then((configs: { title: string; hidden?: boolean }[]) => {
-        const names = configs.filter((c) => !c.hidden).map((c) => c.title);
-        if (names.length) setClassOptions(names);
-      })
-      .catch(() => {});
   }, []);
 
   function updateTestimonial(i: number, field: keyof Testimonial, val: string) {
@@ -1796,27 +1788,14 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                       {nErr && <p className="text-xs text-red-500 mt-1">{nErr}</p>}
                     </div>
                     <div>
-                    <div className="relative">
-                      <select
+                      <input
+                        type="text"
                         value={t.role}
                         onChange={(e) => updateTestimonial(i, "role", e.target.value)}
-                        className={inputCls + " appearance-none pr-8 cursor-pointer" + (rErr ? " " + selectErrBorder : "")}
-                        style={{ WebkitAppearance: "none" }}
-                      >
-                        <option value="">Select class…</option>
-                        {classOptions.map((c) => (
-                          <option key={c} value={c}>{c}</option>
-                        ))}
-                        {/* Keep current value selectable even if not in list */}
-                        {t.role && !classOptions.includes(t.role) && (
-                          <option value={t.role}>{t.role}</option>
-                        )}
-                      </select>
-                      <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                    {rErr && <p className="text-xs text-red-500 mt-1">{rErr}</p>}
+                        placeholder="Class name"
+                        className={inputCls + (rErr ? " " + errBorder : "")}
+                      />
+                      {rErr && <p className="text-xs text-red-500 mt-1">{rErr}</p>}
                     </div>
                   </div>
                   </>);
