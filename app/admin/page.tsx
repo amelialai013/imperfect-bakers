@@ -1276,6 +1276,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
   const [interestKebabOpen, setInterestKebabOpen] = useState<string | null>(null);
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
   const [notifyTarget, setNotifyTarget] = useState<InterestEntry | null>(null);
+  const [notifyClasses, setNotifyClasses] = useState<string[]>([]);
   const [notifying, setNotifying] = useState(false);
   const [notifyError, setNotifyError] = useState("");
   const [notifySuccess, setNotifySuccess] = useState<string | null>(null);
@@ -1325,7 +1326,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
     setNotifying(true);
     setNotifyError("");
     try {
-      const res = await authFetch(`/api/interest/${notifyTarget.id}/notify`, token, { method: "POST" });
+      const res = await authFetch(`/api/interest/${notifyTarget.id}/notify`, token, { method: "POST", body: JSON.stringify({ classes: notifyClasses }) });
       if (!res.ok) {
         const data = await res.json();
         setNotifyError(data.error ?? "Failed to send — please try again");
@@ -1419,7 +1420,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
                             <div className="fixed inset-0 z-10" onClick={() => setInterestKebabOpen(null)} />
                             <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]">
                               <button
-                                onClick={() => { setInterestKebabOpen(null); setNotifyTarget(e); setNotifyError(""); }}
+                                onClick={() => { setInterestKebabOpen(null); setNotifyTarget(e); setNotifyClasses(Array.isArray(e.classes) ? [...e.classes] : []); setNotifyError(""); }}
                                 className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
                               >
                                 Send availability email
@@ -1482,17 +1483,35 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
             <h2 className="text-lg font-semibold text-[#1a1a1a] text-center mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               Notify {notifyTarget.name}?
             </h2>
-            <p className="text-sm text-[#6b7280] text-center mb-2 leading-relaxed">
-              This will send an email letting them know that their selected classes are now available to book.
+            <p className="text-sm text-[#6b7280] text-center mb-5 leading-relaxed">
+              Select which classes are now available. Only the ticked classes will be mentioned in the email.
             </p>
-            <p className="text-xs text-[#006644] font-medium text-center mb-8">
-              {Array.isArray(notifyTarget.classes) && notifyTarget.classes.length ? notifyTarget.classes.join(", ") : "No classes selected"}
-            </p>
+            {Array.isArray(notifyTarget.classes) && notifyTarget.classes.length > 0 && (
+              <div className="border border-[#e4dfd5] rounded-xl overflow-hidden mb-6">
+                {notifyTarget.classes.map((cls) => {
+                  const checked = notifyClasses.includes(cls);
+                  return (
+                    <label
+                      key={cls}
+                      className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-[#faf9f6] transition-colors border-b border-[#e4dfd5] last:border-b-0"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => setNotifyClasses((prev) => checked ? prev.filter((c) => c !== cls) : [...prev, cls])}
+                        className="accent-[#006644] w-4 h-4 shrink-0"
+                      />
+                      <span className="text-sm text-[#1a1a1a]">{cls}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
             {notifyError && <p className="text-xs text-red-500 text-center mb-4">{notifyError}</p>}
             <div className="flex flex-col gap-3">
               <button
                 onClick={sendNotification}
-                disabled={notifying}
+                disabled={notifying || notifyClasses.length === 0}
                 className="w-full py-3 rounded-full bg-[#006644] text-white text-sm font-medium hover:bg-[#004d33] transition-colors disabled:opacity-50"
               >
                 {notifying ? "Sending…" : "Yes, send email"}

@@ -17,8 +17,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   // Stamp the entry so admin UI can show "Notified" badge
   await kv.set(`interest:${id}`, { ...entry, availabilityNotifiedAt: new Date().toISOString() });
 
-  const { name, email, classes } = entry as { name: string; email: string; classes: string[] };
-  const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "your selected classes";
+  const { name, email, classes: allClasses } = entry as { name: string; email: string; classes: string[] };
+  // Allow caller to override which classes to mention (partial availability)
+  let selectedClasses: string[] = allClasses;
+  try { const body = await req.json(); if (Array.isArray(body?.classes) && body.classes.length) selectedClasses = body.classes; } catch { /* no body */ }
+  const classesText = selectedClasses.length ? selectedClasses.join(", ") : "your selected classes";
+  const classes = selectedClasses;
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "Email not configured" }, { status: 500 });
