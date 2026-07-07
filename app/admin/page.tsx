@@ -2829,7 +2829,7 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto">
 
           {/* Stats row */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-10">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
             {[
               { label: "Sessions", value: sessions.length },
               { label: "Total bookings", value: totalBookings },
