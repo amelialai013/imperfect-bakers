@@ -130,7 +130,7 @@ function Field({
   const cls = baseCls + (error ? " border-red-400 focus:border-red-500" : " border-[#e4dfd5] focus:border-[#006644]");
   return (
     <div>
-      <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4">
+      <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">
         {label}
       </label>
       {type === "textarea" ? (
@@ -220,7 +220,7 @@ function SessionForm({
   });
 
   const cls = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
-  const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4";
+  const labelCls = "block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4";
 
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -515,15 +515,15 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
           <div className="px-5 py-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
             <div>
-              <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Email</p>
+              <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
               <p className="text-[#6b7280] break-all">{b.email}</p>
             </div>
             <div>
-              <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Phone</p>
+              <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
               <p className="text-[#6b7280]">{b.phone}</p>
             </div>
             <div>
-              <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Attendees</p>
+              <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
               <p className="text-[#1a1a1a] font-medium">{b.totalPeople} total</p>
               <div className="text-[#6b7280] text-xs mt-1 space-y-0.5">
                 {b.counts.child > 0 && <p>Child (7–17): {b.counts.child}</p>}
@@ -532,7 +532,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
               </div>
             </div>
             <div>
-              <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Payment</p>
+              <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
               <p className="text-[#6b7280] text-xs">
                 {b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}
               </p>
@@ -545,13 +545,13 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             </div>
             {b.notes && (
               <div className="col-span-2 sm:col-span-4 mt-3">
-                <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Notes</p>
+                <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
                 <p className="text-[#6b7280] text-xs">{b.notes}</p>
               </div>
             )}
             {b.participants && b.participants.length > 0 && (
               <div className="col-span-2 sm:col-span-4 mt-3">
-                <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
+                <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-1">Experience</p>
                 <div className="space-y-0.5">
                   {b.participants.map((p, i) => (
                     <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
@@ -1142,7 +1142,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                   <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
                     <div className="flex items-center gap-x-4 gap-y-2 flex-wrap">
                       <div>
-                        <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
+                        <p className="text-[0.6875rem] font-semibold text-[#006644] tracking-[0.2em] uppercase mb-0.5">{b.sessionName}</p>
                         <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}{b.sessionPrice != null ? ` · $${b.sessionPrice}/person` : ""}</p>
                       </div>
                       {b.cancelled
@@ -1170,15 +1170,15 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
 
                       <div>
-                        <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Email</p>
+                        <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
                         <p className="text-[#6b7280] break-all text-xs">{b.email}</p>
                       </div>
                       <div>
-                        <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Phone</p>
+                        <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
                         <p className="text-[#6b7280] text-xs">{b.phone}</p>
                       </div>
                       <div>
-                        <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Attendees</p>
+                        <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
                         <p className="text-[#1a1a1a] font-medium text-xs">{b.totalPeople} total</p>
                         <div className="text-[#6b7280] text-xs mt-0.5 space-y-0.5">
                           {b.counts?.child > 0 && <p>Child: {b.counts.child}</p>}
@@ -1187,7 +1187,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         </div>
                       </div>
                       <div>
-                        <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Payment</p>
+                        <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
                         <p className="text-[#6b7280] text-xs">
                           {b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}
                         </p>
@@ -1200,13 +1200,13 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       </div>
                       {b.notes && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
-                          <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Notes</p>
+                          <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
                           <p className="text-[#6b7280] text-xs">{b.notes}</p>
                         </div>
                       )}
                       {b.participants && b.participants.length > 0 && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
-                          <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-1">Experience</p>
+                          <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-1">Experience</p>
                           <div className="space-y-0.5">
                             {b.participants.map((p, i) => (
                               <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
@@ -1327,24 +1327,24 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 text-sm mb-4">
                       <div>
-                        <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Email</p>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
                         <a href={`mailto:${e.email}`} className="text-[#1a1a1a] hover:text-[#006644] transition-colors break-all">{e.email}</a>
                       </div>
                       <div>
-                        <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Phone</p>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
                         <p className="text-[#1a1a1a]">{e.phone}</p>
                       </div>
                       <div>
-                        <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Experience</p>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Experience</p>
                         <p className="text-[#6b7280]">{EXP_LABELS[e.experience] ?? e.experience ?? "—"}</p>
                       </div>
                       <div>
-                        <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Classes</p>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Classes</p>
                         <p className="text-[#6b7280]">{Array.isArray(e.classes) && e.classes.length ? e.classes.join(", ") : "None selected"}</p>
                       </div>
                       {e.notes && (
                         <div className="col-span-2 sm:col-span-4">
-                          <p className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase text-[#006644] mb-0.5">Notes</p>
+                          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
                           <p className="text-[#6b7280] text-xs italic">{e.notes}</p>
                         </div>
                       )}
@@ -1580,7 +1580,7 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
                 <div className="space-y-6">
                   {/* Subject */}
                   <div>
-                    <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#006644] mb-2">Subject line</label>
+                    <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-2">Subject line</label>
                     <input
                       type="text"
                       value={activeData.subject ?? ""}
@@ -1592,7 +1592,7 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
 
                   {/* Full email structure */}
                   <div>
-                    <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#006644] mb-3">Email body</label>
+                    <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-3">Email body</label>
                     <div className="border border-[#e4dfd5] rounded-xl overflow-hidden divide-y divide-[#e4dfd5]">
                       {activeDef.structure.map((item, i) =>
                         item.type === "fixed" ? (
@@ -1843,7 +1843,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                     const errBorder = "border-red-400 focus:border-red-500";
                     const selectErrBorder = "!border-red-400";
                     return (<>
-                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280]">Quote {i + 1}{i === 0 ? " — featured (large)" : ""}</p>
+                  <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#6b7280]">Quote {i + 1}{i === 0 ? " — featured (large)" : ""}</p>
                   <div>
                     <textarea
                       value={t.quote}
@@ -1912,7 +1912,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                 const socialWarn = !socialOver && footerSocialBlurb.length >= Math.floor(SOCIAL_LIMIT * 0.9);
                 return (<>
                   <div>
-                    <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280] mb-2">Brand tagline</label>
+                    <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#6b7280] mb-2">Brand tagline</label>
                     <p className="text-xs text-[#9b9490] mb-2">Shown under the logo on the left side of the footer.</p>
                     <textarea
                       rows={3}
@@ -1928,7 +1928,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280] mb-2">Social blurb</label>
+                    <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#6b7280] mb-2">Social blurb</label>
                     <p className="text-xs text-[#9b9490] mb-2">Shown in the &ldquo;Get in touch&rdquo; column, below the email address.</p>
                     <input
                       type="text"
@@ -1961,7 +1961,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
             <div className="space-y-6">
               {policySections.map((s, i) => (
                 <div key={i} className="border border-[#e8e2d9] rounded-xl p-5 space-y-3">
-                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280]">Section {i + 1}</p>
+                  <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#6b7280]">Section {i + 1}</p>
                   <div>
                     <label className="block text-xs text-[#9b9490] mb-1">Title</label>
                     <input
@@ -2362,7 +2362,7 @@ export default function AdminPage() {
           <div className="max-w-sm">
             <form onSubmit={login} noValidate className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-2">Password</label>
+                <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-2">Password</label>
                 <div className="flex flex-col gap-6 sm:flex-row sm:gap-3 sm:items-center">
                   <input
                     type="password"
@@ -2456,7 +2456,7 @@ export default function AdminPage() {
 
   if (view === "classes") {
     const inputCls = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
-    const labelCls = "block text-xs font-semibold tracking-[0.15em] uppercase text-[#1a1a1a] mb-4";
+    const labelCls = "block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4";
 
     function tryGoBack() {
       if (hasAnyUnsaved()) {
@@ -3002,7 +3002,7 @@ export default function AdminPage() {
                       onClick={() => setExpandedBookings((prev) => { const next = new Set(prev); showBookings ? next.delete(s.id) : next.add(s.id); return next; })}
                       className="w-full border-t border-[#e8e2d9] px-7 py-3.5 flex items-center justify-between hover:bg-[#faf9f6] transition-colors"
                     >
-                      <span className="text-xs font-semibold tracking-[0.15em] uppercase text-[#006644]">
+                      <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">
                         Bookings · {booked} {booked === 1 ? "person" : "people"}
                       </span>
                       <svg
