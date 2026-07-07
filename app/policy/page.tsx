@@ -57,15 +57,6 @@ export default function PolicyPage() {
         </div>
       </section>
 
-      {/* ── INTRO ──────────────────────────────────────────── */}
-      <section className="bg-[#faf9f6] pt-12 pb-4">
-        <div className="max-w-2xl mx-auto px-8">
-          <p className="text-[#6b7280] text-sm leading-relaxed">
-            By enrolling in an Imperfect Bakers class, you acknowledge and accept these terms. If you have any questions, just reach out — we&apos;re always happy to help.
-          </p>
-        </div>
-      </section>
-
       {/* ── POLICY SECTIONS ────────────────────────────────── */}
       <section className="bg-[#faf9f6] pt-8 pb-24">
         <div className="max-w-2xl mx-auto px-8 space-y-4">
