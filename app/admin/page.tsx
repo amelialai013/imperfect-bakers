@@ -662,7 +662,9 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
 
   // Detect whether we're the second button in a row (same offsetTop as previous sibling)
   useEffect(() => {
+    let cancelled = false;
     function check() {
+      if (cancelled) return;
       const el = wrapperRef.current;
       if (!el) return;
       const prev = el.previousElementSibling as HTMLElement | null;
@@ -673,9 +675,10 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
       }
     }
     check();
+    const parent = wrapperRef.current?.parentElement ?? null;
     const ro = new ResizeObserver(check);
-    if (wrapperRef.current) ro.observe(document.body);
-    return () => ro.disconnect();
+    if (parent) ro.observe(parent);
+    return () => { cancelled = true; ro.disconnect(); };
   }, []);
 
   return (
