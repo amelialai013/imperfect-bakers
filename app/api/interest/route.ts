@@ -2,14 +2,9 @@ import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
 import { getTemplates, sub } from "@/lib/email-templates";
+import { getSettings } from "@/app/api/settings/route";
 
 export const dynamic = "force-dynamic";
-
-const EXPERIENCE_LABELS: Record<string, string> = {
-  complete_beginner: "Complete beginner",
-  some_experience: "Some experience",
-  confident_cook: "Confident cook",
-};
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
 
@@ -97,7 +92,10 @@ async function sendAdminEmail(entry: Record<string, unknown>) {
   };
 
   const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "None selected";
-  const expLabel = EXPERIENCE_LABELS[experience] ?? experience ?? "Not specified";
+  const settings = await getSettings();
+  const levelMap: Record<string, string> = {};
+  for (const l of settings.experienceLevels) levelMap[l.value] = l.label;
+  const expLabel = levelMap[experience] ?? experience ?? "Not specified";
 
   const confirmUrl = `${BASE_URL}/api/interest/action?id=${id}&action=confirm&token=${actionToken}`;
   const declineUrl = `${BASE_URL}/api/interest/action?id=${id}&action=decline&token=${actionToken}`;

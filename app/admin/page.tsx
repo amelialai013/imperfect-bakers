@@ -526,15 +526,15 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
           <div className="px-5 py-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
             <div>
-              <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
               <p className="text-[#6b7280] break-all">{b.email}</p>
             </div>
             <div>
-              <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
               <p className="text-[#6b7280]">{b.phone}</p>
             </div>
             <div>
-              <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
               <p className="text-[#1a1a1a] font-medium">{b.totalPeople} total</p>
               <div className="text-[#6b7280] text-xs mt-1 space-y-0.5">
                 {b.counts.child > 0 && <p>Child (7–17): {b.counts.child}</p>}
@@ -543,7 +543,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
               </div>
             </div>
             <div>
-              <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
               {sessionPrice != null && (
                 <p className="text-[#1a1a1a] text-xs font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
               )}
@@ -556,7 +556,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             </div>
             {b.notes && (
               <div className="col-span-2 sm:col-span-4 mt-3">
-                <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
+                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
                 <p className="text-[#6b7280] text-xs">{b.notes}</p>
               </div>
             )}
@@ -1190,15 +1190,15 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
 
                       <div>
-                        <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
                         <p className="text-[#6b7280] break-all text-xs">{b.email}</p>
                       </div>
                       <div>
-                        <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
                         <p className="text-[#6b7280] text-xs">{b.phone}</p>
                       </div>
                       <div>
-                        <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
                         <p className="text-[#1a1a1a] font-medium text-xs">{b.totalPeople} total</p>
                         <div className="text-[#6b7280] text-xs mt-0.5 space-y-0.5">
                           {b.counts?.child > 0 && <p>Child: {b.counts.child}</p>}
@@ -1207,7 +1207,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         </div>
                       </div>
                       <div>
-                        <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
                         {b.sessionPrice != null && (
                           <p className="text-[#1a1a1a] text-xs font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
                         )}
@@ -1220,7 +1220,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       </div>
                       {b.notes && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
-                          <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
+                          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
                           <p className="text-[#6b7280] text-xs">{b.notes}</p>
                         </div>
                       )}
@@ -1435,16 +1435,16 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Experience</p>
-                        <p className="text-[#6b7280]">{levelMap[e.experience] ?? e.experience ?? "—"}</p>
+                        <p className="text-[#1a1a1a]">{levelMap[e.experience] ?? e.experience ?? "—"}</p>
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Classes</p>
-                        <p className="text-[#6b7280]">{Array.isArray(e.classes) && e.classes.length ? e.classes.join(", ") : "None selected"}</p>
+                        <p className="text-[#1a1a1a]">{Array.isArray(e.classes) && e.classes.length ? e.classes.join(", ") : "None selected"}</p>
                       </div>
                       {e.notes && (
                         <div className="col-span-2 sm:col-span-4">
                           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
-                          <p className="text-[#6b7280] text-xs italic">{e.notes}</p>
+                          <p className="text-[#1a1a1a] text-xs italic">{e.notes}</p>
                         </div>
                       )}
                     </div>

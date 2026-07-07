@@ -4,12 +4,6 @@ import { checkAdminToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-const EXPERIENCE_LABELS: Record<string, string> = {
-  complete_beginner: "Complete beginner",
-  some_experience: "Some experience",
-  confident_cook: "Confident cook",
-};
-
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
