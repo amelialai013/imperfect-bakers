@@ -1065,10 +1065,60 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
           ) : (
             <div className="space-y-3">
               {filtered.map((b) => (
-                <div key={b.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+                <div key={b.id} className="relative bg-white border border-[#e8e2d9] rounded-xl">
+                  {/* Kebab — always top-right */}
+                  {(b.cancelled || b.status === "confirmed" || b.status === "declined") && (
+                    <div className="absolute top-3 right-3 z-10">
+                      <button
+                        onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
+                        className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                          <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
+                        </svg>
+                      </button>
+                      {kebabOpen === b.id && (
+                        <>
+                          <div className="fixed inset-0 z-[90]" onClick={() => setKebabOpen(null)} />
+                          <div className="absolute right-0 top-full mt-1 z-[100] bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                            {(!b.cancelled && b.status !== "declined") && (
+                              <>
+                                <button onClick={() => { setKebabOpen(null); setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                                  Change class
+                                </button>
+                                <div className="h-px bg-[#e8e2d9]" />
+                              </>
+                            )}
+                            {(!b.cancelled && b.status === "confirmed") && (<>
+                              <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                Cancel booking
+                              </button>
+                              <div className="h-px bg-[#e8e2d9]" />
+                            </>)}
+                            {(!b.cancelled && b.status === "declined") && (<>
+                              <button onClick={() => { setKebabOpen(null); setUndeclineTarget(b); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                                Reinstate booking
+                              </button>
+                              <div className="h-px bg-[#e8e2d9]" />
+                            </>)}
+                            {b.cancelled && (<>
+                              <button onClick={() => { setKebabOpen(null); setUndeclineTarget(b); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                                Reinstate booking
+                              </button>
+                              <div className="h-px bg-[#e8e2d9]" />
+                            </>)}
+                            {(b.cancelled || b.status === "declined") && (
+                              <button onClick={() => { setKebabOpen(null); permanentDelete(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                Delete record
+                              </button>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
                   {/* Session label */}
-                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] flex items-center justify-between gap-3 flex-wrap">
-                    {/* Left: session info + badge */}
+                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
                     <div className="flex items-center gap-x-4 gap-y-1 flex-wrap">
                       <div>
                         <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
@@ -1079,70 +1129,16 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         : <StatusBadge status={b.status} />
                       }
                     </div>
-                    {/* Right: confirm/decline or kebab */}
-                    <div className="flex items-center gap-2 shrink-0">
-                      {(!b.cancelled && (!b.status || b.status === "pending")) && (
-                        <>
-                          <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
-                            ✓ Confirm
-                          </button>
-                          <button onClick={() => act(b.id, "declined")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
-                            ✗ Decline
-                          </button>
-                        </>
-                      )}
-                    {/* Kebab — for confirmed/declined/cancelled */}
-                    {(b.cancelled || b.status === "confirmed" || b.status === "declined") && (
-                      <div className="relative">
-                        <button
-                          onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
-                          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
-                        >
-                          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                            <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
-                          </svg>
+                    {(!b.cancelled && (!b.status || b.status === "pending")) && (
+                      <div className="flex items-center gap-2 flex-wrap mt-3">
+                        <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                          ✓ Confirm
                         </button>
-                        {kebabOpen === b.id && (
-                          <>
-                            <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
-                            <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
-                              {(!b.cancelled && b.status !== "declined") && (
-                                <>
-                                  <button onClick={() => { setKebabOpen(null); setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
-                                    Change class
-                                  </button>
-                                  <div className="h-px bg-[#e8e2d9]" />
-                                </>
-                              )}
-                              {(!b.cancelled && b.status === "confirmed") && (<>
-                                <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                  Cancel booking
-                                </button>
-                                <div className="h-px bg-[#e8e2d9]" />
-                              </>)}
-                              {(!b.cancelled && b.status === "declined") && (<>
-                                <button onClick={() => { setKebabOpen(null); setUndeclineTarget(b); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
-                                  Reinstate booking
-                                </button>
-                                <div className="h-px bg-[#e8e2d9]" />
-                              </>)}
-                              {b.cancelled && (<>
-                                <button onClick={() => { setKebabOpen(null); setUndeclineTarget(b); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
-                                  Reinstate booking
-                                </button>
-                                <div className="h-px bg-[#e8e2d9]" />
-                              </>)}
-                              {(b.cancelled || b.status === "declined") && (
-                                <button onClick={() => { setKebabOpen(null); permanentDelete(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                  Delete record
-                                </button>
-                              )}
-                            </div>
-                          </>
-                        )}
+                        <button onClick={() => act(b.id, "declined")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
+                          ✗ Decline
+                        </button>
                       </div>
                     )}
-                    </div>
                   </div>
 
                   {/* Booking details */}
