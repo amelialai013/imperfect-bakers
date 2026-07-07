@@ -539,14 +539,10 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
               {b.paymentStatus === "other" && b.paymentOther && (
                 <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
               )}
+              {sessionPrice != null && (
+                <p className="text-[#1a1a1a] text-xs font-medium mt-2">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
+              )}
             </div>
-            {sessionPrice != null && (
-              <div>
-                <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Booking value</p>
-                <p className="text-[#1a1a1a] font-medium text-sm">${(sessionPrice * b.totalPeople).toLocaleString()}</p>
-                <p className="text-[#6b7280] text-xs mt-0.5">${sessionPrice} × {b.totalPeople}</p>
-              </div>
-            )}
             {b.notes && (
               <div className="col-span-2 sm:col-span-4 mt-3">
                 <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Notes</p>
@@ -1181,14 +1177,10 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         {b.paymentStatus === "other" && b.paymentOther && (
                           <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
                         )}
+                        {b.sessionPrice != null && (
+                          <p className="text-[#1a1a1a] text-xs font-medium mt-2">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                        )}
                       </div>
-                      {b.sessionPrice != null && (
-                        <div>
-                          <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Booking value</p>
-                          <p className="text-[#1a1a1a] font-medium text-xs">${(b.sessionPrice * b.totalPeople).toLocaleString()}</p>
-                          <p className="text-[#6b7280] text-xs mt-0.5">${b.sessionPrice} × {b.totalPeople}</p>
-                        </div>
-                      )}
                       {b.notes && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
                           <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Notes</p>
