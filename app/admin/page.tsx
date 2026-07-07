@@ -738,7 +738,7 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
 
 // ── All Bookings view ─────────────────────────────────────────────────────────
 
-type BookingWithSession = Booking & { sessionName: string; sessionDate: string; sessionTime: string };
+type BookingWithSession = Booking & { sessionName: string; sessionDate: string; sessionTime: string; sessionPrice?: number };
 
 // Parse "Saturday 4 July 2026" → Date (reuses MONTH_IDX already defined above)
 function parseSessionDate(display: string): Date | null {
@@ -801,6 +801,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
               sessionName: s.sessionName || s.classLabel,
               sessionDate: s.date,
               sessionTime: s.time,
+              sessionPrice: s.price,
             }));
         })
       );
@@ -1068,7 +1069,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                     <div className="flex items-center gap-x-4 gap-y-1 flex-wrap">
                       <div>
                         <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
-                        <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}</p>
+                        <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}{b.sessionPrice != null ? ` · $${b.sessionPrice}/person` : ""}</p>
                       </div>
                       {b.cancelled
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
