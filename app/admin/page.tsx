@@ -3106,7 +3106,7 @@ export default function AdminPage() {
       {addBookingTarget && (
         <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center sm:p-4">
           <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setAddBookingTarget(null)} />
-          <div className="relative bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl max-w-lg w-full z-10 flex flex-col" style={{ maxHeight: "90dvh" }}>
+          <div className="relative bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl max-w-lg w-full z-10 flex flex-col" style={{ maxHeight: "75dvh" }}>
             {/* Header — sticky */}
             <div className="px-6 pt-6 pb-4 border-b border-[#f0ece4] shrink-0">
               <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Add booking</h2>
