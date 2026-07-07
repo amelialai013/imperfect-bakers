@@ -1259,6 +1259,7 @@ type InterestEntry = {
   createdAt: string;
   status: "pending" | "confirmed" | "declined";
   actionedAt?: string;
+  availabilityNotifiedAt?: string;
 };
 
 const EXP_LABELS: Record<string, string> = {
@@ -1331,8 +1332,12 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
         setNotifying(false);
         return;
       }
-      setNotifySuccess(notifyTarget.name);
+      const notifiedId = notifyTarget.id;
+      const notifiedName = notifyTarget.name;
+      setInterests((prev) => prev.map((e) => e.id === notifiedId ? { ...e, availabilityNotifiedAt: new Date().toISOString() } : e));
+      setNotifySuccess(notifiedName);
       setNotifyTarget(null);
+      setTimeout(() => setNotifySuccess((cur) => cur === notifiedName ? null : cur), 5000);
     } catch {
       setNotifyError("Connection error — please try again");
     }
@@ -1386,7 +1391,15 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
                   <div className="px-6 pt-5 pb-5">
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-base mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{e.name}</p>
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-semibold text-[#1a1a1a] text-base" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{e.name}</p>
+                          {e.availabilityNotifiedAt && (
+                            <span className="inline-flex items-center gap-1 text-[0.625rem] font-semibold tracking-wide uppercase px-2 py-0.5 rounded-full bg-[#e8f3ef] text-[#006644]">
+                              <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                              Notified
+                            </span>
+                          )}
+                        </div>
                         <p className="text-xs text-[#6b7280]">
                           {new Date(e.createdAt).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
                         </p>

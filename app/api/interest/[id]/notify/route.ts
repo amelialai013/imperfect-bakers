@@ -14,6 +14,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const entry = await kv.get(`interest:${id}`) as Record<string, unknown> | null;
   if (!entry) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
+  // Stamp the entry so admin UI can show "Notified" badge
+  await kv.set(`interest:${id}`, { ...entry, availabilityNotifiedAt: new Date().toISOString() });
+
   const { name, email, classes } = entry as { name: string; email: string; classes: string[] };
   const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "your selected classes";
 
