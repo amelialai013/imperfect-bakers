@@ -671,7 +671,7 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className={`absolute ${align === "right" ? "left-0 md:left-auto md:right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]`}>
+          <div className={`absolute ${align === "right" ? "left-0 sm:left-auto sm:right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]`}>
             <button
               onClick={() => { setOpen(false); onAllBookings(); }}
               className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
@@ -1119,7 +1119,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                   )}
                   {/* Session label */}
                   <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
-                    <div className="flex items-center gap-x-4 gap-y-1 flex-wrap">
+                    <div className="flex items-center gap-x-4 gap-y-2 flex-wrap">
                       <div>
                         <p className="text-xs font-semibold text-[#006644] tracking-widest uppercase mb-0.5">{b.sessionName}</p>
                         <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}{b.sessionPrice != null ? ` · $${b.sessionPrice}/person` : ""}</p>
