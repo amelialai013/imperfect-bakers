@@ -671,7 +671,7 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className={`absolute ${align === "right" ? "left-0 sm:left-auto sm:right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]`}>
+          <div className={`absolute ${align === "right" ? "right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]`}>
             <button
               onClick={() => { setOpen(false); onAllBookings(); }}
               className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
