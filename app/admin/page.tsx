@@ -527,7 +527,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
-              <p className="text-[#6b7280] break-all">{b.email}</p>
+              <p className="text-[#1a1a1a] break-all">{b.email}</p>
             </div>
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
@@ -1191,7 +1191,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
 
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
-                        <p className="text-[#6b7280] break-all text-xs">{b.email}</p>
+                        <p className="text-[#1a1a1a] break-all text-xs">{b.email}</p>
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
