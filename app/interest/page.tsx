@@ -30,6 +30,7 @@ type FieldErrors = {
   email?: string;
   phone?: string;
   experience?: string;
+  classes?: string;
   notes?: string;
 };
 
@@ -92,6 +93,7 @@ export default function InterestPage() {
     else if (!/^[\d\s\+\-\(\)]{7,15}$/.test(phone))
       errors.phone = "Please enter a valid phone number";
     if (!experience) errors.experience = "Please select an experience level";
+    if (selected.length === 0) errors.classes = "Please select at least one class";
 
     // Notes required if "Other — see notes" experience level selected
     const selectedLevel = levels.find((l) => l.value === experience);
@@ -249,7 +251,7 @@ export default function InterestPage() {
                   <button
                     key={name}
                     type="button"
-                    onClick={() => toggle(name)}
+                    onClick={() => { toggle(name); if (fieldErrors.classes) setFieldErrors((p) => ({ ...p, classes: undefined })); }}
                     className={`px-5 py-2.5 text-sm font-medium rounded-full border transition-colors duration-200 ${
                       active
                         ? "bg-[#006644] border-[#006644] text-white"
@@ -262,6 +264,7 @@ export default function InterestPage() {
                 );
               })}
             </div>
+            {fieldErrors.classes && <p className="text-xs text-red-500 mt-3">{fieldErrors.classes}</p>}
           </div>
 
           {/* Notes */}
