@@ -1636,7 +1636,10 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
   const [testimonials, setTestimonials] = useState<Testimonial[]>(DEFAULT_TESTIMONIALS);
   const [savingTestimonials, setSavingTestimonials] = useState(false);
   const [savedTestimonials, setSavedTestimonials] = useState(false);
+  const [testimonialErrors, setTestimonialErrors] = useState<{ quote?: string; name?: string; role?: string }[]>([{}, {}, {}]);
   const [classOptions, setClassOptions] = useState<string[]>([]);
+
+  const QUOTE_LIMITS = [160, 200, 200];
 
   const DEFAULT_LEVELS: ExperienceLevel[] = [
     { value: "beginner", label: "New to cooking — please guide me through everything" },
@@ -1664,10 +1667,20 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
 
   function updateTestimonial(i: number, field: keyof Testimonial, val: string) {
     setTestimonials((prev) => prev.map((t, j) => j === i ? { ...t, [field]: val } : t));
+    setTestimonialErrors((prev) => prev.map((e, j) => j === i ? { ...e, [field]: undefined } : e));
     setSavedTestimonials(false);
   }
 
   async function saveTestimonials() {
+    const errs = testimonials.map((t, i) => ({
+      quote: !t.quote.trim() ? "Quote is required" : t.quote.length > QUOTE_LIMITS[i] ? `Keep under ${QUOTE_LIMITS[i]} characters` : undefined,
+      name: !t.name.trim() ? "Author is required" : undefined,
+      role: !t.role ? "Class is required" : undefined,
+    }));
+    if (errs.some((e) => e.quote || e.name || e.role)) {
+      setTestimonialErrors(errs);
+      return;
+    }
     setSavingTestimonials(true);
     try {
       await authFetch("/api/settings", token, {
@@ -1745,27 +1758,49 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
             <div className="space-y-8">
               {testimonials.map((t, i) => (
                 <div key={i} className="space-y-3">
+                  {(() => {
+                    const limit = QUOTE_LIMITS[i];
+                    const len = t.quote.length;
+                    const warn = len >= limit * 0.9;
+                    const over = len > limit;
+                    const qErr = testimonialErrors[i]?.quote;
+                    const nErr = testimonialErrors[i]?.name;
+                    const rErr = testimonialErrors[i]?.role;
+                    const errBorder = "border-red-400 focus:border-red-500";
+                    const selectErrBorder = "!border-red-400";
+                    return (<>
                   <p className="text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280]">Quote {i + 1}{i === 0 ? " — featured (large)" : ""}</p>
-                  <textarea
-                    value={t.quote}
-                    onChange={(e) => updateTestimonial(i, "quote", e.target.value)}
-                    rows={3}
-                    placeholder="Quote…"
-                    className={inputCls + " resize-none"}
-                  />
-                  <div className="grid grid-cols-2 gap-3">
-                    <input
-                      type="text"
-                      value={t.name}
-                      onChange={(e) => updateTestimonial(i, "name", e.target.value)}
-                      placeholder="Author name"
-                      className={inputCls}
+                  <div>
+                    <textarea
+                      value={t.quote}
+                      onChange={(e) => updateTestimonial(i, "quote", e.target.value)}
+                      rows={3}
+                      placeholder="Quote…"
+                      maxLength={limit}
+                      className={inputCls + " resize-none " + (qErr || over ? errBorder : "")}
                     />
+                    <div className="flex items-center justify-between mt-1">
+                      {qErr ? <p className="text-xs text-red-500">{qErr}</p> : <span />}
+                      <p className={`text-xs ${over ? "text-red-500 font-medium" : warn ? "text-amber-500" : "text-[#c8c0b4]"}`}>{len}/{limit}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <input
+                        type="text"
+                        value={t.name}
+                        onChange={(e) => updateTestimonial(i, "name", e.target.value)}
+                        placeholder="Author name"
+                        className={inputCls + (nErr ? " " + errBorder : "")}
+                      />
+                      {nErr && <p className="text-xs text-red-500 mt-1">{nErr}</p>}
+                    </div>
+                    <div>
                     <div className="relative">
                       <select
                         value={t.role}
                         onChange={(e) => updateTestimonial(i, "role", e.target.value)}
-                        className={inputCls + " appearance-none pr-8 cursor-pointer"}
+                        className={inputCls + " appearance-none pr-8 cursor-pointer" + (rErr ? " " + selectErrBorder : "")}
                         style={{ WebkitAppearance: "none" }}
                       >
                         <option value="">Select class…</option>
@@ -1781,7 +1816,11 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
+                    {rErr && <p className="text-xs text-red-500 mt-1">{rErr}</p>}
+                    </div>
                   </div>
+                  </>);
+                  })()}
                 </div>
               ))}
             </div>
