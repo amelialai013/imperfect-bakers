@@ -106,26 +106,15 @@ export default function PolicyPage() {
           <p className="text-white/60 text-sm mb-8 leading-relaxed">
             If something isn&apos;t clear or your situation is a little different, just drop us a line.
           </p>
-          <div className="flex flex-wrap gap-3">
-            <a
-              href="mailto:imperfectbakers@gmail.com"
-              className="btn btn-tertiary group"
-            >
-              Email us
-              <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-            <a
-              href="tel:+61495012149"
-              className="btn btn-tertiary group"
-            >
-              +61 495 012 149
-              <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
+          <a
+            href="mailto:imperfectbakers@gmail.com"
+            className="btn btn-tertiary group"
+          >
+            Contact us
+            <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
         </div>
       </section>
     </>
