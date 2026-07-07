@@ -3167,7 +3167,7 @@ export default function AdminPage() {
                             <span className="text-[0.625rem] tracking-[0.12em] uppercase bg-red-50 text-red-500 border border-red-200 rounded-full px-2.5 py-0.5 font-semibold">Full</span>
                           )}
                         </div>
-                        <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-[#6b7280]">
+                        <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-[#1a1a1a]">
                           <span>{s.date}</span>
                           <span>{s.time}</span>
                           <span>{s.location}</span>
