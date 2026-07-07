@@ -1,6 +1,27 @@
+"use client";
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
+
+const DEFAULT_TAGLINE =
+  "Building confidence in the kitchen, one imperfect masterpiece at a time. Because the best food is made with love — and a little chaos.";
+const DEFAULT_SOCIAL_BLURB =
+  "Follow along on social for behind-the-scenes kitchen moments.";
 
 export default function Footer() {
+  const [tagline, setTagline] = useState(DEFAULT_TAGLINE);
+  const [socialBlurb, setSocialBlurb] = useState(DEFAULT_SOCIAL_BLURB);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.footerTagline) setTagline(data.footerTagline);
+        if (data.footerSocialBlurb) setSocialBlurb(data.footerSocialBlurb);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <footer className="bg-[#1a1a1a] text-white">
       <div className="max-w-7xl mx-auto px-8 pt-10 pb-10">
@@ -18,7 +39,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
-              Building confidence in the kitchen, one imperfect masterpiece at a time. Because the best food is made with love — and a little chaos.
+              {tagline}
             </p>
             <p className="mt-6 text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white">@imperfectbakers</p>
           </div>
@@ -56,7 +77,7 @@ export default function Footer() {
               imperfectbakers@gmail.com
             </a>
             <p className="text-xs text-white/40 leading-relaxed">
-              Follow along on social for behind-the-scenes kitchen moments.
+              {socialBlurb}
             </p>
           </div>
         </div>

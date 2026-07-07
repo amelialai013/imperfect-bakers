@@ -24,6 +24,8 @@ export const DEFAULT_TESTIMONIALS: Testimonial[] = [
 export type SiteSettings = {
   experienceLevels: ExperienceLevel[];
   testimonials?: Testimonial[];
+  footerTagline?: string;
+  footerSocialBlurb?: string;
 };
 
 export async function getSettings(): Promise<SiteSettings> {

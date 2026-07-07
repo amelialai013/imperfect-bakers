@@ -1652,6 +1652,12 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
   const [savingTestimonials, setSavingTestimonials] = useState(false);
   const [savedTestimonials, setSavedTestimonials] = useState(false);
   const [testimonialErrors, setTestimonialErrors] = useState<{ quote?: string; name?: string; role?: string }[]>([{}, {}, {}, {}]);
+  const DEFAULT_FOOTER_TAGLINE = "Building confidence in the kitchen, one imperfect masterpiece at a time. Because the best food is made with love — and a little chaos.";
+  const DEFAULT_FOOTER_SOCIAL = "Follow along on social for behind-the-scenes kitchen moments.";
+  const [footerTagline, setFooterTagline] = useState(DEFAULT_FOOTER_TAGLINE);
+  const [footerSocialBlurb, setFooterSocialBlurb] = useState(DEFAULT_FOOTER_SOCIAL);
+  const [savingFooter, setSavingFooter] = useState(false);
+  const [savedFooter, setSavedFooter] = useState(false);
 
   const QUOTE_LIMITS = [225, 150, 150, 150];
 
@@ -1672,6 +1678,8 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
           while (t.length < 4) t.push(DEFAULT_TESTIMONIALS[t.length] ?? { quote: "", name: "", role: "" });
           setTestimonials(t);
         }
+        if (data.footerTagline) setFooterTagline(data.footerTagline);
+        if (data.footerSocialBlurb) setFooterSocialBlurb(data.footerSocialBlurb);
         setLoading(false);
       })
       .catch(() => { setLevels(DEFAULT_LEVELS); setLoading(false); });
@@ -1703,6 +1711,19 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
       setTimeout(() => setSavedTestimonials(false), 2500);
     } catch { /* silent */ }
     setSavingTestimonials(false);
+  }
+
+  async function saveFooter() {
+    setSavingFooter(true);
+    try {
+      await authFetch("/api/settings", token, {
+        method: "PATCH",
+        body: JSON.stringify({ footerTagline, footerSocialBlurb }),
+      });
+      setSavedFooter(true);
+      setTimeout(() => setSavedFooter(false), 2500);
+    } catch { /* silent */ }
+    setSavingFooter(false);
   }
 
   function updateLevel(i: number, field: "value" | "label", val: string) {
@@ -1833,6 +1854,44 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                 {savingTestimonials ? "Saving…" : "Save testimonials"}
               </button>
               {savedTestimonials && <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>}
+            </div>
+          </div>
+
+          {/* Footer copy card */}
+          <div className="bg-white border border-[#e8e2d9] rounded-xl p-8">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Footer copy</h2>
+            <p className="text-sm text-[#6b7280] mb-8">These two lines appear in the footer across every page of the site.</p>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280] mb-2">Brand tagline</label>
+                <p className="text-xs text-[#9b9490] mb-2">Shown under the logo on the left side of the footer.</p>
+                <textarea
+                  rows={3}
+                  value={footerTagline}
+                  onChange={(e) => { setFooterTagline(e.target.value); setSavedFooter(false); }}
+                  placeholder="Building confidence in the kitchen…"
+                  className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-none"
+                />
+                <p className="text-xs text-[#c8c0b4] text-right mt-1">{footerTagline.length} chars</p>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280] mb-2">Social blurb</label>
+                <p className="text-xs text-[#9b9490] mb-2">Shown in the &ldquo;Get in touch&rdquo; column, below the email address.</p>
+                <input
+                  type="text"
+                  value={footerSocialBlurb}
+                  onChange={(e) => { setFooterSocialBlurb(e.target.value); setSavedFooter(false); }}
+                  placeholder="Follow along on social…"
+                  className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors"
+                />
+                <p className="text-xs text-[#c8c0b4] text-right mt-1">{footerSocialBlurb.length} chars</p>
+              </div>
+            </div>
+            <div className="pt-6 flex items-center gap-4">
+              <button type="button" onClick={saveFooter} disabled={savingFooter} className="btn-primary disabled:opacity-50">
+                {savingFooter ? "Saving…" : "Save footer copy"}
+              </button>
+              {savedFooter && <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>}
             </div>
           </div>
 
