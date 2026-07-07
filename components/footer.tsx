@@ -73,9 +73,15 @@ export default function Footer() {
             <h4 className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-5">Get in touch</h4>
             <a
               href="mailto:imperfectbakers@gmail.com"
-              className="text-sm text-white/60 hover:text-white transition-colors block mb-4 break-all"
+              className="text-sm text-white/60 hover:text-white transition-colors block mb-2 break-all"
             >
               imperfectbakers@gmail.com
+            </a>
+            <a
+              href="tel:+61495012149"
+              className="text-sm text-white/60 hover:text-white transition-colors block mb-4"
+            >
+              +61 495 012 149
             </a>
             <p className="text-xs text-white/40 leading-relaxed">
               {socialBlurb}
