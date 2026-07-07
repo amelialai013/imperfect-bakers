@@ -378,7 +378,7 @@ function SessionForm({
   );
 }
 
-function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }: { sessionId: string; sessionName?: string; token: string; isPast?: boolean; onChangeClass?: (b: Booking & { sessionName: string }) => void }) {
+function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, onChangeClass }: { sessionId: string; sessionName?: string; sessionPrice?: number; token: string; isPast?: boolean; onChangeClass?: (b: Booking & { sessionName: string }) => void }) {
   const [bookings, setBookings] = useState<Booking[] | null>(null);
   const [acting, setActing] = useState<string | null>(null);
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
@@ -540,6 +540,13 @@ function BookingsPanel({ sessionId, sessionName, token, isPast, onChangeClass }:
                 <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
               )}
             </div>
+            {sessionPrice != null && (
+              <div>
+                <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Booking value</p>
+                <p className="text-[#1a1a1a] font-medium text-sm">${(sessionPrice * b.totalPeople).toLocaleString()}</p>
+                <p className="text-[#6b7280] text-xs mt-0.5">${sessionPrice} × {b.totalPeople}</p>
+              </div>
+            )}
             {b.notes && (
               <div className="col-span-2 sm:col-span-4 mt-3">
                 <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Notes</p>
@@ -1175,6 +1182,13 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           <p className="text-[#1a1a1a] text-xs mt-0.5 italic">{b.paymentOther}</p>
                         )}
                       </div>
+                      {b.sessionPrice != null && (
+                        <div>
+                          <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Booking value</p>
+                          <p className="text-[#1a1a1a] font-medium text-xs">${(b.sessionPrice * b.totalPeople).toLocaleString()}</p>
+                          <p className="text-[#6b7280] text-xs mt-0.5">${b.sessionPrice} × {b.totalPeople}</p>
+                        </div>
+                      )}
                       {b.notes && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
                           <p className="text-[0.6875rem] tracking-widest uppercase text-[#006644] mb-0.5">Notes</p>
@@ -2819,6 +2833,7 @@ export default function AdminPage() {
                         <BookingsPanel
                           sessionId={s.id}
                           sessionName={s.sessionName || s.classLabel}
+                          sessionPrice={s.price}
                           token={token}
                           isPast={dashTimeFilter === "past"}
                           onChangeClass={(b) => { setDashMoveTarget(b); setDashMoveSessionId(""); setDashMoveError(""); }}
