@@ -26,6 +26,11 @@ export type EmailTemplates = {
     subject: string;
     next_steps: string;
   };
+  interest_classes_available: {
+    subject: string;
+    body: string;
+    cta: string;
+  };
 };
 
 // ── Defaults ──────────────────────────────────────────────────────────────────
@@ -54,6 +59,11 @@ export const DEFAULT_TEMPLATES: EmailTemplates = {
     subject: "Interest registered — {{classes}}",
     next_steps: "In the meantime, feel free to browse our upcoming classes — there may already be something perfect for you!",
   },
+  interest_classes_available: {
+    subject: "Classes you're interested in are now available — {{classes}}",
+    body: "We're excited to let you know that sessions are now open for the classes you registered interest in. Spots are limited, so we recommend booking early to secure your place.",
+    cta: "We hope to see you in the kitchen soon!",
+  },
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -73,5 +83,6 @@ export async function getTemplates(): Promise<EmailTemplates> {
     booking_declined: { ...DEFAULT_TEMPLATES.booking_declined, ...stored.booking_declined },
     booking_cancelled: { ...DEFAULT_TEMPLATES.booking_cancelled, ...stored.booking_cancelled },
     interest_received: { ...DEFAULT_TEMPLATES.interest_received, ...stored.interest_received },
+    interest_classes_available: { ...DEFAULT_TEMPLATES.interest_classes_available, ...stored.interest_classes_available },
   };
 }

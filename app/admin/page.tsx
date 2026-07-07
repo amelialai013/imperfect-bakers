@@ -1274,6 +1274,10 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
   const [deleting, setDeleting] = useState<string | null>(null);
   const [interestKebabOpen, setInterestKebabOpen] = useState<string | null>(null);
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
+  const [notifyTarget, setNotifyTarget] = useState<InterestEntry | null>(null);
+  const [notifying, setNotifying] = useState(false);
+  const [notifyError, setNotifyError] = useState("");
+  const [notifySuccess, setNotifySuccess] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -1289,9 +1293,9 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = deleteConfirm ? "hidden" : "";
+    document.body.style.overflow = (deleteConfirm || notifyTarget) ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [deleteConfirm]);
+  }, [deleteConfirm, notifyTarget]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -1313,6 +1317,26 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
     } catch { /* silent */ }
     setDeleting(null);
     setDeleteConfirm(null);
+  }
+
+  async function sendNotification() {
+    if (!notifyTarget) return;
+    setNotifying(true);
+    setNotifyError("");
+    try {
+      const res = await authFetch(`/api/interest/${notifyTarget.id}/notify`, token, { method: "POST" });
+      if (!res.ok) {
+        const data = await res.json();
+        setNotifyError(data.error ?? "Failed to send — please try again");
+        setNotifying(false);
+        return;
+      }
+      setNotifySuccess(notifyTarget.name);
+      setNotifyTarget(null);
+    } catch {
+      setNotifyError("Connection error — please try again");
+    }
+    setNotifying(false);
   }
 
   return (
@@ -1380,7 +1404,14 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
                         {interestKebabOpen === e.id && (
                           <>
                             <div className="fixed inset-0 z-10" onClick={() => setInterestKebabOpen(null)} />
-                            <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                            <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[200px]">
+                              <button
+                                onClick={() => { setInterestKebabOpen(null); setNotifyTarget(e); setNotifyError(""); }}
+                                className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
+                              >
+                                Notify — classes available
+                              </button>
+                              <div className="h-px bg-[#e8e2d9]" />
                               <button
                                 onClick={() => { setInterestKebabOpen(null); setDeleteConfirm(e.id); }}
                                 className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-[#faf9f6] transition-colors"
@@ -1424,6 +1455,60 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
           )}
         </div>
       </section>
+
+      {/* ── Notify classes available modal ── */}
+      {notifyTarget && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
+            <div className="w-12 h-12 rounded-full bg-[#006644]/10 flex items-center justify-center mx-auto mb-5">
+              <svg className="w-5 h-5 text-[#006644]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] text-center mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Notify {notifyTarget.name}?
+            </h2>
+            <p className="text-sm text-[#6b7280] text-center mb-2 leading-relaxed">
+              This will send an email letting them know that their selected classes are now available to book.
+            </p>
+            <p className="text-xs text-[#006644] font-medium text-center mb-8">
+              {Array.isArray(notifyTarget.classes) && notifyTarget.classes.length ? notifyTarget.classes.join(", ") : "No classes selected"}
+            </p>
+            {notifyError && <p className="text-xs text-red-500 text-center mb-4">{notifyError}</p>}
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={sendNotification}
+                disabled={notifying}
+                className="w-full py-3 rounded-full bg-[#006644] text-white text-sm font-medium hover:bg-[#004d33] transition-colors disabled:opacity-50"
+              >
+                {notifying ? "Sending…" : "Yes, send email"}
+              </button>
+              <button
+                onClick={() => setNotifyTarget(null)}
+                className="w-full py-3 rounded-full border border-[#e4dfd5] text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Notify success toast ── */}
+      {notifySuccess && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[10001] bg-[#006644] text-white text-sm font-medium px-5 py-3 rounded-full shadow-lg flex items-center gap-2">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          Email sent to {notifySuccess}
+          <button onClick={() => setNotifySuccess(null)} className="ml-2 opacity-70 hover:opacity-100">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
 
       {/* ── Delete interest record modal ── */}
       {deleteConfirm && (
@@ -1557,6 +1642,23 @@ const TEMPLATE_DEFS: {
       { type: "fixed", text: "Hi {{name}}! 👋" },
       { type: "fixed", text: "Thanks for registering your interest in {{classes}}. We've got your details and will be in touch as soon as a relevant session opens up." },
       { type: "field", key: "next_steps", label: "Next steps paragraph", hint: "What happens next. Available: {{name}}, {{classes}}" },
+      { type: "fixed", text: "Warmly, Chef Sarah & the Imperfect Bakers team" },
+    ],
+  },
+  {
+    key: "interest_classes_available",
+    title: "Classes now available",
+    description: "Sent to a registered interest customer to let them know their selected classes are now available to book.",
+    subjectHint: "Available: {{name}}, {{classes}}",
+    fields: [
+      { key: "body", label: "Body paragraph", hint: "Main message. Available: {{name}}, {{classes}}" },
+      { key: "cta", label: "Closing paragraph", hint: "Final encouragement before sign-off. Available: {{name}}, {{classes}}" },
+    ],
+    structure: [
+      { type: "fixed", text: "Hi {{name}}! 👋" },
+      { type: "fixed", text: "Great news — sessions are now available for {{classes}}, the class(es) you registered interest in!" },
+      { type: "field", key: "body", label: "Body paragraph", hint: "Main message. Available: {{name}}, {{classes}}" },
+      { type: "field", key: "cta", label: "Closing paragraph", hint: "Final encouragement before sign-off." },
       { type: "fixed", text: "Warmly, Chef Sarah & the Imperfect Bakers team" },
     ],
   },
