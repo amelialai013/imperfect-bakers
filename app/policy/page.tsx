@@ -108,9 +108,12 @@ export default function PolicyPage() {
           </p>
           <a
             href="mailto:imperfectbakers@gmail.com"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#006644] text-sm font-semibold rounded-full hover:bg-white/90 transition-colors"
+            className="btn btn-tertiary group"
           >
-            imperfectbakers@gmail.com
+            Contact us
+            <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
           </a>
         </div>
       </section>
