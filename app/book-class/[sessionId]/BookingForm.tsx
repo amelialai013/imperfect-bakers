@@ -505,13 +505,12 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               </svg>
               <span>{session.location}</span>
             </div>
-          </div>
-          <div className="h-px bg-white/10" style={{ marginTop: 24, marginBottom: 24 }} />
-          <div className="flex items-baseline gap-1.5">
-            <p className="text-lg font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              ${session.price}
-            </p>
-            <p className="text-xs text-white/40">per person</p>
+            <div className="flex items-baseline gap-1.5 pt-2">
+              <p className="text-lg font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                ${session.price}
+              </p>
+              <p className="text-xs text-white/40">per person</p>
+            </div>
           </div>
           {session.skills && session.skills.length > 0 && (
             <>
