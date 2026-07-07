@@ -1316,7 +1316,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
               Admin dashboard
             </button>
             <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-              Interest <em className="not-italic text-[#006644]">registrations</em>
+              Registered <em className="not-italic text-[#006644]">interest</em>
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
