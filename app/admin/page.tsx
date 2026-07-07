@@ -3132,14 +3132,14 @@ export default function AdminPage() {
               {/* Attendees */}
               <div>
                 <label className={`block text-xs font-medium mb-2 ${addBookingFieldErrors.attendees ? "text-red-500" : "text-[#1a1a1a]"}`}>Attendees *</label>
-                <div className="grid grid-cols-3 gap-3">
-                  {([["child", "Child"], ["youngAdult", "Young Adult"], ["adult", "Adult"]] as const).map(([key, label]) => (
-                    <div key={key} className="flex items-center justify-between border border-[#e4dfd5] rounded-lg px-3 py-2">
-                      <span className="text-xs text-[#6b7280]">{label}</span>
-                      <div className="flex items-center gap-2">
-                        <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: Math.max(0, f[key] - 1) }))} className="w-5 h-5 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-xs font-bold hover:bg-[#e4dfd5]">−</button>
-                        <span className="text-sm font-medium w-4 text-center">{addBookingForm[key]}</span>
-                        <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: f[key] + 1 }))} className="w-5 h-5 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-xs font-bold hover:bg-[#e4dfd5]">+</button>
+                <div className="flex flex-col gap-2">
+                  {([["child", "Child (7–17)"], ["youngAdult", "Young Adult (18–34)"], ["adult", "Adult (35+)"]] as const).map(([key, label]) => (
+                    <div key={key} className="flex items-center justify-between border border-[#e4dfd5] rounded-lg px-4 py-3">
+                      <span className="text-sm text-[#1a1a1a]">{label}</span>
+                      <div className="flex items-center gap-3">
+                        <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: Math.max(0, f[key] - 1) }))} className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-sm font-bold hover:bg-[#e4dfd5] transition-colors">−</button>
+                        <span className="text-sm font-semibold w-5 text-center">{addBookingForm[key]}</span>
+                        <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: f[key] + 1 }))} className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-sm font-bold hover:bg-[#e4dfd5] transition-colors">+</button>
                       </div>
                     </div>
                   ))}
