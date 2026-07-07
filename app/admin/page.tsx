@@ -531,12 +531,12 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             </div>
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
-              <p className="text-[#6b7280]">{b.phone}</p>
+              <p className="text-[#1a1a1a]">{b.phone}</p>
             </div>
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
               <p className="text-[#1a1a1a] font-medium">{b.totalPeople} total</p>
-              <div className="text-[#6b7280] text-xs mt-1 space-y-0.5">
+              <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
                 {b.counts.child > 0 && <p>Child (7–17): {b.counts.child}</p>}
                 {b.counts.youngAdult > 0 && <p>Young Adult (18–34): {b.counts.youngAdult}</p>}
                 {b.counts.adult > 0 && <p>Adult (35+): {b.counts.adult}</p>}
@@ -547,7 +547,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
               {sessionPrice != null && (
                 <p className="text-[#1a1a1a] font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
               )}
-              <div className="text-[#6b7280] text-xs mt-1 space-y-0.5">
+              <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
                 <p>{b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}</p>
                 {b.paymentStatus === "other" && b.paymentOther && (
                   <p className="italic">{b.paymentOther}</p>
@@ -565,7 +565,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
                 <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-1">Experience</p>
                 <div className="space-y-0.5">
                   {b.participants.map((p, i) => (
-                    <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
+                    <p key={i} className="text-[#1a1a1a] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
                   ))}
                 </div>
               </div>
@@ -1195,12 +1195,12 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
-                        <p className="text-[#6b7280] text-xs">{b.phone}</p>
+                        <p className="text-[#1a1a1a] text-xs">{b.phone}</p>
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
                         <p className="text-[#1a1a1a] font-medium text-xs">{b.totalPeople} total</p>
-                        <div className="text-[#6b7280] text-xs mt-0.5 space-y-0.5">
+                        <div className="text-[#1a1a1a] text-xs mt-0.5 space-y-0.5">
                           {b.counts?.child > 0 && <p>Child: {b.counts.child}</p>}
                           {b.counts?.youngAdult > 0 && <p>Young Adult: {b.counts.youngAdult}</p>}
                           {b.counts?.adult > 0 && <p>Adult: {b.counts.adult}</p>}
@@ -1211,7 +1211,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                         {b.sessionPrice != null && (
                           <p className="text-[#1a1a1a] font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
                         )}
-                        <div className="text-[#6b7280] text-xs mt-1 space-y-0.5">
+                        <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
                           <p>{b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}</p>
                           {b.paymentStatus === "other" && b.paymentOther && (
                             <p className="italic">{b.paymentOther}</p>
@@ -1229,7 +1229,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                           <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-1">Experience</p>
                           <div className="space-y-0.5">
                             {b.participants.map((p, i) => (
-                              <p key={i} className="text-[#6b7280] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
+                              <p key={i} className="text-[#1a1a1a] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
                             ))}
                           </div>
                         </div>
