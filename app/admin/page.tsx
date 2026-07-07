@@ -671,24 +671,20 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [menuAlign, setMenuAlign] = useState<"left" | "right">("left");
 
-  // Detect whether we're the second button in a row (same offsetTop as previous sibling)
+  // Align dropdown to whichever edge keeps it inside the viewport
   useEffect(() => {
     let cancelled = false;
     function check() {
       if (cancelled) return;
       const el = wrapperRef.current;
       if (!el) return;
-      const prev = el.previousElementSibling as HTMLElement | null;
-      if (prev && prev.getBoundingClientRect().top === el.getBoundingClientRect().top) {
-        setMenuAlign("right");
-      } else {
-        setMenuAlign("left");
-      }
+      const rect = el.getBoundingClientRect();
+      const midpoint = window.innerWidth / 2;
+      setMenuAlign(rect.left + rect.width / 2 > midpoint ? "right" : "left");
     }
     check();
-    const parent = wrapperRef.current?.parentElement ?? null;
     const ro = new ResizeObserver(check);
-    if (parent) ro.observe(parent);
+    ro.observe(document.documentElement);
     return () => { cancelled = true; ro.disconnect(); };
   }, []);
 
