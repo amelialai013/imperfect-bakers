@@ -386,6 +386,11 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
   const [undeclinePanelTarget, setUndeclinePanelTarget] = useState<string | null>(null);
 
   useEffect(() => {
+    document.body.style.overflow = undeclinePanelTarget ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [undeclinePanelTarget]);
+
+  useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
       .then((data) => {
@@ -616,7 +621,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
       {/* Reinstate booking confirmation modal */}
       {undeclinePanelTarget && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setUndeclinePanelTarget(null)} />
+          <div className="absolute inset-0 bg-black/40" />
           <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
             <h2 className="text-lg font-semibold text-[#1a1a1a] mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Reinstate booking</h2>
             <p className="text-sm text-[#6b7280] mb-6">This booking will be moved back to pending and will need to be confirmed.</p>
@@ -815,6 +820,12 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    const anyOpen = !!(moveTarget || undeclineTarget);
+    document.body.style.overflow = anyOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [moveTarget, undeclineTarget]);
+
+  useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
       .then((data) => {
@@ -977,7 +988,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
           {/* Reinstate booking confirmation modal */}
           {undeclineTarget && (
             <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-              <div className="absolute inset-0 bg-black/40" onClick={() => setUndeclineTarget(null)} />
+              <div className="absolute inset-0 bg-black/40" />
               <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm z-10">
                 <h2 className="text-lg font-semibold text-[#1a1a1a] mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Reinstate booking</h2>
                 <p className="text-sm text-[#6b7280] mb-6">This booking will be moved back to pending and will need to be confirmed.</p>
@@ -996,7 +1007,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
           {/* Move booking modal */}
           {moveTarget && (
             <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
-              <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => { setMoveTarget(null); setMoveSessionId(""); setMoveError(""); }} />
+              <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
               <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 z-10">
                 <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                   Change class
@@ -1295,6 +1306,11 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
   const [deleting, setDeleting] = useState<string | null>(null);
   const [interestKebabOpen, setInterestKebabOpen] = useState<string | null>(null);
 
+  useEffect(() => {
+    document.body.style.overflow = deleteConfirm ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [deleteConfirm]);
+
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -1446,7 +1462,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
       {/* ── Delete interest record modal ── */}
       {deleteConfirm && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
-          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setDeleteConfirm(null)} />
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
             <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5">
               <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2250,10 +2266,10 @@ export default function AdminPage() {
 
   // Lock body scroll whenever any overlay modal is open
   useEffect(() => {
-    const anyOpen = !!(deleteConfirm || deleteSessionConfirm || deleteClassConfirm || dashMoveTarget || addBookingTarget);
+    const anyOpen = !!(deleteConfirm || deleteSessionConfirm || deleteClassConfirm || dashMoveTarget || addBookingTarget || unsavedWarning);
     document.body.style.overflow = anyOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [deleteConfirm, deleteSessionConfirm, deleteClassConfirm, dashMoveTarget, addBookingTarget]);
+  }, [deleteConfirm, deleteSessionConfirm, deleteClassConfirm, dashMoveTarget, addBookingTarget, unsavedWarning]);
 
   const loadSessions = useCallback(async () => {
     setLoading(true);
@@ -3180,7 +3196,7 @@ export default function AdminPage() {
       {/* Change class modal */}
       {dashMoveTarget && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
-          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => { setDashMoveTarget(null); setDashMoveSessionId(""); setDashMoveError(""); }} />
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 z-10">
             <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Change class</h2>
             <p className="text-sm text-[#6b7280] mb-6">Moving <strong className="text-[#1a1a1a]">{dashMoveTarget.name}</strong> ({dashMoveTarget.totalPeople} {dashMoveTarget.totalPeople === 1 ? "person" : "people"}) from <strong className="text-[#1a1a1a]">{dashMoveTarget.sessionName}</strong>.</p>
@@ -3221,7 +3237,7 @@ export default function AdminPage() {
       {/* Delete session confirmation modal */}
       {deleteSessionConfirm && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
-          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setDeleteSessionConfirm(null)} />
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
             <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5">
               <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3255,7 +3271,7 @@ export default function AdminPage() {
       {/* Add booking modal */}
       {addBookingTarget && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setAddBookingTarget(null)} />
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" />
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full z-10 flex flex-col" style={{ maxHeight: "75dvh" }}>
             {/* Header — sticky */}
             <div className="px-6 pt-6 pb-4 border-b border-[#f0ece4] shrink-0">
