@@ -1640,6 +1640,24 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
   const [savingTestimonials, setSavingTestimonials] = useState(false);
   const [savedTestimonials, setSavedTestimonials] = useState(false);
   const [testimonialErrors, setTestimonialErrors] = useState<{ quote?: string; name?: string; role?: string }[]>([{}, {}, {}, {}]);
+  type PolicyItem = { highlight: string; text: string };
+  type PolicySection = { title: string; body?: string; items?: PolicyItem[] };
+  const DEFAULT_POLICY_SECTIONS: PolicySection[] = [
+    { title: "Who can enrol?", body: "Due to insurance requirements, all participants must be over the age of 18." },
+    { title: "Pricing", body: "Current pricing does not reflect future pricing. However, once booked and paid, your price is locked in — no changes will be made." },
+    { title: "Confirmation of booking", body: "A confirmation email will be sent before your class begins. Please note — your booking is not confirmed until payment has been received." },
+    { title: "Transfers, cancellations & refunds", items: [
+      { highlight: "5+ business days before class", text: "Full refund or free transfer to another class — no questions asked." },
+      { highlight: "Less than 5 business days", text: "Refunds are not guaranteed. Please get in touch and we'll do our best to help." },
+    ]},
+    { title: "If we cancel a class", body: "If a class doesn't reach minimum numbers, we may need to cancel it. We'll let you know at least 48 hours in advance and give you the choice of a full refund or a transfer to another session." },
+    { title: "What to wear", body: "We recommend closed-toe, soft-soled, flat shoes — comfort over style in the kitchen." },
+    { title: "Communications", body: "By booking a class, you agree to receive emails related to your booking. We won't spam you — just the important stuff." },
+  ];
+  const [policySections, setPolicySections] = useState<PolicySection[]>(DEFAULT_POLICY_SECTIONS);
+  const [savingPolicy, setSavingPolicy] = useState(false);
+  const [savedPolicy, setSavedPolicy] = useState(false);
+
   const DEFAULT_FOOTER_TAGLINE = "Building confidence in the kitchen, one imperfect masterpiece at a time. Because the best food is made with love — and a little chaos.";
   const DEFAULT_FOOTER_SOCIAL = "Follow along on social for behind-the-scenes kitchen moments.";
   const [footerTagline, setFooterTagline] = useState(DEFAULT_FOOTER_TAGLINE);
@@ -1668,6 +1686,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
         }
         if (data.footerTagline) setFooterTagline(data.footerTagline);
         if (data.footerSocialBlurb) setFooterSocialBlurb(data.footerSocialBlurb);
+        if (data.policySections?.length) setPolicySections(data.policySections);
         setLoading(false);
       })
       .catch(() => { setLevels(DEFAULT_LEVELS); setLoading(false); });
@@ -1712,6 +1731,19 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
       setTimeout(() => setSavedFooter(false), 2500);
     } catch { /* silent */ }
     setSavingFooter(false);
+  }
+
+  async function savePolicy() {
+    setSavingPolicy(true);
+    try {
+      await authFetch("/api/settings", token, {
+        method: "PATCH",
+        body: JSON.stringify({ policySections }),
+      });
+      setSavedPolicy(true);
+      setTimeout(() => setSavedPolicy(false), 2500);
+    } catch { /* silent */ }
+    setSavingPolicy(false);
   }
 
   function updateLevel(i: number, field: "value" | "label", val: string) {
@@ -1898,6 +1930,67 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                 {savingFooter ? "Saving…" : "Save footer copy"}
               </button>
               {savedFooter && <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>}
+            </div>
+          </div>
+
+          {/* Booking policy card */}
+          <div className="bg-white border border-[#e8e2d9] rounded-xl p-8">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Booking policy</h2>
+            <p className="text-sm text-[#6b7280] mb-8">Edit the content shown on the Booking Policy page. Section titles and text only — icons stay fixed.</p>
+            <div className="space-y-6">
+              {policySections.map((s, i) => (
+                <div key={i} className="border border-[#e8e2d9] rounded-xl p-5 space-y-3">
+                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-[#6b7280]">Section {i + 1}</p>
+                  <div>
+                    <label className="block text-xs text-[#9b9490] mb-1">Title</label>
+                    <input
+                      type="text"
+                      value={s.title}
+                      onChange={(e) => { setPolicySections((prev) => prev.map((sec, j) => j === i ? { ...sec, title: e.target.value } : sec)); setSavedPolicy(false); }}
+                      className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors"
+                    />
+                  </div>
+                  {s.body !== undefined && (
+                    <div>
+                      <label className="block text-xs text-[#9b9490] mb-1">Content</label>
+                      <textarea
+                        rows={3}
+                        value={s.body}
+                        onChange={(e) => { setPolicySections((prev) => prev.map((sec, j) => j === i ? { ...sec, body: e.target.value } : sec)); setSavedPolicy(false); }}
+                        className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-none"
+                      />
+                    </div>
+                  )}
+                  {s.items && s.items.map((item, j) => (
+                    <div key={j} className="pl-3 border-l-2 border-[#e8e2d9] space-y-2">
+                      <div>
+                        <label className="block text-xs text-[#9b9490] mb-1">Point {j + 1} — label</label>
+                        <input
+                          type="text"
+                          value={item.highlight}
+                          onChange={(e) => { setPolicySections((prev) => prev.map((sec, si) => si === i ? { ...sec, items: sec.items!.map((it, ii) => ii === j ? { ...it, highlight: e.target.value } : it) } : sec)); setSavedPolicy(false); }}
+                          className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-[#9b9490] mb-1">Point {j + 1} — description</label>
+                        <textarea
+                          rows={2}
+                          value={item.text}
+                          onChange={(e) => { setPolicySections((prev) => prev.map((sec, si) => si === i ? { ...sec, items: sec.items!.map((it, ii) => ii === j ? { ...it, text: e.target.value } : it) } : sec)); setSavedPolicy(false); }}
+                          className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-none"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className="pt-6 flex items-center gap-4">
+              <button type="button" onClick={savePolicy} disabled={savingPolicy} className="btn-primary disabled:opacity-50">
+                {savingPolicy ? "Saving…" : "Save policy"}
+              </button>
+              {savedPolicy && <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>}
             </div>
           </div>
 

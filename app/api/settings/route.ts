@@ -21,11 +21,28 @@ export const DEFAULT_TESTIMONIALS: Testimonial[] = [
   { quote: "Such a wonderful experience — warm, fun, and I walked away with skills I actually use at home.", name: "Emily T.", role: "Sweet Food" },
 ];
 
+export type PolicyItem = { highlight: string; text: string };
+export type PolicySection = { title: string; body?: string; items?: PolicyItem[] };
+
+export const DEFAULT_POLICY_SECTIONS: PolicySection[] = [
+  { title: "Who can enrol?", body: "Due to insurance requirements, all participants must be over the age of 18." },
+  { title: "Pricing", body: "Current pricing does not reflect future pricing. However, once booked and paid, your price is locked in — no changes will be made." },
+  { title: "Confirmation of booking", body: "A confirmation email will be sent before your class begins. Please note — your booking is not confirmed until payment has been received." },
+  { title: "Transfers, cancellations & refunds", items: [
+    { highlight: "5+ business days before class", text: "Full refund or free transfer to another class — no questions asked." },
+    { highlight: "Less than 5 business days", text: "Refunds are not guaranteed. Please get in touch and we'll do our best to help." },
+  ]},
+  { title: "If we cancel a class", body: "If a class doesn't reach minimum numbers, we may need to cancel it. We'll let you know at least 48 hours in advance and give you the choice of a full refund or a transfer to another session." },
+  { title: "What to wear", body: "We recommend closed-toe, soft-soled, flat shoes — comfort over style in the kitchen." },
+  { title: "Communications", body: "By booking a class, you agree to receive emails related to your booking. We won't spam you — just the important stuff." },
+];
+
 export type SiteSettings = {
   experienceLevels: ExperienceLevel[];
   testimonials?: Testimonial[];
   footerTagline?: string;
   footerSocialBlurb?: string;
+  policySections?: PolicySection[];
 };
 
 export async function getSettings(): Promise<SiteSettings> {
