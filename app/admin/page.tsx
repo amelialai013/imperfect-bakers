@@ -455,61 +455,61 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
   return (
     <div className="mt-4 space-y-2">
       {active.map((b) => (
-        <div key={b.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
+        <div key={b.id} className="relative bg-white border border-[#e8e2d9] rounded-xl">
+          {/* Kebab — always top-right */}
+          {(b.status === "confirmed" || b.status === "declined") && (
+            <div className="absolute top-3 right-3 z-10">
+              <button onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                  <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
+                </svg>
+              </button>
+              {kebabOpen === b.id && (
+                <>
+                  <div className="fixed inset-0 z-[90]" onClick={() => setKebabOpen(null)} />
+                  <div className="absolute right-0 top-full mt-1 z-[100] bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                    {b.status === "confirmed" && !isPast && onChangeClass && (<>
+                      <button onClick={() => { setKebabOpen(null); onChangeClass({ ...b, sessionName: sessionName ?? "" }); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                        Change class
+                      </button>
+                      <div className="h-px bg-[#e8e2d9]" />
+                    </>)}
+                    {b.status === "confirmed" && !isPast && (
+                      <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                        Cancel booking
+                      </button>
+                    )}
+                    {b.status === "declined" && (<>
+                      <button onClick={() => { setKebabOpen(null); setUndeclinePanelTarget(b.id); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
+                        Reinstate booking
+                      </button>
+                      <div className="h-px bg-[#e8e2d9]" />
+                      <button onClick={() => { setKebabOpen(null); deleteRecord(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                        Delete record
+                      </button>
+                    </>)}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
           {/* Header — name, badge, actions */}
-          <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] flex items-center justify-between gap-3 flex-wrap">
+          <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
             <div className="flex items-center gap-2 flex-wrap">
               <p className="font-medium text-[#1a1a1a] text-sm">{b.name}</p>
               <StatusBadge status={b.status} />
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Pending: inline confirm/decline */}
-              {(!b.status || b.status === "pending") && (<>
+            {/* Pending: inline confirm/decline */}
+            {(!b.status || b.status === "pending") && (
+              <div className="flex items-center gap-2 flex-wrap mt-3">
                 <button onClick={() => act(b.id, "confirmed")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50">
                   ✓ Confirm
                 </button>
                 <button onClick={() => act(b.id, "declined")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50">
                   ✗ Decline
                 </button>
-              </>)}
-              {/* Kebab — always shown for non-pending */}
-              {(b.status === "confirmed" || b.status === "declined") && (
-                <div className="relative">
-                  <button onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer">
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                      <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
-                    </svg>
-                  </button>
-                  {kebabOpen === b.id && (
-                    <>
-                      <div className="fixed inset-0 z-10" onClick={() => setKebabOpen(null)} />
-                      <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
-                        {b.status === "confirmed" && !isPast && onChangeClass && (<>
-                          <button onClick={() => { setKebabOpen(null); onChangeClass({ ...b, sessionName: sessionName ?? "" }); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
-                            Change class
-                          </button>
-                          <div className="h-px bg-[#e8e2d9]" />
-                        </>)}
-                        {b.status === "confirmed" && !isPast && (
-                          <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                            Cancel booking
-                          </button>
-                        )}
-                        {b.status === "declined" && (<>
-                          <button onClick={() => { setKebabOpen(null); setUndeclinePanelTarget(b.id); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
-                            Reinstate booking
-                          </button>
-                          <div className="h-px bg-[#e8e2d9]" />
-                          <button onClick={() => { setKebabOpen(null); deleteRecord(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                            Delete record
-                          </button>
-                        </>)}
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
           {/* Body */}
           <div className="px-5 py-4">
@@ -679,7 +679,7 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
               <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
-              Manage bookings
+              All bookings
             </button>
             <div className="h-px bg-[#e8e2d9]" />
             <button
