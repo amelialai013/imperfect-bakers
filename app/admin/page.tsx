@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import type { ClassSession, Booking, ClassConfig } from "@/lib/types";
 import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
 import LocationInput from "@/components/LocationInput";
@@ -657,11 +657,11 @@ type ExperienceLevel = { value: string; label: string };
 
 function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void; align?: "left" | "right" }) {
   const [open, setOpen] = useState(false);
-  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [menuAlign, setMenuAlign] = useState<"left" | "right">("left");
 
   // Detect whether we're the second button in a row (same offsetTop as previous sibling)
-  React.useEffect(() => {
+  useEffect(() => {
     function check() {
       const el = wrapperRef.current;
       if (!el) return;
