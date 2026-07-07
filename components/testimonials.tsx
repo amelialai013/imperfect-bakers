@@ -106,20 +106,42 @@ export default function Testimonials() {
                 ))}
               </div>
 
-              {/* Dot indicators */}
-              <div className="flex items-center gap-2 mt-8">
-                {rest.map((t, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActive(i)}
-                    className={`transition-[width,background-color] duration-300 rounded-full ${
-                      i === active
-                        ? "w-6 h-1.5 bg-white"
-                        : "w-1.5 h-1.5 bg-white/30"
-                    }`}
-                    aria-label={`Go to ${t.name}`}
-                  />
-                ))}
+              {/* Dot indicators + chevrons */}
+              <div className="flex items-center justify-between mt-8">
+                <button
+                  onClick={() => setActive((a) => Math.max(a - 1, 0))}
+                  disabled={active === 0}
+                  aria-label="Previous quote"
+                  className="text-white/50 hover:text-white disabled:opacity-20 transition-colors p-1 -ml-1"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <div className="flex items-center gap-2">
+                  {rest.map((t, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActive(i)}
+                      className={`transition-[width,background-color] duration-300 rounded-full ${
+                        i === active
+                          ? "w-6 h-1.5 bg-white"
+                          : "w-1.5 h-1.5 bg-white/30"
+                      }`}
+                      aria-label={`Go to ${t.name}`}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={() => setActive((a) => Math.min(a + 1, rest.length - 1))}
+                  disabled={active === rest.length - 1}
+                  aria-label="Next quote"
+                  className="text-white/50 hover:text-white disabled:opacity-20 transition-colors p-1 -mr-1"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
             </div>
 
