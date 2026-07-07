@@ -1411,22 +1411,6 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
                       </div>
                     </div>
 
-                    {deleteConfirm === e.id && (
-                      <div className="flex items-center gap-3 flex-wrap mb-4 p-3 bg-red-50 rounded-lg">
-                        <p className="text-sm text-[#1a1a1a]">Delete this record permanently?</p>
-                        <button
-                          onClick={() => deleteEntry(e.id)}
-                          disabled={deleting === e.id}
-                          className="text-xs font-semibold text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-full transition-colors disabled:opacity-50"
-                        >
-                          {deleting === e.id ? "Deleting…" : "Yes, delete"}
-                        </button>
-                        <button onClick={() => setDeleteConfirm(null)} className="text-xs text-[#6b7280] hover:text-[#1a1a1a] transition-colors">
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 text-sm">
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
@@ -1458,6 +1442,41 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
           )}
         </div>
       </section>
+
+      {/* ── Delete interest record modal ── */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
+          <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setDeleteConfirm(null)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 z-10">
+            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5">
+              <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] text-center mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Delete record?
+            </h2>
+            <p className="text-sm text-[#6b7280] text-center mb-8 leading-relaxed">
+              This will permanently remove the registration. This action cannot be undone.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => deleteEntry(deleteConfirm)}
+                disabled={deleting === deleteConfirm}
+                className="w-full py-3 rounded-full bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors disabled:opacity-50"
+              >
+                {deleting === deleteConfirm ? "Deleting…" : "Yes, delete record"}
+              </button>
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                className="w-full py-3 rounded-full border border-[#e4dfd5] text-sm text-[#1a1a1a] hover:border-[#006644] hover:text-[#006644] transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
