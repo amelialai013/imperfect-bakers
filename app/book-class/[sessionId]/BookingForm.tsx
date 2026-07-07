@@ -478,54 +478,60 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           in the left column. The sidebar is display-only — nothing in it is
           interactive — so disabling pointer events here has zero UX impact. */}
       <div className="order-first lg:order-last lg:sticky lg:top-28" style={{ pointerEvents: "none" }}>
-        <div className="bg-[#006644] rounded-2xl py-6 px-8 text-white flex flex-col">
-          <div>
+        <div className="bg-[#006644] rounded-2xl py-6 px-8 text-white flex flex-col md:flex-row md:gap-8 lg:flex-col lg:gap-0">
+          {/* Session info */}
+          <div className="md:flex-1 lg:flex-none">
             <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40">{session.classLabel}</span>
             <h3 className="text-lg font-medium leading-snug mt-2 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {session.sessionName || session.classLabel}
             </h3>
+            <div className="space-y-1 text-sm mt-3">
+              <div className="flex items-center gap-2 text-white/70">
+                <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{session.date}</span>
+              </div>
+              <div className="flex items-center gap-2 text-white/70">
+                <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{session.time}</span>
+              </div>
+              <div className="flex items-center gap-2 text-white/70">
+                <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>{session.location}</span>
+              </div>
+              <div className="flex items-baseline gap-1.5 pt-2">
+                <p className="text-lg font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+                  ${session.price}
+                </p>
+                <p className="text-xs text-white/40">per person</p>
+              </div>
+            </div>
           </div>
-          <div className="space-y-1 text-sm mt-3">
-            <div className="flex items-center gap-2 text-white/70">
-              <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span>{session.date}</span>
-            </div>
-            <div className="flex items-center gap-2 text-white/70">
-              <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>{session.time}</span>
-            </div>
-            <div className="flex items-center gap-2 text-white/70">
-              <svg className="w-3 h-3 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span>{session.location}</span>
-            </div>
-            <div className="flex items-baseline gap-1.5 pt-2">
-              <p className="text-lg font-semibold text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                ${session.price}
-              </p>
-              <p className="text-xs text-white/40">per person</p>
-            </div>
-          </div>
+
           {session.skills && session.skills.length > 0 && (
             <>
-              <div className="h-px bg-white/10" style={{ marginTop: 24, marginBottom: 20 }} />
-              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Skills you&apos;ll practice</p>
-              <ul className="space-y-1.5">
-                {session.skills.map((skill) => (
-                  <li key={skill} className="flex items-start gap-2 text-sm text-white/70">
-                    <svg className="w-3.5 h-3.5 text-white/30 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                    {skill}
-                  </li>
-                ))}
-              </ul>
+              {/* Vertical divider on tablet, horizontal on mobile/desktop */}
+              <div className="h-px bg-white/10 my-6 md:hidden lg:block" />
+              <div className="hidden md:block lg:hidden w-px bg-white/10 self-stretch" />
+              <div className="md:flex-1 lg:flex-none">
+                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Skills you&apos;ll practice</p>
+                <ul className="space-y-1.5">
+                  {session.skills.map((skill) => (
+                    <li key={skill} className="flex items-start gap-2 text-sm text-white/70">
+                      <svg className="w-3.5 h-3.5 text-white/30 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </>
           )}
         </div>
