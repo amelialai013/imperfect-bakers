@@ -1255,6 +1255,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [interestKebabOpen, setInterestKebabOpen] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -1318,17 +1319,57 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
             <div className="space-y-3">
               {interests.map((e) => (
                 <div key={e.id} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
-                  <div className="px-6 pt-5 pb-4">
-                    <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+                  <div className="px-6 pt-5 pb-5">
+                    <div className="flex items-start justify-between gap-4 mb-4">
                       <div>
                         <p className="font-semibold text-[#1a1a1a] text-base mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>{e.name}</p>
                         <p className="text-xs text-[#6b7280]">
                           {new Date(e.createdAt).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
                         </p>
                       </div>
+                      {/* Kebab menu */}
+                      <div className="relative shrink-0">
+                        <button
+                          onClick={() => setInterestKebabOpen(interestKebabOpen === e.id ? null : e.id)}
+                          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                            <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
+                          </svg>
+                        </button>
+                        {interestKebabOpen === e.id && (
+                          <>
+                            <div className="fixed inset-0 z-10" onClick={() => setInterestKebabOpen(null)} />
+                            <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
+                              <button
+                                onClick={() => { setInterestKebabOpen(null); setDeleteConfirm(e.id); }}
+                                className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-[#faf9f6] transition-colors"
+                              >
+                                Delete record
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 text-sm mb-4">
+                    {deleteConfirm === e.id && (
+                      <div className="flex items-center gap-3 flex-wrap mb-4 p-3 bg-red-50 rounded-lg">
+                        <p className="text-sm text-[#1a1a1a]">Delete this record permanently?</p>
+                        <button
+                          onClick={() => deleteEntry(e.id)}
+                          disabled={deleting === e.id}
+                          className="text-xs font-semibold text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-full transition-colors disabled:opacity-50"
+                        >
+                          {deleting === e.id ? "Deleting…" : "Yes, delete"}
+                        </button>
+                        <button onClick={() => setDeleteConfirm(null)} className="text-xs text-[#6b7280] hover:text-[#1a1a1a] transition-colors">
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 text-sm">
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
                         <a href={`mailto:${e.email}`} className="text-[#1a1a1a] hover:text-[#006644] transition-colors break-all">{e.email}</a>
@@ -1350,34 +1391,6 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
                           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
                           <p className="text-[#6b7280] text-xs italic">{e.notes}</p>
                         </div>
-                      )}
-                    </div>
-
-                    <div className="pt-3 border-t border-[#e8e2d9]">
-                      {deleteConfirm === e.id ? (
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <p className="text-sm text-[#1a1a1a]">Delete this record permanently?</p>
-                          <button
-                            onClick={() => deleteEntry(e.id)}
-                            disabled={deleting === e.id}
-                            className="text-xs font-semibold text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-full transition-colors disabled:opacity-50"
-                          >
-                            {deleting === e.id ? "Deleting…" : "Yes, delete"}
-                          </button>
-                          <button onClick={() => setDeleteConfirm(null)} className="text-xs text-[#6b7280] hover:text-[#1a1a1a] transition-colors">
-                            Cancel
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => setDeleteConfirm(e.id)}
-                          className="inline-flex items-center gap-1.5 text-xs text-[#6b7280] hover:text-red-500 transition-colors"
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                          Delete record
-                        </button>
                       )}
                     </div>
                   </div>
