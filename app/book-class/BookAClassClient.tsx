@@ -153,7 +153,11 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
           <p className="text-[#1a1a1a] font-medium mb-2" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
             No upcoming sessions for {activeClass !== "All" ? <span className="text-[#006644] font-semibold whitespace-nowrap">{activeClass}</span> : ""}
           </p>
-          <p className="text-[#6b7280] text-sm mb-8">Check back soon — or register your interest and we&apos;ll reach out when a spot opens up.</p>
+          <p className="text-[#6b7280] text-sm mb-8">
+            Check back soon — or{" "}
+            <a href="/interest" className="text-[#006644] underline underline-offset-2 hover:text-[#004d33] transition-colors">register your interest</a>
+            {" "}and we&apos;ll reach out when a spot opens up.
+          </p>
           <div className="flex flex-wrap justify-center gap-3">
             {activeClass !== "All" && (
               <button
@@ -163,7 +167,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
                 View all sessions
               </button>
             )}
-            <a href="/interest" className="btn-secondary">Register interest</a>
+            <a href="/book-class" className="btn-secondary">Back to classes</a>
           </div>
         </div>
       ) : (
