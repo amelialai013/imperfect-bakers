@@ -557,7 +557,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             {b.notes && (
               <div className="col-span-2 sm:col-span-4 mt-3">
                 <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
-                <p className="text-[#6b7280] text-xs">{b.notes}</p>
+                <p className="text-[#1a1a1a] text-xs italic">{b.notes}</p>
               </div>
             )}
             {b.participants && b.participants.length > 0 && (
@@ -1221,7 +1221,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
                       {b.notes && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
                           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
-                          <p className="text-[#6b7280] text-xs">{b.notes}</p>
+                          <p className="text-[#1a1a1a] text-xs italic">{b.notes}</p>
                         </div>
                       )}
                       {b.participants && b.participants.length > 0 && (
