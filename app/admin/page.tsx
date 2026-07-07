@@ -1626,6 +1626,7 @@ const DEFAULT_TESTIMONIALS: Testimonial[] = [
   { quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.", name: "Sarah M.", role: "Knife Skills" },
   { quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real.", name: "James R.", role: "Savoury Food" },
   { quote: "The random kitchen fun class was a total game-changer. My son taught me how to make pasta from scratch. I'll never forget his little face.", name: "Laura K.", role: "Random Kitchen Fun" },
+  { quote: "Such a wonderful experience — warm, fun, and I walked away with skills I actually use at home.", name: "Emily T.", role: "Sweet Food" },
 ];
 
 function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClasses, onEmailTemplates, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onLogout: () => void }) {
@@ -1636,9 +1637,9 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
   const [testimonials, setTestimonials] = useState<Testimonial[]>(DEFAULT_TESTIMONIALS);
   const [savingTestimonials, setSavingTestimonials] = useState(false);
   const [savedTestimonials, setSavedTestimonials] = useState(false);
-  const [testimonialErrors, setTestimonialErrors] = useState<{ quote?: string; name?: string; role?: string }[]>([{}, {}, {}]);
+  const [testimonialErrors, setTestimonialErrors] = useState<{ quote?: string; name?: string; role?: string }[]>([{}, {}, {}, {}]);
 
-  const QUOTE_LIMITS = [250, 200, 200];
+  const QUOTE_LIMITS = [250, 200, 200, 200];
 
   const DEFAULT_LEVELS: ExperienceLevel[] = [
     { value: "beginner", label: "New to cooking — please guide me through everything" },
@@ -1651,7 +1652,12 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
       .then((r) => r.json())
       .then((data) => {
         setLevels(data.experienceLevels?.length ? data.experienceLevels : DEFAULT_LEVELS);
-        if (data.testimonials?.length) setTestimonials(data.testimonials);
+        if (data.testimonials?.length) {
+          // Pad to 4 if older data only has 3
+          const t = [...data.testimonials];
+          while (t.length < 4) t.push(DEFAULT_TESTIMONIALS[t.length] ?? { quote: "", name: "", role: "" });
+          setTestimonials(t);
+        }
         setLoading(false);
       })
       .catch(() => { setLevels(DEFAULT_LEVELS); setLoading(false); });
@@ -1745,7 +1751,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
               Testimonials
             </h2>
             <p className="text-sm text-[#6b7280] mb-8">
-              These three quotes appear on the home page. Update them any time to reflect your latest reviews.
+              These four quotes appear on the home page. Quote 1 is featured large on the left; quotes 2–4 are stacked on the right.
             </p>
             <div className="space-y-8">
               {testimonials.map((t, i) => (

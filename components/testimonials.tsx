@@ -19,6 +19,11 @@ const DEFAULT_TESTIMONIALS: Testimonial[] = [
     name: "Laura K.",
     role: "Random Kitchen Fun",
   },
+  {
+    quote: "Such a wonderful experience — warm, fun, and I walked away with skills I actually use at home.",
+    name: "Emily T.",
+    role: "Sweet Food",
+  },
 ];
 
 export default function Testimonials() {
@@ -30,7 +35,11 @@ export default function Testimonials() {
     fetch("/api/settings")
       .then((r) => r.json())
       .then((data) => {
-        if (data.testimonials?.length) setTestimonials(data.testimonials);
+        if (data.testimonials?.length) {
+          const t = [...data.testimonials];
+          while (t.length < 4) t.push(DEFAULT_TESTIMONIALS[t.length] ?? { quote: "", name: "", role: "" });
+          setTestimonials(t);
+        }
       })
       .catch(() => {});
   }, []);

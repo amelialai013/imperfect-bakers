@@ -18,6 +18,7 @@ export const DEFAULT_TESTIMONIALS: Testimonial[] = [
   { quote: "My daughter came home beaming and immediately wanted to cook dinner. She's never been so excited about food before. Absolutely incredible experience.", name: "Sarah M.", role: "Knife Skills" },
   { quote: "I always thought I was terrible at cooking. After just two classes, I made a three-course meal for my family. The confidence boost is real.", name: "James R.", role: "Savoury Food" },
   { quote: "The random kitchen fun class was a total game-changer. My son taught me how to make pasta from scratch. I'll never forget his little face.", name: "Laura K.", role: "Random Kitchen Fun" },
+  { quote: "Such a wonderful experience — warm, fun, and I walked away with skills I actually use at home.", name: "Emily T.", role: "Sweet Food" },
 ];
 
 export type SiteSettings = {
