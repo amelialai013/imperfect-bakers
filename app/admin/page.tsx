@@ -1273,6 +1273,20 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [interestKebabOpen, setInterestKebabOpen] = useState<string | null>(null);
+  const [levelMap, setLevelMap] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.experienceLevels?.length) {
+          const map: Record<string, string> = {};
+          for (const l of data.experienceLevels) map[l.value] = l.label;
+          setLevelMap(map);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = deleteConfirm ? "hidden" : "";
@@ -1390,7 +1404,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Experience</p>
-                        <p className="text-[#6b7280]">{EXP_LABELS[e.experience] ?? e.experience ?? "—"}</p>
+                        <p className="text-[#6b7280]">{levelMap[e.experience] ?? e.experience ?? "—"}</p>
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Classes</p>
