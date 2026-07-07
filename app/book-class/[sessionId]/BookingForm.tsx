@@ -513,6 +513,22 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             </p>
             <p className="text-xs text-white/40">per person</p>
           </div>
+          {session.skills && session.skills.length > 0 && (
+            <>
+              <div className="h-px bg-white/10" style={{ marginTop: 24, marginBottom: 20 }} />
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Skills you&apos;ll practice</p>
+              <ul className="space-y-1.5">
+                {session.skills.map((skill) => (
+                  <li key={skill} className="flex items-start gap-2 text-sm text-white/70">
+                    <svg className="w-3.5 h-3.5 text-white/30 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {skill}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </div>
 

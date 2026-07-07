@@ -13,6 +13,7 @@ export interface ClassSession {
   imageUrl: string;
   createdAt: string;
   attendeeTypes?: Array<"child" | "youngAdult" | "adult">;
+  skills?: string[];
 }
 
 export interface ClassConfig {

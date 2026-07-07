@@ -167,18 +167,22 @@ const ATTENDEE_OPTIONS = [
 function SessionForm({
   initial,
   initialAttendeeTypes,
+  initialSkills,
   onSave,
   onCancel,
   saving,
 }: {
   initial: FormState;
   initialAttendeeTypes: Array<"child" | "youngAdult" | "adult">;
-  onSave: (data: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">) => void;
+  initialSkills?: string[];
+  onSave: (data: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">, skills: string[]) => void;
   onCancel: () => void;
   saving: boolean;
 }) {
   const [form, setForm] = useState(initial);
   const [attendeeTypes, setAttendeeTypes] = useState(initialAttendeeTypes);
+  const [skills, setSkills] = useState<string[]>(initialSkills ?? []);
+  const [skillInput, setSkillInput] = useState("");
   const [locationError, setLocationError] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   // Derive ISO date from stored display date for the date input
@@ -281,7 +285,7 @@ function SessionForm({
       setLocationError(locMissing);
       setFieldErrors(errs);
       if (Object.keys(errs).length > 0 || locMissing) return;
-      onSave(form, attendeeTypes);
+      onSave(form, attendeeTypes, skills);
     }}>
 
       {/* ── Section 1: Class ─────────────────────────────── */}
@@ -364,6 +368,54 @@ function SessionForm({
         </div>
       </div>
 
+
+      {/* ── Section 4: Skills ───────────────────────────── */}
+      <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
+        <span className={sectionLabel}>Skills practiced</span>
+        <p className="text-xs text-[#6b7280] mb-4">Add skills customers will learn in this session. Press Enter or comma to add each one.</p>
+        <div className="flex gap-2 mb-4">
+          <input
+            type="text"
+            value={skillInput}
+            onChange={(e) => setSkillInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const v = skillInput.trim().replace(/,$/, "");
+                if (v && !skills.includes(v)) setSkills((prev) => [...prev, v]);
+                setSkillInput("");
+              } else if (e.key === "Backspace" && !skillInput && skills.length) {
+                setSkills((prev) => prev.slice(0, -1));
+              }
+            }}
+            placeholder="e.g. Rolling out dough"
+            className={cls + " flex-1"}
+          />
+          <button
+            type="button"
+            onClick={() => {
+              const v = skillInput.trim().replace(/,$/, "");
+              if (v && !skills.includes(v)) setSkills((prev) => [...prev, v]);
+              setSkillInput("");
+            }}
+            className="px-4 py-2 rounded-[6px] bg-[#006644] text-white text-sm font-medium hover:bg-[#004d33] transition-colors shrink-0"
+          >
+            Add
+          </button>
+        </div>
+        {skills.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {skills.map((s) => (
+              <span key={s} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#e8f3ef] text-[#006644] text-xs font-medium rounded-full">
+                {s}
+                <button type="button" onClick={() => setSkills((prev) => prev.filter((x) => x !== s))} className="opacity-60 hover:opacity-100 transition-opacity leading-none">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* ── Actions ──────────────────────────────────────── */}
       <div className="flex items-center gap-3">
@@ -2437,7 +2489,7 @@ export default function AdminPage() {
     setSessions([]);
   }
 
-  async function saveSession(form: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">) {
+  async function saveSession(form: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">, skills: string[]) {
     setSaving(true);
     const payload = {
       classLabel: form.classLabel,
@@ -2448,6 +2500,7 @@ export default function AdminPage() {
       price: Number(form.price),
       maxSpots: Number(form.maxSpots),
       attendeeTypes,
+      skills,
     };
 
     if (view === "edit" && editTarget) {
@@ -2641,6 +2694,7 @@ export default function AdminPage() {
             <SessionForm
               initial={initial}
               initialAttendeeTypes={editTarget?.attendeeTypes ?? ["child", "youngAdult", "adult"]}
+              initialSkills={editTarget?.skills ?? []}
               onSave={saveSession}
               onCancel={() => { setView("dashboard"); setEditTarget(null); }}
               saving={saving}
