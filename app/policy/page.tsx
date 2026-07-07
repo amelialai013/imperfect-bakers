@@ -58,7 +58,7 @@ export default function PolicyPage() {
       </section>
 
       {/* ── POLICY SECTIONS ────────────────────────────────── */}
-      <section className="bg-[#faf9f6] pt-8 pb-24">
+      <section className="bg-[#faf9f6] pt-12 pb-24">
         <div className="max-w-2xl mx-auto px-8 space-y-4">
           {sections.map((s, i) => (
             <div key={i} className="bg-white border border-[#e8e2d9] rounded-2xl px-7 py-6">
