@@ -3020,7 +3020,7 @@ export default function AdminPage() {
                       onClick={() => setExpandedBookings((prev) => { const next = new Set(prev); showBookings ? next.delete(s.id) : next.add(s.id); return next; })}
                       className="w-full border-t border-[#e8e2d9] px-7 py-3.5 flex items-center justify-between hover:bg-[#faf9f6] transition-colors"
                     >
-                      <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644]">
+                      <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] text-left">
                         Bookings · {booked} {booked === 1 ? "person" : "people"}
                       </span>
                       <svg
