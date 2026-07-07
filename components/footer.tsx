@@ -41,7 +41,7 @@ export default function Footer() {
             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
               {tagline}
             </p>
-            <p className="mt-6 text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white">@imperfectbakers</p>
+            <p className="mt-6 text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white">@imperfect_bakers</p>
           </div>
 
           {/* Spacer */}
