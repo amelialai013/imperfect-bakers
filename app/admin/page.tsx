@@ -2625,7 +2625,7 @@ export default function AdminPage() {
                 Admin dashboard
               </button>
               <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                Manage <em className="not-italic text-[#006644]">classes</em>
+                Class <em className="not-italic text-[#006644]">settings</em>
               </h1>
             </div>
             <div className="flex flex-wrap items-center gap-4 pb-1 mt-12">
