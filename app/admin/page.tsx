@@ -2897,7 +2897,22 @@ export default function AdminPage() {
 
           {/* Sessions list */}
           {loading ? (
-            <p className="text-[#6b7280] text-sm">Loading sessions…</p>
+            <div className="space-y-3 mt-2">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white border border-[#e8e2d9] rounded-xl p-5 animate-pulse">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="space-y-2 flex-1">
+                      <div className="h-4 bg-[#f0ece4] rounded w-2/5" />
+                      <div className="h-3 bg-[#f0ece4] rounded w-3/5" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-3 bg-[#f0ece4] rounded w-1/3" />
+                    <div className="h-3 bg-[#f0ece4] rounded w-1/4" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : sessions.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-[#6b7280] mb-6">No sessions yet. Add your first one to get started.</p>
@@ -3128,26 +3143,28 @@ export default function AdminPage() {
               {/* Name + Email */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Full name *</label>
-                  <input value={addBookingForm.name} onChange={(e) => { setAddBookingForm((f) => ({ ...f, name: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, name: undefined })); }} placeholder="Jane Smith" className={`w-full border rounded-lg px-3 py-2 text-sm focus:outline-none ${addBookingFieldErrors.name ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Full name *</label>
+                  <input value={addBookingForm.name} onChange={(e) => { setAddBookingForm((f) => ({ ...f, name: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, name: undefined })); }} placeholder="Jane Smith" className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none ${addBookingFieldErrors.name ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
                   {addBookingFieldErrors.name && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.name}</p>}
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Email *</label>
-                  <input type="email" value={addBookingForm.email} onChange={(e) => { setAddBookingForm((f) => ({ ...f, email: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, email: undefined })); }} placeholder="jane@email.com" className={`w-full border rounded-lg px-3 py-2 text-sm focus:outline-none ${addBookingFieldErrors.email ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Email *</label>
+                  <input type="email" value={addBookingForm.email} onChange={(e) => { setAddBookingForm((f) => ({ ...f, email: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, email: undefined })); }} placeholder="jane@email.com" className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none ${addBookingFieldErrors.email ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
                   {addBookingFieldErrors.email && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.email}</p>}
                 </div>
               </div>
               {/* Phone */}
               <div>
-                <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Phone</label>
-                <input value={addBookingForm.phone} onChange={(e) => setAddBookingForm((f) => ({ ...f, phone: e.target.value }))} placeholder="0400 000 000" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644]" />
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Phone</label>
+                <input value={addBookingForm.phone} onChange={(e) => setAddBookingForm((f) => ({ ...f, phone: e.target.value }))} placeholder="0400 000 000" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#006644]" />
               </div>
-              {/* Attendees */}
+              {/* Attendees — only show types configured for this session */}
               <div>
                 <label className={`block text-xs font-medium mb-2 ${addBookingFieldErrors.attendees ? "text-red-500" : "text-[#1a1a1a]"}`}>Attendees *</label>
                 <div className="flex flex-col gap-2">
-                  {([["child", "Child (7–17)"], ["youngAdult", "Young Adult (18–34)"], ["adult", "Adult (35+)"]] as const).map(([key, label]) => (
+                  {([["child", "Child (7–17)"], ["youngAdult", "Young Adult (18–34)"], ["adult", "Adult (35+)"]] as const)
+                    .filter(([key]) => !addBookingTarget.attendeeTypes?.length || addBookingTarget.attendeeTypes.includes(key))
+                    .map(([key, label]) => (
                     <div key={key} className="flex items-center justify-between gap-2 border border-[#e4dfd5] rounded-lg px-4 py-3">
                       <span className="text-sm text-[#1a1a1a]">{label}</span>
                       <div className="flex items-center gap-3">
@@ -3162,25 +3179,30 @@ export default function AdminPage() {
               </div>
               {/* Payment */}
               <div>
-                <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Payment *</label>
-                <select value={addBookingForm.paymentStatus} onChange={(e) => { setAddBookingForm((f) => ({ ...f, paymentStatus: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, payment: undefined })); }} className={`w-full border rounded-lg px-3 py-2 text-sm focus:outline-none bg-white ${addBookingFieldErrors.payment ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`}>
-                  <option value="">Select payment method…</option>
-                  <option value="completed">Paid in full</option>
-                  <option value="within-week">Paying this week</option>
-                  <option value="other">Other</option>
-                </select>
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Payment *</label>
+                <div className="relative">
+                  <select value={addBookingForm.paymentStatus} onChange={(e) => { setAddBookingForm((f) => ({ ...f, paymentStatus: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, payment: undefined })); }} className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none bg-white appearance-none pr-8 ${addBookingFieldErrors.payment ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`}>
+                    <option value="">Select payment method…</option>
+                    <option value="completed">Paid in full</option>
+                    <option value="within-week">Paying this week</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
                 {addBookingFieldErrors.payment && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.payment}</p>}
               </div>
               {addBookingForm.paymentStatus === "other" && (
                 <div>
-                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Payment details</label>
-                  <input value={addBookingForm.paymentOther} onChange={(e) => setAddBookingForm((f) => ({ ...f, paymentOther: e.target.value }))} placeholder="e.g. Cash on the day" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644]" />
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Payment details</label>
+                  <input value={addBookingForm.paymentOther} onChange={(e) => setAddBookingForm((f) => ({ ...f, paymentOther: e.target.value }))} placeholder="e.g. Cash on the day" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#006644]" />
                 </div>
               )}
               {/* Notes */}
               <div>
-                <label className="block text-xs font-medium text-[#1a1a1a] mb-1">Notes</label>
-                <textarea value={addBookingForm.notes} onChange={(e) => setAddBookingForm((f) => ({ ...f, notes: e.target.value }))} rows={2} placeholder="Any notes…" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006644] resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]" />
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Notes</label>
+                <textarea value={addBookingForm.notes} onChange={(e) => setAddBookingForm((f) => ({ ...f, notes: e.target.value }))} rows={2} placeholder="Any notes…" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#006644] resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]" />
               </div>
             </div>
 
