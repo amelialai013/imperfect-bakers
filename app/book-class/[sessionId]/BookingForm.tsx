@@ -480,7 +480,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
       <div className="order-first lg:order-last lg:sticky lg:top-28" style={{ pointerEvents: "none" }}>
         <div className="bg-[#006644] rounded-2xl py-6 px-8 text-white flex flex-col md:flex-row lg:flex-col">
           {/* Session info */}
-          <div className="md:w-1/2 md:min-w-0 md:pr-8 lg:w-auto lg:pr-0">
+          <div className="md:flex-1 md:min-w-0 md:pr-8 lg:flex-none lg:pr-0">
             <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40">{session.classLabel}</span>
             <h3 className="text-lg font-medium leading-snug mt-2 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {session.sessionName || session.classLabel}
@@ -519,7 +519,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               {/* Vertical divider on tablet, horizontal on mobile/desktop */}
               <div className="h-px bg-white/10 my-6 md:hidden lg:block" />
               <div className="hidden md:block lg:hidden w-px bg-white/10 self-stretch shrink-0" />
-              <div className="md:w-1/2 md:min-w-0 md:pl-8 lg:w-auto lg:pl-0">
+              <div className="md:flex-1 md:min-w-0 md:pl-8 lg:flex-none lg:pl-0">
                 <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Skills you&apos;ll practice</p>
                 <ul className="space-y-1.5">
                   {session.skills.map((skill) => (
