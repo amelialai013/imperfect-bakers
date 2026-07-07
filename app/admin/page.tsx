@@ -445,22 +445,10 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
   }
 
   if (!bookings) return (
-    <div className="space-y-3 py-2">
-      {[1, 2].map((i) => (
-        <div key={i} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden animate-pulse">
-          <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4]">
-            <div className="h-3 bg-[#f0ece4] rounded w-1/3 mb-2" />
-            <div className="h-3 bg-[#f0ece4] rounded w-1/2" />
-          </div>
-          <div className="px-5 py-4 space-y-3">
-            <div className="h-4 bg-[#f0ece4] rounded w-2/5" />
-            <div className="grid grid-cols-2 gap-x-8 gap-y-3">
-              <div className="space-y-1"><div className="h-2.5 bg-[#f0ece4] rounded w-1/2" /><div className="h-3 bg-[#f0ece4] rounded w-3/4" /></div>
-              <div className="space-y-1"><div className="h-2.5 bg-[#f0ece4] rounded w-1/2" /><div className="h-3 bg-[#f0ece4] rounded w-2/3" /></div>
-            </div>
-          </div>
-        </div>
-      ))}
+    <div className="py-4 space-y-2.5 animate-pulse">
+      <div className="h-3 bg-[#f0ece4] rounded-full w-2/5" />
+      <div className="h-3 bg-[#f0ece4] rounded-full w-3/5" />
+      <div className="h-3 bg-[#f0ece4] rounded-full w-1/3" />
     </div>
   );
   if (bookings.length === 0)
@@ -1110,26 +1098,10 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: 
           </div>
 
           {loading ? (
-            <div className="space-y-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden animate-pulse">
-                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
-                    <div className="h-3 bg-[#f0ece4] rounded w-1/3 mb-2" />
-                    <div className="h-3 bg-[#f0ece4] rounded w-1/2" />
-                  </div>
-                  <div className="px-5 py-4 space-y-3">
-                    <div className="h-4 bg-[#f0ece4] rounded w-2/5" />
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3">
-                      {[1,2,3,4].map((j) => (
-                        <div key={j} className="space-y-1">
-                          <div className="h-2.5 bg-[#f0ece4] rounded w-1/2" />
-                          <div className="h-3 bg-[#f0ece4] rounded w-3/4" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="py-4 space-y-2.5 animate-pulse">
+              <div className="h-3 bg-[#f0ece4] rounded-full w-2/5" />
+              <div className="h-3 bg-[#f0ece4] rounded-full w-3/5" />
+              <div className="h-3 bg-[#f0ece4] rounded-full w-1/3" />
             </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-20">
@@ -1364,26 +1336,10 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
           )}
 
           {loading ? (
-            <div className="space-y-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white border border-[#e8e2d9] rounded-xl px-6 py-5 animate-pulse">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="space-y-2 flex-1 pr-8">
-                      <div className="h-4 bg-[#f0ece4] rounded w-2/5" />
-                      <div className="h-3 bg-[#f0ece4] rounded w-1/3" />
-                    </div>
-                    <div className="w-7 h-7 rounded-full bg-[#f0ece4]" />
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3">
-                    {[1,2,3,4].map((j) => (
-                      <div key={j} className="space-y-1">
-                        <div className="h-2.5 bg-[#f0ece4] rounded w-1/2" />
-                        <div className="h-3 bg-[#f0ece4] rounded w-3/4" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+            <div className="py-4 space-y-2.5 animate-pulse">
+              <div className="h-3 bg-[#f0ece4] rounded-full w-2/5" />
+              <div className="h-3 bg-[#f0ece4] rounded-full w-3/5" />
+              <div className="h-3 bg-[#f0ece4] rounded-full w-1/3" />
             </div>
           ) : interests.length === 0 ? (
             <div className="text-center py-20">
@@ -1678,22 +1634,10 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
           {/* Editor */}
           <div className="flex-1 min-w-0">
             {loading ? (
-              <div className="bg-white border border-[#e8e2d9] rounded-xl p-8 animate-pulse">
-                <div className="mb-6 space-y-2">
-                  <div className="h-5 bg-[#f0ece4] rounded w-2/5" />
-                  <div className="h-3 bg-[#f0ece4] rounded w-3/5" />
-                </div>
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <div className="h-3 bg-[#f0ece4] rounded w-1/4 mb-2" />
-                    <div className="h-10 bg-[#f0ece4] rounded-lg w-full" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-3 bg-[#f0ece4] rounded w-1/4 mb-2" />
-                    <div className="h-40 bg-[#f0ece4] rounded-lg w-full" />
-                  </div>
-                  <div className="h-10 bg-[#f0ece4] rounded-full w-32" />
-                </div>
+              <div className="py-4 space-y-2.5 animate-pulse">
+                <div className="h-3 bg-[#f0ece4] rounded-full w-2/5" />
+                <div className="h-3 bg-[#f0ece4] rounded-full w-3/5" />
+                <div className="h-3 bg-[#f0ece4] rounded-full w-1/3" />
               </div>
             ) : (
               <div className="bg-white border border-[#e8e2d9] rounded-xl p-8">
@@ -2150,15 +2094,10 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
             </p>
 
             {loading ? (
-              <div className="space-y-4 animate-pulse">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex gap-3 items-start">
-                    <div className="flex-1 space-y-2">
-                      <div className="h-10 bg-[#f0ece4] rounded-lg w-full" />
-                    </div>
-                    <div className="w-9 h-10 bg-[#f0ece4] rounded-lg shrink-0" />
-                  </div>
-                ))}
+              <div className="py-4 space-y-2.5 animate-pulse">
+                <div className="h-3 bg-[#f0ece4] rounded-full w-2/5" />
+                <div className="h-3 bg-[#f0ece4] rounded-full w-3/5" />
+                <div className="h-3 bg-[#f0ece4] rounded-full w-1/3" />
               </div>
             ) : (
               <div className="space-y-4">
@@ -2752,16 +2691,10 @@ export default function AdminPage() {
             )}
 
             {classConfigsLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="bg-white border border-[#e8e2d9] rounded-xl overflow-hidden">
-                    <div className="h-40 bg-[#f0ece4]" />
-                    <div className="p-5 space-y-3">
-                      <div className="h-4 bg-[#f0ece4] rounded w-3/5" />
-                      <div className="h-3 bg-[#f0ece4] rounded w-2/5" />
-                    </div>
-                  </div>
-                ))}
+              <div className="py-4 space-y-2.5 animate-pulse">
+                <div className="h-3 bg-[#f0ece4] rounded-full w-2/5" />
+                <div className="h-3 bg-[#f0ece4] rounded-full w-3/5" />
+                <div className="h-3 bg-[#f0ece4] rounded-full w-1/3" />
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3038,21 +2971,10 @@ export default function AdminPage() {
 
           {/* Sessions list */}
           {loading ? (
-            <div className="space-y-3 mt-2">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white border border-[#e8e2d9] rounded-xl p-5 animate-pulse">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="space-y-2 flex-1">
-                      <div className="h-4 bg-[#f0ece4] rounded w-2/5" />
-                      <div className="h-3 bg-[#f0ece4] rounded w-3/5" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-3 bg-[#f0ece4] rounded w-1/3" />
-                    <div className="h-3 bg-[#f0ece4] rounded w-1/4" />
-                  </div>
-                </div>
-              ))}
+            <div className="py-4 space-y-2.5 animate-pulse">
+              <div className="h-3 bg-[#f0ece4] rounded-full w-2/5" />
+              <div className="h-3 bg-[#f0ece4] rounded-full w-3/5" />
+              <div className="h-3 bg-[#f0ece4] rounded-full w-1/3" />
             </div>
           ) : sessions.length === 0 ? (
             <div className="text-center py-20">
