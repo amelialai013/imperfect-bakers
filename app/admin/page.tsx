@@ -3104,13 +3104,17 @@ export default function AdminPage() {
 
       {/* Add booking modal */}
       {addBookingTarget && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center sm:p-4">
           <div className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm" onClick={() => setAddBookingTarget(null)} />
-          <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 z-10 my-4">
-            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Add booking</h2>
-            <p className="text-sm text-[#6b7280] mb-6">Manually add a booking to <strong className="text-[#1a1a1a]">{addBookingTarget.sessionName || addBookingTarget.classLabel}</strong>.</p>
+          <div className="relative bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl max-w-lg w-full z-10 flex flex-col" style={{ maxHeight: "90dvh" }}>
+            {/* Header — sticky */}
+            <div className="px-6 pt-6 pb-4 border-b border-[#f0ece4] shrink-0">
+              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>Add booking</h2>
+              <p className="text-sm text-[#6b7280]">Manually add a booking to <strong className="text-[#1a1a1a]">{addBookingTarget.sessionName || addBookingTarget.classLabel}</strong>.</p>
+            </div>
 
-            <div className="space-y-4">
+            {/* Scrollable body */}
+            <div className="overflow-y-auto px-6 py-5 space-y-4 flex-1">
               {/* Name + Email */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -3170,12 +3174,15 @@ export default function AdminPage() {
               </div>
             </div>
 
-            {addBookingError && <p className="text-xs text-red-500 mt-3">{addBookingError}</p>}
-            <div className="flex gap-3 flex-wrap mt-6">
-              <button onClick={submitAddBooking} disabled={addBookingSaving} className="btn-primary disabled:opacity-50">
-                {addBookingSaving ? "Adding…" : "Add booking"}
-              </button>
-              <button onClick={() => setAddBookingTarget(null)} className="btn-secondary">Cancel</button>
+            {/* Footer — sticky */}
+            <div className="px-6 py-4 border-t border-[#f0ece4] shrink-0">
+              {addBookingError && <p className="text-xs text-red-500 mb-3">{addBookingError}</p>}
+              <div className="flex gap-3">
+                <button onClick={submitAddBooking} disabled={addBookingSaving} className="btn-primary flex-1 disabled:opacity-50">
+                  {addBookingSaving ? "Adding…" : "Add booking"}
+                </button>
+                <button onClick={() => setAddBookingTarget(null)} className="btn-secondary flex-1">Cancel</button>
+              </div>
             </div>
           </div>
         </div>
