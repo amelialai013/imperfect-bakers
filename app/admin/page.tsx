@@ -2198,7 +2198,7 @@ export default function AdminPage() {
         body: JSON.stringify({ password }),
       });
       if (!res.ok) {
-        setLoginError("Incorrect password.");
+        setLoginError("Incorrect password");
         return;
       }
       const { token: t } = await res.json();
@@ -2206,7 +2206,7 @@ export default function AdminPage() {
       setToken(t);
       setView("dashboard");
     } catch {
-      setLoginError("Connection error. Please try again.");
+      setLoginError("Connection error — please try again");
     }
   }
 
@@ -2749,10 +2749,10 @@ export default function AdminPage() {
     const { name, email, phone, notes, paymentStatus, paymentOther, child, youngAdult, adult } = addBookingForm;
     const totalPeople = child + youngAdult + adult;
     const fieldErrs: { name?: string; email?: string; attendees?: string; payment?: string } = {};
-    if (!name.trim()) fieldErrs.name = "Name is required.";
-    if (!email.trim()) fieldErrs.email = "Email is required.";
-    if (totalPeople < 1) fieldErrs.attendees = "Add at least 1 attendee.";
-    if (!paymentStatus) fieldErrs.payment = "Select a payment method.";
+    if (!name.trim()) fieldErrs.name = "Name is required";
+    if (!email.trim()) fieldErrs.email = "Email is required";
+    if (totalPeople < 1) fieldErrs.attendees = "Add at least 1 attendee";
+    if (!paymentStatus) fieldErrs.payment = "Select a payment method";
     if (Object.keys(fieldErrs).length > 0) { setAddBookingFieldErrors(fieldErrs); return; }
     setAddBookingFieldErrors({});
     setAddBookingSaving(true); setAddBookingError("");
@@ -2769,7 +2769,7 @@ export default function AdminPage() {
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
-      setAddBookingError(data.error ?? "Failed to add booking. Please try again.");
+      setAddBookingError(data.error ?? "Failed to add booking — please try again");
       setAddBookingSaving(false); return;
     }
     setAddBookingTarget(null);
@@ -2785,7 +2785,7 @@ export default function AdminPage() {
       method: "PATCH",
       body: JSON.stringify({ newSessionId: dashMoveSessionId }),
     });
-    if (!res.ok) { setDashMoveError("Failed to change class. Please try again."); setDashMoving(false); return; }
+    if (!res.ok) { setDashMoveError("Failed to change class — please try again"); setDashMoving(false); return; }
     setDashMoveTarget(null); setDashMoveSessionId(""); setDashMoveError("");
     setDashMoving(false);
     await loadSessions();
