@@ -6,9 +6,10 @@ import { useState, useEffect, useRef } from "react";
 import { useScrolled } from "@/hooks/useScrolled";
 
 const links = [
-  { label: "Home",        href: "/" },
-  { label: "About",       href: "/about" },
-  { label: "Our classes", href: "/classes" },
+  { label: "Home",           href: "/" },
+  { label: "About",          href: "/about" },
+  { label: "Our classes",    href: "/classes" },
+  { label: "Booking policy", href: "/policy" },
 ];
 
 export default function Nav() {
@@ -113,20 +114,6 @@ export default function Nav() {
               </Link>
             );
           })}
-
-          {/* Booking policy — sub-item under Our classes */}
-          <Link
-            href="/policy"
-            onClick={() => setOpen(false)}
-            className={`text-sm py-2.5 pl-3 border-b border-[#e8e2d9] transition-colors flex items-center gap-1.5 ${
-              pathname === "/policy" ? "text-[#006644] font-medium" : "text-[#6b7280]"
-            }`}
-          >
-            <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-            Booking policy
-          </Link>
 
           <div className="pt-4 flex flex-col gap-3">
             <Link href="/book-class" onClick={() => setOpen(false)} className="btn-primary btn-sm w-full justify-center">
