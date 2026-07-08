@@ -716,10 +716,154 @@ function storageRemove(key: string) {
 
 // ── main component ─────────────────────────────────────────────────────────────
 
-type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests" | "emailTemplates" | "settings";
+type View = "login" | "dashboard" | "add" | "edit" | "classes" | "bookings" | "interests" | "emailTemplates" | "settings" | "gallery";
 type ExperienceLevel = { value: string; label: string };
 
-function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void; align?: "left" | "right" }) {
+// ── Gallery view ──────────────────────────────────────────────────────────────
+
+interface GalleryPhoto { id: string; url: string; createdAt: string; }
+
+function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () => void; onLogout: () => void }) {
+  const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/gallery");
+      const data = await res.json();
+      setPhotos(data);
+    } catch { setError("Failed to load photos"); }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  async function handleUpload(files: FileList | null) {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    setError("");
+    for (const file of Array.from(files)) {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/gallery/upload", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: form,
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        setError(d.error ?? "Upload failed");
+      }
+    }
+    setUploading(false);
+    load();
+  }
+
+  async function handleDelete(photo: GalleryPhoto) {
+    if (!confirm("Delete this photo?")) return;
+    setDeleting(photo.id);
+    await fetch("/api/gallery", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id: photo.id, url: photo.url }),
+    });
+    setDeleting(null);
+    setPhotos((p) => p.filter((x) => x.id !== photo.id));
+  }
+
+  return (
+    <div className="min-h-screen bg-[#faf9f6]">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8 gap-4 flex-wrap">
+          <div className="flex items-center gap-4">
+            <button onClick={onBack} className="p-2 hover:bg-[#f0ede6] rounded-lg transition-colors">
+              <svg className="w-5 h-5 text-[#1a1a1a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <h1 className="text-2xl font-bold text-[#1a1a1a]">Gallery</h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="btn-primary flex items-center gap-2"
+            >
+              {uploading ? (
+                <><svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>Uploading…</>
+              ) : (
+                <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>Upload photos</>
+              )}
+            </button>
+            <button onClick={onLogout} className="text-sm text-[#6b7280] hover:text-[#1a1a1a] transition-colors px-3 py-2">Sign out</button>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => handleUpload(e.target.files)}
+          />
+        </div>
+
+        {error && <p className="text-sm text-red-500 mb-4">{error}</p>}
+
+        {loading ? (
+          <div className="flex justify-center py-24">
+            <svg className="w-6 h-6 animate-spin text-[#006644]" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+            </svg>
+          </div>
+        ) : photos.length === 0 ? (
+          <div
+            className="border-2 border-dashed border-[#e4dfd5] rounded-2xl flex flex-col items-center justify-center py-24 cursor-pointer hover:border-[#006644]/40 transition-colors"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <svg className="w-10 h-10 text-[#006644]/30 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <p className="text-[#6b7280] text-sm">No photos yet — click to upload</p>
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-[#6b7280] mb-6">{photos.length} photo{photos.length !== 1 ? "s" : ""}</p>
+            <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
+              {photos.map((photo) => (
+                <div key={photo.id} className="break-inside-avoid relative group overflow-hidden rounded-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={photo.url} alt="" className="w-full object-cover" />
+                  <button
+                    onClick={() => handleDelete(photo)}
+                    disabled={deleting === photo.id}
+                    className="absolute top-2 right-2 w-8 h-8 bg-black/60 hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
+                  >
+                    {deleting === photo.id ? (
+                      <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
+                    ) : (
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onGallery, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onGallery: () => void; onLogout: () => void; align?: "left" | "right" }) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [menuAlign, setMenuAlign] = useState<"left" | "right">("left");
@@ -805,6 +949,16 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               Site settings
+            </button>
+            <div className="h-px bg-[#e8e2d9]" />
+            <button
+              onClick={() => { setOpen(false); onGallery(); }}
+              className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
+            >
+              <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Gallery
             </button>
             <div className="h-px bg-[#e8e2d9]" />
             <button
@@ -1014,7 +1168,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout, initialFilt
             </div>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onGallery={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1417,7 +1571,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onGallery={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1802,7 +1956,7 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onGallery={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -2079,7 +2233,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onGallery={() => {}} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -2713,6 +2867,10 @@ export default function AdminPage() {
     return <AllBookingsView token={token} onBack={() => { setBookingsInitialFilter("all"); setView("dashboard"); }} onManageClasses={() => { setBookingsInitialFilter("all"); setView("classes"); }} onLogout={logout} initialFilter={bookingsInitialFilter} />;
   }
 
+  if (view === "gallery") {
+    return <GalleryView token={token} onBack={() => setView("dashboard")} onLogout={logout} />;
+  }
+
   if (view === "interests") {
     return <InterestsView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onManageClasses={() => setView("classes")} onLogout={logout} />;
   }
@@ -2836,7 +2994,7 @@ export default function AdminPage() {
               <button onClick={() => setAddingClass(true)} className="btn-primary group">
                 New class <span>+</span>
               </button>
-              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />
+              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onGallery={() => setView("gallery")} onLogout={logout} />
             </div>
           </div>
         </section>
@@ -3079,7 +3237,7 @@ export default function AdminPage() {
             <button onClick={() => setView("add")} className="btn-primary group">
               Add session <span>+</span>
             </button>
-            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />
+            <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onGallery={() => setView("gallery")} onLogout={logout} />
           </div>
         </div>
       </section>

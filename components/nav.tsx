@@ -6,9 +6,10 @@ import { useState, useEffect, useRef } from "react";
 import { useScrolled } from "@/hooks/useScrolled";
 
 const links = [
-  { label: "Home",           href: "/" },
-  { label: "About",          href: "/about" },
-  { label: "Our classes",    href: "/classes" },
+  { label: "Home",        href: "/" },
+  { label: "About",       href: "/about" },
+  { label: "Our classes", href: "/classes" },
+  { label: "Gallery",     href: "/gallery" },
 ];
 
 export default function Nav() {
