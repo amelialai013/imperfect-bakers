@@ -168,7 +168,7 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
                 View all sessions
               </button>
             )}
-            <a href="/book-class" className="btn-secondary">Back to classes</a>
+            <a href="/classes" className="btn-secondary">Back to classes</a>
           </div>
         </div>
       ) : (
