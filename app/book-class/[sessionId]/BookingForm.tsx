@@ -372,7 +372,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 const nameErr = fieldErrors.participants?.[i];
                 const levelErr = fieldErrors.participantLevels?.[i];
                 return (
-                  <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:items-start">
+                  <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-3 sm:items-start">
                     <div>
                       {participantTypes[i] && (
                         <p className="text-sm text-[#1a1a1a] mb-1">{participantTypes[i]}</p>
@@ -395,7 +395,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                       {nameErr && <p className="text-xs text-red-500 mt-1.5">{nameErr}</p>}
                     </div>
                     <div>
-                      <p className="text-sm text-[#1a1a1a] mb-1 opacity-0 select-none" aria-hidden="true">x</p>
+                      <p className="hidden sm:block text-sm text-[#1a1a1a] mb-1 opacity-0 select-none" aria-hidden="true">x</p>
                       <div className="relative"><select
                         value={p.level}
                         onChange={(e) => {
