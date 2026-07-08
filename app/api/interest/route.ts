@@ -169,4 +169,4 @@ async function sendToSheets(entry: Record<string, unknown>) {
 
 // ── exported helpers (used by action route) ───────────────────────────────────
 
-export { sendEmail, EXPERIENCE_LABELS };
+export { sendEmail };
