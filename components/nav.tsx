@@ -91,8 +91,8 @@ export default function Nav() {
           className="lg:hidden absolute top-full left-0 right-0 z-50 border-t border-[#e4dfd5] bg-[#faf9f6] shadow-lg px-8 py-6 flex flex-col gap-1"
           style={{
             animation: open
-              ? "nav-menu-in 0.22s ease forwards"
-              : "nav-menu-out 0.2s ease forwards",
+              ? "nav-menu-in 0.28s cubic-bezier(0.16,1,0.3,1) forwards"
+              : "nav-menu-out 0.18s ease-in forwards",
           }}
         >
           {links.map((link) => {
