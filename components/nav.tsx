@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useScrolled } from "@/hooks/useScrolled";
 
 const links = [
@@ -14,7 +14,20 @@ const links = [
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
   const scrolled = useScrolled(10);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Animate in on open, animate out on close
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+    } else {
+      // Keep element mounted briefly so the close animation can play
+      timerRef.current = setTimeout(() => setVisible(false), 220);
+    }
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [open]);
 
   return (
     <nav className={`sticky top-0 z-[9999] bg-[#faf9f6] transition-shadow duration-300 ${scrolled ? "shadow-sm" : ""}`}>
@@ -72,10 +85,15 @@ export default function Nav() {
         </button>
       </div>
 
-      {/* Mobile menu — absolutely positioned so it overlays the page */}
-      {open && (
+      {/* Mobile menu — fade + clip animation on open/close */}
+      {visible && (
         <div
-          className="lg:hidden absolute top-full left-0 right-0 z-50 border-t border-[#e4dfd5] bg-[#faf9f6] shadow-lg px-8 py-6 flex flex-col gap-4"
+          className="lg:hidden absolute top-full left-0 right-0 z-50 border-t border-[#e4dfd5] bg-[#faf9f6] shadow-lg px-8 py-6 flex flex-col gap-1"
+          style={{
+            animation: open
+              ? "nav-menu-in 0.22s ease forwards"
+              : "nav-menu-out 0.2s ease forwards",
+          }}
         >
           {links.map((link) => {
             const active = pathname === link.href;
@@ -84,17 +102,33 @@ export default function Nav() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`text-sm tracking-wide py-1 transition-colors ${
+                className={`text-base py-3 border-b border-[#e8e2d9] transition-colors ${
                   active
                     ? "text-[#006644] font-semibold"
-                    : "text-[#555] font-normal"
+                    : "text-[#1a1a1a] font-normal"
                 }`}
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
                 {link.label}
               </Link>
             );
           })}
-          <div className="pt-2 flex flex-col gap-3">
+
+          {/* Booking policy — sub-item under Our classes */}
+          <Link
+            href="/policy"
+            onClick={() => setOpen(false)}
+            className={`text-sm py-2.5 pl-3 border-b border-[#e8e2d9] transition-colors flex items-center gap-1.5 ${
+              pathname === "/policy" ? "text-[#006644] font-medium" : "text-[#6b7280]"
+            }`}
+          >
+            <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+            Booking policy
+          </Link>
+
+          <div className="pt-4 flex flex-col gap-3">
             <Link href="/book-class" onClick={() => setOpen(false)} className="btn-primary btn-sm w-full justify-center">
               Book class
             </Link>
