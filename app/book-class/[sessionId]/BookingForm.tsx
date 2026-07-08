@@ -477,9 +477,9 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           in the left column. The sidebar is display-only — nothing in it is
           interactive — so disabling pointer events here has zero UX impact. */}
       <div className="order-first sm:order-last sm:sticky sm:top-28" style={{ pointerEvents: "none" }}>
-        <div className="bg-[#006644] rounded-2xl py-6 px-8 sm:px-0 lg:px-8 text-white flex flex-col sm:flex-row lg:flex-col">
+        <div className="bg-[#006644] rounded-2xl py-6 px-8 text-white flex flex-col">
           {/* Session info */}
-          <div className="sm:flex-1 sm:min-w-0 sm:px-8 lg:px-0 sm:border-r sm:border-white/10 lg:border-r-0">
+          <div>
             <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40">{session.classLabel}</span>
             <h3 className="text-lg font-medium leading-snug mt-2 text-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
               {session.sessionName || session.classLabel}
@@ -515,9 +515,8 @@ export default function BookingForm({ session }: { session: ClassSession }) {
 
           {session.skills && session.skills.length > 0 && (
             <>
-              {/* Horizontal divider on mobile/desktop only; sm+ uses border-r on left column */}
-              <div className="h-px bg-white/10 my-6 sm:hidden lg:block" />
-              <div className="sm:flex-1 sm:min-w-0 sm:px-8 lg:flex-none lg:px-0">
+              <div className="h-px bg-white/10 my-6" />
+              <div>
                 <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-3">Skills you&apos;ll practice</p>
                 <ul className="space-y-1.5">
                   {session.skills.map((skill) => (
