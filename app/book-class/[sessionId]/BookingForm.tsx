@@ -476,7 +476,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           bleeds across the full grid row in Safari, swallowing all button clicks
           in the left column. The sidebar is display-only — nothing in it is
           interactive — so disabling pointer events here has zero UX impact. */}
-      <div className="order-first lg:order-last lg:sticky lg:top-28" style={{ pointerEvents: "none" }}>
+      <div className="order-first sm:order-last sm:sticky sm:top-28" style={{ pointerEvents: "none" }}>
         <div className="bg-[#006644] rounded-2xl py-6 px-8 sm:px-0 lg:px-8 text-white flex flex-col sm:flex-row lg:flex-col">
           {/* Session info */}
           <div className="sm:flex-1 sm:min-w-0 sm:px-8 lg:px-0 sm:border-r sm:border-white/10 lg:border-r-0">
