@@ -809,7 +809,7 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
                 <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>Upload photos</>
               )}
             </button>
-            <button onClick={onLogout} className="text-sm text-[#6b7280] hover:text-[#006644] transition-colors">Sign out</button>
+            <MoreMenu onManageClasses={() => {}} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onGallery={() => {}} onLogout={onLogout} />
           </div>
           <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleUpload(e.target.files)} />
         </div>
