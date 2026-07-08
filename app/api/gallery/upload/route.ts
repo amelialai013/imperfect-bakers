@@ -4,17 +4,12 @@ import { put } from "@vercel/blob";
 import { checkAdminToken } from "@/lib/auth";
 import type { GalleryPhoto } from "../route";
 
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
-// Node.js runtime — edge runtime can fail to resolve encrypted env vars like BLOB_READ_WRITE_TOKEN
 
 export async function POST(req: Request) {
   if (!checkAdminToken(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) {
-    return NextResponse.json({ error: "BLOB_READ_WRITE_TOKEN not configured" }, { status: 500 });
   }
 
   let form: FormData;
@@ -34,7 +29,6 @@ export async function POST(req: Request) {
   try {
     blob = await put(`gallery/${Date.now()}-${file.name}`, file, {
       access: "public",
-      token,
     });
   } catch (e) {
     return NextResponse.json({ error: `Blob upload failed: ${e}` }, { status: 500 });
