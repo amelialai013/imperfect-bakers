@@ -9,7 +9,7 @@ const links = [
   { label: "Home",           href: "/" },
   { label: "About",          href: "/about" },
   { label: "Our classes",    href: "/classes" },
-  { label: "Booking policy", href: "/policy" },
+  { label: "Booking policy", href: "/policy", noBorder: true },
 ];
 
 export default function Nav() {
@@ -103,7 +103,7 @@ export default function Nav() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`text-base py-3 border-b border-[#e8e2d9] transition-colors ${
+                className={`text-base py-3 transition-colors ${link.noBorder ? "" : "border-b border-[#e8e2d9]"} ${
                   active
                     ? "text-[#006644] font-semibold"
                     : "text-[#1a1a1a] font-normal"
