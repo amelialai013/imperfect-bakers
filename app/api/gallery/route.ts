@@ -13,10 +13,15 @@ export interface GalleryPhoto {
 
 // ── GET: list all photos (public) ─────────────────────────────────────────────
 export async function GET() {
-  const ids = (await kv.lrange("gallery:all", 0, -1)) as string[];
-  if (!ids.length) return NextResponse.json([]);
-  const photos = await Promise.all(ids.map((id) => kv.get<GalleryPhoto>(`gallery:${id}`)));
-  return NextResponse.json(photos.filter(Boolean).reverse()); // newest first
+  try {
+    const ids = (await kv.lrange("gallery:all", 0, -1)) as string[];
+    if (!ids.length) return NextResponse.json([]);
+    const photos = await Promise.all(ids.map((id) => kv.get<GalleryPhoto>(`gallery:${id}`)));
+    return NextResponse.json(photos.filter(Boolean).reverse()); // newest first
+  } catch (e) {
+    console.error("Gallery GET error:", e);
+    return NextResponse.json([]);
+  }
 }
 
 // ── DELETE: remove a photo (admin only) ───────────────────────────────────────

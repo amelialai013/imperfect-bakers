@@ -733,11 +733,12 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
 
   const load = useCallback(async () => {
     setLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/gallery");
       const data = await res.json();
-      setPhotos(data);
-    } catch { setError("Failed to load photos"); }
+      setPhotos(Array.isArray(data) ? data : []);
+    } catch { /* gallery unavailable — show empty */ }
     setLoading(false);
   }, []);
 
