@@ -203,21 +203,22 @@ function SessionForm({
     return "";
   });
   const [duration, setDuration] = useState(() => {
-    // Parse duration from "1 – 4pm" → 3
+    // Parse duration from "1 – 4:30pm" → 3.5
     if (initial.time) {
       const parts = initial.time.split("–");
       if (parts.length === 2) {
-        const getH = (s: string) => {
+        const getMins = (s: string) => {
           const m = s.trim().match(/(\d+)(?::(\d+))?(am|pm)?/i);
           if (!m) return 0;
           let h = parseInt(m[1], 10);
+          const mins = parseInt(m[2] ?? "0", 10);
           const period = m[3]?.toLowerCase();
           if (period === "pm" && h !== 12) h += 12;
           if (period === "am" && h === 12) h = 0;
-          return h;
+          return h * 60 + mins;
         };
-        const diff = getH(parts[1]) - getH(parts[0]);
-        return String(diff > 0 ? diff : 3);
+        const diffMins = getMins(parts[1]) - getMins(parts[0]);
+        if (diffMins > 0) return String(diffMins / 60);
       }
     }
     return "3";
@@ -245,7 +246,7 @@ function SessionForm({
   }, [dateIso]);
 
   useEffect(() => {
-    setForm((f) => ({ ...f, time: formatTimeRange(startTime, parseInt(duration, 10) || 3) }));
+    setForm((f) => ({ ...f, time: formatTimeRange(startTime, parseFloat(duration) || 3) }));
   }, [startTime, duration]);
 
   const SelectField = ({ label, name, value, onChange, required: req, children, error }: {
