@@ -50,6 +50,7 @@ export default function InterestPage() {
   const phoneRef = useRef<HTMLInputElement>(null);
   const experienceRef = useRef<HTMLSelectElement>(null);
   const notesRef = useRef<HTMLTextAreaElement>(null);
+  const classesErrorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (submitted) window.scrollTo({ top: 0, behavior: "smooth" });
@@ -103,6 +104,18 @@ export default function InterestPage() {
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
+      // Scroll to the first error field
+      setTimeout(() => {
+        const firstErrorEl =
+          errors.name ? nameRef.current :
+          errors.email ? emailRef.current :
+          errors.phone ? phoneRef.current :
+          errors.experience ? experienceRef.current :
+          errors.classes ? classesErrorRef.current :
+          errors.notes ? notesRef.current :
+          null;
+        firstErrorEl?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 50);
       return;
     }
 
@@ -242,7 +255,7 @@ export default function InterestPage() {
           </div>
 
           {/* Class interests */}
-          <div className="mt-[60px]">
+          <div className="mt-[60px]" ref={classesErrorRef}>
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Classes of interest</p>
             <div className="flex flex-wrap gap-2.5 mt-3">
               {classOptions.map((name) => {

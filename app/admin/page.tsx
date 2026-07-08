@@ -601,7 +601,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
                 <p className="text-[#1a1a1a] font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
               )}
               <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
-                <p>{b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}</p>
+                <p>{b.paymentStatus === "completed" ? "Paid" : "Other"}</p>
                 {b.paymentStatus === "other" && b.paymentOther && (
                   <p className="italic">{b.paymentOther}</p>
                 )}
@@ -1265,7 +1265,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout, initialFilt
                           <p className="text-[#1a1a1a] font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
                         )}
                         <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
-                          <p>{b.paymentStatus === "completed" ? "Paid" : b.paymentStatus === "within-week" ? "Paying this week" : "Other"}</p>
+                          <p>{b.paymentStatus === "completed" ? "Paid" : "Other"}</p>
                           {b.paymentStatus === "other" && b.paymentOther && (
                             <p className="italic">{b.paymentOther}</p>
                           )}
@@ -3447,7 +3447,7 @@ export default function AdminPage() {
                   <select value={addBookingForm.paymentStatus} onChange={(e) => { setAddBookingForm((f) => ({ ...f, paymentStatus: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, payment: undefined })); }} className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none bg-white appearance-none pr-8 ${addBookingFieldErrors.payment ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`}>
                     <option value="">Select payment method…</option>
                     <option value="completed">Paid in full</option>
-                    <option value="within-week">Paying this week</option>
+
                     <option value="other">Other</option>
                   </select>
                   <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

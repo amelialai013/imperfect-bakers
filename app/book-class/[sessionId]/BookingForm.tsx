@@ -330,7 +330,6 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           <div className="flex flex-wrap gap-2">
             {[
               { value: "completed", label: "Paid" },
-              { value: "within-week", label: "Paying this week" },
               { value: "other", label: "Other" },
             ].map((opt) => (
               <button
