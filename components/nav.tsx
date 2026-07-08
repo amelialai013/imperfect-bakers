@@ -102,7 +102,7 @@ export default function Nav() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`text-base py-3 transition-colors border-b border-[#e8e2d9] ${
+                className={`text-base py-3 transition-colors ${i < links.length - 1 ? "border-b border-[#e8e2d9]" : ""} ${
                   active
                     ? "text-[#006644] font-semibold"
                     : "text-[#1a1a1a] font-normal"
