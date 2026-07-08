@@ -780,18 +780,24 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
 
   return (
     <div className="min-h-screen bg-[#faf9f6]">
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 gap-4 flex-wrap">
-          <div className="flex items-center gap-4">
-            <button onClick={onBack} className="p-2 hover:bg-[#f0ede6] rounded-lg transition-colors">
-              <svg className="w-5 h-5 text-[#1a1a1a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+      {/* Header — matches other admin views */}
+      <section className="bg-[#faf9f6] pt-10 pb-8 border-b border-[#e8e2d9]">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+          <div>
+            <button
+              onClick={onBack}
+              className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#006644] text-sm mb-5 transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
+              Admin dashboard
             </button>
-            <h1 className="text-2xl font-bold text-[#1a1a1a]">Gallery</h1>
+            <h1 className="text-4xl md:text-5xl text-[#1a1a1a] leading-tight tracking-tight" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              Photo <em className="not-italic text-[#006644]">gallery</em>
+            </h1>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4 pb-1 mt-12 flex-wrap">
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
@@ -803,17 +809,12 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
                 <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>Upload photos</>
               )}
             </button>
-            <button onClick={onLogout} className="text-sm text-[#6b7280] hover:text-[#1a1a1a] transition-colors px-3 py-2">Sign out</button>
+            <button onClick={onLogout} className="text-sm text-[#6b7280] hover:text-[#006644] transition-colors">Sign out</button>
           </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            onChange={(e) => handleUpload(e.target.files)}
-          />
+          <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleUpload(e.target.files)} />
         </div>
+      </section>
+      <div className="max-w-7xl mx-auto px-8 pt-8 pb-24">
 
         {error && <p className="text-sm text-red-500 mb-4">{error}</p>}
 
