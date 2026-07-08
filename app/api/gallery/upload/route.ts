@@ -5,11 +5,16 @@ import { checkAdminToken } from "@/lib/auth";
 import type { GalleryPhoto } from "../route";
 
 export const dynamic = "force-dynamic";
-export const runtime = "edge";
+// Node.js runtime — edge runtime can fail to resolve encrypted env vars like BLOB_READ_WRITE_TOKEN
 
 export async function POST(req: Request) {
   if (!checkAdminToken(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!token) {
+    return NextResponse.json({ error: "BLOB_READ_WRITE_TOKEN not configured" }, { status: 500 });
   }
 
   let form: FormData;
@@ -27,7 +32,10 @@ export async function POST(req: Request) {
 
   let blob: { url: string };
   try {
-    blob = await put(`gallery/${Date.now()}-${file.name}`, file, { access: "public" });
+    blob = await put(`gallery/${Date.now()}-${file.name}`, file, {
+      access: "public",
+      token,
+    });
   } catch (e) {
     return NextResponse.json({ error: `Blob upload failed: ${e}` }, { status: 500 });
   }
