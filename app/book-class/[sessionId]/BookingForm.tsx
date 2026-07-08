@@ -250,7 +250,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         {/* 01 — Your details */}
         <div className="mb-12">
           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Your details</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="sm:col-span-2">
               <input
                 ref={nameRef}
@@ -372,7 +372,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 const nameErr = fieldErrors.participants?.[i];
                 const levelErr = fieldErrors.participantLevels?.[i];
                 return (
-                  <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-3 sm:items-start">
+                  <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:items-start">
                     <div>
                       {participantTypes[i] && (
                         <p className="text-sm text-[#1a1a1a] mb-1">{participantTypes[i]}</p>
