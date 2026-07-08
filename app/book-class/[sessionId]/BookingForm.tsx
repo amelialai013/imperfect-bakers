@@ -367,7 +367,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         {totalPeople > 0 && (
           <div className="mt-[60px] mb-12" ref={experienceSectionRef}>
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Experience</p>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6">
               {participants.map((p, i) => {
                 const nameErr = fieldErrors.participants?.[i];
                 const levelErr = fieldErrors.participantLevels?.[i];
