@@ -841,13 +841,13 @@ function parseSessionDate(display: string): Date | null {
   return null;
 }
 
-function AllBookingsView({ token, onBack, onManageClasses, onLogout }: { token: string; onBack: () => void; onManageClasses: () => void; onLogout: () => void }) {
+function AllBookingsView({ token, onBack, onManageClasses, onLogout, initialFilter }: { token: string; onBack: () => void; onManageClasses: () => void; onLogout: () => void; initialFilter?: "all" | "pending" | "confirmed" | "declined" | "cancelled" }) {
   const [rows, setRows] = useState<BookingWithSession[]>([]);
   const [allSessions, setAllSessions] = useState<ClassSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
   const [kebabOpen, setKebabOpen] = useState<string | null>(null);
-  const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined" | "cancelled">("all");
+  const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined" | "cancelled">(initialFilter ?? "all");
   const [timeFilter, setTimeFilter] = useState<"upcoming" | "past">("upcoming");
   const [moveTarget, setMoveTarget] = useState<BookingWithSession | null>(null);
   const [moveSessionId, setMoveSessionId] = useState<string>("");
@@ -2357,6 +2357,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
 export default function AdminPage() {
   const [token, setToken] = useState<string>("");
   const [view, setView] = useState<View>("login");
+  const [bookingsInitialFilter, setBookingsInitialFilter] = useState<"all" | "pending">("all");
 
   // Hydrate token from storage after mount to avoid SSR/client mismatch
   useEffect(() => {
@@ -2709,7 +2710,7 @@ export default function AdminPage() {
   // ── All Bookings ─────────────────────────────────────────
 
   if (view === "bookings") {
-    return <AllBookingsView token={token} onBack={() => setView("dashboard")} onManageClasses={() => setView("classes")} onLogout={logout} />;
+    return <AllBookingsView token={token} onBack={() => { setBookingsInitialFilter("all"); setView("dashboard"); }} onManageClasses={() => { setBookingsInitialFilter("all"); setView("classes"); }} onLogout={logout} initialFilter={bookingsInitialFilter} />;
   }
 
   if (view === "interests") {
@@ -3096,7 +3097,7 @@ export default function AdminPage() {
               <span className="font-bold">{pendingCount} pending {pendingCount === 1 ? "request" : "requests"}</span>
             </p>
             <button
-              onClick={() => setView("bookings")}
+              onClick={() => { setBookingsInitialFilter("pending"); setView("bookings"); }}
               className="shrink-0 flex items-center gap-1 text-sm font-semibold text-[#7a4f00] underline underline-offset-2 decoration-[#7a4f00]/30 hover:decoration-[#7a4f00] transition-all"
             >
               Review now
