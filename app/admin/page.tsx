@@ -756,8 +756,10 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
         body: form,
       });
       if (!res.ok) {
-        const d = await res.json().catch(() => ({}));
-        setError(d.error ?? "Upload failed");
+        const text = await res.text().catch(() => "");
+        let msg = "Upload failed";
+        try { msg = JSON.parse(text).error ?? `Upload failed (${res.status})`; } catch { msg = text || `Upload failed (${res.status})`; }
+        setError(msg);
       }
     }
     setUploading(false);
