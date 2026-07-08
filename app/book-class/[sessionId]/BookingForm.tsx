@@ -242,7 +242,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_320px] gap-[60px] md:gap-12 lg:gap-20 items-start">
+    <div className="grid grid-cols-1 sm:grid-cols-[1fr_260px] md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_320px] gap-[60px] sm:gap-8 md:gap-12 lg:gap-20 items-start">
 
       {/* ── Form — no <form> element to avoid Safari desktop event bugs ── */}
       <div>
