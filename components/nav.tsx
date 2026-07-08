@@ -9,7 +9,6 @@ const links = [
   { label: "Home",           href: "/" },
   { label: "About",          href: "/about" },
   { label: "Our classes",    href: "/classes" },
-  { label: "Booking policy", href: "/policy", noBorder: true },
 ];
 
 export default function Nav() {

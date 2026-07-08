@@ -367,7 +367,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         {totalPeople > 0 && (
           <div className="mt-[60px] mb-12" ref={experienceSectionRef}>
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Experience</p>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-10">
               {participants.map((p, i) => {
                 const nameErr = fieldErrors.participants?.[i];
                 const levelErr = fieldErrors.participantLevels?.[i];
@@ -394,9 +394,9 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                       />
                       {nameErr && <p className="text-xs text-red-500 mt-1.5">{nameErr}</p>}
                     </div>
-                    <div className="relative">
+                    <div>
                       <p className="text-sm text-[#1a1a1a] mb-1 opacity-0 select-none" aria-hidden="true">x</p>
-                      <select
+                      <div className="relative"><select
                         value={p.level}
                         onChange={(e) => {
                           const val = e.target.value;
@@ -417,7 +417,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                       </select>
                       <svg className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
+                      </svg></div>
                       {levelErr && <p className="text-xs text-red-500 mt-1.5">{levelErr}</p>}
                     </div>
                   </div>
