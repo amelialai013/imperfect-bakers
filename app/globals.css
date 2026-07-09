@@ -58,6 +58,8 @@
   from { opacity: 1; clip-path: inset(0 0 0%   0); }
   to   { opacity: 0; clip-path: inset(0 0 100% 0); }
 }
+@keyframes nav-fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nav-fade-out { from { opacity: 1; } to { opacity: 0; } }
 
 /* ── Feature cards entrance animation ──────────────────────
    CSS-only, fill-mode: backwards so Safari releases the

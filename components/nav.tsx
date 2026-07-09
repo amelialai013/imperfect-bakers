@@ -86,6 +86,15 @@ export default function Nav() {
         </button>
       </div>
 
+      {/* Mobile backdrop */}
+      {visible && (
+        <div
+          className="lg:hidden fixed inset-0 top-20 bg-black/40 z-40"
+          style={{ animation: open ? "nav-fade-in 0.2s ease forwards" : "nav-fade-out 0.18s ease forwards" }}
+          onClick={() => setOpen(false)}
+        />
+      )}
+
       {/* Mobile menu — fade + clip animation on open/close */}
       {visible && (
         <div
