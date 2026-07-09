@@ -57,17 +57,17 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
       {/* ── LIGHTBOX ─────────────────────────────────────────── */}
       {activeIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm py-16 px-16 sm:px-20"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm py-24 px-16 sm:px-20"
           onClick={close}
         >
           {/* Counter */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 text-white/60 text-sm font-medium tabular-nums select-none pointer-events-none">
+          <div className="absolute top-9 left-1/2 -translate-x-1/2 text-white/60 text-sm font-medium tabular-nums select-none pointer-events-none">
             {activeIndex + 1} / {photos.length}
           </div>
 
           {/* Close button */}
           <button
-            className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            className="absolute top-7 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
             onClick={close}
             aria-label="Close"
           >
@@ -89,14 +89,14 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
 
           {/* Image */}
           <div
-            className="relative max-w-full max-h-[76vh]"
+            className="relative max-w-full max-h-[68vh]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={photos[activeIndex].url}
               alt="Gallery photo"
-              className="max-w-full max-h-[76vh] object-contain rounded-lg shadow-2xl select-none"
+              className="max-w-full max-h-[68vh] object-contain rounded-lg shadow-2xl select-none"
               draggable={false}
             />
           </div>
