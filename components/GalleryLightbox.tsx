@@ -3,15 +3,15 @@
 import { useState, useEffect, useCallback } from "react";
 import type { GalleryPhoto } from "@/app/api/gallery/route";
 
+const BAR = "5rem"; // top and bottom bar height — equal for symmetry
+
 export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const close = useCallback(() => setActiveIndex(null), []);
-
   const prev = useCallback(() =>
     setActiveIndex((i) => (i === null ? null : (i - 1 + photos.length) % photos.length)),
     [photos.length]);
-
   const next = useCallback(() =>
     setActiveIndex((i) => (i === null ? null : (i + 1) % photos.length)),
     [photos.length]);
@@ -55,39 +55,48 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
 
       {/* ── LIGHTBOX ─────────────────────────────────────────── */}
       {activeIndex !== null && (
+        /* Clicking the backdrop (this div) closes the lightbox */
         <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm"
-          style={{ display: "grid", gridTemplateRows: "5rem 1fr 5rem" }}
           onClick={close}
+          style={{
+            position: "fixed", inset: 0, zIndex: 50,
+            display: "flex", flexDirection: "column",
+            background: "rgba(0,0,0,0.9)",
+            backdropFilter: "blur(4px)",
+          }}
         >
-          {/* ── Row 1: top bar (counter + close) ── */}
-          <div className="flex items-center justify-between px-6">
-            <div className="absolute left-1/2 -translate-x-1/2 text-white/60 text-sm font-medium tabular-nums select-none pointer-events-none">
+          {/* Top bar — fixed height, click closes */}
+          <div
+            style={{ height: BAR, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 1.5rem", position: "relative" }}
+          >
+            {/* Counter */}
+            <span style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", color: "rgba(255,255,255,0.6)", fontSize: "0.875rem", fontVariantNumeric: "tabular-nums", pointerEvents: "none", userSelect: "none" }}>
               {activeIndex + 1} / {photos.length}
-            </div>
+            </span>
+            {/* Close button */}
             <button
-              className="ml-auto w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
               onClick={close}
               aria-label="Close"
+              style={{ marginLeft: "auto", width: "2.5rem", height: "2.5rem", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "9999px", background: "rgba(255,255,255,0.1)", color: "white", border: "none", cursor: "pointer" }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
-          {/* ── Row 2: image (fills exactly the space between the two bars) ── */}
+          {/* Image zone — fills all remaining space, overflow hidden keeps image inside */}
           <div
-            className="flex items-center justify-center px-16 sm:px-20 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
+            style={{ flex: 1, minHeight: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4rem" }}
           >
-            {/* Prev arrow */}
+            {/* Prev */}
             <button
-              className="absolute left-2 sm:left-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
               onClick={(e) => { e.stopPropagation(); prev(); }}
               aria-label="Previous photo"
+              style={{ position: "absolute", left: "0.5rem", width: "2.5rem", height: "2.5rem", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "9999px", background: "rgba(255,255,255,0.1)", color: "white", border: "none", cursor: "pointer", zIndex: 1 }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
@@ -96,24 +105,24 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
             <img
               src={photos[activeIndex].url}
               alt="Gallery photo"
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none"
               draggable={false}
+              style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", borderRadius: "0.5rem", boxShadow: "0 25px 50px rgba(0,0,0,0.5)", userSelect: "none" }}
             />
 
-            {/* Next arrow */}
+            {/* Next */}
             <button
-              className="absolute right-2 sm:right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
               onClick={(e) => { e.stopPropagation(); next(); }}
               aria-label="Next photo"
+              style={{ position: "absolute", right: "0.5rem", width: "2.5rem", height: "2.5rem", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "9999px", background: "rgba(255,255,255,0.1)", color: "white", border: "none", cursor: "pointer", zIndex: 1 }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
 
-          {/* ── Row 3: bottom bar (same height as top = perfect symmetry) ── */}
-          <div />
+          {/* Bottom bar — same height as top bar = perfect symmetry, click closes */}
+          <div style={{ height: BAR, flexShrink: 0 }} />
         </div>
       )}
     </>
