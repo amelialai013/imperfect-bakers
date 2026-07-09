@@ -760,11 +760,23 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
       try {
         if (isVercel) {
           // Production: direct client-side upload to Vercel Blob (no payload limit)
-          await upload(`gallery/${Date.now()}-${file.name}`, file, {
+          const blob = await upload(`gallery/${Date.now()}-${file.name}`, file, {
             access: "public",
             handleUploadUrl: "/api/gallery/upload",
             clientPayload: token,
           });
+          // Explicitly register the blob URL in KV (more reliable than onUploadCompleted)
+          const reg = await fetch("/api/gallery/upload", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ url: blob.url }),
+          });
+          if (!reg.ok) {
+            const d = await reg.json().catch(() => ({}));
+            throw new Error(d.error ?? `Failed to save photo (${reg.status})`);
+          }
+          const photo = await reg.json();
+          if (photo?.url) setPhotos((prev) => [photo, ...prev]);
         } else {
           // Local dev: regular multipart POST → saved to public/gallery/
           const form = new FormData();

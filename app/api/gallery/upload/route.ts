@@ -27,11 +27,10 @@ async function handleLocalUpload(req: Request): Promise<NextResponse> {
   await writeFile(path.join(dir, filename), Buffer.from(bytes));
 
   const url = `/gallery/${filename}`;
-  // Local dev: no KV needed — GET /api/gallery scans the folder directly
   return NextResponse.json({ id: filename, url, createdAt: new Date().toISOString() });
 }
 
-// ── PRODUCTION: client-side direct upload to Vercel Blob (OIDC) ─────────────
+// ── PRODUCTION: client-side blob token generation ────────────────────────────
 async function handleBlobUpload(req: Request): Promise<NextResponse> {
   const body = (await req.json()) as HandleUploadBody;
   try {
@@ -46,12 +45,9 @@ async function handleBlobUpload(req: Request): Promise<NextResponse> {
           maximumSizeInBytes: 20 * 1024 * 1024,
         };
       },
-      onUploadCompleted: async ({ blob }) => {
-        const id = crypto.randomUUID();
-        const photo: GalleryPhoto = { id, url: blob.url, createdAt: new Date().toISOString() };
-        await kv.set(`gallery:${id}`, photo);
-        await kv.rpush("gallery:all", id);
-      },
+      // NOTE: onUploadCompleted is unreliable — KV registration is done
+      // client-side via PUT /api/gallery/upload after upload() resolves.
+      onUploadCompleted: async () => {},
     });
     return NextResponse.json(jsonResponse);
   } catch (e) {
@@ -59,9 +55,27 @@ async function handleBlobUpload(req: Request): Promise<NextResponse> {
   }
 }
 
+// ── PUT: register a completed blob upload into KV (called from client) ───────
+export async function PUT(req: Request): Promise<NextResponse> {
+  if (!checkAdminToken(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { url } = await req.json();
+  if (!url) return NextResponse.json({ error: "Missing url" }, { status: 400 });
+
+  const id = crypto.randomUUID();
+  const photo: GalleryPhoto = { id, url, createdAt: new Date().toISOString() };
+  try {
+    await kv.set(`gallery:${id}`, photo);
+    await kv.rpush("gallery:all", id);
+  } catch (e) {
+    return NextResponse.json({ error: `KV save failed: ${e}` }, { status: 500 });
+  }
+  return NextResponse.json(photo);
+}
+
 export async function POST(req: Request): Promise<NextResponse> {
   const contentType = req.headers.get("content-type") ?? "";
-  // Multipart = local dev flow; JSON = production client-upload flow
   if (contentType.includes("multipart/form-data")) {
     return handleLocalUpload(req);
   }
