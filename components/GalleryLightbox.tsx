@@ -48,7 +48,6 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
               loading="lazy"
             />
-            {/* subtle overlay on hover */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
           </div>
         ))}
@@ -57,60 +56,63 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
       {/* ── LIGHTBOX ─────────────────────────────────────────── */}
       {activeIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm py-20 px-16 sm:px-20"
+          className="fixed inset-0 z-50 flex flex-col bg-black/90 backdrop-blur-sm"
           onClick={close}
         >
-          {/* Counter */}
-          <div className="absolute top-9 left-1/2 -translate-x-1/2 text-white/60 text-sm font-medium tabular-nums select-none pointer-events-none">
-            {activeIndex + 1} / {photos.length}
+          {/* ── Top bar (counter + close) — fixed height = bottom bar height ── */}
+          <div className="h-20 shrink-0 flex items-center justify-between px-6">
+            {/* Counter centred */}
+            <div className="absolute left-1/2 -translate-x-1/2 text-white/60 text-sm font-medium tabular-nums select-none pointer-events-none">
+              {activeIndex + 1} / {photos.length}
+            </div>
+            {/* Close */}
+            <button
+              className="ml-auto w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              onClick={close}
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
-          {/* Close button */}
-          <button
-            className="absolute top-7 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-            onClick={close}
-            aria-label="Close"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          {/* ── Image area — fills remaining space between the two bars ── */}
+          <div className="flex-1 flex items-center justify-center px-16 sm:px-20 overflow-hidden min-h-0">
+            {/* Prev arrow */}
+            <button
+              className="absolute left-2 sm:left-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0 z-10"
+              onClick={(e) => { e.stopPropagation(); prev(); }}
+              aria-label="Previous photo"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
 
-          {/* Prev arrow */}
-          <button
-            className="absolute left-2 sm:left-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0"
-            onClick={(e) => { e.stopPropagation(); prev(); }}
-            aria-label="Previous photo"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          {/* Image */}
-          <div
-            className="relative max-w-full max-h-[calc(100vh-10rem)]"
-            onClick={(e) => e.stopPropagation()}
-          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={photos[activeIndex].url}
               alt="Gallery photo"
-              className="max-w-full max-h-[calc(100vh-10rem)] object-contain rounded-lg shadow-2xl select-none"
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none"
               draggable={false}
+              onClick={(e) => e.stopPropagation()}
             />
+
+            {/* Next arrow */}
+            <button
+              className="absolute right-2 sm:right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0 z-10"
+              onClick={(e) => { e.stopPropagation(); next(); }}
+              aria-label="Next photo"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
-          {/* Next arrow */}
-          <button
-            className="absolute right-2 sm:right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0"
-            onClick={(e) => { e.stopPropagation(); next(); }}
-            aria-label="Next photo"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          {/* ── Bottom bar — same height as top bar for perfect symmetry ── */}
+          <div className="h-20 shrink-0" />
         </div>
       )}
     </>
