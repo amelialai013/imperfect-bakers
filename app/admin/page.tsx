@@ -2808,7 +2808,8 @@ export default function AdminPage() {
             <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs md:text-right pb-1">Imperfect Bakers</p>
           </div>
         </section>
-        <section className="px-8 pt-14 pb-32 bg-[#faf9f6]">
+        <section className="pt-14 pb-32 bg-[#faf9f6]">
+          <div className="max-w-7xl mx-auto px-8">
           <div className="max-w-sm">
             <form onSubmit={login} noValidate className="space-y-4">
               <div>
@@ -2828,6 +2829,7 @@ export default function AdminPage() {
               </div>
               {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
             </form>
+          </div>
           </div>
         </section>
       </>
