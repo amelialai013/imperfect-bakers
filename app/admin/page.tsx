@@ -737,16 +737,12 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      // On localhost, fetch from production so cloud-uploaded photos are visible
-      const url = isLocal
-        ? "https://www.imperfectbakers.com/api/gallery"
-        : "/api/gallery";
-      const res = await fetch(url);
+      const res = await fetch("/api/gallery");
       const data = await res.json();
       setPhotos(Array.isArray(data) ? data : []);
     } catch { /* gallery unavailable — show empty */ }
     setLoading(false);
-  }, [isLocal]);
+  }, []);
 
   useEffect(() => { load(); }, [load]);
 

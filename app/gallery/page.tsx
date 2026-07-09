@@ -8,7 +8,6 @@ export const dynamic = "force-dynamic";
 
 async function getPhotos(): Promise<GalleryPhoto[]> {
   try {
-    // Use localhost in dev so the local public/gallery/ folder is read
     const BASE = process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
       : (process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com");
