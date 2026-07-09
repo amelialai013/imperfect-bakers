@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { upload } from "@vercel/blob/client";
 import type { ClassSession, Booking, ClassConfig } from "@/lib/types";
 import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
 import LocationInput from "@/components/LocationInput";
@@ -750,36 +749,22 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
     if (!files || files.length === 0) return;
     setUploading(true);
     setError("");
-    const isVercel = typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
     const errors: string[] = [];
 
     for (const file of Array.from(files)) {
       try {
-        if (isVercel) {
-          // Upload directly to Vercel Blob — blob store is the source of truth,
-          // no KV registration needed (GET /api/gallery uses blob list() directly)
-          const blob = await upload(`gallery/${Date.now()}-${file.name}`, file, {
-            access: "public",
-            handleUploadUrl: "/api/gallery/upload",
-            clientPayload: token,
-          });
-          // Optimistically add to UI
-          setPhotos((prev) => [{ id: blob.pathname, url: blob.url, createdAt: new Date().toISOString() }, ...prev]);
-        } else {
-          // Local dev: multipart POST → saved to public/gallery/
-          const form = new FormData();
-          form.append("file", file);
-          const res = await fetch("/api/gallery/upload", {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-            body: form,
-          });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) {
-            errors.push(`${file.name}: ${data.error ?? `upload failed (${res.status})`}`);
-          } else if (data?.url) {
-            setPhotos((prev) => [data, ...prev]);
-          }
+        const form = new FormData();
+        form.append("file", file);
+        const res = await fetch("/api/gallery/upload", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: form,
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          errors.push(`${file.name}: ${data.error ?? `upload failed (${res.status})`}`);
+        } else if (data?.url) {
+          setPhotos((prev) => [{ id: data.id, url: data.url, createdAt: data.createdAt }, ...prev]);
         }
       } catch (e) {
         errors.push(`${file.name}: ${String(e)}`);
