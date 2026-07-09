@@ -903,25 +903,16 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
   const [menuAlign, setMenuAlign] = useState<"left" | "right">("left");
   const [menuFlipUp, setMenuFlipUp] = useState(false);
 
-  // Align dropdown to whichever edge keeps it inside the viewport, and flip
-  // upward when there isn't enough space below.
+  // Recalculate alignment and flip direction every time the menu opens
   useEffect(() => {
-    let cancelled = false;
-    function check() {
-      if (cancelled) return;
-      const el = wrapperRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const midpoint = window.innerWidth / 2;
-      setMenuAlign(rect.left + rect.width / 2 > midpoint ? "right" : "left");
-      // Flip up if less than 420px below the button
-      setMenuFlipUp(window.innerHeight - rect.bottom < 420);
-    }
-    check();
-    const ro = new ResizeObserver(check);
-    ro.observe(document.documentElement);
-    return () => { cancelled = true; ro.disconnect(); };
-  }, []);
+    const el = wrapperRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const midpoint = window.innerWidth / 2;
+    setMenuAlign(rect.left + rect.width / 2 > midpoint ? "right" : "left");
+    // Flip up if less than 460px of space below the button
+    setMenuFlipUp(window.innerHeight - rect.bottom < 460);
+  }, [open]);
 
   return (
     <div className="relative" ref={wrapperRef}>
