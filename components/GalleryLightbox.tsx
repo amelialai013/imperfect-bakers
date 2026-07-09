@@ -59,7 +59,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
         <div
           onClick={close}
           style={{
-            position: "fixed", inset: 0, zIndex: 50,
+            position: "fixed", inset: 0, zIndex: 10000,
             display: "flex", flexDirection: "column",
             background: "rgba(0,0,0,0.9)",
             backdropFilter: "blur(4px)",
@@ -87,7 +87,6 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
 
           {/* Image zone — fills all remaining space, overflow hidden keeps image inside */}
           <div
-            onClick={(e) => e.stopPropagation()}
             style={{ flex: 1, minHeight: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4rem" }}
           >
             {/* Prev */}
@@ -106,6 +105,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               src={photos[activeIndex].url}
               alt="Gallery photo"
               draggable={false}
+              onClick={(e) => e.stopPropagation()}
               style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", borderRadius: "0.5rem", boxShadow: "0 25px 50px rgba(0,0,0,0.5)", userSelect: "none" }}
             />
 
