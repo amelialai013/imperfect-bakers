@@ -55,6 +55,7 @@ export default function Footer() {
                 { label: "Home",              href: "/" },
                 { label: "About",             href: "/about" },
                 { label: "Our classes",       href: "/classes" },
+                { label: "Gallery",           href: "/gallery" },
                 { label: "Book a class",      href: "/book-class" },
                 { label: "Register interest", href: "/interest" },
                 { label: "Booking policy",    href: "/policy" },
