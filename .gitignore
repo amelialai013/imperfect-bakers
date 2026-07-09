@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 .gh_token
 .env.local
+
+# Local dev gallery uploads (don't deploy these)
+public/gallery/*
+!public/gallery/.gitkeep
