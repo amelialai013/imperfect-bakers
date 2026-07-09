@@ -2810,7 +2810,7 @@ export default function AdminPage() {
         </section>
         <section className="pt-14 pb-32 bg-[#faf9f6]">
           <div className="max-w-7xl mx-auto px-8">
-          <div className="max-w-sm">
+          <div className="max-w-sm mx-auto md:max-w-md">
             <form onSubmit={login} noValidate className="space-y-4">
               <div>
                 <label className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-2">Password</label>
