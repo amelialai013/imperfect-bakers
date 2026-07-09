@@ -10,6 +10,8 @@ export async function GET() {
     VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN
       ? "set (len=" + process.env.VERCEL_OIDC_TOKEN.length + ")"
       : "missing",
+    ADMIN_PASSWORD_LEN: process.env.ADMIN_PASSWORD?.length ?? 0,
+    ADMIN_PASSWORD_FIRST3: process.env.ADMIN_PASSWORD?.substring(0, 3) ?? "missing",
     VERCEL_ENV: process.env.VERCEL_ENV,
   };
 
