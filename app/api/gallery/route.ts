@@ -14,25 +14,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 // ── GET: list all photos ──────────────────────────────────────────────────────
 export async function GET() {
-  if (isDev) {
-    // Local dev: scan public/gallery/ folder directly
-    try {
-      const { readdir } = await import("fs/promises");
-      const path = await import("path");
-      const dir = path.join(process.cwd(), "public", "gallery");
-      const files = await readdir(dir).catch(() => [] as string[]);
-      const photos: GalleryPhoto[] = files
-        .filter((f) => /\.(jpe?g|png|webp|gif|heic)$/i.test(f))
-        .sort()
-        .reverse()
-        .map((f) => ({ id: f, url: `/gallery/${f}`, createdAt: "" }));
-      return NextResponse.json(photos);
-    } catch {
-      return NextResponse.json([]);
-    }
-  }
-
-  // Production: list blobs directly from the blob store (no KV needed)
+  // Try blob store first (works in production and in local dev with VERCEL_OIDC_TOKEN)
   try {
     const { blobs } = await list({ prefix: "gallery/" });
     const photos: GalleryPhoto[] = blobs
@@ -43,8 +25,24 @@ export async function GET() {
         createdAt: blob.uploadedAt.toISOString(),
       }));
     return NextResponse.json(photos);
-  } catch (e) {
-    console.error("Gallery GET error:", e);
+  } catch {
+    // Fallback: local dev without cloud credentials — scan public/gallery/
+    if (isDev) {
+      try {
+        const { readdir } = await import("fs/promises");
+        const path = await import("path");
+        const dir = path.join(process.cwd(), "public", "gallery");
+        const files = await readdir(dir).catch(() => [] as string[]);
+        const photos: GalleryPhoto[] = files
+          .filter((f) => /\.(jpe?g|png|webp|gif|heic)$/i.test(f))
+          .sort()
+          .reverse()
+          .map((f) => ({ id: f, url: `/gallery/${f}`, createdAt: "" }));
+        return NextResponse.json(photos);
+      } catch {
+        return NextResponse.json([]);
+      }
+    }
     return NextResponse.json([]);
   }
 }
