@@ -723,7 +723,7 @@ type ExperienceLevel = { value: string; label: string };
 
 interface GalleryPhoto { id: string; url: string; createdAt: string; }
 
-function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () => void; onLogout: () => void }) {
+function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasses, onEmailTemplates, onSettings, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void }) {
   const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -822,7 +822,7 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
                 <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>Upload photos</>
               )}
             </button>
-            <MoreMenu onManageClasses={() => {}} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onGallery={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={() => {}} onLogout={onLogout} />
           </div>
           <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleUpload(e.target.files)} />
         </div>
@@ -1019,7 +1019,7 @@ function parseSessionDate(display: string): Date | null {
   return null;
 }
 
-function AllBookingsView({ token, onBack, onManageClasses, onLogout, initialFilter }: { token: string; onBack: () => void; onManageClasses: () => void; onLogout: () => void; initialFilter?: "all" | "pending" | "confirmed" | "declined" | "cancelled" }) {
+function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailTemplates, onSettings, onGallery, onLogout, initialFilter }: { token: string; onBack: () => void; onManageClasses: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onGallery: () => void; onLogout: () => void; initialFilter?: "all" | "pending" | "confirmed" | "declined" | "cancelled" }) {
   const [rows, setRows] = useState<BookingWithSession[]>([]);
   const [allSessions, setAllSessions] = useState<ClassSession[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1192,7 +1192,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout, initialFilt
             </div>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onGallery={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1499,7 +1499,7 @@ const EXP_LABELS: Record<string, string> = {
   confident_cook: "Confident cook",
 };
 
-function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onManageClasses: () => void; onLogout: () => void }) {
+function InterestsView({ token, onBack, onAllBookings, onManageClasses, onEmailTemplates, onSettings, onGallery, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onSettings: () => void; onGallery: () => void; onLogout: () => void }) {
   const [interests, setInterests] = useState<InterestEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -1595,7 +1595,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={() => {}} onSettings={() => {}} onGallery={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1927,7 +1927,7 @@ const TEMPLATE_DEFS: {
   },
 ];
 
-function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManageClasses, onSettings, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onSettings: () => void; onLogout: () => void }) {
+function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManageClasses, onSettings, onGallery, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onSettings: () => void; onGallery: () => void; onLogout: () => void }) {
   const [templates, setTemplates] = useState<Record<string, Record<string, string>>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
@@ -1980,7 +1980,7 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onGallery={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -2096,7 +2096,7 @@ const DEFAULT_TESTIMONIALS: Testimonial[] = [
   { quote: "Such a wonderful experience — warm, fun, and I walked away with skills I actually use at home.", name: "Emily T.", role: "Sweet Food" },
 ];
 
-function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClasses, onEmailTemplates, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onLogout: () => void }) {
+function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClasses, onEmailTemplates, onGallery, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onGallery: () => void; onLogout: () => void }) {
   const [levels, setLevels] = useState<ExperienceLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -2257,7 +2257,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onGallery={() => {}} onLogout={onLogout} />
+            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onGallery={onGallery} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -2890,23 +2890,23 @@ export default function AdminPage() {
   // ── All Bookings ─────────────────────────────────────────
 
   if (view === "bookings") {
-    return <AllBookingsView token={token} onBack={() => { setBookingsInitialFilter("all"); setView("dashboard"); }} onManageClasses={() => { setBookingsInitialFilter("all"); setView("classes"); }} onLogout={logout} initialFilter={bookingsInitialFilter} />;
+    return <AllBookingsView token={token} onBack={() => { setBookingsInitialFilter("all"); setView("dashboard"); }} onManageClasses={() => { setBookingsInitialFilter("all"); setView("classes"); }} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onGallery={() => setView("gallery")} onLogout={logout} initialFilter={bookingsInitialFilter} />;
   }
 
   if (view === "gallery") {
-    return <GalleryView token={token} onBack={() => setView("dashboard")} onLogout={logout} />;
+    return <GalleryView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onManageClasses={() => setView("classes")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onLogout={logout} />;
   }
 
   if (view === "interests") {
-    return <InterestsView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onManageClasses={() => setView("classes")} onLogout={logout} />;
+    return <InterestsView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onManageClasses={() => setView("classes")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onGallery={() => setView("gallery")} onLogout={logout} />;
   }
 
   if (view === "emailTemplates") {
-    return <EmailTemplatesView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onManageClasses={() => setView("classes")} onSettings={() => setView("settings")} onLogout={logout} />;
+    return <EmailTemplatesView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onManageClasses={() => setView("classes")} onSettings={() => setView("settings")} onGallery={() => setView("gallery")} onLogout={logout} />;
   }
 
   if (view === "settings") {
-    return <SettingsView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onManageClasses={() => setView("classes")} onEmailTemplates={() => setView("emailTemplates")} onLogout={logout} />;
+    return <SettingsView token={token} onBack={() => setView("dashboard")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onManageClasses={() => setView("classes")} onEmailTemplates={() => setView("emailTemplates")} onGallery={() => setView("gallery")} onLogout={logout} />;
   }
 
   // ── Classes ──────────────────────────────────────────────
