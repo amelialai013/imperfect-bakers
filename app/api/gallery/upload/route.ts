@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { checkAdminToken } from "@/lib/auth";
-import type { GalleryPhoto } from "../route";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +28,7 @@ async function handleLocalUpload(req: Request): Promise<NextResponse> {
   return NextResponse.json({ id: filename, url, createdAt: new Date().toISOString() });
 }
 
-// ── PRODUCTION: client-side blob token generation ────────────────────────────
+// ── PRODUCTION: generate client-side blob upload token ───────────────────────
 async function handleBlobUpload(req: Request): Promise<NextResponse> {
   const body = (await req.json()) as HandleUploadBody;
   try {
@@ -45,33 +43,12 @@ async function handleBlobUpload(req: Request): Promise<NextResponse> {
           maximumSizeInBytes: 20 * 1024 * 1024,
         };
       },
-      // NOTE: onUploadCompleted is unreliable — KV registration is done
-      // client-side via PUT /api/gallery/upload after upload() resolves.
       onUploadCompleted: async () => {},
     });
     return NextResponse.json(jsonResponse);
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 400 });
   }
-}
-
-// ── PUT: register a completed blob upload into KV (called from client) ───────
-export async function PUT(req: Request): Promise<NextResponse> {
-  if (!checkAdminToken(req)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  const { url } = await req.json();
-  if (!url) return NextResponse.json({ error: "Missing url" }, { status: 400 });
-
-  const id = crypto.randomUUID();
-  const photo: GalleryPhoto = { id, url, createdAt: new Date().toISOString() };
-  try {
-    await kv.set(`gallery:${id}`, photo);
-    await kv.rpush("gallery:all", id);
-  } catch (e) {
-    return NextResponse.json({ error: `KV save failed: ${e}` }, { status: 500 });
-  }
-  return NextResponse.json(photo);
 }
 
 export async function POST(req: Request): Promise<NextResponse> {

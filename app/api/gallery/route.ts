@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
-import { del } from "@vercel/blob";
+import { list, del } from "@vercel/blob";
 import { checkAdminToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +15,7 @@ const isDev = process.env.NODE_ENV === "development";
 // ── GET: list all photos ──────────────────────────────────────────────────────
 export async function GET() {
   if (isDev) {
-    // Local dev: scan public/gallery/ folder directly (no KV needed)
+    // Local dev: scan public/gallery/ folder directly
     try {
       const { readdir } = await import("fs/promises");
       const path = await import("path");
@@ -33,12 +32,17 @@ export async function GET() {
     }
   }
 
-  // Production: read from KV
+  // Production: list blobs directly from the blob store (no KV needed)
   try {
-    const ids = (await kv.lrange("gallery:all", 0, -1)) as string[];
-    if (!ids.length) return NextResponse.json([]);
-    const photos = await Promise.all(ids.map((id) => kv.get<GalleryPhoto>(`gallery:${id}`)));
-    return NextResponse.json(photos.filter(Boolean).reverse());
+    const { blobs } = await list({ prefix: "gallery/" });
+    const photos: GalleryPhoto[] = blobs
+      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
+      .map((blob) => ({
+        id: blob.pathname,
+        url: blob.url,
+        createdAt: blob.uploadedAt.toISOString(),
+      }));
+    return NextResponse.json(photos);
   } catch (e) {
     console.error("Gallery GET error:", e);
     return NextResponse.json([]);
@@ -50,25 +54,23 @@ export async function DELETE(req: Request) {
   if (!checkAdminToken(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id, url } = await req.json();
-  if (!id || !url) {
-    return NextResponse.json({ error: "Missing id or url" }, { status: 400 });
+  const { url } = await req.json();
+  if (!url) {
+    return NextResponse.json({ error: "Missing url" }, { status: 400 });
   }
 
   if (isDev) {
-    // Local dev: delete file from public/gallery/
+    // Local dev: derive filename from url and delete file
     try {
       const { unlink } = await import("fs/promises");
       const path = await import("path");
-      await unlink(path.join(process.cwd(), "public", "gallery", id));
+      const filename = url.split("/").pop()!;
+      await unlink(path.join(process.cwd(), "public", "gallery", filename));
     } catch { /* already gone */ }
     return NextResponse.json({ ok: true });
   }
 
-  // Production: delete from blob + KV
+  // Production: delete from blob store
   try { await del(url); } catch { /* blob may already be gone */ }
-  await kv.lrem("gallery:all", 0, id);
-  await kv.del(`gallery:${id}`);
-
   return NextResponse.json({ ok: true });
 }

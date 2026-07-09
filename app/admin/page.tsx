@@ -760,25 +760,15 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
     for (const file of Array.from(files)) {
       try {
         if (isVercel) {
-          // Step 1: upload directly to Vercel Blob
+          // Upload directly to Vercel Blob — blob store is the source of truth,
+          // no KV registration needed (GET /api/gallery uses blob list() directly)
           const blob = await upload(`gallery/${Date.now()}-${file.name}`, file, {
             access: "public",
             handleUploadUrl: "/api/gallery/upload",
             clientPayload: token,
           });
-
-          // Step 2: register URL in KV
-          const reg = await fetch("/api/gallery/upload", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-            body: JSON.stringify({ url: blob.url }),
-          });
-          const regData = await reg.json().catch(() => ({}));
-          if (!reg.ok) {
-            errors.push(`${file.name}: ${regData.error ?? `save failed (${reg.status})`}`);
-          } else if (regData?.url) {
-            setPhotos((prev) => [regData, ...prev]);
-          }
+          // Optimistically add to UI
+          setPhotos((prev) => [{ id: blob.pathname, url: blob.url, createdAt: new Date().toISOString() }, ...prev]);
         } else {
           // Local dev: multipart POST → saved to public/gallery/
           const form = new FormData();
@@ -814,7 +804,7 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
     await fetch("/api/gallery", {
       method: "DELETE",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ id: photo.id, url: photo.url }),
+      body: JSON.stringify({ url: photo.url }),
     });
     setDeleting(null);
     setPhotos((p) => p.filter((x) => x.id !== photo.id));
