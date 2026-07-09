@@ -98,7 +98,7 @@ export default function Nav() {
       {/* Mobile menu — fade + clip animation on open/close */}
       {visible && (
         <div
-          className="lg:hidden absolute top-full left-0 right-0 z-50 border-t border-[#e4dfd5] bg-[#faf9f6] shadow-lg px-8 py-6 flex flex-col gap-1"
+          className="lg:hidden fixed top-20 left-0 right-0 z-50 border-t border-[#e4dfd5] bg-[#faf9f6] shadow-lg px-8 py-6 flex flex-col gap-1"
           style={{
             animation: open
               ? "nav-menu-in 0.28s cubic-bezier(0.16,1,0.3,1) forwards"
