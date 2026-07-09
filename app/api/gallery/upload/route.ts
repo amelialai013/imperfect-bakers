@@ -1,43 +1,42 @@
 import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
-import { put } from "@vercel/blob";
-import { checkAdminToken } from "@/lib/auth";
+import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import type { GalleryPhoto } from "../route";
 
-export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
+// POST — called twice by the client upload flow:
+//   1. { type: "blob.generate-client-token" } → returns a short-lived upload token
+//   2. { type: "blob.upload-completed" }     → saves metadata to KV
 export async function POST(req: Request) {
-  if (!checkAdminToken(req)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const body = (await req.json()) as HandleUploadBody;
 
-  let form: FormData;
   try {
-    form = await req.formData();
-  } catch (e) {
-    return NextResponse.json({ error: `Failed to parse form: ${e}` }, { status: 400 });
-  }
-
-  const file = form.get("file") as File | null;
-
-  if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
-  if (!file.type.startsWith("image/")) return NextResponse.json({ error: "File must be an image" }, { status: 400 });
-  if (file.size > 10 * 1024 * 1024) return NextResponse.json({ error: "Image must be under 10MB" }, { status: 400 });
-
-  let blob: { url: string };
-  try {
-    blob = await put(`gallery/${Date.now()}-${file.name}`, file, {
-      access: "public",
+    const jsonResponse = await handleUpload({
+      body,
+      request: req,
+      onBeforeGenerateToken: async (_pathname, clientPayload) => {
+        // clientPayload contains the admin token sent from the browser
+        const expected = process.env.ADMIN_PASSWORD ?? "";
+        if (!expected || clientPayload !== expected) {
+          throw new Error("Unauthorized");
+        }
+        return {
+          allowedContentTypes: ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "image/heif"],
+          maximumSizeInBytes: 20 * 1024 * 1024,
+        };
+      },
+      onUploadCompleted: async ({ blob }) => {
+        // Fires after the browser finishes uploading directly to blob storage
+        const id = crypto.randomUUID();
+        const photo: GalleryPhoto = { id, url: blob.url, createdAt: new Date().toISOString() };
+        await kv.set(`gallery:${id}`, photo);
+        await kv.rpush("gallery:all", id);
+      },
     });
+
+    return NextResponse.json(jsonResponse);
   } catch (e) {
-    return NextResponse.json({ error: `Blob upload failed: ${e}` }, { status: 500 });
+    return NextResponse.json({ error: String(e) }, { status: 400 });
   }
-
-  const id = crypto.randomUUID();
-  const photo: GalleryPhoto = { id, url: blob.url, createdAt: new Date().toISOString() };
-  await kv.set(`gallery:${id}`, photo);
-  await kv.rpush("gallery:all", id);
-
-  return NextResponse.json(photo);
 }

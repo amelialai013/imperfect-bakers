@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { upload } from "@vercel/blob/client";
 import type { ClassSession, Booking, ClassConfig } from "@/lib/types";
 import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
 import LocationInput from "@/components/LocationInput";
@@ -749,19 +750,16 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
     setError("");
     let hasError = false;
     for (const file of Array.from(files)) {
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch("/api/gallery/upload", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: form,
-      });
-      if (!res.ok) {
+      try {
+        // Direct client-side upload to Vercel Blob — bypasses function payload limits
+        await upload(`gallery/${Date.now()}-${file.name}`, file, {
+          access: "public",
+          handleUploadUrl: "/api/gallery/upload",
+          clientPayload: token, // pass admin token so server can verify
+        });
+      } catch (e) {
         hasError = true;
-        const text = await res.text().catch(() => "");
-        let msg = `Upload failed (${res.status})`;
-        try { msg = JSON.parse(text).error ?? msg; } catch { msg = text || msg; }
-        setError(msg);
+        setError(String(e));
       }
     }
     setUploading(false);
