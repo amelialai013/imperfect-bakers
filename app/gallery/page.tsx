@@ -8,7 +8,10 @@ export const dynamic = "force-dynamic";
 
 async function getPhotos(): Promise<GalleryPhoto[]> {
   try {
-    const BASE = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
+    // Use localhost in dev so the local public/gallery/ folder is read
+    const BASE = process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : (process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com");
     const res = await fetch(`${BASE}/api/gallery`, { cache: "no-store" });
     if (!res.ok) return [];
     return res.json();
