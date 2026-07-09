@@ -57,7 +57,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
       {/* ── LIGHTBOX ─────────────────────────────────────────── */}
       {activeIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm pt-16 pb-8 px-16 sm:px-20"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm py-16 px-16 sm:px-20"
           onClick={close}
         >
           {/* Counter */}
