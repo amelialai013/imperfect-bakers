@@ -57,7 +57,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
       {/* ── LIGHTBOX ─────────────────────────────────────────── */}
       {activeIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm py-40 px-16 sm:px-20"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm py-20 px-16 sm:px-20"
           onClick={close}
         >
           {/* Counter */}
@@ -89,14 +89,14 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
 
           {/* Image */}
           <div
-            className="relative max-w-full max-h-[48vh]"
+            className="relative max-w-full max-h-[calc(100vh-10rem)]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={photos[activeIndex].url}
               alt="Gallery photo"
-              className="max-w-full max-h-[48vh] object-contain rounded-lg shadow-2xl select-none"
+              className="max-w-full max-h-[calc(100vh-10rem)] object-contain rounded-lg shadow-2xl select-none"
               draggable={false}
             />
           </div>
