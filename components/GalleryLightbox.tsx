@@ -56,16 +56,15 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
       {/* ── LIGHTBOX ─────────────────────────────────────────── */}
       {activeIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex flex-col bg-black/90 backdrop-blur-sm"
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm"
+          style={{ display: "grid", gridTemplateRows: "5rem 1fr 5rem" }}
           onClick={close}
         >
-          {/* ── Top bar (counter + close) — fixed height = bottom bar height ── */}
-          <div className="h-20 shrink-0 flex items-center justify-between px-6">
-            {/* Counter centred */}
+          {/* ── Row 1: top bar (counter + close) ── */}
+          <div className="flex items-center justify-between px-6">
             <div className="absolute left-1/2 -translate-x-1/2 text-white/60 text-sm font-medium tabular-nums select-none pointer-events-none">
               {activeIndex + 1} / {photos.length}
             </div>
-            {/* Close */}
             <button
               className="ml-auto w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
               onClick={close}
@@ -77,11 +76,14 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
             </button>
           </div>
 
-          {/* ── Image area — fills remaining space between the two bars ── */}
-          <div className="flex-1 flex items-center justify-center px-16 sm:px-20 overflow-hidden min-h-0">
+          {/* ── Row 2: image (fills exactly the space between the two bars) ── */}
+          <div
+            className="flex items-center justify-center px-16 sm:px-20 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Prev arrow */}
             <button
-              className="absolute left-2 sm:left-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0 z-10"
+              className="absolute left-2 sm:left-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
               onClick={(e) => { e.stopPropagation(); prev(); }}
               aria-label="Previous photo"
             >
@@ -96,12 +98,11 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               alt="Gallery photo"
               className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none"
               draggable={false}
-              onClick={(e) => e.stopPropagation()}
             />
 
             {/* Next arrow */}
             <button
-              className="absolute right-2 sm:right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0 z-10"
+              className="absolute right-2 sm:right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
               onClick={(e) => { e.stopPropagation(); next(); }}
               aria-label="Next photo"
             >
@@ -111,8 +112,8 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
             </button>
           </div>
 
-          {/* ── Bottom bar — same height as top bar for perfect symmetry ── */}
-          <div className="h-20 shrink-0" />
+          {/* ── Row 3: bottom bar (same height as top = perfect symmetry) ── */}
+          <div />
         </div>
       )}
     </>
