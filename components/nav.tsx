@@ -30,6 +30,26 @@ export default function Nav() {
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, [open]);
 
+  // Lock background scroll/focus/clicks while the mobile menu is open
+  useEffect(() => {
+    const main = document.querySelector("main");
+    const footer = document.querySelector("footer");
+    if (open) {
+      document.body.style.overflow = "hidden";
+      main?.setAttribute("inert", "");
+      footer?.setAttribute("inert", "");
+    } else {
+      document.body.style.overflow = "";
+      main?.removeAttribute("inert");
+      footer?.removeAttribute("inert");
+    }
+    return () => {
+      document.body.style.overflow = "";
+      main?.removeAttribute("inert");
+      footer?.removeAttribute("inert");
+    };
+  }, [open]);
+
   return (
     <nav className={`sticky top-0 z-[9999] bg-[#faf9f6] transition-shadow duration-300 ${scrolled ? "shadow-sm" : ""}`}>
       <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
