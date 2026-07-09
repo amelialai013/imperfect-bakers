@@ -754,31 +754,33 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
     if (!files || files.length === 0) return;
     setUploading(true);
     setError("");
-    let hasError = false;
     const isVercel = typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
+    const errors: string[] = [];
+
     for (const file of Array.from(files)) {
       try {
         if (isVercel) {
-          // Production: direct client-side upload to Vercel Blob (no payload limit)
+          // Step 1: upload directly to Vercel Blob
           const blob = await upload(`gallery/${Date.now()}-${file.name}`, file, {
             access: "public",
             handleUploadUrl: "/api/gallery/upload",
             clientPayload: token,
           });
-          // Explicitly register the blob URL in KV (more reliable than onUploadCompleted)
+
+          // Step 2: register URL in KV
           const reg = await fetch("/api/gallery/upload", {
             method: "PUT",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify({ url: blob.url }),
           });
+          const regData = await reg.json().catch(() => ({}));
           if (!reg.ok) {
-            const d = await reg.json().catch(() => ({}));
-            throw new Error(d.error ?? `Failed to save photo (${reg.status})`);
+            errors.push(`${file.name}: ${regData.error ?? `save failed (${reg.status})`}`);
+          } else if (regData?.url) {
+            setPhotos((prev) => [regData, ...prev]);
           }
-          const photo = await reg.json();
-          if (photo?.url) setPhotos((prev) => [photo, ...prev]);
         } else {
-          // Local dev: regular multipart POST → saved to public/gallery/
+          // Local dev: multipart POST → saved to public/gallery/
           const form = new FormData();
           form.append("file", file);
           const res = await fetch("/api/gallery/upload", {
@@ -786,23 +788,24 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
             headers: { Authorization: `Bearer ${token}` },
             body: form,
           });
+          const data = await res.json().catch(() => ({}));
           if (!res.ok) {
-            const data = await res.json().catch(() => ({}));
-            throw new Error(data.error ?? `Upload failed (${res.status})`);
-          }
-          // Response contains the photo object directly
-          const photo = await res.json().catch(() => null);
-          if (photo?.url) {
-            setPhotos((prev) => [photo, ...prev]);
+            errors.push(`${file.name}: ${data.error ?? `upload failed (${res.status})`}`);
+          } else if (data?.url) {
+            setPhotos((prev) => [data, ...prev]);
           }
         }
       } catch (e) {
-        hasError = true;
-        setError(String(e));
+        errors.push(`${file.name}: ${String(e)}`);
       }
     }
+
     setUploading(false);
-    if (!hasError) await load();
+    if (errors.length > 0) {
+      setError(errors.join(" · "));
+    } else {
+      await load();
+    }
   }
 
   async function handleDelete(photo: GalleryPhoto) {
