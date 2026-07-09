@@ -901,8 +901,10 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [menuAlign, setMenuAlign] = useState<"left" | "right">("left");
+  const [menuFlipUp, setMenuFlipUp] = useState(false);
 
-  // Align dropdown to whichever edge keeps it inside the viewport
+  // Align dropdown to whichever edge keeps it inside the viewport, and flip
+  // upward when there isn't enough space below.
   useEffect(() => {
     let cancelled = false;
     function check() {
@@ -912,6 +914,8 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
       const rect = el.getBoundingClientRect();
       const midpoint = window.innerWidth / 2;
       setMenuAlign(rect.left + rect.width / 2 > midpoint ? "right" : "left");
+      // Flip up if less than 420px below the button
+      setMenuFlipUp(window.innerHeight - rect.bottom < 420);
     }
     check();
     const ro = new ResizeObserver(check);
@@ -933,7 +937,7 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className={`absolute ${menuAlign === "right" ? "right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-y-auto min-w-[200px] max-h-[70vh]`}>
+          <div className={`absolute ${menuAlign === "right" ? "right-0" : "left-0"} ${menuFlipUp ? "bottom-full mb-2" : "top-full mt-2"} z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-y-auto min-w-[200px] max-h-[70vh]`}>
             <button
               onClick={() => { setOpen(false); onAllBookings(); }}
               className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
