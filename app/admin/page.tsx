@@ -733,7 +733,6 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError("");
     try {
       const res = await fetch("/api/gallery");
       const data = await res.json();
@@ -748,6 +747,7 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
     if (!files || files.length === 0) return;
     setUploading(true);
     setError("");
+    let hasError = false;
     for (const file of Array.from(files)) {
       const form = new FormData();
       form.append("file", file);
@@ -757,14 +757,15 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
         body: form,
       });
       if (!res.ok) {
+        hasError = true;
         const text = await res.text().catch(() => "");
-        let msg = "Upload failed";
-        try { msg = JSON.parse(text).error ?? `Upload failed (${res.status})`; } catch { msg = text || `Upload failed (${res.status})`; }
+        let msg = `Upload failed (${res.status})`;
+        try { msg = JSON.parse(text).error ?? msg; } catch { msg = text || msg; }
         setError(msg);
       }
     }
     setUploading(false);
-    load();
+    if (!hasError) await load();
   }
 
   async function handleDelete(photo: GalleryPhoto) {
