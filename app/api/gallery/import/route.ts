@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
+import { checkAdminToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 // Temporary bulk-import endpoint — streams files directly to blob (no payload limit)
-// Protected by admin password. Remove after bulk upload is done.
+// Protected by admin password via Bearer token. Remove after bulk upload is done.
 export async function POST(req: Request): Promise<NextResponse> {
-  const pw = req.headers.get("x-admin-password");
-  const expected = process.env.ADMIN_PASSWORD ?? "";
-  if (!expected || pw !== expected) {
+  if (!checkAdminToken(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
