@@ -772,6 +772,11 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
             const data = await res.json().catch(() => ({}));
             throw new Error(data.error ?? `Upload failed (${res.status})`);
           }
+          // Response contains the photo object directly
+          const photo = await res.json().catch(() => null);
+          if (photo?.url) {
+            setPhotos((prev) => [photo, ...prev]);
+          }
         }
       } catch (e) {
         hasError = true;
