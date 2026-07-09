@@ -1197,8 +1197,8 @@ function AllBookingsView({ token, onBack, onManageClasses, onLogout, initialFilt
         </div>
       </section>
 
-      <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-8 pb-24 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto px-8">
 
           {/* Reinstate booking confirmation modal */}
           {undeclineTarget && (
@@ -1600,8 +1600,8 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onLogout
         </div>
       </section>
 
-      <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-8 pb-24 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto px-8">
           {!loading && interests.length > 0 && (
             <p className="text-sm text-[#6b7280] mb-6">{interests.length} {interests.length === 1 ? "registration" : "registrations"}</p>
           )}
@@ -1985,8 +1985,8 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
         </div>
       </section>
 
-      <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+      <section className="pt-8 pb-24 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row gap-8">
 
           {/* Sidebar nav */}
           <div className="lg:w-64 shrink-0">
@@ -2262,8 +2262,8 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
         </div>
       </section>
 
-      <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
-        <div className="max-w-2xl mx-auto space-y-6">
+      <section className="pt-8 pb-24 bg-[#faf9f6]">
+        <div className="max-w-2xl mx-auto px-8 space-y-6">
 
           {/* Testimonials card */}
           <div className="bg-white border border-[#e8e2d9] rounded-xl p-8">
@@ -2871,8 +2871,8 @@ export default function AdminPage() {
             </div>
           </div>
         </section>
-        <section className="px-8 pt-10 pb-24 bg-[#faf9f6]">
-          <div className="max-w-2xl mx-auto">
+        <section className="pt-10 pb-24 bg-[#faf9f6]">
+          <div className="max-w-2xl mx-auto px-8">
             <SessionForm
               initial={initial}
               initialAttendeeTypes={editTarget?.attendeeTypes ?? ["child", "youngAdult", "adult"]}
@@ -3025,8 +3025,8 @@ export default function AdminPage() {
           </div>
         </section>
 
-        <section className="px-8 pt-10 pb-24 bg-[#faf9f6]">
-          <div className="max-w-7xl mx-auto">
+        <section className="pt-10 pb-24 bg-[#faf9f6]">
+          <div className="max-w-7xl mx-auto px-8">
             {/* ── Add new class form ── */}
             {addingClass && (
               <div className="bg-white border border-[#006644] rounded-xl p-6 mb-6">
@@ -3293,8 +3293,8 @@ export default function AdminPage() {
         </div>
       )}
 
-      <section className="px-8 pt-8 pb-24 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-8 pb-24 bg-[#faf9f6]">
+        <div className="max-w-7xl mx-auto px-8">
 
           {/* Stats row */}
           <div className="grid grid-cols-3 gap-2 sm:gap-4">
