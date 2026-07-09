@@ -1,4 +1,5 @@
 import type { GalleryPhoto } from "@/app/api/gallery/route";
+import GalleryLightbox from "@/components/GalleryLightbox";
 
 export const metadata = {
   title: "Gallery | Imperfect Bakers",
@@ -41,7 +42,7 @@ export default async function GalleryPage() {
 
       {/* ── PHOTOS ───────────────────────────────────────────── */}
       <section className="pt-12 pb-24 bg-[#faf9f6]">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
           {photos.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-32 text-center">
               <div className="w-16 h-16 rounded-full bg-[#006644]/8 flex items-center justify-center mb-5">
@@ -52,19 +53,7 @@ export default async function GalleryPage() {
               <p className="text-[#6b7280] text-base">Photos coming soon — check back later!</p>
             </div>
           ) : (
-            <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
-              {photos.map((photo) => (
-                <div key={photo.id} className="break-inside-avoid overflow-hidden rounded-xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={photo.url}
-                    alt="Gallery photo"
-                    className="w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            </div>
+            <GalleryLightbox photos={photos} />
           )}
         </div>
       </section>
