@@ -749,14 +749,30 @@ function GalleryView({ token, onBack, onLogout }: { token: string; onBack: () =>
     setUploading(true);
     setError("");
     let hasError = false;
+    const isVercel = typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
     for (const file of Array.from(files)) {
       try {
-        // Direct client-side upload to Vercel Blob — bypasses function payload limits
-        await upload(`gallery/${Date.now()}-${file.name}`, file, {
-          access: "public",
-          handleUploadUrl: "/api/gallery/upload",
-          clientPayload: token, // pass admin token so server can verify
-        });
+        if (isVercel) {
+          // Production: direct client-side upload to Vercel Blob (no payload limit)
+          await upload(`gallery/${Date.now()}-${file.name}`, file, {
+            access: "public",
+            handleUploadUrl: "/api/gallery/upload",
+            clientPayload: token,
+          });
+        } else {
+          // Local dev: regular multipart POST → saved to public/gallery/
+          const form = new FormData();
+          form.append("file", file);
+          const res = await fetch("/api/gallery/upload", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            body: form,
+          });
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error ?? `Upload failed (${res.status})`);
+          }
+        }
       } catch (e) {
         hasError = true;
         setError(String(e));
