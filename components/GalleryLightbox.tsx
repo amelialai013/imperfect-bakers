@@ -57,7 +57,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
       {/* ── LIGHTBOX ─────────────────────────────────────────── */}
       {activeIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm pt-16 pb-8"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm pt-16 pb-8 px-16 sm:px-20"
           onClick={close}
         >
           {/* Counter */}
@@ -78,7 +78,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
 
           {/* Prev arrow */}
           <button
-            className="absolute left-3 sm:left-5 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            className="absolute left-2 sm:left-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0"
             onClick={(e) => { e.stopPropagation(); prev(); }}
             aria-label="Previous photo"
           >
@@ -89,7 +89,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
 
           {/* Image */}
           <div
-            className="relative max-w-[90vw] max-h-[76vh] mx-14"
+            className="relative max-w-full max-h-[76vh]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -103,7 +103,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
 
           {/* Next arrow */}
           <button
-            className="absolute right-3 sm:right-5 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            className="absolute right-2 sm:right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0"
             onClick={(e) => { e.stopPropagation(); next(); }}
             aria-label="Next photo"
           >
