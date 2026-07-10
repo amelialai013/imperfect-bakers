@@ -54,7 +54,7 @@ export default async function BookAClassPage({
           <div>
             <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-4">Private bookings</span>
             <h2
-              className="text-3xl md:text-4xl text-[#1a1a1a] leading-snug"
+              className="text-3xl md:text-4xl text-[#1a1a1a] leading-snug text-balance"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
               Can&apos;t find what you&apos;re looking for?
