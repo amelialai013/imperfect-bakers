@@ -93,6 +93,10 @@ export async function updateSession(
   const existing = await getSession(id);
   if (!existing) return null;
   const updated = { ...existing, ...data };
+  // Enforce 0 <= spotsLeft <= maxSpots regardless of what the caller computed —
+  // e.g. an admin reducing maxSpots below the current booked count shouldn't be
+  // able to push spotsLeft negative.
+  updated.spotsLeft = Math.min(Math.max(updated.spotsLeft, 0), updated.maxSpots);
   await kv.set(`session:${id}`, updated);
   return updated;
 }
@@ -116,17 +120,50 @@ export async function getSessionBookings(sessionId: string): Promise<Booking[]> 
   );
 }
 
+// Atomically check-and-decrement spotsLeft on a session's JSON record.
+// A plain read-then-write (getSession + updateSession) has a race: two
+// concurrent bookings can both read the same spotsLeft, both pass the
+// capacity check, and both write independently, oversubscribing the
+// session. Running the check-and-decrement as a single Lua script makes it
+// one atomic operation on the Redis server, closing that window.
+const DECREMENT_SPOTS_SCRIPT = `
+local raw = redis.call('GET', KEYS[1])
+if not raw then return cjson.encode({ok = false, reason = 'not_found'}) end
+local session = cjson.decode(raw)
+local amount = tonumber(ARGV[1])
+if session.spotsLeft < amount then
+  return cjson.encode({ok = false, reason = 'insufficient', spotsLeft = session.spotsLeft})
+end
+session.spotsLeft = session.spotsLeft - amount
+redis.call('SET', KEYS[1], cjson.encode(session))
+return cjson.encode({ok = true, spotsLeft = session.spotsLeft})
+`;
+
+type SpotAdjustResult =
+  | { ok: true; spotsLeft: number }
+  | { ok: false; reason: "not_found" | "insufficient"; spotsLeft?: number };
+
+async function decrementSpots(sessionId: string, amount: number): Promise<SpotAdjustResult> {
+  // kv.eval already JSON-deserializes the Lua script's cjson-encoded return value —
+  // do not JSON.parse it again here.
+  const result = await kv.eval(DECREMENT_SPOTS_SCRIPT, [`session:${sessionId}`], [amount]);
+  return result as SpotAdjustResult;
+}
+
 export async function createBooking(
   data: Omit<Booking, "id" | "createdAt" | "cancelled">
 ): Promise<{ booking: Booking; session: ClassSession } | { error: string }> {
-  const session = await getSession(data.sessionId);
-  if (!session) return { error: "Session not found." };
-  if (session.spotsLeft < data.totalPeople) {
+  if (!Number.isInteger(data.totalPeople) || data.totalPeople < 1) {
+    return { error: "Invalid number of attendees." };
+  }
+  const result = await decrementSpots(data.sessionId, data.totalPeople);
+  if (!result.ok) {
+    if (result.reason === "not_found") return { error: "Session not found." };
     return {
       error:
-        session.spotsLeft === 0
+        result.spotsLeft === 0
           ? "This session is fully booked."
-          : `Only ${session.spotsLeft} spot${session.spotsLeft === 1 ? "" : "s"} remaining — you requested ${data.totalPeople}.`,
+          : `Only ${result.spotsLeft} spot${result.spotsLeft === 1 ? "" : "s"} remaining — you requested ${data.totalPeople}.`,
     };
   }
 
@@ -143,10 +180,7 @@ export async function createBooking(
   await kv.set(`booking:${id}`, booking);
   await kv.rpush(`session:${data.sessionId}:bookings`, id);
 
-  const updatedSession = await updateSession(data.sessionId, {
-    spotsLeft: session.spotsLeft - data.totalPeople,
-  });
-
+  const updatedSession = await getSession(data.sessionId);
   return { booking, session: updatedSession! };
 }
 
@@ -161,14 +195,37 @@ export async function updateBookingStatus(
   return updated;
 }
 
+// Atomically mark a booking cancelled and restore its spots to the session,
+// as a single Lua script. This closes two races: two concurrent cancel
+// requests for the same booking both passing the "not already cancelled"
+// check and double-refunding spots, and the same read-then-write race on
+// spotsLeft described above DECREMENT_SPOTS_SCRIPT.
+const CANCEL_BOOKING_SCRIPT = `
+local braw = redis.call('GET', KEYS[1])
+if not braw then return cjson.encode({ok = false, reason = 'not_found'}) end
+local booking = cjson.decode(braw)
+if booking.cancelled then return cjson.encode({ok = true, alreadyCancelled = true}) end
+booking.cancelled = true
+redis.call('SET', KEYS[1], cjson.encode(booking))
+
+local sraw = redis.call('GET', KEYS[2])
+if sraw then
+  local session = cjson.decode(sraw)
+  local amount = tonumber(ARGV[1])
+  local newSpots = session.spotsLeft + amount
+  if newSpots > session.maxSpots then newSpots = session.maxSpots end
+  session.spotsLeft = newSpots
+  redis.call('SET', KEYS[2], cjson.encode(session))
+end
+return cjson.encode({ok = true})
+`;
+
 export async function cancelBooking(id: string): Promise<void> {
   const booking = await kv.get<Booking>(`booking:${id}`);
-  if (!booking || booking.cancelled) return;
-  await kv.set(`booking:${id}`, { ...booking, cancelled: true });
-  const session = await getSession(booking.sessionId);
-  if (session) {
-    await updateSession(booking.sessionId, {
-      spotsLeft: Math.min(session.spotsLeft + booking.totalPeople, session.maxSpots),
-    });
-  }
+  if (!booking) return;
+  await kv.eval(
+    CANCEL_BOOKING_SCRIPT,
+    [`booking:${id}`, `session:${booking.sessionId}`],
+    [booking.totalPeople]
+  );
 }

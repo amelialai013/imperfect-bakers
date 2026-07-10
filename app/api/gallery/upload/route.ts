@@ -13,6 +13,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   const file = form.get("file") as File | null;
   if (!file) return NextResponse.json({ error: "No file" }, { status: 400 });
   if (!file.type.startsWith("image/")) return NextResponse.json({ error: "Not an image" }, { status: 400 });
+  if (file.size > 10 * 1024 * 1024) return NextResponse.json({ error: "Image must be under 10MB" }, { status: 400 });
 
   const isDev = process.env.NODE_ENV === "development";
 

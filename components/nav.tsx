@@ -69,7 +69,7 @@ export default function Nav() {
 
         {/* Desktop links */}
         <div className="hidden lg:flex items-center gap-8">
-          {links.map((link, _i) => {
+          {links.map((link) => {
             const active = pathname === link.href;
             return (
               <Link

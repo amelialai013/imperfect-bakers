@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
+import { escapeHtml } from "@/lib/email-templates";
 
 export const dynamic = "force-dynamic";
 
@@ -27,8 +28,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   await kv.set(`interest:${id}`, updated);
 
   // Send customer email
-  const { name, email, classes } = entry as { name: string; email: string; classes: string[] };
-  const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "your selected classes";
+  const { name: rawName, email, classes } = entry as { name: string; email: string; classes: string[] };
+  const name = escapeHtml(rawName);
+  const classesText = Array.isArray(classes) && classes.length ? escapeHtml(classes.join(", ")) : "your selected classes";
 
   try {
     await sendCustomerEmail(status, { name, email, classes: classesText });

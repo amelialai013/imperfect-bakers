@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { createBooking, getSession, getSessionBookings } from "@/lib/data";
+import { createBooking, getSessionBookings } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
-import { getTemplates, sub } from "@/lib/email-templates";
+import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
 import type { Booking, ClassSession } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
@@ -56,14 +56,19 @@ async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
 
-  const { id, actionToken, name, email, phone, counts, totalPeople, paymentStatus, notes } = booking;
+  const { id, actionToken, name: rawName, email: rawEmail, phone: rawPhone, counts, totalPeople, paymentStatus: rawPaymentStatus, notes: rawNotes } = booking;
+  const name = escapeHtml(rawName);
+  const email = escapeHtml(rawEmail);
+  const phone = escapeHtml(rawPhone);
+  const paymentStatus = escapeHtml(rawPaymentStatus);
+  const notes = escapeHtml(rawNotes ?? "");
 
   const confirmUrl = `${BASE_URL}/api/bookings/action?id=${id}&action=confirm&token=${actionToken}`;
   const declineUrl = `${BASE_URL}/api/bookings/action?id=${id}&action=decline&token=${actionToken}`;
 
-  const sessionName = session?.sessionName ?? "Unknown session";
-  const sessionDate = session?.date ?? "";
-  const sessionTime = session?.time ?? "";
+  const sessionName = escapeHtml(session?.sessionName ?? "Unknown session");
+  const sessionDate = escapeHtml(session?.date ?? "");
+  const sessionTime = escapeHtml(session?.time ?? "");
 
   const attendeeBreakdown = [
     counts.child > 0 ? `${counts.child} child` : null,
@@ -103,7 +108,7 @@ async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
     body: JSON.stringify({
       from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <hello@imperfectbakers.com>", reply_to: ["imperfectbakers@gmail.com"],
       to: ["imperfectbakers@gmail.com"],
-      subject: `New booking: ${name} — ${sessionName} (${sessionDate})`,
+      subject: `New booking: ${rawName} — ${session?.sessionName ?? "Unknown session"} (${session?.date ?? ""})`,
       html,
     }),
   });
@@ -117,13 +122,15 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
 
-  const { name, email, totalPeople } = booking;
-  const sessionName = session?.sessionName ?? "your class";
-  const sessionDate = session?.date ?? "";
-  const sessionTime = session?.time ?? "";
+  const { name: rawName, email, totalPeople } = booking;
+  const name = escapeHtml(rawName);
+  const sessionName = escapeHtml(session?.sessionName ?? "your class");
+  const sessionDate = escapeHtml(session?.date ?? "");
+  const sessionTime = escapeHtml(session?.time ?? "");
 
   const tmpl = (await getTemplates()).booking_request;
   const vars = { name, sessionName, sessionDate, sessionTime, totalPeople: String(totalPeople) };
+  const subjectVars = { name: rawName, sessionName: session?.sessionName ?? "your class", sessionDate: session?.date ?? "", sessionTime: session?.time ?? "", totalPeople: String(totalPeople) };
 
   const html = `
     <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
@@ -153,7 +160,7 @@ async function sendCustomerRequestEmail(booking: Booking, session: ClassSession 
       from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <hello@imperfectbakers.com>",
       reply_to: ["imperfectbakers@gmail.com"],
       to: [email],
-      subject: sub(tmpl.subject, vars),
+      subject: sub(tmpl.subject, subjectVars),
       html,
     }),
   });

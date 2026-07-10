@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
-import { getTemplates, sub } from "@/lib/email-templates";
+import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
 
 export const dynamic = "force-dynamic";
 
@@ -14,21 +14,21 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const entry = await kv.get(`interest:${id}`) as Record<string, unknown> | null;
   if (!entry) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  // Stamp the entry so admin UI can show "Notified" badge
-  await kv.set(`interest:${id}`, { ...entry, availabilityNotifiedAt: new Date().toISOString() });
-
-  const { name, email, classes: allClasses } = entry as { name: string; email: string; classes: string[] };
-  // Allow caller to override which classes to mention (partial availability)
-  let selectedClasses: string[] = allClasses;
-  try { const body = await req.json(); if (Array.isArray(body?.classes) && body.classes.length) selectedClasses = body.classes; } catch { /* no body */ }
-  const classesText = selectedClasses.length ? selectedClasses.join(", ") : "your selected classes";
-  const classes = selectedClasses;
-
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "Email not configured" }, { status: 500 });
 
+  const { name: rawName, email, classes: allClasses } = entry as { name: string; email: string; classes: string[] };
+  const name = escapeHtml(rawName);
+  // Allow caller to override which classes to mention (partial availability)
+  let selectedClasses: string[] = Array.isArray(allClasses) ? allClasses : [];
+  try { const body = await req.json(); if (Array.isArray(body?.classes) && body.classes.length) selectedClasses = body.classes; } catch { /* no body */ }
+  const rawClassesText = selectedClasses.length ? selectedClasses.join(", ") : "your selected classes";
+  const classesText = escapeHtml(rawClassesText);
+  const classes = selectedClasses;
+
   const tmpl = (await getTemplates()).interest_classes_available;
   const vars = { name, classes: classesText };
+  const subjectVars = { name: rawName, classes: rawClassesText };
 
   const html = `
     <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
@@ -59,15 +59,19 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       from: process.env.RESEND_FROM_EMAIL ?? "Imperfect Bakers <hello@imperfectbakers.com>",
       reply_to: ["imperfectbakers@gmail.com"],
       to: [email],
-      subject: sub(tmpl.subject, vars),
+      subject: sub(tmpl.subject, subjectVars),
       html,
     }),
   });
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Resend error ${res.status}: ${text}`);
+    return NextResponse.json({ error: `Failed to send email: ${text}` }, { status: 502 });
   }
+
+  // Only stamp "notified" once the email has actually been sent successfully —
+  // otherwise the admin UI shows a false "Notified" badge for a send that failed.
+  await kv.set(`interest:${id}`, { ...entry, availabilityNotifiedAt: new Date().toISOString() });
 
   return NextResponse.json({ ok: true });
 }

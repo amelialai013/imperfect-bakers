@@ -199,24 +199,6 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
   );
 }
 
-function dateParts(date: string) {
-  // "Saturday 18 July 2026" → { dow: "Sat", day: "18", mon: "Jul" }
-  const months: Record<string, string> = {
-    January: "Jan", February: "Feb", March: "Mar", April: "Apr",
-    May: "May", June: "Jun", July: "Jul", August: "Aug",
-    September: "Sep", October: "Oct", November: "Nov", December: "Dec",
-  };
-  const days: Record<string, string> = {
-    Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu",
-    Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
-  };
-  const parts = date.split(" "); // ["Saturday", "18", "July", "2026"]
-  if (parts.length === 4) {
-    return { dow: days[parts[0]] ?? parts[0], day: parts[1], mon: months[parts[2]] ?? parts[2] };
-  }
-  return { dow: "", day: "", mon: date };
-}
-
 function shortDate(date: string) {
   // "Saturday 18 July 2026" → "18 Jul 2026"
   const months: Record<string, string> = {
@@ -227,19 +209,6 @@ function shortDate(date: string) {
   const parts = date.split(" "); // ["Saturday", "18", "July", "2026"]
   if (parts.length === 4) {
     return `${parts[1]} ${months[parts[2]] ?? parts[2]} ${parts[3]}`;
-  }
-  return date;
-}
-
-function shortDayDate(date: string) {
-  // "Saturday 18 July 2026" → "Sat 18 July 2026"
-  const days: Record<string, string> = {
-    Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu",
-    Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
-  };
-  const parts = date.split(" "); // ["Saturday", "18", "July", "2026"]
-  if (parts.length === 4) {
-    return `${days[parts[0]] ?? parts[0]} ${parts[1]} ${parts[2]} ${parts[3]}`;
   }
   return date;
 }

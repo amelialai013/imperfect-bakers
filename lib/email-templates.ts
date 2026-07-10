@@ -68,7 +68,19 @@ export const DEFAULT_TEMPLATES: EmailTemplates = {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-/** Replace {{variable}} placeholders in a string */
+/** Escape a string for safe interpolation into HTML (email bodies, etc). */
+export function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/** Replace {{variable}} placeholders in a string. Used for both plain-text
+ * subject lines and HTML email bodies — callers must pass already-escaped
+ * values in `vars` when substituting into an HTML context. */
 export function sub(text: string, vars: Record<string, string>): string {
   return Object.entries(vars).reduce((t, [k, v]) => t.replaceAll(`{{${k}}}`, v), text);
 }

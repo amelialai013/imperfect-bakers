@@ -9,8 +9,8 @@ interface Props {
   error?: string;
 }
 
-// Compress + resize image client-side → returns base64 data URL
-function compressImage(file: File, maxPx = 1200, quality = 0.82): Promise<string> {
+// Compress + resize image client-side → returns a Blob ready for upload
+function compressImage(file: File, maxPx = 1200, quality = 0.82): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = reject;
@@ -27,7 +27,7 @@ function compressImage(file: File, maxPx = 1200, quality = 0.82): Promise<string
         const ctx = canvas.getContext("2d");
         if (!ctx) { reject(new Error("Canvas unavailable")); return; }
         ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL("image/jpeg", quality));
+        canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("Compression failed")), "image/jpeg", quality);
       };
       img.src = e.target?.result as string;
     };
@@ -35,7 +35,7 @@ function compressImage(file: File, maxPx = 1200, quality = 0.82): Promise<string
   });
 }
 
-export default function ImageUpload({ value, onChange, error }: Props) {
+export default function ImageUpload({ value, onChange, token, error }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [processing, setProcessing] = useState(false);
   const [uploadError, setUploadError] = useState("");
@@ -46,12 +46,25 @@ export default function ImageUpload({ value, onChange, error }: Props) {
       setUploadError("File must be an image");
       return;
     }
+    if (!token) {
+      setUploadError("Not signed in — please refresh and try again");
+      return;
+    }
     setProcessing(true);
     try {
-      const dataUrl = await compressImage(file);
-      onChange(dataUrl);
-    } catch {
-      setUploadError("Could not process image — please try again");
+      const compressed = await compressImage(file);
+      const form = new FormData();
+      form.append("file", compressed, file.name);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: form,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error ?? `Upload failed (${res.status})`);
+      onChange(data.url);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Could not upload image — please try again");
     }
     setProcessing(false);
   }

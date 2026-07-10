@@ -1,13 +1,7 @@
-import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
+import { escapeHtml } from "@/lib/email-templates";
 
 export const dynamic = "force-dynamic";
-
-const EXPERIENCE_LABELS: Record<string, string> = {
-  complete_beginner: "Complete beginner",
-  some_experience: "Some experience",
-  confident_cook: "Confident cook",
-};
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
 
@@ -66,12 +60,12 @@ export async function GET(req: Request) {
   await kv.set(`interest:${id}`, updated);
 
   // Send customer email
-  const { name, email, classes, experience } = entry as {
-    name: string; email: string; classes: string[]; experience: string;
+  const { name: rawName, email, classes } = entry as {
+    name: string; email: string; classes: string[];
   };
+  const name = escapeHtml(rawName);
 
-  const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "your selected classes";
-  const expLabel = EXPERIENCE_LABELS[experience] ?? experience ?? "";
+  const classesText = Array.isArray(classes) && classes.length ? escapeHtml(classes.join(", ")) : "your selected classes";
 
   try {
     if (action === "confirm") {
@@ -135,12 +129,13 @@ export async function GET(req: Request) {
     // Still show success page — status was already updated
   }
 
+  const safeEmail = escapeHtml(email);
   if (action === "confirm") {
     return htmlPage(
       "Confirmed!",
       "✅",
       `${name} is confirmed!`,
-      `A confirmation email has been sent to ${email}. They're all set!`,
+      `A confirmation email has been sent to ${safeEmail}. They're all set!`,
       "#006644"
     );
   } else {
@@ -148,7 +143,7 @@ export async function GET(req: Request) {
       "Declined",
       "❌",
       "Registration declined",
-      `A notification has been sent to ${email} letting them know.`,
+      `A notification has been sent to ${safeEmail} letting them know.`,
       "#374151"
     );
   }

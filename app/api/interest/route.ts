@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
-import { getTemplates, sub } from "@/lib/email-templates";
+import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
 import { getSettings } from "@/app/api/settings/route";
 
 export const dynamic = "force-dynamic";
@@ -86,16 +86,20 @@ async function sendEmail(payload: {
 }
 
 async function sendAdminEmail(entry: Record<string, unknown>) {
-  const { id, actionToken, name, email, phone, experience, classes, notes } = entry as {
+  const { id, actionToken, name: rawName, email: rawEmail, phone: rawPhone, experience, classes, notes: rawNotes } = entry as {
     id: string; actionToken: string; name: string; email: string; phone: string;
     experience: string; classes: string[]; notes: string;
   };
+  const name = escapeHtml(rawName);
+  const email = escapeHtml(rawEmail);
+  const phone = escapeHtml(rawPhone);
+  const notes = escapeHtml(rawNotes ?? "");
 
-  const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "None selected";
+  const classesText = Array.isArray(classes) && classes.length ? escapeHtml(classes.join(", ")) : "None selected";
   const settings = await getSettings();
   const levelMap: Record<string, string> = {};
   for (const l of settings.experienceLevels) levelMap[l.value] = l.label;
-  const expLabel = levelMap[experience] ?? experience ?? "Not specified";
+  const expLabel = escapeHtml(levelMap[experience] ?? experience ?? "Not specified");
 
   const confirmUrl = `${BASE_URL}/api/interest/action?id=${id}&action=confirm&token=${actionToken}`;
   const declineUrl = `${BASE_URL}/api/interest/action?id=${id}&action=decline&token=${actionToken}`;
@@ -115,23 +119,32 @@ async function sendAdminEmail(entry: Record<string, unknown>) {
           <tr><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:13px;color:#6b7280">Classes</td><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:14px">${classesText}</td></tr>
           <tr><td style="padding:10px 0;font-size:13px;color:#6b7280;vertical-align:top">Notes</td><td style="padding:10px 0;font-size:14px">${notes || "—"}</td></tr>
         </table>
+        <div style="margin-top:32px">
+          <a href="${confirmUrl}" style="display:inline-block;padding:14px 28px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600;margin-right:12px">✓ Confirm</a>
+          <a href="${declineUrl}" style="display:inline-block;padding:14px 28px;background:#fff;color:#1a1a1a;text-decoration:none;border-radius:9999px;font-size:14px;font-weight:600;border:1px solid #e4dfd5">✗ Decline</a>
+        </div>
+        <p style="margin-top:16px;font-size:12px;color:#9ca3af">Clicking Confirm or Decline will immediately send an automated response to ${name} at ${email}.</p>
       </div>
     </div>
   `;
 
+  const rawClassesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "None selected";
   await sendEmail({
     to: ["imperfectbakers@gmail.com"],
-    subject: `New interest: ${name} — ${classesText}`,
+    subject: `New interest: ${rawName} — ${rawClassesText}`,
     html,
   });
 }
 
 async function sendCustomerEmail(entry: Record<string, unknown>) {
-  const { name, email, classes } = entry as { name: string; email: string; classes: string[] };
-  const classesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "your selected classes";
+  const { name: rawName, email, classes } = entry as { name: string; email: string; classes: string[] };
+  const name = escapeHtml(rawName);
+  const rawClassesText = Array.isArray(classes) && classes.length ? classes.join(", ") : "your selected classes";
+  const classesText = escapeHtml(rawClassesText);
 
   const tmpl = (await getTemplates()).interest_received;
   const vars = { name, classes: classesText };
+  const subjectVars = { name: rawName, classes: rawClassesText };
 
   const html = `
     <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
@@ -153,7 +166,7 @@ async function sendCustomerEmail(entry: Record<string, unknown>) {
     </div>
   `;
 
-  await sendEmail({ to: [email], subject: sub(tmpl.subject, vars), html });
+  await sendEmail({ to: [email], subject: sub(tmpl.subject, subjectVars), html });
 }
 
 async function sendToSheets(entry: Record<string, unknown>) {

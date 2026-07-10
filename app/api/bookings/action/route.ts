@@ -1,5 +1,6 @@
 import { kv } from "@vercel/kv";
 import { updateBookingStatus, getSession, cancelBooking } from "@/lib/data";
+import { escapeHtml } from "@/lib/email-templates";
 import type { Booking } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +14,7 @@ function htmlPage(title: string, emoji: string, heading: string, body: string, c
     <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#faf9f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
     .card{background:#fff;border:1px solid #e4dfd5;border-radius:16px;padding:48px 40px;max-width:440px;width:100%;text-align:center}
     .emoji{font-size:48px;margin-bottom:20px}
-    h1{font-size:24px;font-weight:600;color:#1a1a1a;margin-bottom:12px}
+    h1{font-size:24px;font-weight:600;color:${color};margin-bottom:12px}
     p{font-size:15px;color:#6b7280;line-height:1.6;margin-bottom:24px}
     a{display:inline-block;padding:14px 32px;background:#006644;color:#fff;text-decoration:none;border-radius:9999px;font-size:15px;font-weight:600;letter-spacing:-0.01em}</style>
     </head><body><div class="card"><div class="emoji">${emoji}</div><h1>${heading}</h1><p>${body}</p>
@@ -62,14 +63,17 @@ export async function GET(req: Request) {
   }
 
   const session = await getSession(booking.sessionId);
-  const sessionName = session?.sessionName ?? "your class";
-  const sessionDate = session?.date ?? "";
+  const rawSessionName = session?.sessionName ?? "your class";
+  const customerName = escapeHtml(booking.name);
+  const customerEmail = escapeHtml(booking.email);
+  const sessionName = escapeHtml(rawSessionName);
+  const sessionDate = escapeHtml(session?.date ?? "");
 
   try {
     if (action === "confirm") {
       await sendEmail({
         to: booking.email,
-        subject: `You're confirmed! — ${sessionName}`,
+        subject: `You're confirmed! — ${rawSessionName}`,
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
             <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -77,7 +81,7 @@ export async function GET(req: Request) {
               <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
             </div>
             <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
-              <p style="font-size:16px;margin-bottom:16px">Hi ${booking.name}! 👋</p>
+              <p style="font-size:16px;margin-bottom:16px">Hi ${customerName}! 👋</p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
                 Great news — your booking for <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""} is confirmed!
               </p>
@@ -103,7 +107,7 @@ export async function GET(req: Request) {
               <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
             </div>
             <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
-              <p style="font-size:16px;margin-bottom:16px">Hi ${booking.name},</p>
+              <p style="font-size:16px;margin-bottom:16px">Hi ${customerName},</p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
                 Thank you so much for booking <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""}.
               </p>
@@ -127,9 +131,9 @@ export async function GET(req: Request) {
   }
 
   if (action === "confirm") {
-    return htmlPage("Confirmed!", "✅", `${booking.name} is confirmed!`, `A confirmation email has been sent to ${booking.email}.`, "#006644");
+    return htmlPage("Confirmed!", "✅", `${customerName} is confirmed!`, `A confirmation email has been sent to ${customerEmail}.`, "#006644");
   } else {
-    return htmlPage("Declined", "❌", "Booking declined", `A notification has been sent to ${booking.email} and their spot has been released.`, "#374151");
+    return htmlPage("Declined", "❌", "Booking declined", `A notification has been sent to ${customerEmail} and their spot has been released.`, "#374151");
   }
 }
 

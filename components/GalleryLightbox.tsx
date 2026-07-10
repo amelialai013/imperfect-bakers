@@ -46,7 +46,6 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               src={photo.url}
               alt="Gallery photo"
               className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-              loading="lazy"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
           </div>

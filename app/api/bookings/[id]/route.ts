@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { cancelBooking, updateBookingStatus, getSession, getSessionBookings, updateSession } from "@/lib/data";
+import { cancelBooking, updateBookingStatus, getSession, updateSession } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
-import { getTemplates, sub } from "@/lib/email-templates";
+import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
 import type { Booking } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
@@ -37,14 +37,16 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   if (booking) {
     const session = await getSession(booking.sessionId);
-    const sessionName = session?.sessionName ?? "your class";
-    const sessionDate = session?.date ?? "";
+    const customerName = escapeHtml(booking.name);
+    const sessionName = escapeHtml(session?.sessionName ?? "your class");
+    const sessionDate = escapeHtml(session?.date ?? "");
     try {
       const tmpl = (await getTemplates()).booking_cancelled;
-      const vars = { name: booking.name, sessionName, sessionDate };
+      const vars = { name: customerName, sessionName, sessionDate };
+      const subjectVars = { name: booking.name, sessionName: session?.sessionName ?? "your class", sessionDate: session?.date ?? "" };
       await sendEmail({
         to: booking.email,
-        subject: sub(tmpl.subject, vars),
+        subject: sub(tmpl.subject, subjectVars),
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
             <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -52,7 +54,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
               <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
             </div>
             <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
-              <p style="font-size:16px;margin-bottom:16px">Hi ${booking.name},</p>
+              <p style="font-size:16px;margin-bottom:16px">Hi ${customerName},</p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
                 Your booking for <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""} has sadly been cancelled due to insufficient registrations or unforeseen circumstances.
               </p>
@@ -147,18 +149,20 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   const session = await getSession(booking.sessionId);
-  const sessionName = session?.sessionName ?? "your class";
-  const sessionDate = session?.date ?? "";
+  const customerName = escapeHtml(booking.name);
+  const sessionName = escapeHtml(session?.sessionName ?? "your class");
+  const sessionDate = escapeHtml(session?.date ?? "");
 
   // Send customer email
   try {
     const templates = await getTemplates();
-    const vars = { name: booking.name, sessionName, sessionDate };
+    const subjectVars = { name: booking.name, sessionName: session?.sessionName ?? "your class", sessionDate: session?.date ?? "" };
+    const vars = { name: customerName, sessionName, sessionDate };
     if (status === "confirmed") {
       const tmpl = templates.booking_confirmed;
       await sendEmail({
         to: booking.email,
-        subject: sub(tmpl.subject, vars),
+        subject: sub(tmpl.subject, subjectVars),
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
             <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -166,7 +170,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
               <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
             </div>
             <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
-              <p style="font-size:16px;margin-bottom:16px">Hi ${booking.name}! 👋</p>
+              <p style="font-size:16px;margin-bottom:16px">Hi ${customerName}! 👋</p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
                 Great news — your booking for <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""} is confirmed!
               </p>
@@ -183,7 +187,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       const tmpl = templates.booking_declined;
       await sendEmail({
         to: booking.email,
-        subject: sub(tmpl.subject, vars),
+        subject: sub(tmpl.subject, subjectVars),
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
             <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -191,7 +195,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
               <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:14px">Imperfect Bakers</p>
             </div>
             <div style="background:#faf9f6;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e4dfd5;border-top:none">
-              <p style="font-size:16px;margin-bottom:16px">Hi ${booking.name},</p>
+              <p style="font-size:16px;margin-bottom:16px">Hi ${customerName},</p>
               <p style="font-size:15px;color:#374151;line-height:1.7;margin-bottom:16px">
                 Thank you so much for booking <strong>${sessionName}</strong>${sessionDate ? ` on <strong>${sessionDate}</strong>` : ""}.
               </p>

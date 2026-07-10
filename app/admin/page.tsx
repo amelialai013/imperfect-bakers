@@ -64,18 +64,6 @@ function displayDateToIso(display: string): string {
 }
 
 // Format start time + duration hours → "1 – 4pm"
-function shortDayDate(date: string): string {
-  const days: Record<string, string> = {
-    Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu",
-    Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
-  };
-  const parts = date.split(" ");
-  if (parts.length === 4) {
-    return `${days[parts[0]] ?? parts[0]} ${parts[1]} ${parts[2]} ${parts[3]}`;
-  }
-  return date;
-}
-
 function formatTimeRange(start: string, durationHours: number): string {
   if (!start) return "";
   const [hStr, mStr] = start.split(":");
@@ -164,6 +152,31 @@ const ATTENDEE_OPTIONS = [
   { key: "adult" as const, label: "Adult", sub: "35+ yrs" },
 ];
 
+const SESSION_FORM_LABEL_CLS = "block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4";
+const SESSION_FORM_INPUT_CLS = "w-full border border-[#e4dfd5] rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors";
+
+function SelectField({ label, name, value, onChange, required: req, children, error }: {
+  label: string; name: string; value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  required?: boolean; children: React.ReactNode; error?: string;
+}) {
+  return (
+    <div>
+      <label className={SESSION_FORM_LABEL_CLS}>{label}</label>
+      <div className="relative">
+        <select name={name} value={value} onChange={onChange} required={req}
+          className={SESSION_FORM_INPUT_CLS + " appearance-none pr-8 cursor-pointer" + (error ? " !border-red-400 focus:!border-red-500" : "")}>
+          {children}
+        </select>
+        <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+      {error && <p className="text-xs text-red-500 mt-1.5">{error}</p>}
+    </div>
+  );
+}
+
 function SessionForm({
   initial,
   initialAttendeeTypes,
@@ -248,26 +261,6 @@ function SessionForm({
   useEffect(() => {
     setForm((f) => ({ ...f, time: formatTimeRange(startTime, parseFloat(duration) || 3) }));
   }, [startTime, duration]);
-
-  const SelectField = ({ label, name, value, onChange, required: req, children, error }: {
-    label: string; name: string; value: string;
-    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    required?: boolean; children: React.ReactNode; error?: string;
-  }) => (
-    <div>
-      <label className={labelCls}>{label}</label>
-      <div className="relative">
-        <select name={name} value={value} onChange={onChange} required={req}
-          className={cls + " appearance-none pr-8 cursor-pointer" + (error ? " !border-red-400 focus:!border-red-500" : "")}>
-          {children}
-        </select>
-        <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-        </svg>
-      </div>
-      {error && <p className="text-xs text-red-500 mt-1.5">{error}</p>}
-    </div>
-  );
 
   const sectionLabel = "text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-5 block";
 
@@ -1403,10 +1396,10 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                     </div>
                     {(!b.cancelled && (!b.status || b.status === "pending")) && (
                       <div className="flex items-center gap-2 flex-wrap mt-3">
-                        <button onClick={() => act(b.id, "confirmed")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors">
+                        <button onClick={() => act(b.id, "confirmed")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50">
                           ✓ Confirm
                         </button>
-                        <button onClick={() => act(b.id, "declined")} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors">
+                        <button onClick={() => act(b.id, "declined")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50">
                           ✗ Decline
                         </button>
                       </div>
@@ -1491,12 +1484,6 @@ type InterestEntry = {
   status: "pending" | "confirmed" | "declined";
   actionedAt?: string;
   availabilityNotifiedAt?: string;
-};
-
-const EXP_LABELS: Record<string, string> = {
-  complete_beginner: "Complete beginner",
-  some_experience: "Some experience",
-  confident_cook: "Confident cook",
 };
 
 function InterestsView({ token, onBack, onAllBookings, onManageClasses, onEmailTemplates, onSettings, onGallery, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onSettings: () => void; onGallery: () => void; onLogout: () => void }) {
@@ -2285,7 +2272,6 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                     const nErr = testimonialErrors[i]?.name;
                     const rErr = testimonialErrors[i]?.role;
                     const errBorder = "border-red-400 focus:border-red-500";
-                    const selectErrBorder = "!border-red-400";
                     return (<>
                   <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#6b7280]">Quote {i + 1}{i === 0 ? " — featured (large)" : ""}</p>
                   <div>
@@ -3463,7 +3449,7 @@ export default function AdminPage() {
 
                     {/* Bookings accordion trigger */}
                     <button
-                      onClick={() => setExpandedBookings((prev) => { const next = new Set(prev); showBookings ? next.delete(s.id) : next.add(s.id); return next; })}
+                      onClick={() => setExpandedBookings((prev) => { const next = new Set(prev); if (showBookings) { next.delete(s.id); } else { next.add(s.id); } return next; })}
                       className="w-full border-t border-[#e8e2d9] px-7 py-3.5 flex items-center justify-between hover:bg-[#faf9f6] transition-colors"
                     >
                       <span className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] text-left">

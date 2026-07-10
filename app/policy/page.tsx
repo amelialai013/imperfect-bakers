@@ -64,7 +64,7 @@ export default function PolicyPage() {
             <div key={i} className="bg-white border border-[#e8e2d9] rounded-2xl px-7 py-6">
               <div className="flex items-start gap-4">
                 <div className="mt-0.5 flex-shrink-0 w-9 h-9 rounded-full bg-[#006644]/8 flex items-center justify-center text-[#006644]">
-                  {ICONS[i] ?? ICONS[0]}
+                  {ICONS[i % ICONS.length]}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h2
