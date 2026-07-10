@@ -5,8 +5,16 @@ import type { GalleryPhoto } from "@/app/api/gallery/route";
 
 const BAR = "5rem"; // top and bottom bar height — equal for symmetry
 
+// Varied placeholder ratios so the loading skeleton already looks like a masonry grid
+const PLACEHOLDER_RATIOS = ["4 / 5", "1 / 1", "3 / 4", "5 / 4", "4 / 3"];
+
 export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [loaded, setLoaded] = useState<Set<string>>(new Set());
+
+  const markLoaded = useCallback((id: string) => {
+    setLoaded((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
+  }, []);
 
   const close = useCallback(() => setActiveIndex(null), []);
   const prev = useCallback(() =>
@@ -35,21 +43,31 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
     <>
       {/* ── GRID ─────────────────────────────────────────────── */}
       <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-3 space-y-3">
-        {photos.map((photo, i) => (
-          <div
-            key={photo.id}
-            className="break-inside-avoid overflow-hidden rounded-xl cursor-zoom-in group relative"
-            onClick={() => setActiveIndex(i)}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={photo.url}
-              alt="Gallery photo"
-              className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
-          </div>
-        ))}
+        {photos.map((photo, i) => {
+          const isLoaded = loaded.has(photo.id);
+          return (
+            <div
+              key={photo.id}
+              className="break-inside-avoid overflow-hidden rounded-xl cursor-zoom-in group relative bg-[#efe9de]"
+              style={!isLoaded ? { aspectRatio: PLACEHOLDER_RATIOS[i % PLACEHOLDER_RATIOS.length] } : undefined}
+              onClick={() => setActiveIndex(i)}
+            >
+              {!isLoaded && (
+                <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-[#efe9de] to-[#e2d9cb]" />
+              )}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photo.url}
+                alt="Gallery photo"
+                onLoad={() => markLoaded(photo.id)}
+                className={`w-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.02] ${
+                  isLoaded ? "opacity-100" : "absolute inset-0 h-full opacity-0"
+                }`}
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
+            </div>
+          );
+        })}
       </div>
 
       {/* ── LIGHTBOX ─────────────────────────────────────────── */}
