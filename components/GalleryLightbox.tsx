@@ -57,6 +57,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               )}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
+                ref={(el) => { if (el?.complete) markLoaded(photo.id); }}
                 src={photo.url}
                 alt="Gallery photo"
                 onLoad={() => markLoaded(photo.id)}
