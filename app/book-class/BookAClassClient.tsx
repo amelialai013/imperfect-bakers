@@ -64,8 +64,11 @@ export default function BookAClassClient({ sessions, initialClass }: { sessions:
   if (upcomingSessions.length === 0) {
     return (
       <div className="py-20 text-center">
-        <p className="text-[#6b7280] text-base">No sessions currently available.</p>
-        <p className="text-[#6b7280] text-sm mt-2">Check back soon or register your interest below.</p>
+        <p className="text-[#1a1a1a] text-base">No sessions currently available.</p>
+        <p className="text-[#6b7280] text-sm mt-2">
+          Check back soon or{" "}
+          <a href="/interest" className="text-[#006644] underline underline-offset-2 hover:text-[#004d33] transition-colors">register your interest</a>.
+        </p>
       </div>
     );
   }
