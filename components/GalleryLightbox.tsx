@@ -1,16 +1,20 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import type { GalleryPhoto } from "@/app/api/gallery/route";
-
-const BAR = "5rem"; // top and bottom bar height — equal for symmetry
 
 // Varied placeholder ratios so the loading skeleton already looks like a masonry grid
 const PLACEHOLDER_RATIOS = ["4 / 5", "1 / 1", "3 / 4", "5 / 4", "4 / 3"];
 
+// Minimum horizontal drag (px) to count as a swipe, and how much more
+// horizontal than vertical the drag must be so a scroll-ish gesture doesn't
+// accidentally page through photos.
+const SWIPE_THRESHOLD = 50;
+
 export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [loaded, setLoaded] = useState<Set<string>>(new Set());
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const markLoaded = useCallback((id: string) => {
     setLoaded((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
@@ -23,6 +27,22 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
   const next = useCallback(() =>
     setActiveIndex((i) => (i === null ? null : (i + 1) % photos.length)),
     [photos.length]);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  }, []);
+
+  const onTouchEnd = useCallback((e: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0) next(); else prev();
+  }, [next, prev]);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -79,26 +99,21 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
         /* Clicking the backdrop (this div) closes the lightbox */
         <div
           onClick={close}
-          style={{
-            position: "fixed", inset: 0, zIndex: 10000,
-            display: "flex", flexDirection: "column",
-            background: "rgba(0,0,0,0.9)",
-            backdropFilter: "blur(4px)",
-          }}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          className="fixed inset-0 z-[10000] flex flex-col bg-black/90 backdrop-blur-sm"
         >
-          {/* Top bar — fixed height, click closes */}
-          <div
-            style={{ height: BAR, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 1.5rem", position: "relative" }}
-          >
+          {/* Top bar — fixed height, click closes. Shorter on mobile so the photo gets more room. */}
+          <div className="relative flex h-12 sm:h-20 shrink-0 items-center justify-between px-3 sm:px-6">
             {/* Counter */}
-            <span style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", color: "rgba(255,255,255,0.6)", fontSize: "0.875rem", fontVariantNumeric: "tabular-nums", pointerEvents: "none", userSelect: "none" }}>
+            <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 select-none text-sm text-white/60 [font-variant-numeric:tabular-nums]">
               {activeIndex + 1} / {photos.length}
             </span>
             {/* Close button */}
             <button
               onClick={close}
               aria-label="Close"
-              style={{ marginLeft: "auto", width: "2.5rem", height: "2.5rem", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "9999px", background: "rgba(255,255,255,0.1)", color: "white", border: "none", cursor: "pointer" }}
+              className="ml-auto flex h-9 w-9 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -106,15 +121,13 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
             </button>
           </div>
 
-          {/* Image zone — fills all remaining space, overflow hidden keeps image inside */}
-          <div
-            style={{ flex: 1, minHeight: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4rem" }}
-          >
+          {/* Image zone — fills all remaining space; nearly edge-to-edge on mobile, gutters for the nav buttons on larger screens */}
+          <div className="relative flex flex-1 min-h-0 items-center justify-center overflow-hidden px-1 sm:px-16">
             {/* Prev */}
             <button
               onClick={(e) => { e.stopPropagation(); prev(); }}
               aria-label="Previous photo"
-              style={{ position: "absolute", left: "0.5rem", width: "2.5rem", height: "2.5rem", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "9999px", background: "rgba(255,255,255,0.1)", color: "white", border: "none", cursor: "pointer", zIndex: 1 }}
+              className="absolute left-1 sm:left-2 z-[1] flex h-9 w-9 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -127,14 +140,14 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               alt="Gallery photo"
               draggable={false}
               onClick={(e) => e.stopPropagation()}
-              style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", borderRadius: "0.5rem", boxShadow: "0 25px 50px rgba(0,0,0,0.5)", userSelect: "none" }}
+              className="h-full w-full select-none rounded-lg object-contain shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
             />
 
             {/* Next */}
             <button
               onClick={(e) => { e.stopPropagation(); next(); }}
               aria-label="Next photo"
-              style={{ position: "absolute", right: "0.5rem", width: "2.5rem", height: "2.5rem", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "9999px", background: "rgba(255,255,255,0.1)", color: "white", border: "none", cursor: "pointer", zIndex: 1 }}
+              className="absolute right-1 sm:right-2 z-[1] flex h-9 w-9 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -143,7 +156,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
           </div>
 
           {/* Bottom bar — same height as top bar = perfect symmetry, click closes */}
-          <div style={{ height: BAR, flexShrink: 0 }} />
+          <div className="h-12 sm:h-20 shrink-0" />
         </div>
       )}
     </>
