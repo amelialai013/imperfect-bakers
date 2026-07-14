@@ -18,14 +18,9 @@ function GallerySkeleton() {
       {SKELETON_RATIOS.map((ratio, i) => (
         <div
           key={i}
-          className="break-inside-avoid overflow-hidden rounded-xl bg-[#efe9de] relative"
-          style={{ aspectRatio: ratio }}
-        >
-          <div
-            className="absolute inset-0 animate-pulse bg-gradient-to-br from-[#efe9de] to-[#e2d9cb]"
-            style={{ animationDelay: `${(i % 4) * 120}ms` }}
-          />
-        </div>
+          className="gallery-skeleton break-inside-avoid overflow-hidden rounded-xl"
+          style={{ aspectRatio: ratio, animationDelay: `-${(i % 6) * 0.4}s` }}
+        />
       ))}
     </div>
   );

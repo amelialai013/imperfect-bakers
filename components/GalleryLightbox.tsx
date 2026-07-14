@@ -53,7 +53,10 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               onClick={() => setActiveIndex(i)}
             >
               {!isLoaded && (
-                <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-[#efe9de] to-[#e2d9cb]" />
+                <div
+                  className="gallery-skeleton absolute inset-0"
+                  style={{ animationDelay: `-${(i % 6) * 0.4}s` }}
+                />
               )}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -61,8 +64,8 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
                 src={photo.url}
                 alt="Gallery photo"
                 onLoad={() => markLoaded(photo.id)}
-                className={`w-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.02] ${
-                  isLoaded ? "opacity-100" : "absolute inset-0 h-full opacity-0"
+                className={`w-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.02] ${
+                  isLoaded ? "opacity-100 blur-none" : "absolute inset-0 h-full opacity-0 blur-sm"
                 }`}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
