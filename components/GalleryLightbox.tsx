@@ -103,8 +103,9 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
           onTouchEnd={onTouchEnd}
           className="fixed inset-0 z-[10000] flex flex-col bg-black/90 backdrop-blur-sm"
         >
-          {/* Top bar — fixed height, click closes. Shorter on mobile so the photo gets more room. */}
-          <div className="relative flex h-12 sm:h-20 shrink-0 items-center justify-between px-3 sm:px-6">
+          {/* Top bar — fixed height, click closes. Compact whenever the viewport is short
+              (includes landscape phones, not just narrow ones) so the photo gets more room. */}
+          <div className="lightbox-bar lightbox-bar-inner relative flex shrink-0 items-center justify-between">
             {/* Counter */}
             <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 select-none text-sm text-white/60 [font-variant-numeric:tabular-nums]">
               {activeIndex + 1} / {photos.length}
@@ -113,7 +114,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
             <button
               onClick={close}
               aria-label="Close"
-              className="ml-auto flex h-9 w-9 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
+              className="lightbox-btn ml-auto flex cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -121,13 +122,15 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
             </button>
           </div>
 
-          {/* Image zone — fills all remaining space; nearly edge-to-edge on mobile, gutters for the nav buttons on larger screens */}
-          <div className="relative flex flex-1 min-h-0 items-center justify-center overflow-hidden px-1 sm:px-16">
+          {/* Image zone — fills all remaining space; nearly edge-to-edge whenever the viewport
+              is short (phones, portrait or landscape), gutters for the nav buttons once there's
+              room to spare (real desktop/tablet). */}
+          <div className="lightbox-zone relative flex flex-1 min-h-0 items-center justify-center overflow-hidden">
             {/* Prev */}
             <button
               onClick={(e) => { e.stopPropagation(); prev(); }}
               aria-label="Previous photo"
-              className="absolute left-1 sm:left-2 z-[1] flex h-9 w-9 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
+              className="lightbox-btn lightbox-btn-prev absolute z-[1] flex cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -147,7 +150,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
             <button
               onClick={(e) => { e.stopPropagation(); next(); }}
               aria-label="Next photo"
-              className="absolute right-1 sm:right-2 z-[1] flex h-9 w-9 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
+              className="lightbox-btn lightbox-btn-next absolute z-[1] flex cursor-pointer items-center justify-center rounded-full border-none bg-white/10 text-white"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -156,7 +159,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
           </div>
 
           {/* Bottom bar — same height as top bar = perfect symmetry, click closes */}
-          <div className="h-12 sm:h-20 shrink-0" />
+          <div className="lightbox-bar shrink-0" />
         </div>
       )}
     </>

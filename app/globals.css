@@ -93,6 +93,44 @@
   animation: gallery-breathe 2.8s ease-in-out infinite;
 }
 
+/* ── Lightbox chrome — width AND height, not just width ──────
+   A landscape phone is wide but short. Tailwind's sm: breakpoint
+   is width-only, so it was handing landscape phones the same big
+   bars/gutters meant for actual desktop windows, leaving the photo
+   letterboxed. The "spacious" sizing below only kicks in once the
+   viewport is comfortably wide AND tall — a real desktop/tablet,
+   not just a rotated phone — so landscape mobile stays edge-to-edge.
+─────────────────────────────────────────────────────────── */
+.lightbox-bar {
+  height: 3rem;
+}
+.lightbox-bar-inner {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+.lightbox-zone {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+.lightbox-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.lightbox-btn-prev {
+  left: 0.25rem;
+}
+.lightbox-btn-next {
+  right: 0.25rem;
+}
+@media (min-width: 640px) and (min-height: 500px) {
+  .lightbox-bar { height: 5rem; }
+  .lightbox-bar-inner { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .lightbox-zone { padding-left: 4rem; padding-right: 4rem; }
+  .lightbox-btn { width: 2.5rem; height: 2.5rem; }
+  .lightbox-btn-prev { left: 0.5rem; }
+  .lightbox-btn-next { right: 0.5rem; }
+}
+
 /* ── iOS Safari 100vh fix ───────────────────────────────────
    100vh on iOS Safari includes the browser chrome (address bar),
    so the hero section bleeds below the visible viewport.
