@@ -1,36 +1,10 @@
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { kv } from "@vercel/kv";
-import { imageSize } from "image-size";
-import sharp from "sharp";
 import { checkAdminToken } from "@/lib/auth";
+import { getPhotoAssets } from "@/lib/image";
 
 export const dynamic = "force-dynamic";
-
-interface Dims {
-  width: number;
-  height: number;
-  blurDataURL?: string;
-}
-
-// Reads pixel dimensions from the raw bytes, and generates a tiny (20px-wide)
-// blurred JPEG of the same photo as a base64 data URI — shown in the gallery
-// grid while the full photo loads, then crossfaded away once it arrives.
-// Non-fatal if either step fails (e.g. an unsupported format): the tile just
-// falls back to a placeholder aspect ratio / plain skeleton client-side.
-async function tryGetDims(bytes: Uint8Array): Promise<Dims | null> {
-  try {
-    const { width, height } = imageSize(bytes);
-    let blurDataURL: string | undefined;
-    try {
-      const blurBuf = await sharp(bytes).resize(20).jpeg({ quality: 50 }).toBuffer();
-      blurDataURL = `data:image/jpeg;base64,${blurBuf.toString("base64")}`;
-    } catch { /* blur is a nice-to-have — dims alone are still useful */ }
-    return { width, height, blurDataURL };
-  } catch {
-    return null;
-  }
-}
 
 export async function POST(req: Request): Promise<NextResponse> {
   if (!checkAdminToken(req)) {
@@ -44,27 +18,46 @@ export async function POST(req: Request): Promise<NextResponse> {
   if (file.size > 10 * 1024 * 1024) return NextResponse.json({ error: "Image must be under 10MB" }, { status: 400 });
 
   const bytes = new Uint8Array(await file.arrayBuffer());
-  const dims = await tryGetDims(bytes);
+  const assets = await getPhotoAssets(bytes);
+  const { thumbBuffer, ...dims } = assets ?? {};
 
   const isDev = process.env.NODE_ENV === "development";
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
 
   if (isDev) {
-    // Local dev: save to public/gallery/
+    // Local dev: save the original to public/gallery/ and the thumbnail
+    // (if generated) alongside it under public/gallery/thumbs/.
     const { writeFile, mkdir } = await import("fs/promises");
     const path = await import("path");
     const dir = path.join(process.cwd(), "public", "gallery");
     await mkdir(dir, { recursive: true });
-    const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+    const filename = `${Date.now()}-${safeName}`;
     await writeFile(path.join(dir, filename), bytes);
-    return NextResponse.json({ id: filename, url: `/gallery/${filename}`, createdAt: new Date().toISOString(), ...dims });
+    let thumbUrl: string | undefined;
+    if (thumbBuffer) {
+      const thumbDir = path.join(dir, "thumbs");
+      await mkdir(thumbDir, { recursive: true });
+      await writeFile(path.join(thumbDir, filename), thumbBuffer);
+      thumbUrl = `/gallery/thumbs/${filename}`;
+    }
+    return NextResponse.json({ id: filename, url: `/gallery/${filename}`, createdAt: new Date().toISOString(), ...dims, thumbUrl });
   }
 
-  // Production: upload directly to Vercel Blob using put() (works with OIDC auth)
+  // Production: upload the original and (if generated) the thumbnail directly
+  // to Vercel Blob using put() (works with OIDC auth).
   try {
-    const pathname = `gallery/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+    const pathname = `gallery/${Date.now()}-${safeName}`;
     const blob = await put(pathname, Buffer.from(bytes), { access: "public", contentType: file.type });
-    if (dims) await kv.set(`gallery-dims:${blob.pathname}`, dims);
-    return NextResponse.json({ id: blob.pathname, url: blob.url, createdAt: new Date().toISOString(), ...dims });
+    let thumbUrl: string | undefined;
+    if (thumbBuffer) {
+      const thumbBlob = await put(`gallery-thumbs/${Date.now()}-${safeName}`, thumbBuffer, {
+        access: "public",
+        contentType: "image/jpeg",
+      });
+      thumbUrl = thumbBlob.url;
+    }
+    await kv.set(`gallery-dims:${blob.pathname}`, { ...dims, thumbUrl });
+    return NextResponse.json({ id: blob.pathname, url: blob.url, createdAt: new Date().toISOString(), ...dims, thumbUrl });
   } catch (e) {
     console.error("Upload error:", e);
     return NextResponse.json({ error: String(e) }, { status: 500 });

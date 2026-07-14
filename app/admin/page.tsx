@@ -778,7 +778,7 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
     await fetch("/api/gallery", {
       method: "DELETE",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ url: photo.url }),
+      body: JSON.stringify({ url: photo.url, id: photo.id }),
     });
     setDeleting(null);
     setPhotos((p) => p.filter((x) => x.id !== photo.id));
