@@ -65,11 +65,19 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
       <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-3 space-y-3">
         {photos.map((photo, i) => {
           const isLoaded = loaded.has(photo.id);
+          // Real dimensions (known ahead of time from the API) give the tile its
+          // true masonry proportions from the very first paint — the box never
+          // has to resize once the photo loads. Photos without stored dimensions
+          // (a rare case — only possible for something uploaded outside the admin
+          // flow) fall back to a cycling placeholder ratio.
+          const ratio = photo.width && photo.height
+            ? `${photo.width} / ${photo.height}`
+            : PLACEHOLDER_RATIOS[i % PLACEHOLDER_RATIOS.length];
           return (
             <div
               key={photo.id}
               className="break-inside-avoid overflow-hidden rounded-xl cursor-zoom-in group relative bg-[#efe9de]"
-              style={{ aspectRatio: PLACEHOLDER_RATIOS[i % PLACEHOLDER_RATIOS.length] }}
+              style={{ aspectRatio: ratio }}
               onClick={() => setActiveIndex(i)}
             >
               {!isLoaded && (

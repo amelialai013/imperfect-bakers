@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { list, del } from "@vercel/blob";
+import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -8,6 +9,17 @@ export interface GalleryPhoto {
   id: string;
   url: string;
   createdAt: string;
+  // Real pixel dimensions, when known — lets the gallery grid size each tile
+  // to its true aspect ratio *before* the image itself has loaded, so tiles
+  // never resize once the photo arrives. Optional because photos uploaded
+  // before dimension tracking was added won't have a stored value.
+  width?: number;
+  height?: number;
+}
+
+interface Dims {
+  width: number;
+  height: number;
 }
 
 const isDev = process.env.NODE_ENV === "development";
@@ -17,27 +29,35 @@ export async function GET() {
   // Try blob store first (works in production and in local dev with VERCEL_OIDC_TOKEN)
   try {
     const { blobs } = await list({ prefix: "gallery/" });
-    const photos: GalleryPhoto[] = blobs
-      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
-      .map((blob) => ({
-        id: blob.pathname,
-        url: blob.url,
-        createdAt: blob.uploadedAt.toISOString(),
-      }));
+    const sorted = blobs.sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
+    const dims = await Promise.all(sorted.map((blob) => kv.get<Dims>(`gallery-dims:${blob.pathname}`)));
+    const photos: GalleryPhoto[] = sorted.map((blob, i) => ({
+      id: blob.pathname,
+      url: blob.url,
+      createdAt: blob.uploadedAt.toISOString(),
+      ...(dims[i] ? { width: dims[i].width, height: dims[i].height } : {}),
+    }));
     return NextResponse.json(photos);
   } catch {
     // Fallback: local dev without cloud credentials — scan public/gallery/
     if (isDev) {
       try {
-        const { readdir } = await import("fs/promises");
+        const { readdir, readFile } = await import("fs/promises");
         const path = await import("path");
+        const { imageSize } = await import("image-size");
         const dir = path.join(process.cwd(), "public", "gallery");
         const files = await readdir(dir).catch(() => [] as string[]);
-        const photos: GalleryPhoto[] = files
-          .filter((f) => /\.(jpe?g|png|webp|gif|heic)$/i.test(f))
-          .sort()
-          .reverse()
-          .map((f) => ({ id: f, url: `/gallery/${f}`, createdAt: "" }));
+        const names = files.filter((f) => /\.(jpe?g|png|webp|gif|heic)$/i.test(f)).sort().reverse();
+        const photos: GalleryPhoto[] = await Promise.all(
+          names.map(async (f) => {
+            let dims: Dims | undefined;
+            try {
+              const { width, height } = imageSize(await readFile(path.join(dir, f)));
+              dims = { width, height };
+            } catch { /* unreadable — falls back to placeholder ratio client-side */ }
+            return { id: f, url: `/gallery/${f}`, createdAt: "", ...dims };
+          })
+        );
         return NextResponse.json(photos);
       } catch {
         return NextResponse.json([]);
