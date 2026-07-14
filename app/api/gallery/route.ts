@@ -15,11 +15,16 @@ export interface GalleryPhoto {
   // before dimension tracking was added won't have a stored value.
   width?: number;
   height?: number;
+  // Tiny base64-encoded blurred preview of this exact photo, shown while the
+  // full image loads and crossfaded away once it arrives. Optional for the
+  // same reason as width/height — only present once generated at upload time.
+  blurDataURL?: string;
 }
 
 interface Dims {
   width: number;
   height: number;
+  blurDataURL?: string;
 }
 
 const isDev = process.env.NODE_ENV === "development";
@@ -35,7 +40,7 @@ export async function GET() {
       id: blob.pathname,
       url: blob.url,
       createdAt: blob.uploadedAt.toISOString(),
-      ...(dims[i] ? { width: dims[i].width, height: dims[i].height } : {}),
+      ...(dims[i] ? { width: dims[i].width, height: dims[i].height, blurDataURL: dims[i].blurDataURL } : {}),
     }));
     return NextResponse.json(photos);
   } catch {
@@ -45,6 +50,7 @@ export async function GET() {
         const { readdir, readFile } = await import("fs/promises");
         const path = await import("path");
         const { imageSize } = await import("image-size");
+        const sharp = (await import("sharp")).default;
         const dir = path.join(process.cwd(), "public", "gallery");
         const files = await readdir(dir).catch(() => [] as string[]);
         const names = files.filter((f) => /\.(jpe?g|png|webp|gif|heic)$/i.test(f)).sort().reverse();
@@ -52,8 +58,10 @@ export async function GET() {
           names.map(async (f) => {
             let dims: Dims | undefined;
             try {
-              const { width, height } = imageSize(await readFile(path.join(dir, f)));
-              dims = { width, height };
+              const bytes = await readFile(path.join(dir, f));
+              const { width, height } = imageSize(bytes);
+              const blurBuf = await sharp(bytes).resize(20).jpeg({ quality: 50 }).toBuffer();
+              dims = { width, height, blurDataURL: `data:image/jpeg;base64,${blurBuf.toString("base64")}` };
             } catch { /* unreadable — falls back to placeholder ratio client-side */ }
             return { id: f, url: `/gallery/${f}`, createdAt: "", ...dims };
           })

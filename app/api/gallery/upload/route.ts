@@ -2,18 +2,31 @@ import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { kv } from "@vercel/kv";
 import { imageSize } from "image-size";
+import sharp from "sharp";
 import { checkAdminToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-// Reads pixel dimensions from the raw bytes without decoding the full image —
-// stored so the gallery grid can size each tile correctly before the photo
-// itself has loaded. Non-fatal if it fails (e.g. an unsupported format):
-// the tile just falls back to a placeholder aspect ratio client-side.
-function tryGetDims(bytes: Uint8Array): { width: number; height: number } | null {
+interface Dims {
+  width: number;
+  height: number;
+  blurDataURL?: string;
+}
+
+// Reads pixel dimensions from the raw bytes, and generates a tiny (20px-wide)
+// blurred JPEG of the same photo as a base64 data URI — shown in the gallery
+// grid while the full photo loads, then crossfaded away once it arrives.
+// Non-fatal if either step fails (e.g. an unsupported format): the tile just
+// falls back to a placeholder aspect ratio / plain skeleton client-side.
+async function tryGetDims(bytes: Uint8Array): Promise<Dims | null> {
   try {
     const { width, height } = imageSize(bytes);
-    return { width, height };
+    let blurDataURL: string | undefined;
+    try {
+      const blurBuf = await sharp(bytes).resize(20).jpeg({ quality: 50 }).toBuffer();
+      blurDataURL = `data:image/jpeg;base64,${blurBuf.toString("base64")}`;
+    } catch { /* blur is a nice-to-have — dims alone are still useful */ }
+    return { width, height, blurDataURL };
   } catch {
     return null;
   }
@@ -31,7 +44,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   if (file.size > 10 * 1024 * 1024) return NextResponse.json({ error: "Image must be under 10MB" }, { status: 400 });
 
   const bytes = new Uint8Array(await file.arrayBuffer());
-  const dims = tryGetDims(bytes);
+  const dims = await tryGetDims(bytes);
 
   const isDev = process.env.NODE_ENV === "development";
 

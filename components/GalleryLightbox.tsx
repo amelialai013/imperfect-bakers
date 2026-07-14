@@ -80,11 +80,30 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               style={{ aspectRatio: ratio }}
               onClick={() => setActiveIndex(i)}
             >
-              {!isLoaded && (
-                <div
-                  className="gallery-skeleton absolute inset-0"
-                  style={{ animationDelay: `-${(i % 6) * 0.4}s` }}
+              {photo.blurDataURL ? (
+                /* Blur-up placeholder: an actual (tiny, blurred) preview of this
+                   exact photo, so what you see while it loads is real content,
+                   not a generic shape — and the crossfade to the sharp photo
+                   reads as the image itself resolving into focus. scale-110 is
+                   static (never transitions/animates) — it just pushes the
+                   blur filter's soft edge outside the visible crop so the tile
+                   boundary stays crisp instead of showing a faint blur halo. */
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={photo.blurDataURL}
+                  alt=""
+                  aria-hidden="true"
+                  className={`absolute inset-0 h-full w-full scale-110 object-cover blur-xl transition-opacity duration-700 ${
+                    isLoaded ? "opacity-0" : "opacity-100"
+                  }`}
                 />
+              ) : (
+                !isLoaded && (
+                  <div
+                    className="gallery-skeleton absolute inset-0"
+                    style={{ animationDelay: `-${(i % 6) * 0.4}s` }}
+                  />
+                )
               )}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -93,7 +112,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
                 alt="Gallery photo"
                 onLoad={() => markLoaded(photo.id)}
                 className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.02] ${
-                  isLoaded ? "opacity-100 blur-none" : "opacity-0 blur-sm"
+                  isLoaded ? "opacity-100" : "opacity-0"
                 }`}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
