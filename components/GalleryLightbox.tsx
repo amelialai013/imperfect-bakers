@@ -69,7 +69,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
             <div
               key={photo.id}
               className="break-inside-avoid overflow-hidden rounded-xl cursor-zoom-in group relative bg-[#efe9de]"
-              style={!isLoaded ? { aspectRatio: PLACEHOLDER_RATIOS[i % PLACEHOLDER_RATIOS.length] } : undefined}
+              style={{ aspectRatio: PLACEHOLDER_RATIOS[i % PLACEHOLDER_RATIOS.length] }}
               onClick={() => setActiveIndex(i)}
             >
               {!isLoaded && (
@@ -84,8 +84,8 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
                 src={photo.url}
                 alt="Gallery photo"
                 onLoad={() => markLoaded(photo.id)}
-                className={`w-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.02] ${
-                  isLoaded ? "opacity-100 blur-none" : "absolute inset-0 h-full opacity-0 blur-sm"
+                className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.02] ${
+                  isLoaded ? "opacity-100 blur-none" : "opacity-0 blur-sm"
                 }`}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
