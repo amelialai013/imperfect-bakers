@@ -65,14 +65,14 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
       <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-3 space-y-3">
         {photos.map((photo, i) => {
           const isLoaded = loaded.has(photo.id);
-          // Real dimensions (known ahead of time from the API) give the tile its
-          // true masonry proportions from the very first paint — the box never
-          // has to resize once the photo loads. Photos without stored dimensions
-          // (a rare case — only possible for something uploaded outside the admin
-          // flow) fall back to a cycling placeholder ratio.
-          const ratio = photo.width && photo.height
-            ? `${photo.width} / ${photo.height}`
-            : PLACEHOLDER_RATIOS[i % PLACEHOLDER_RATIOS.length];
+          // Deliberately NOT using each photo's real aspect ratio here even
+          // though the API provides one: CSS multi-column layout balances
+          // total height per column, and real photos range from very wide
+          // (e.g. 6000x2590 panoramic) to very tall — that variance makes the
+          // balancing algorithm leave visible gaps when a tall image gets
+          // pushed whole into the next column. The moderate, evenly-varied
+          // cycle below keeps every column's rhythm close enough to avoid that.
+          const ratio = PLACEHOLDER_RATIOS[i % PLACEHOLDER_RATIOS.length];
           return (
             <div
               key={photo.id}
