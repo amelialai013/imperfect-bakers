@@ -93,6 +93,26 @@
   animation: gallery-breathe 2.8s ease-in-out infinite;
 }
 
+/* ── Private-bookings CTA — align with the footer's content edge ──
+   These full-bleed color blocks sit in a half-width grid column, so they
+   can't center themselves with mx-auto like the footer does — they need
+   the *whole* page's centering offset from inside a half-width descendant,
+   which only a viewport-width value can express. Plain 100vw overcounts by
+   the scrollbar's width (100vw includes the scrollbar track; the footer's
+   mx-auto centering, driven by normal block layout, doesn't), so the two
+   edges landed a few pixels apart on wide screens. --full-vw is set in
+   layout.tsx to the scrollbar-corrected width, with 100vw as the fallback
+   for the brief pre-hydration window.
+─────────────────────────────────────────────────────────── */
+@media (min-width: 1536px) {
+  .cta-edge-pad-r {
+    padding-right: max(3rem, calc((var(--full-vw, 100vw) - 1280px) / 2 + 2rem));
+  }
+  .cta-edge-pad-l {
+    padding-left: max(3rem, calc((var(--full-vw, 100vw) - 1280px) / 2 + 2rem));
+  }
+}
+
 /* ── Lightbox chrome — width AND height, not just width ──────
    A landscape phone is wide but short. Tailwind's sm: breakpoint
    is width-only, so it was handing landscape phones the same big
