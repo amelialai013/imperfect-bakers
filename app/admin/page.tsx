@@ -514,7 +514,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
       {active.map((b) => (
         <div key={b.id} className="relative bg-white border border-[#e8e2d9] rounded-xl">
           {/* Kebab — always top-right */}
-          {(b.status === "confirmed" || b.status === "declined") && (
+          {((b.status === "confirmed" && !isPast) || b.status === "declined") && (
             <div className="absolute top-3 right-3 z-10">
               <button onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -550,10 +550,9 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
               )}
             </div>
           )}
-          {/* Header — name, badge, actions */}
+          {/* Header — badge, actions */}
           <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
-            <div className="flex items-center gap-2 flex-wrap">
-              <p className="font-medium text-[#1a1a1a] text-sm">{b.name}</p>
+            <div className="mb-4">
               <StatusBadge status={b.status} />
             </div>
             {/* Pending: inline confirm/decline */}
@@ -569,7 +568,10 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             )}
           </div>
           {/* Body */}
-          <div className="px-5 py-4">
+          <div className="px-5 py-4 space-y-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <p className="font-medium text-[#1a1a1a]">{b.name}</p>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
@@ -581,7 +583,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             </div>
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
-              <p className="text-[#1a1a1a] font-medium">{b.totalPeople} total</p>
+              <p className="text-[#1a1a1a] font-medium text-xs">{b.totalPeople} total</p>
               <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
                 {b.counts.child > 0 && <p>Child (7–17): {b.counts.child}</p>}
                 {b.counts.youngAdult > 0 && <p>Young Adult (18–34): {b.counts.youngAdult}</p>}
@@ -591,7 +593,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
               {sessionPrice != null && (
-                <p className="text-[#1a1a1a] font-medium">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                <p className="text-[#1a1a1a] font-medium text-xs">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
               )}
               <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
                 <p>{b.paymentStatus === "completed" ? "Paid" : "Other"}</p>
@@ -1395,7 +1397,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                   )}
                   {/* Session label */}
                   <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
-                    <div className="mb-6">
+                    <div className="mb-4">
                       {b.cancelled
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
                         : <StatusBadge status={b.status} />
@@ -1444,7 +1446,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
                         {b.sessionPrice != null && (
-                          <p className="text-[#1a1a1a] font-medium">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                          <p className="text-[#1a1a1a] font-medium text-xs">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
                         )}
                         <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
                           <p>{b.paymentStatus === "completed" ? "Paid" : "Other"}</p>
@@ -2292,14 +2294,14 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                       rows={3}
                       placeholder="Quote…"
                       maxLength={limit}
-                      className={inputCls + " resize-none " + (qErr || over ? errBorder : "")}
+                      className={inputCls + " resize-none [scrollbar-width:thin] [scrollbar-color:#e4dfd5_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4] " + (qErr || over ? errBorder : "")}
                     />
                     <div className="flex items-center justify-between mt-1">
                       {qErr ? <p className="text-xs text-red-500">{qErr}</p> : <span />}
                       <p className={`text-xs ${over ? "text-red-500 font-medium" : warn ? "text-amber-500" : "text-[#c8c0b4]"}`}>{len}/{limit}</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <input
                         type="text"
@@ -2361,7 +2363,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                       value={footerTagline}
                       onChange={(e) => { setFooterTagline(e.target.value); setSavedFooter(false); }}
                       placeholder="Building confidence in the kitchen…"
-                      className={`w-full border rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none bg-white transition-colors resize-none ${taglineOver ? "border-red-400 focus:border-red-500" : "border-[#e4dfd5] focus:border-[#006644]"}`}
+                      className={`w-full border rounded-[6px] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none bg-white transition-colors resize-none [scrollbar-width:thin] [scrollbar-color:#e4dfd5_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4] ${taglineOver ? "border-red-400 focus:border-red-500" : "border-[#e4dfd5] focus:border-[#006644]"}`}
                     />
                     <div className="flex items-center justify-between mt-1">
                       <span>{taglineOver && <span className="text-xs text-red-500">Keep under {TAGLINE_LIMIT} characters</span>}</span>
@@ -2419,7 +2421,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                         rows={3}
                         value={s.body}
                         onChange={(e) => { setPolicySections((prev) => prev.map((sec, j) => j === i ? { ...sec, body: e.target.value } : sec)); setSavedPolicy(false); }}
-                        className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-none"
+                        className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-none [scrollbar-width:thin] [scrollbar-color:#e4dfd5_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"
                       />
                     </div>
                   )}
@@ -2440,7 +2442,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
                           rows={2}
                           value={item.text}
                           onChange={(e) => { setPolicySections((prev) => prev.map((sec, si) => si === i ? { ...sec, items: sec.items!.map((it, ii) => ii === j ? { ...it, text: e.target.value } : it) } : sec)); setSavedPolicy(false); }}
-                          className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-none"
+                          className="w-full border border-[#e4dfd5] rounded-[6px] px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c8c0b4] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-none [scrollbar-width:thin] [scrollbar-color:#e4dfd5_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"
                         />
                       </div>
                     </div>
@@ -3055,7 +3057,7 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <label className={labelCls}>Description <span className="normal-case font-normal tracking-normal text-[#6b7280]">(optional)</span></label>
-                    <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value.slice(0, 100) }))} rows={2} placeholder="Short description…" maxLength={100} className={inputCls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"} />
+                    <textarea value={newClass.description} onChange={(e) => setNewClass((n) => ({ ...n, description: e.target.value.slice(0, 100) }))} rows={2} placeholder="Short description…" maxLength={100} className={inputCls + " resize-none [scrollbar-width:thin] [scrollbar-color:#e4dfd5_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"} />
                     <p className={`text-right text-xs mt-1 ${newClass.description.length >= 90 ? "text-red-400" : "text-[#c8c0b4]"}`}>{newClass.description.length}/100</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -3163,7 +3165,7 @@ export default function AdminPage() {
                           onChange={(e) => updateClassConfig(c.key, "description", e.target.value.slice(0, 100))}
                           rows={2}
                           maxLength={100}
-                          className={inputCls + " resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"}
+                          className={inputCls + " resize-none [scrollbar-width:thin] [scrollbar-color:#e4dfd5_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"}
                         />
                         <p className={`text-right text-xs mt-1 ${c.description.length >= 90 ? "text-red-400" : "text-[#c8c0b4]"}`}>{c.description.length}/100</p>
                       </div>
@@ -3586,29 +3588,29 @@ export default function AdminPage() {
               {/* Name + Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Full name *</label>
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Full name</label>
                   <input value={addBookingForm.name} onChange={(e) => { setAddBookingForm((f) => ({ ...f, name: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, name: undefined })); }} placeholder="Jane Smith" className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none ${addBookingFieldErrors.name ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
                   {addBookingFieldErrors.name && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.name}</p>}
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Email *</label>
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Email</label>
                   <input type="email" value={addBookingForm.email} onChange={(e) => { setAddBookingForm((f) => ({ ...f, email: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, email: undefined })); }} placeholder="jane@email.com" className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none ${addBookingFieldErrors.email ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
                   {addBookingFieldErrors.email && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.email}</p>}
                 </div>
               </div>
               {/* Phone */}
               <div>
-                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Phone</label>
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Phone (optional)</label>
                 <input value={addBookingForm.phone} onChange={(e) => setAddBookingForm((f) => ({ ...f, phone: e.target.value }))} placeholder="0400 000 000" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#006644]" />
               </div>
               {/* Attendees — only show types configured for this session */}
               <div>
-                <label className={`block text-xs font-medium mb-2 ${addBookingFieldErrors.attendees ? "text-red-500" : "text-[#1a1a1a]"}`}>Attendees *</label>
+                <label className={`block text-xs font-medium mb-1.5 ${addBookingFieldErrors.attendees ? "text-red-500" : "text-[#1a1a1a]"}`}>Attendees</label>
                 <div className="flex flex-col gap-2">
                   {([["child", "Child (7–17)"], ["youngAdult", "Young Adult (18–34)"], ["adult", "Adult (35+)"]] as const)
                     .filter(([key]) => !addBookingTarget.attendeeTypes?.length || addBookingTarget.attendeeTypes.includes(key))
                     .map(([key, label]) => (
-                    <div key={key} className="flex flex-wrap items-center justify-between gap-2 border border-[#e4dfd5] rounded-lg px-4 py-3">
+                    <div key={key} className="flex flex-col min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between gap-2 border border-[#e4dfd5] rounded-lg px-4 py-3">
                       <span className="text-sm text-[#1a1a1a] whitespace-nowrap">{label}</span>
                       <div className="flex items-center gap-3">
                         <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: Math.max(0, f[key] - 1) }))} className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-sm font-bold hover:bg-[#e4dfd5] transition-colors">−</button>
@@ -3622,7 +3624,7 @@ export default function AdminPage() {
               </div>
               {/* Payment */}
               <div>
-                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Payment *</label>
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Payment</label>
                 <div className="relative">
                   <select value={addBookingForm.paymentStatus} onChange={(e) => { setAddBookingForm((f) => ({ ...f, paymentStatus: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, payment: undefined })); }} className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none bg-white appearance-none pr-8 ${addBookingFieldErrors.payment ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`}>
                     <option value="">Select payment method…</option>
@@ -3638,14 +3640,14 @@ export default function AdminPage() {
               </div>
               {addBookingForm.paymentStatus === "other" && (
                 <div>
-                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Payment details</label>
+                  <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Payment details (optional)</label>
                   <input value={addBookingForm.paymentOther} onChange={(e) => setAddBookingForm((f) => ({ ...f, paymentOther: e.target.value }))} placeholder="e.g. Cash on the day" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#006644]" />
                 </div>
               )}
               {/* Notes */}
               <div>
-                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Notes</label>
-                <textarea value={addBookingForm.notes} onChange={(e) => setAddBookingForm((f) => ({ ...f, notes: e.target.value }))} rows={2} placeholder="Any notes…" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#006644] resize-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]" />
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Notes (optional)</label>
+                <textarea value={addBookingForm.notes} onChange={(e) => setAddBookingForm((f) => ({ ...f, notes: e.target.value }))} rows={2} placeholder="Any notes…" className="w-full border border-[#e4dfd5] rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#006644] resize-none [scrollbar-width:thin] [scrollbar-color:#e4dfd5_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]" />
               </div>
             </div>
 
