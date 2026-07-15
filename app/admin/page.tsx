@@ -724,8 +724,6 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -824,24 +822,6 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
 
         {error && <p className="text-sm text-red-500 mb-4">{error}</p>}
 
-        {/* On localhost the blob store isn't accessible — direct the user to the live admin */}
-        {isLocal && (
-          <div className="mb-6 flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4">
-            <svg className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <p className="text-sm font-medium text-amber-800">You&apos;re on localhost</p>
-              <p className="text-sm text-amber-700 mt-0.5">
-                The live gallery photos are stored in the cloud and can&apos;t be accessed from your local server.{" "}
-                <a href="https://www.imperfectbakers.com/admin" target="_blank" rel="noopener noreferrer" className="underline font-medium hover:text-amber-900">
-                  Open the live admin →
-                </a>
-              </p>
-            </div>
-          </div>
-        )}
-
         {loading ? (
           <div className="flex justify-center py-24">
             <svg className="w-6 h-6 animate-spin text-[#006644]" fill="none" viewBox="0 0 24 24">
@@ -857,7 +837,7 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
             <svg className="w-10 h-10 text-[#006644]/30 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-[#6b7280] text-sm">{isLocal ? "No local photos — use the live admin to manage the gallery" : "No photos yet — click to upload"}</p>
+            <p className="text-[#6b7280] text-sm">No photos yet — click to upload</p>
           </div>
         ) : (
           <>

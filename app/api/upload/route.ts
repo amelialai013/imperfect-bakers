@@ -1,8 +1,6 @@
-import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { checkAdminToken } from "@/lib/auth";
-
-export const runtime = "edge";
+import { r2Put } from "@/lib/r2";
 
 export async function POST(req: Request) {
   if (!checkAdminToken(req)) {
@@ -26,9 +24,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Image must be under 5MB" }, { status: 400 });
   }
 
-  const blob = await put(`class-images/${Date.now()}-${file.name}`, file, {
-    access: "public",
-  });
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const blob = await r2Put(`class-images/${Date.now()}-${safeName}`, bytes, file.type);
 
   return NextResponse.json({ url: blob.url });
 }

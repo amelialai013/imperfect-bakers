@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { put } from "@vercel/blob";
 import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
 import { getPhotoAssets } from "@/lib/image";
+import { r2Put } from "@/lib/r2";
 
 export const dynamic = "force-dynamic";
 
@@ -20,40 +20,14 @@ export async function POST(req: Request): Promise<NextResponse> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const assets = await getPhotoAssets(bytes);
   const { thumbBuffer, ...dims } = assets ?? {};
-
-  const isDev = process.env.NODE_ENV === "development";
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
 
-  if (isDev) {
-    // Local dev: save the original to public/gallery/ and the thumbnail
-    // (if generated) alongside it under public/gallery/thumbs/.
-    const { writeFile, mkdir } = await import("fs/promises");
-    const path = await import("path");
-    const dir = path.join(process.cwd(), "public", "gallery");
-    await mkdir(dir, { recursive: true });
-    const filename = `${Date.now()}-${safeName}`;
-    await writeFile(path.join(dir, filename), bytes);
-    let thumbUrl: string | undefined;
-    if (thumbBuffer) {
-      const thumbDir = path.join(dir, "thumbs");
-      await mkdir(thumbDir, { recursive: true });
-      await writeFile(path.join(thumbDir, filename), thumbBuffer);
-      thumbUrl = `/gallery/thumbs/${filename}`;
-    }
-    return NextResponse.json({ id: filename, url: `/gallery/${filename}`, createdAt: new Date().toISOString(), ...dims, thumbUrl });
-  }
-
-  // Production: upload the original and (if generated) the thumbnail directly
-  // to Vercel Blob using put() (works with OIDC auth).
   try {
     const pathname = `gallery/${Date.now()}-${safeName}`;
-    const blob = await put(pathname, Buffer.from(bytes), { access: "public", contentType: file.type });
+    const blob = await r2Put(pathname, Buffer.from(bytes), file.type);
     let thumbUrl: string | undefined;
     if (thumbBuffer) {
-      const thumbBlob = await put(`gallery-thumbs/${Date.now()}-${safeName}`, thumbBuffer, {
-        access: "public",
-        contentType: "image/jpeg",
-      });
+      const thumbBlob = await r2Put(`gallery-thumbs/${Date.now()}-${safeName}`, thumbBuffer, "image/jpeg");
       thumbUrl = thumbBlob.url;
     }
     await kv.set(`gallery-dims:${blob.pathname}`, { ...dims, thumbUrl });
