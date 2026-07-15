@@ -306,8 +306,8 @@ function SessionForm({
           </div>
           <div>
             <label className={labelCls}>Time</label>
-            <div className="flex gap-2">
-              <input type="time" value={startTime} onChange={(e) => { setStartTime(e.target.value); setFieldErrors((prev) => ({ ...prev, startTime: "" })); }} className={cls + (fieldErrors.startTime ? " !border-red-400 focus:!border-red-500" : "")} />
+            <div className="flex flex-wrap gap-2">
+              <input type="time" value={startTime} onChange={(e) => { setStartTime(e.target.value); setFieldErrors((prev) => ({ ...prev, startTime: "" })); }} className={cls + (fieldErrors.startTime ? " !border-red-400 focus:!border-red-500" : "") + " min-w-[125px] flex-1"} />
               <div className="relative shrink-0 w-32">
                 <select value={duration} onChange={(e) => setDuration(e.target.value)} className={cls + " appearance-none pr-8 cursor-pointer"}>
                   {[1,1.5,2,2.5,3,3.5,4,4.5,5].map((h) => (
@@ -347,7 +347,7 @@ function SessionForm({
                 const active = attendeeTypes.includes(opt.key);
                 return (
                   <button key={opt.key} type="button" onClick={() => { toggleAttendeeType(opt.key); setFieldErrors((prev) => ({ ...prev, attendeeTypes: "" })); }}
-                    className={`group inline-flex items-center gap-2 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-colors duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
+                    className={`group inline-flex flex-wrap items-center justify-center text-center gap-x-2 gap-y-0.5 px-8 py-3.5 text-[0.9375rem] font-medium border rounded-full transition-colors duration-200 ${active ? "bg-[#006644] border-[#006644] text-white" : "bg-white border-[#006644] text-[#006644] hover:bg-[#006644] hover:text-white"}`}>
                     {opt.label} <span className={`text-sm transition-colors duration-200 ${active ? "text-white/70" : "text-[#006644]/60 group-hover:text-white/70"}`}>{opt.sub}</span>
                   </button>
                 );
@@ -367,7 +367,7 @@ function SessionForm({
       <div className="bg-white border border-[#e8e2d9] rounded-xl p-6 mb-4">
         <span className={sectionLabel}>Skills practiced</span>
         <p className="text-xs text-[#6b7280] mb-4">Add skills customers will learn in this session. Press Enter or comma to add each one.</p>
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <input
             type="text"
             value={skillInput}
@@ -412,7 +412,7 @@ function SessionForm({
       </div>
 
       {/* ── Actions ──────────────────────────────────────── */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <button type="submit" disabled={saving} className="btn-primary">
           {saving ? "Saving…" : "Save session"}
         </button>
@@ -723,6 +723,28 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
   const [deleting, setDeleting] = useState<string | null>(null);
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
+
+  function handleDrop(targetId: string) {
+    setDragOverId(null);
+    if (!draggedId || draggedId === targetId) { setDraggedId(null); return; }
+    setPhotos((prev) => {
+      const from = prev.findIndex((p) => p.id === draggedId);
+      const to = prev.findIndex((p) => p.id === targetId);
+      if (from === -1 || to === -1) return prev;
+      const next = [...prev];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
+      fetch("/api/gallery", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ order: next.map((p) => p.id) }),
+      }).catch(() => {});
+      return next;
+    });
+    setDraggedId(null);
+  }
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -841,12 +863,21 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
           </div>
         ) : (
           <>
-            <p className="text-sm text-[#6b7280] mb-6">{photos.length} photo{photos.length !== 1 ? "s" : ""}</p>
+            <p className="text-sm text-[#6b7280] mb-6">{photos.length} photo{photos.length !== 1 ? "s" : ""} — drag to reorder</p>
             <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
               {photos.map((photo) => (
-                <div key={photo.id} className="break-inside-avoid relative group overflow-hidden rounded-xl">
+                <div
+                  key={photo.id}
+                  draggable
+                  onDragStart={() => setDraggedId(photo.id)}
+                  onDragOver={(e) => { e.preventDefault(); if (draggedId && draggedId !== photo.id) setDragOverId(photo.id); }}
+                  onDragLeave={() => setDragOverId((cur) => (cur === photo.id ? null : cur))}
+                  onDrop={(e) => { e.preventDefault(); handleDrop(photo.id); }}
+                  onDragEnd={() => { setDraggedId(null); setDragOverId(null); }}
+                  className={`break-inside-avoid relative group overflow-hidden rounded-xl cursor-grab active:cursor-grabbing transition-opacity ${draggedId === photo.id ? "opacity-40" : "opacity-100"} ${dragOverId === photo.id ? "ring-2 ring-[#006644] ring-offset-2 ring-offset-[#faf9f6]" : ""}`}
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photo.url} alt="" className="w-full object-cover" />
+                  <img src={photo.url} alt="" className="w-full object-cover pointer-events-none" draggable={false} />
                   <button
                     onClick={() => handleDelete(photo)}
                     disabled={deleting === photo.id}
@@ -1364,15 +1395,15 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                   )}
                   {/* Session label */}
                   <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
-                    <div className="flex items-center gap-x-4 gap-y-2 flex-wrap">
-                      <div>
-                        <p className="text-[0.6875rem] font-semibold text-[#006644] tracking-[0.2em] uppercase mb-0.5">{b.sessionName}</p>
-                        <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}{b.sessionPrice != null ? ` · $${b.sessionPrice}/person` : ""}</p>
-                      </div>
+                    <div className="mb-6">
                       {b.cancelled
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
                         : <StatusBadge status={b.status} />
                       }
+                    </div>
+                    <div>
+                      <p className="text-[0.6875rem] font-semibold text-[#006644] tracking-[0.2em] uppercase mb-1.5">{b.sessionName}</p>
+                      <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}{b.sessionPrice != null ? ` · $${b.sessionPrice}/person` : ""}</p>
                     </div>
                     {(!b.cancelled && (!b.status || b.status === "pending")) && (
                       <div className="flex items-center gap-2 flex-wrap mt-3">
@@ -1430,7 +1461,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                       )}
                       {b.participants && b.participants.length > 0 && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
-                          <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-1">Experience</p>
+                          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Experience</p>
                           <div className="space-y-0.5">
                             {b.participants.map((p, i) => (
                               <p key={i} className="text-[#1a1a1a] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
@@ -2021,7 +2052,7 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
                               value={activeData[item.key] ?? ""}
                               onChange={(e) => update(active, item.key, e.target.value)}
                               placeholder={`Enter ${item.label.toLowerCase()}…`}
-                              className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-y"
+                              className="w-full border border-[#e4dfd5] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#006644] bg-white transition-colors resize-y [scrollbar-width:thin] [scrollbar-color:#e4dfd5_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e4dfd5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#c8c0b4]"
                             />
                             <p className="text-xs text-[#9ca3af] mt-1">{item.hint}</p>
                           </div>
@@ -3362,7 +3393,7 @@ export default function AdminPage() {
                       </div>
 
                       {/* Session info */}
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 pr-5">
                         <div className="flex items-center gap-2.5 flex-wrap mb-1.5">
                           <p className="font-semibold text-[#1a1a1a] text-base leading-snug" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
                             {s.classLabel}
@@ -3553,7 +3584,7 @@ export default function AdminPage() {
             {/* Scrollable body */}
             <div className="overflow-y-auto px-6 py-5 space-y-4 flex-1">
               {/* Name + Email */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Full name *</label>
                   <input value={addBookingForm.name} onChange={(e) => { setAddBookingForm((f) => ({ ...f, name: e.target.value })); setAddBookingFieldErrors((fe) => ({ ...fe, name: undefined })); }} placeholder="Jane Smith" className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none ${addBookingFieldErrors.name ? "border-red-400 focus:border-red-400" : "border-[#e4dfd5] focus:border-[#006644]"}`} />
@@ -3577,8 +3608,8 @@ export default function AdminPage() {
                   {([["child", "Child (7–17)"], ["youngAdult", "Young Adult (18–34)"], ["adult", "Adult (35+)"]] as const)
                     .filter(([key]) => !addBookingTarget.attendeeTypes?.length || addBookingTarget.attendeeTypes.includes(key))
                     .map(([key, label]) => (
-                    <div key={key} className="flex items-center justify-between gap-2 border border-[#e4dfd5] rounded-lg px-4 py-3">
-                      <span className="text-sm text-[#1a1a1a]">{label}</span>
+                    <div key={key} className="flex flex-wrap items-center justify-between gap-2 border border-[#e4dfd5] rounded-lg px-4 py-3">
+                      <span className="text-sm text-[#1a1a1a] whitespace-nowrap">{label}</span>
                       <div className="flex items-center gap-3">
                         <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: Math.max(0, f[key] - 1) }))} className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-sm font-bold hover:bg-[#e4dfd5] transition-colors">−</button>
                         <span className="text-sm font-semibold w-5 text-center">{addBookingForm[key]}</span>

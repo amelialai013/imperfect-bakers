@@ -57,8 +57,8 @@ export default async function BookAClassPage({
               className="text-3xl md:text-4xl text-[#1a1a1a] leading-snug text-balance"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Can&apos;t find what
-              <br />
+              Can&apos;t find what{" "}
+              <br className="hidden md:block" />
               you&apos;re looking for?
             </h2>
             <p className="text-[#1a1a1a] text-sm leading-relaxed mt-4">

@@ -137,8 +137,8 @@ export default async function ClassesPage() {
               className="text-3xl md:text-4xl text-white leading-snug"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Looking for something
-              <br />
+              Looking for something{" "}
+              <br className="hidden md:block" />
               more personal?
             </h2>
             <p className="text-white/70 text-sm leading-relaxed mt-4">

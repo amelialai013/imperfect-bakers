@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
-import { r2List, r2Del } from "@/lib/r2";
+import { r2List, r2Del, type R2Object } from "@/lib/r2";
 
 export const dynamic = "force-dynamic";
 
@@ -35,11 +35,25 @@ interface Dims {
   thumbUrl?: string;
 }
 
+// Applies a saved manual order (an array of pathnames, admin-set via drag and
+// drop) to the photo list. Photos not yet in the saved order — i.e. anything
+// uploaded since the last reorder — are newest-first at the front, matching
+// the pre-reordering default; everything else follows in its saved order.
+function sortByOrder(objects: R2Object[], order: string[] | null): R2Object[] {
+  const byRecency = [...objects].sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime());
+  if (!order || order.length === 0) return byRecency;
+  const index = new Map(order.map((id, i) => [id, i]));
+  const known = byRecency.filter((o) => index.has(o.pathname)).sort((a, b) => index.get(a.pathname)! - index.get(b.pathname)!);
+  const unknown = byRecency.filter((o) => !index.has(o.pathname));
+  return [...unknown, ...known];
+}
+
 // ── GET: list all photos ──────────────────────────────────────────────────────
 export async function GET() {
   try {
     const objects = await r2List("gallery/");
-    const sorted = objects.sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime());
+    const order = await kv.get<string[]>("gallery-order").catch(() => null);
+    const sorted = sortByOrder(objects, order);
     const dims = await Promise.all(sorted.map((obj) => kv.get<Dims>(`gallery-dims:${obj.pathname}`)));
     const photos: GalleryPhoto[] = sorted.map((obj, i) => ({
       id: obj.pathname,
@@ -54,6 +68,19 @@ export async function GET() {
     console.error("Gallery list error:", e);
     return NextResponse.json([]);
   }
+}
+
+// ── PATCH: save a manual photo order (admin only) ─────────────────────────────
+export async function PATCH(req: Request) {
+  if (!checkAdminToken(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { order } = await req.json();
+  if (!Array.isArray(order) || !order.every((id) => typeof id === "string")) {
+    return NextResponse.json({ error: "Missing order" }, { status: 400 });
+  }
+  await kv.set("gallery-order", order);
+  return NextResponse.json({ ok: true });
 }
 
 // ── DELETE: remove a photo (admin only) ───────────────────────────────────────
@@ -76,6 +103,10 @@ export async function DELETE(req: Request) {
       await r2Del(dims.thumbUrl).catch(() => {});
     }
     await kv.del(`gallery-dims:${id}`).catch(() => {});
+    const order = await kv.get<string[]>("gallery-order").catch(() => null);
+    if (order?.includes(id)) {
+      await kv.set("gallery-order", order.filter((x) => x !== id)).catch(() => {});
+    }
   }
   return NextResponse.json({ ok: true });
 }
