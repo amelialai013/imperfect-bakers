@@ -45,3 +45,7 @@ next-env.d.ts
 # Local dev gallery uploads (don't deploy these)
 public/gallery/*
 !public/gallery/.gitkeep
+
+# Source photos uploaded straight to R2 via scripts/upload-local-gallery.mjs —
+# not meant to live in the repo (hundreds of MB of full-res camera files)
+New photos/
