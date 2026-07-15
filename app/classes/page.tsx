@@ -130,7 +130,7 @@ export default async function ClassesPage() {
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=900&auto=format&fit=crop&q=85')" }}
         />
         {/* Text half */}
-        <div className="bg-[#006644] flex flex-col justify-center pl-8 lg:pl-12 pr-8 lg:pr-12 cta-edge-pad-r py-10 md:py-12 gap-8">
+        <div className="bg-[#006644] flex flex-col justify-center pl-8 lg:pl-12 cta-edge-pad-r py-10 md:py-12 gap-8">
           <div>
             <span className="block text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">Private bookings</span>
             <h2

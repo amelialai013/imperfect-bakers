@@ -103,14 +103,21 @@
    edges landed a few pixels apart on wide screens. --full-vw is set in
    layout.tsx to the scrollbar-corrected width, with 100vw as the fallback
    for the brief pre-hydration window.
+
+   No @media gate: the footer is `max-w-7xl mx-auto px-8` — its content
+   edge is flat 2rem until the viewport exceeds 1280px (max-w-7xl itself),
+   then grows via the mx-auto margin. max(2rem, ...) reproduces exactly
+   that curve at every width (the calc term goes negative below 1280px,
+   so max() correctly falls back to flat 2rem there) — an earlier version
+   gated this behind a 2xl (1536px) media query with a 3rem floor, which
+   didn't match the footer's real 2rem floor OR its real 1280px crossover,
+   leaving every width from 1280–1536px visibly misaligned.
 ─────────────────────────────────────────────────────────── */
-@media (min-width: 1536px) {
-  .cta-edge-pad-r {
-    padding-right: max(3rem, calc((var(--full-vw, 100vw) - 1280px) / 2 + 2rem));
-  }
-  .cta-edge-pad-l {
-    padding-left: max(3rem, calc((var(--full-vw, 100vw) - 1280px) / 2 + 2rem));
-  }
+.cta-edge-pad-r {
+  padding-right: max(2rem, calc((var(--full-vw, 100vw) - 1280px) / 2 + 2rem));
+}
+.cta-edge-pad-l {
+  padding-left: max(2rem, calc((var(--full-vw, 100vw) - 1280px) / 2 + 2rem));
 }
 
 /* ── Lightbox chrome — width AND height, not just width ──────
