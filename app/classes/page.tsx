@@ -137,7 +137,9 @@ export default async function ClassesPage() {
               className="text-3xl md:text-4xl text-white leading-snug"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Looking for something more personal?
+              Looking for something
+              <br />
+              more personal?
             </h2>
             <p className="text-white/70 text-sm leading-relaxed mt-4">
               We love doing private sessions — birthdays, team days, hens parties, and more. We&apos;re very happy to come to you, just tell us what you have in mind.
