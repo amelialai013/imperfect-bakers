@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import type { ClassSession, Booking, ClassConfig } from "@/lib/types";
+import type { GalleryPhoto } from "@/app/api/gallery/route";
+import { getColumnCount, packColumns } from "@/lib/galleryLayout";
 import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
 import LocationInput from "@/components/LocationInput";
 import ImageUpload from "@/components/ImageUpload";
@@ -716,8 +718,6 @@ type ExperienceLevel = { value: string; label: string };
 
 // ── Gallery view ──────────────────────────────────────────────────────────────
 
-interface GalleryPhoto { id: string; url: string; createdAt: string; }
-
 function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasses, onEmailTemplates, onSettings, onLogout }: { token: string; onBack: () => void; onAllBookings: () => void; onInterests: () => void; onManageClasses: () => void; onEmailTemplates: () => void; onSettings: () => void; onLogout: () => void }) {
   const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -727,6 +727,21 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const [loadedImgs, setLoadedImgs] = useState<Set<string>>(new Set());
+  // Same column-count logic as the public gallery (see lib/galleryLayout) —
+  // starts at the SSR guess and corrects after mount, same hydration
+  // reasoning as GalleryLightbox.
+  const [columnCount, setColumnCount] = useState(4);
+  useEffect(() => {
+    const onResize = () => setColumnCount(getColumnCount());
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  const columns = useMemo(() => packColumns(photos, columnCount), [photos, columnCount]);
+  const markLoaded = useCallback((id: string) => {
+    setLoadedImgs((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
+  }, []);
 
   function handleDrop(targetId: string) {
     setDragOverId(null);
@@ -866,33 +881,63 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
         ) : (
           <>
             <p className="text-sm text-[#6b7280] mb-6">{photos.length} photo{photos.length !== 1 ? "s" : ""} — drag to reorder</p>
-            <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
-              {photos.map((photo) => (
-                <div
-                  key={photo.id}
-                  draggable
-                  onDragStart={() => setDraggedId(photo.id)}
-                  onDragOver={(e) => { e.preventDefault(); if (draggedId && draggedId !== photo.id) setDragOverId(photo.id); }}
-                  onDragLeave={() => setDragOverId((cur) => (cur === photo.id ? null : cur))}
-                  onDrop={(e) => { e.preventDefault(); handleDrop(photo.id); }}
-                  onDragEnd={() => { setDraggedId(null); setDragOverId(null); }}
-                  className={`break-inside-avoid relative group overflow-hidden rounded-xl cursor-grab active:cursor-grabbing transition-opacity ${draggedId === photo.id ? "opacity-40" : "opacity-100"} ${dragOverId === photo.id ? "ring-2 ring-[#006644] ring-offset-2 ring-offset-[#faf9f6]" : ""}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photo.url} alt="" className="w-full object-cover pointer-events-none" draggable={false} />
-                  <button
-                    onClick={() => handleDelete(photo)}
-                    disabled={deleting === photo.id}
-                    className="absolute top-2 right-2 w-8 h-8 bg-black/60 hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
-                  >
-                    {deleting === photo.id ? (
-                      <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
-                    ) : (
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    )}
-                  </button>
+            {/* Same masonry packing as the public gallery (lib/galleryLayout) —
+                this preview should show exactly what visitors see. */}
+            <div className="flex items-start gap-3">
+              {columns.map((column, colIndex) => (
+                <div key={colIndex} className="flex flex-1 flex-col gap-3">
+                  {column.map(({ photo }) => {
+                    const isLoaded = loadedImgs.has(photo.id);
+                    const ratio = photo.width && photo.height ? `${photo.width} / ${photo.height}` : "1 / 1";
+                    return (
+                      <div
+                        key={photo.id}
+                        draggable
+                        onDragStart={() => setDraggedId(photo.id)}
+                        onDragOver={(e) => { e.preventDefault(); if (draggedId && draggedId !== photo.id) setDragOverId(photo.id); }}
+                        onDragLeave={() => setDragOverId((cur) => (cur === photo.id ? null : cur))}
+                        onDrop={(e) => { e.preventDefault(); handleDrop(photo.id); }}
+                        onDragEnd={() => { setDraggedId(null); setDragOverId(null); }}
+                        className={`relative group overflow-hidden rounded-xl cursor-grab active:cursor-grabbing bg-[#efe9de] transition-opacity ${draggedId === photo.id ? "opacity-40" : "opacity-100"} ${dragOverId === photo.id ? "ring-2 ring-[#006644] ring-offset-2 ring-offset-[#faf9f6]" : ""}`}
+                        style={{ aspectRatio: ratio }}
+                      >
+                        {photo.blurDataURL ? (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img
+                            src={photo.blurDataURL}
+                            alt=""
+                            aria-hidden="true"
+                            draggable={false}
+                            className={`pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover blur-xl transition-opacity duration-700 ${isLoaded ? "opacity-0" : "opacity-100"}`}
+                          />
+                        ) : (
+                          !isLoaded && <div className="gallery-skeleton absolute inset-0" />
+                        )}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          ref={(el) => { if (el?.complete) markLoaded(photo.id); }}
+                          src={photo.thumbUrl || photo.url}
+                          alt=""
+                          onLoad={() => markLoaded(photo.id)}
+                          draggable={false}
+                          className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+                        />
+                        <button
+                          onClick={() => handleDelete(photo)}
+                          disabled={deleting === photo.id}
+                          className="absolute top-2 right-2 w-8 h-8 bg-black/60 hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
+                        >
+                          {deleting === photo.id ? (
+                            <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
+                          ) : (
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               ))}
             </div>

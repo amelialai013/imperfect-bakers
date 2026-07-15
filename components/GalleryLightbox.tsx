@@ -2,55 +2,12 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import type { GalleryPhoto } from "@/app/api/gallery/route";
-
-// Fallback for photos without stored dimensions (shouldn't happen going
-// forward — see the upload route) so the packing math below still has a
-// number to work with.
-const FALLBACK_RATIO = 1; // square
+import { getColumnCount, packColumns } from "@/lib/galleryLayout";
 
 // Minimum horizontal drag (px) to count as a swipe, and how much more
 // horizontal than vertical the drag must be so a scroll-ish gesture doesn't
 // accidentally page through photos.
 const SWIPE_THRESHOLD = 50;
-
-// Matches the columns-1/sm/lg/xl breakpoints this grid used to rely on via
-// CSS `columns-*`. We compute layout in JS now (see below), so the column
-// count needs to be known here instead of left to the browser.
-const COLUMN_BREAKPOINTS = [
-  { minWidth: 1280, columns: 4 },
-  { minWidth: 1024, columns: 3 },
-  { minWidth: 640, columns: 2 },
-  { minWidth: 0, columns: 1 },
-];
-
-function getColumnCount(): number {
-  if (typeof window === "undefined") return 4; // SSR guess; corrected on mount below
-  const w = window.innerWidth;
-  return COLUMN_BREAKPOINTS.find((b) => w >= b.minWidth)!.columns;
-}
-
-// Real masonry — like Pinterest, not CSS `columns-*`. `columns-*` fills each
-// column completely (in DOM order) before moving to the next, balancing
-// *total* column height; with photos this varied in aspect ratio (6000x2590
-// panoramics next to 3438x5157 portraits) that balancing left visible gaps
-// wherever a tall photo got pushed whole into the next column. This instead
-// walks the photos in order and drops each one into whichever column is
-// currently shortest — the standard masonry packing algorithm, which can't
-// produce a gap by construction.
-function packColumns(photos: GalleryPhoto[], columnCount: number) {
-  const heights = new Array(columnCount).fill(0);
-  const columns: { photo: GalleryPhoto; index: number }[][] = Array.from({ length: columnCount }, () => []);
-  photos.forEach((photo, index) => {
-    const heightRatio = photo.width && photo.height ? photo.height / photo.width : FALLBACK_RATIO;
-    let shortest = 0;
-    for (let c = 1; c < columnCount; c++) {
-      if (heights[c] < heights[shortest]) shortest = c;
-    }
-    columns[shortest].push({ photo, index });
-    heights[shortest] += heightRatio;
-  });
-  return columns;
-}
 
 export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
