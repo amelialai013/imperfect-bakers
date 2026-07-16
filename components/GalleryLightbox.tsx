@@ -189,7 +189,7 @@ export default function GalleryLightbox({ photos }: { photos: GalleryPhoto[] }) 
               alt="Gallery photo"
               draggable={false}
               onClick={(e) => e.stopPropagation()}
-              className="h-full w-full select-none rounded-lg object-contain shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
+              className="max-h-full max-w-full select-none rounded-lg object-contain shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
             />
 
             {/* Next */}

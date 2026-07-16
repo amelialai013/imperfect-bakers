@@ -120,13 +120,14 @@
   padding-left: max(2rem, calc((var(--full-vw, 100vw) - 1280px) / 2 + 2rem));
 }
 
-/* ── Lightbox chrome — width AND height, not just width ──────
-   A landscape phone is wide but short. Tailwind's sm: breakpoint
-   is width-only, so it was handing landscape phones the same big
-   bars/gutters meant for actual desktop windows, leaving the photo
-   letterboxed. The "spacious" sizing below only kicks in once the
-   viewport is comfortably wide AND tall — a real desktop/tablet,
-   not just a rotated phone — so landscape mobile stays edge-to-edge.
+/* ── Lightbox chrome — real desktop only, not just a big viewport ──
+   A landscape phone is wide but short, so gating "spacious" on width+height
+   alone caught most phones — but a tablet (or a large phone) in landscape
+   is also wide AND tall, so it fell through to the desktop-sized bars/
+   gutters too, leaving the photo letterboxed exactly like the bug this was
+   meant to fix. hover:hover + pointer:fine only matches a mouse-driven
+   browser — true on desktop, false on every touch device regardless of
+   screen size or orientation — so "spacious" now only ever applies there.
 ─────────────────────────────────────────────────────────── */
 .lightbox-bar {
   height: 3rem;
@@ -149,7 +150,7 @@
 .lightbox-btn-next {
   right: 0.25rem;
 }
-@media (min-width: 640px) and (min-height: 500px) {
+@media (min-width: 640px) and (min-height: 500px) and (hover: hover) and (pointer: fine) {
   .lightbox-bar { height: 5rem; }
   .lightbox-bar-inner { padding-left: 1.5rem; padding-right: 1.5rem; }
   .lightbox-zone { padding-left: 4rem; padding-right: 4rem; }
