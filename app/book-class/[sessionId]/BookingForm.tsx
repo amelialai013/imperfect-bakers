@@ -479,7 +479,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               type="checkbox"
               checked={photoConsent}
               onChange={(e) => setPhotoConsent(e.target.checked)}
-              className="mt-0.5 w-4 h-4 shrink-0 accent-[#006644] cursor-pointer"
+              className="mt-[3.375px] w-4 h-4 shrink-0 accent-[#006644] cursor-pointer"
             />
             <span className="text-sm text-[#1a1a1a] leading-relaxed">
               I consent to photos taken during the class being shared on Imperfect Bakers&apos; social media and website.
