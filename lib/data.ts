@@ -229,3 +229,149 @@ export async function cancelBooking(id: string): Promise<void> {
     [booking.totalPeople]
   );
 }
+
+// Same read-then-write race as DECREMENT_SPOTS_SCRIPT above, but for
+// permanently deleting a booking: restoring its spots to the session, removing
+// it from the session's booking list, and deleting the record all need to
+// happen as one atomic operation, keyed off the booking's *current* cancelled/
+// declined state (re-read inside the script, not the possibly-stale state the
+// caller already has).
+const PERMANENT_DELETE_SCRIPT = `
+local braw = redis.call('GET', KEYS[1])
+if not braw then return cjson.encode({ok = true}) end
+local booking = cjson.decode(braw)
+if not booking.cancelled and booking.status ~= 'declined' then
+  local sraw = redis.call('GET', KEYS[2])
+  if sraw then
+    local session = cjson.decode(sraw)
+    local newSpots = session.spotsLeft + booking.totalPeople
+    if newSpots > session.maxSpots then newSpots = session.maxSpots end
+    session.spotsLeft = newSpots
+    redis.call('SET', KEYS[2], cjson.encode(session))
+  end
+end
+redis.call('LREM', KEYS[3], 0, ARGV[1])
+redis.call('DEL', KEYS[1])
+return cjson.encode({ok = true})
+`;
+
+export async function permanentlyDeleteBooking(id: string): Promise<void> {
+  const booking = await kv.get<Booking>(`booking:${id}`);
+  if (!booking) return;
+  await kv.eval(
+    PERMANENT_DELETE_SCRIPT,
+    [`booking:${id}`, `session:${booking.sessionId}`, `session:${booking.sessionId}:bookings`],
+    [id]
+  );
+}
+
+// Moving a booking to a different session touches spotsLeft on *two* sessions
+// plus the booking's own sessionId and both sessions' booking-list keys — the
+// previous read-then-write version (getSession + Promise.all of separate
+// updateSession/kv calls) had the same lost-update race as the other spot
+// counters above, times two. Doing the capacity check and both spot
+// adjustments atomically in one script closes that window.
+const MOVE_BOOKING_SCRIPT = `
+local braw = redis.call('GET', KEYS[1])
+if not braw then return cjson.encode({ok = false, reason = 'not_found'}) end
+local booking = cjson.decode(braw)
+
+local nraw = redis.call('GET', KEYS[3])
+if not nraw then return cjson.encode({ok = false, reason = 'not_found'}) end
+local newSession = cjson.decode(nraw)
+
+local amount = booking.totalPeople
+local active = (not booking.cancelled) and (booking.status ~= 'declined')
+
+if active and newSession.spotsLeft < amount then
+  return cjson.encode({ok = false, reason = 'insufficient', spotsLeft = newSession.spotsLeft})
+end
+
+if active then
+  newSession.spotsLeft = newSession.spotsLeft - amount
+  redis.call('SET', KEYS[3], cjson.encode(newSession))
+
+  local oraw = redis.call('GET', KEYS[2])
+  if oraw then
+    local oldSession = cjson.decode(oraw)
+    local restored = oldSession.spotsLeft + amount
+    if restored > oldSession.maxSpots then restored = oldSession.maxSpots end
+    oldSession.spotsLeft = restored
+    redis.call('SET', KEYS[2], cjson.encode(oldSession))
+  end
+end
+
+booking.sessionId = ARGV[2]
+redis.call('SET', KEYS[1], cjson.encode(booking))
+redis.call('LREM', KEYS[4], 0, ARGV[1])
+redis.call('RPUSH', KEYS[5], ARGV[1])
+
+return cjson.encode({ok = true})
+`;
+
+// Reinstating a cancelled/declined booking back to "pending" makes it active
+// again, so — like a fresh booking — it needs to *consume* a spot, with the
+// same capacity check DECREMENT_SPOTS_SCRIPT does (the session may have
+// filled up on other bookings while this one sat declined). The previous
+// version of this (both the original read-then-write code and an earlier
+// draft of this atomic script) mistakenly *restored* a spot on reinstate —
+// the opposite of correct, since decline had already freed it — which is
+// exactly the kind of drift between spotsLeft and actual active bookings
+// this whole fix is closing.
+const REINSTATE_BOOKING_SCRIPT = `
+local braw = redis.call('GET', KEYS[1])
+if not braw then return cjson.encode({ok = false, reason = 'not_found'}) end
+local booking = cjson.decode(braw)
+local wasActive = (not booking.cancelled) and (booking.status ~= 'declined')
+if not wasActive then
+  local sraw = redis.call('GET', KEYS[2])
+  if not sraw then return cjson.encode({ok = false, reason = 'not_found'}) end
+  local session = cjson.decode(sraw)
+  if session.spotsLeft < booking.totalPeople then
+    return cjson.encode({ok = false, reason = 'insufficient', spotsLeft = session.spotsLeft})
+  end
+  session.spotsLeft = session.spotsLeft - booking.totalPeople
+  redis.call('SET', KEYS[2], cjson.encode(session))
+end
+booking.cancelled = false
+booking.status = 'pending'
+redis.call('SET', KEYS[1], cjson.encode(booking))
+return cjson.encode({ok = true})
+`;
+
+type ReinstateResult =
+  | { ok: true }
+  | { ok: false; reason: "not_found" | "insufficient"; spotsLeft?: number };
+
+export async function reinstateBooking(id: string): Promise<ReinstateResult> {
+  const booking = await kv.get<Booking>(`booking:${id}`);
+  if (!booking) return { ok: false, reason: "not_found" };
+  const result = await kv.eval(
+    REINSTATE_BOOKING_SCRIPT,
+    [`booking:${id}`, `session:${booking.sessionId}`],
+    []
+  );
+  return result as ReinstateResult;
+}
+
+type MoveBookingResult =
+  | { ok: true }
+  | { ok: false; reason: "not_found" | "insufficient"; spotsLeft?: number };
+
+export async function moveBooking(id: string, newSessionId: string): Promise<MoveBookingResult> {
+  const booking = await kv.get<Booking>(`booking:${id}`);
+  if (!booking) return { ok: false, reason: "not_found" };
+  if (booking.sessionId === newSessionId) return { ok: true };
+  const result = await kv.eval(
+    MOVE_BOOKING_SCRIPT,
+    [
+      `booking:${id}`,
+      `session:${booking.sessionId}`,
+      `session:${newSessionId}`,
+      `session:${booking.sessionId}:bookings`,
+      `session:${newSessionId}:bookings`,
+    ],
+    [id, newSessionId]
+  );
+  return result as MoveBookingResult;
+}

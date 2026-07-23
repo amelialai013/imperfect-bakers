@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import type { ClassSession } from "@/lib/types";
+import { ADD_ONS, addOnsTotal, type AddOns } from "@/lib/addOns";
 
 type Counts = { child: number; youngAdult: number; adult: number };
 type Participant = { name: string; level: string };
@@ -69,6 +70,7 @@ function Counter({
 
 export default function BookingForm({ session }: { session: ClassSession }) {
   const [counts, setCounts] = useState<Counts>({ child: 0, youngAdult: 0, adult: 0 });
+  const [addOns, setAddOns] = useState<AddOns>({ cakeContainer: 0 });
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [levels, setLevels] = useState<ExperienceLevel[]>(DEFAULT_LEVELS);
   const [paymentStatus, setPaymentStatus] = useState("");
@@ -191,6 +193,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         phone,
         counts,
         totalPeople,
+        addOns,
         participants,
         paymentStatus,
         paymentOther: paymentStatus === "other" ? paymentOther : "",
@@ -306,18 +309,44 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             );
           })()}
           {fieldErrors.attendees && <p className="text-xs text-red-500 mt-2">{fieldErrors.attendees}</p>}
-
-          {totalPeople > 0 && (
-            <div className="mt-6 flex items-center justify-between rounded-xl bg-[#006644]/8 px-5 py-4">
-              <p className="text-sm text-[#1a1a1a]">{totalPeople} {totalPeople === 1 ? "person" : "people"} × ${session.price}</p>
-              <p className="text-2xl font-semibold text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-                ${(totalPeople * session.price).toLocaleString()}
-              </p>
-            </div>
-          )}
         </div>
 
-        {/* 03 — Payment */}
+        {/* 03 — Optional add-ons */}
+        <div className="mt-10">
+          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Optional add-ons</p>
+          <div className="divide-y divide-[#f0ece4]">
+            {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => (
+              <Counter
+                key={key}
+                label={ADD_ONS[key].label}
+                sub={`$${ADD_ONS[key].price} each`}
+                value={addOns[key] ?? 0}
+                onChange={(v) => setAddOns((prev) => ({ ...prev, [key]: v }))}
+              />
+            ))}
+          </div>
+        </div>
+
+        {(totalPeople > 0 || addOnsTotal(addOns) > 0) && (
+          <div className="mt-6 flex items-center justify-between rounded-xl bg-[#006644]/8 px-5 py-4">
+            <div>
+              <p className="text-sm text-[#1a1a1a]">{totalPeople} {totalPeople === 1 ? "person" : "people"} × ${session.price}</p>
+              {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => {
+                const qty = addOns[key] ?? 0;
+                return qty > 0 ? (
+                  <p key={key} className="text-xs text-[#6b7280] mt-0.5">
+                    + {ADD_ONS[key].label} × {qty} (${ADD_ONS[key].price} each)
+                  </p>
+                ) : null;
+              })}
+            </div>
+            <p className="text-2xl font-semibold text-[#1a1a1a]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+              ${(totalPeople * session.price + addOnsTotal(addOns)).toLocaleString()}
+            </p>
+          </div>
+        )}
+
+        {/* 04 — Payment */}
         <div className="mt-10 mb-12" ref={paymentSectionRef}>
           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-8">Payment</p>
           <div className="mb-8">
@@ -363,7 +392,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           {fieldErrors.payment && <p className="text-xs text-red-500 mt-2">{fieldErrors.payment}</p>}
         </div>
 
-        {/* 04 — Experience */}
+        {/* 05 — Experience */}
         {totalPeople > 0 && (
           <div className="mt-[60px] mb-12" ref={experienceSectionRef}>
             <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-6">Experience</p>
@@ -427,7 +456,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           </div>
         )}
 
-        {/* 05 — Notes */}
+        {/* 06 — Notes */}
         <div className="mt-[60px]">
           <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a] mb-4">Notes</p>
           <textarea

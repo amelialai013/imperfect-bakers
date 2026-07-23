@@ -38,6 +38,7 @@ export interface Booking {
     adult: number;
   };
   totalPeople: number;
+  addOns?: Partial<Record<"cakeContainer", number>>;
   paymentStatus: string;
   paymentOther?: string;
   notes: string;

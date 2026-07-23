@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import type { ClassSession, Booking, ClassConfig } from "@/lib/types";
 import type { GalleryPhoto } from "@/app/api/gallery/route";
 import { getColumnCount, packColumns } from "@/lib/galleryLayout";
+import { ADD_ONS, addOnsTotal } from "@/lib/addOns";
 import { DEFAULT_CLASS_CONFIGS } from "@/lib/classDefaults";
 import LocationInput from "@/components/LocationInput";
 import ImageUpload from "@/components/ImageUpload";
@@ -486,8 +487,13 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
 
   async function undeclinePanel(id: string) {
     setActing(id);
-    setBookings((prev) => prev ? prev.map((b) => b.id === id ? { ...b, status: "pending" } : b) : prev);
-    await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status: "pending" }) });
+    const res = await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status: "pending" }) });
+    if (res.ok) {
+      setBookings((prev) => prev ? prev.map((b) => b.id === id ? { ...b, status: "pending" } : b) : prev);
+    } else {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error ?? "Couldn't reinstate this booking — please try again.");
+    }
     setActing(null);
     setUndeclinePanelTarget(null);
   }
@@ -577,27 +583,36 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3 text-sm">
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Email</p>
-              <p className="text-[#1a1a1a] break-all">{b.email}</p>
+              <p className="text-[#1a1a1a] break-all text-xs">{b.email}</p>
             </div>
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Phone</p>
-              <p className="text-[#1a1a1a]">{b.phone}</p>
+              <p className="text-[#1a1a1a] text-xs">{b.phone}</p>
             </div>
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
               <p className="text-[#1a1a1a] font-medium text-xs">{b.totalPeople} total</p>
-              <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
+              <div className="text-[#1a1a1a] text-xs mt-0.5 space-y-0.5">
                 {b.counts.child > 0 && <p>Child (7–17): {b.counts.child}</p>}
                 {b.counts.youngAdult > 0 && <p>Young Adult (18–34): {b.counts.youngAdult}</p>}
                 {b.counts.adult > 0 && <p>Adult (35+): {b.counts.adult}</p>}
               </div>
+              {addOnsTotal(b.addOns) > 0 && (
+                <div className="text-[#1a1a1a] text-xs mt-2 space-y-0.5">
+                  <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Add-ons</p>
+                  {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => {
+                    const qty = b.addOns?.[key] ?? 0;
+                    return qty > 0 ? <p key={key}>{ADD_ONS[key].label} × {qty}</p> : null;
+                  })}
+                </div>
+              )}
             </div>
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
               {sessionPrice != null && (
-                <p className="text-[#1a1a1a] font-medium text-xs">${(sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                <p className="text-[#1a1a1a] font-medium text-xs">${(sessionPrice * b.totalPeople + addOnsTotal(b.addOns)).toLocaleString()} total</p>
               )}
-              <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
+              <div className="text-[#1a1a1a] text-xs mt-0.5 space-y-0.5">
                 <p>{b.paymentStatus === "completed" ? "Paid" : "Other"}</p>
                 {b.paymentStatus === "other" && b.paymentOther && (
                   <p className="italic">{b.paymentOther}</p>
@@ -625,7 +640,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
         </div>
       ))}
       {cancelled.length > 0 && (
-        <details className="mt-2">
+        <details className="mt-6">
           <summary className="text-xs text-[#6b7280] cursor-pointer select-none">
             {cancelled.length} cancelled booking{cancelled.length > 1 ? "s" : ""}
           </summary>
@@ -1167,10 +1182,14 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
 
   async function undecline(id: string) {
     setActing(id);
-    await authFetch(`/api/bookings/${id}`, token, {
+    const res = await authFetch(`/api/bookings/${id}`, token, {
       method: "PATCH",
       body: JSON.stringify({ status: "pending" }),
     });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error ?? "Couldn't reinstate this booking — please try again.");
+    }
     await load();
     setActing(null);
     setUndeclineTarget(null);
@@ -1487,13 +1506,22 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                           {b.counts?.youngAdult > 0 && <p>Young Adult: {b.counts.youngAdult}</p>}
                           {b.counts?.adult > 0 && <p>Adult: {b.counts.adult}</p>}
                         </div>
+                        {addOnsTotal(b.addOns) > 0 && (
+                          <div className="text-[#1a1a1a] text-xs mt-2 space-y-0.5">
+                            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Add-ons</p>
+                            {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => {
+                              const qty = b.addOns?.[key] ?? 0;
+                              return qty > 0 ? <p key={key}>{ADD_ONS[key].label} × {qty}</p> : null;
+                            })}
+                          </div>
+                        )}
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
                         {b.sessionPrice != null && (
-                          <p className="text-[#1a1a1a] font-medium text-xs">${(b.sessionPrice * b.totalPeople).toLocaleString()} total</p>
+                          <p className="text-[#1a1a1a] font-medium text-xs">${(b.sessionPrice * b.totalPeople + addOnsTotal(b.addOns)).toLocaleString()} total</p>
                         )}
-                        <div className="text-[#1a1a1a] text-xs mt-1 space-y-0.5">
+                        <div className="text-[#1a1a1a] text-xs mt-0.5 space-y-0.5">
                           <p>{b.paymentStatus === "completed" ? "Paid" : "Other"}</p>
                           {b.paymentStatus === "other" && b.paymentOther && (
                             <p className="italic">{b.paymentOther}</p>

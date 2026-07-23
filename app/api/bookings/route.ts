@@ -3,6 +3,7 @@ import { createBooking, getSessionBookings } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
 import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
+import { ADD_ONS } from "@/lib/addOns";
 import type { Booking, ClassSession } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.imperfectbakers.com";
@@ -25,13 +26,13 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { sessionId, name, email, phone, counts, totalPeople, paymentStatus, paymentOther, notes, participants } = body;
+  const { sessionId, name, email, phone, counts, totalPeople, addOns, paymentStatus, paymentOther, notes, participants } = body;
 
   if (!sessionId || !name || !email || totalPeople < 1) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
   }
 
-  const result = await createBooking({ sessionId, name, email, phone, counts, totalPeople, paymentStatus, paymentOther, notes, participants });
+  const result = await createBooking({ sessionId, name, email, phone, counts, totalPeople, addOns, paymentStatus, paymentOther, notes, participants });
 
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: 409 });
@@ -76,6 +77,14 @@ async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
     counts.adult > 0 ? `${counts.adult} adult` : null,
   ].filter(Boolean).join(", ");
 
+  const addOnsBreakdown = (Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[])
+    .map((key) => {
+      const qty = booking.addOns?.[key] ?? 0;
+      return qty > 0 ? `${ADD_ONS[key].label} × ${qty}` : null;
+    })
+    .filter(Boolean)
+    .join(", ");
+
   const html = `
     <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
       <div style="background:#006644;padding:24px 32px;border-radius:12px 12px 0 0">
@@ -90,6 +99,7 @@ async function sendAdminEmail(booking: Booking, session: ClassSession | null) {
           <tr><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:13px;color:#6b7280">Email</td><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:14px"><a href="mailto:${email}" style="color:#006644">${email}</a></td></tr>
           <tr><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:13px;color:#6b7280">Phone</td><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:14px">${phone}</td></tr>
           <tr><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:13px;color:#6b7280">Attendees</td><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:14px">${totalPeople} (${attendeeBreakdown})</td></tr>
+          ${addOnsBreakdown ? `<tr><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:13px;color:#6b7280">Add-ons</td><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:14px">${addOnsBreakdown}</td></tr>` : ""}
           <tr><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:13px;color:#6b7280">Payment</td><td style="padding:10px 0;border-bottom:1px solid #e4dfd5;font-size:14px">${paymentStatus}</td></tr>
           <tr><td style="padding:10px 0;font-size:13px;color:#6b7280;vertical-align:top">Notes</td><td style="padding:10px 0;font-size:14px">${notes || "—"}</td></tr>
         </table>

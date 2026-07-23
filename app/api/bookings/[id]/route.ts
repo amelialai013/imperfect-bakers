@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cancelBooking, updateBookingStatus, getSession, updateSession } from "@/lib/data";
+import { cancelBooking, updateBookingStatus, getSession, permanentlyDeleteBooking, reinstateBooking, moveBooking } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
 import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
@@ -14,20 +14,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   // Permanent delete — restore spots then remove record entirely from KV (no email sent)
   if (searchParams.get("permanent") === "true") {
-    const booking = await kv.get<Booking>(`booking:${id}`);
-    if (booking) {
-      // Return spots to session if booking was active (not already cancelled/declined)
-      if (!booking.cancelled && booking.status !== "declined") {
-        const session = await getSession(booking.sessionId);
-        if (session) {
-          await updateSession(booking.sessionId, {
-            spotsLeft: Math.min(session.spotsLeft + booking.totalPeople, session.maxSpots),
-          });
-        }
-      }
-      await kv.lrem(`session:${booking.sessionId}:bookings`, 0, id);
-    }
-    await kv.del(`booking:${id}`);
+    await permanentlyDeleteBooking(id);
     return NextResponse.json({ ok: true });
   }
 
@@ -83,38 +70,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   // ── Move booking to a different session ───────────────────────────────────
   if (body.newSessionId) {
-    const booking = await kv.get<Booking>(`booking:${id}`);
-    if (!booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
-
-    const oldSessionId = booking.sessionId;
-    const newSessionId = body.newSessionId;
-
-    if (oldSessionId === newSessionId) return NextResponse.json({ ok: true });
-
-    const [oldSession, newSession] = await Promise.all([
-      getSession(oldSessionId),
-      getSession(newSessionId),
-    ]);
-
-    if (!newSession) return NextResponse.json({ error: "Target session not found" }, { status: 404 });
-    if (newSession.spotsLeft < booking.totalPeople) {
-      return NextResponse.json({ error: `Not enough spots in target session (${newSession.spotsLeft} left)` }, { status: 409 });
+    const result = await moveBooking(id, body.newSessionId);
+    if (!result.ok) {
+      if (result.reason === "not_found") return NextResponse.json({ error: "Booking or target session not found" }, { status: 404 });
+      return NextResponse.json({ error: `Not enough spots in target session (${result.spotsLeft} left)` }, { status: 409 });
     }
-
-    // Move booking record to new session in KV
-    await Promise.all([
-      kv.set(`booking:${id}`, { ...booking, sessionId: newSessionId }),
-      kv.lrem(`session:${oldSessionId}:bookings`, 0, id),
-      kv.rpush(`session:${newSessionId}:bookings`, id),
-      // Return spot to old session, consume spot in new session
-      oldSession && !booking.cancelled && booking.status !== "declined"
-        ? updateSession(oldSessionId, { spotsLeft: Math.min(oldSession.spotsLeft + booking.totalPeople, oldSession.maxSpots) })
-        : Promise.resolve(),
-      !booking.cancelled && booking.status !== "declined"
-        ? updateSession(newSessionId, { spotsLeft: newSession.spotsLeft - booking.totalPeople })
-        : Promise.resolve(),
-    ]);
-
     return NextResponse.json({ ok: true });
   }
 
@@ -127,15 +87,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const booking = await kv.get<Booking>(`booking:${id}`);
   if (!booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  // Reinstating a declined booking — restore spot to session and clear status
+  // Reinstating a declined booking — consume a spot again (declining freed it) and clear status
   if (status === "pending") {
-    const session = await getSession(booking.sessionId);
-    if (session) {
-      await updateSession(booking.sessionId, {
-        spotsLeft: Math.min(session.spotsLeft + booking.totalPeople, session.maxSpots),
-      });
+    const result = await reinstateBooking(id);
+    if (!result.ok) {
+      if (result.reason === "not_found") return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json({ error: `Session is now full — only ${result.spotsLeft} spot${result.spotsLeft === 1 ? "" : "s"} left` }, { status: 409 });
     }
-    await kv.set(`booking:${id}`, { ...booking, status: "pending", cancelled: false });
     return NextResponse.json({ ok: true, status: "pending" });
   }
 
