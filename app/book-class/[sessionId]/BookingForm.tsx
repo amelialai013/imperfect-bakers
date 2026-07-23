@@ -74,6 +74,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [levels, setLevels] = useState<ExperienceLevel[]>(DEFAULT_LEVELS);
   const [paymentStatus, setPaymentStatus] = useState("");
+  const [photoConsent, setPhotoConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{
@@ -198,6 +199,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         paymentStatus,
         paymentOther: paymentStatus === "other" ? paymentOther : "",
         notes,
+        photoConsent,
       }),
     });
     setSubmitting(false);
@@ -468,6 +470,21 @@ export default function BookingForm({ session }: { session: ClassSession }) {
             onChange={() => fieldErrors.notes && setFieldErrors((p) => ({ ...p, notes: undefined }))}
           />
           {fieldErrors.notes && <p className="text-xs text-red-500 mt-1.5">{fieldErrors.notes}</p>}
+        </div>
+
+        {/* 07 — Photo consent */}
+        <div className="mt-[60px]">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={photoConsent}
+              onChange={(e) => setPhotoConsent(e.target.checked)}
+              className="mt-0.5 w-4 h-4 shrink-0 accent-[#006644] cursor-pointer"
+            />
+            <span className="text-sm text-[#1a1a1a] leading-relaxed">
+              I consent to photos taken during the class being shared on Imperfect Bakers&apos; social media and website.
+            </span>
+          </label>
         </div>
 
         <div className="mt-8 pt-2 flex flex-col gap-6">

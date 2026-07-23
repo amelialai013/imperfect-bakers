@@ -519,10 +519,12 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
 
   return (
     <div className="mt-4 space-y-2">
-      {active.map((b) => (
+      {active.map((b) => {
+        const showKebab = (b.status === "confirmed" && !isPast) || b.status === "declined";
+        return (
         <div key={b.id} className="relative bg-white border border-[#e8e2d9] rounded-xl">
           {/* Kebab — always top-right */}
-          {((b.status === "confirmed" && !isPast) || b.status === "declined") && (
+          {showKebab && (
             <div className="absolute top-3 right-3 z-10">
               <button onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -559,21 +561,21 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             </div>
           )}
           {/* Header — badge, actions */}
-          <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
-            <div className="mb-4">
+          <div className={`px-5 pt-4 pb-3 border-b border-[#f0ece4] ${showKebab ? "pr-10" : ""}`}>
+            <div className="flex items-center justify-between gap-2 flex-wrap">
               <StatusBadge status={b.status} />
+              {/* Pending: inline confirm/decline, top-right, aligned with the badge */}
+              {(!b.status || b.status === "pending") && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button onClick={() => act(b.id, "confirmed")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50">
+                    ✓ Confirm
+                  </button>
+                  <button onClick={() => act(b.id, "declined")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50">
+                    ✗ Decline
+                  </button>
+                </div>
+              )}
             </div>
-            {/* Pending: inline confirm/decline */}
-            {(!b.status || b.status === "pending") && (
-              <div className="flex items-center gap-2 flex-wrap mt-3">
-                <button onClick={() => act(b.id, "confirmed")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50">
-                  ✓ Confirm
-                </button>
-                <button onClick={() => act(b.id, "declined")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50">
-                  ✗ Decline
-                </button>
-              </div>
-            )}
           </div>
           {/* Body */}
           <div className="px-5 py-4 space-y-3">
@@ -597,15 +599,6 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
                 {b.counts.youngAdult > 0 && <p>Young Adult (18–34): {b.counts.youngAdult}</p>}
                 {b.counts.adult > 0 && <p>Adult (35+): {b.counts.adult}</p>}
               </div>
-              {addOnsTotal(b.addOns) > 0 && (
-                <div className="text-[#1a1a1a] text-xs mt-2 space-y-0.5">
-                  <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Add-ons</p>
-                  {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => {
-                    const qty = b.addOns?.[key] ?? 0;
-                    return qty > 0 ? <p key={key}>{ADD_ONS[key].label} × {qty}</p> : null;
-                  })}
-                </div>
-              )}
             </div>
             <div>
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
@@ -627,7 +620,7 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             )}
             {b.participants && b.participants.length > 0 && (
               <div className="col-span-2 sm:col-span-4 mt-3">
-                <p className="text-[0.6875rem] tracking-[0.2em] uppercase text-[#006644] mb-1">Experience</p>
+                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Experience</p>
                 <div className="space-y-0.5">
                   {b.participants.map((p, i) => (
                     <p key={i} className="text-[#1a1a1a] text-xs">{p.name}{p.level ? ` — ${levelMap[p.level] ?? p.level}` : ""}</p>
@@ -635,10 +628,22 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
                 </div>
               </div>
             )}
+            {addOnsTotal(b.addOns) > 0 && (
+              <div className="col-span-2 sm:col-span-4 mt-3">
+                <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Add-ons</p>
+                <div className="space-y-0.5">
+                  {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => {
+                    const qty = b.addOns?.[key] ?? 0;
+                    return qty > 0 ? <p key={key} className="text-[#1a1a1a] text-xs">{ADD_ONS[key].label} × {qty}</p> : null;
+                  })}
+                </div>
+              </div>
+            )}
           </div>
           </div>
         </div>
-      ))}
+        );
+      })}
       {cancelled.length > 0 && (
         <details className="mt-6">
           <summary className="text-xs text-[#6b7280] cursor-pointer select-none">
@@ -867,7 +872,7 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
                 <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>Upload photos</>
               )}
             </button>
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={() => {}} onLogout={onLogout} />
+            <MoreMenu onDashboard={onBack} onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={() => {}} onLogout={onLogout} />
           </div>
           <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleUpload(e.target.files)} />
         </div>
@@ -963,7 +968,7 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
   );
 }
 
-function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onGallery, onLogout }: { onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onGallery: () => void; onLogout: () => void; align?: "left" | "right" }) {
+function MoreMenu({ onDashboard, onManageClasses, onAllBookings, onInterests, onEmailTemplates, onSettings, onGallery, onLogout }: { onDashboard?: () => void; onManageClasses: () => void; onAllBookings: () => void; onInterests: () => void; onEmailTemplates: () => void; onSettings: () => void; onGallery: () => void; onLogout: () => void; align?: "left" | "right" }) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [menuAlign, setMenuAlign] = useState<"left" | "right">("left");
@@ -990,6 +995,18 @@ function MoreMenu({ onManageClasses, onAllBookings, onInterests, onEmailTemplate
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className={`absolute ${menuAlign === "right" ? "right-0" : "left-0"} top-full mt-2 z-20 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-y-auto min-w-[200px] max-h-[70vh]`}>
+            {onDashboard && (<>
+              <button
+                onClick={() => { setOpen(false); onDashboard(); }}
+                className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
+              >
+                <svg className="w-4 h-4 text-[#006644] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Admin dashboard
+              </button>
+              <div className="h-px bg-[#e8e2d9]" />
+            </>)}
             <button
               onClick={() => { setOpen(false); onAllBookings(); }}
               className="w-full text-left px-5 py-3.5 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors flex items-center gap-3"
@@ -1262,7 +1279,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
             </div>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
+            <MoreMenu onDashboard={onBack} onManageClasses={onManageClasses} onAllBookings={() => {}} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -1406,10 +1423,12 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
             </div>
           ) : (
             <div className="space-y-3">
-              {filtered.map((b) => (
+              {filtered.map((b) => {
+                const showKebab = b.cancelled || b.status === "confirmed" || b.status === "declined";
+                return (
                 <div key={b.id} className="relative bg-white border border-[#e8e2d9] rounded-xl">
                   {/* Kebab — always top-right */}
-                  {(b.cancelled || b.status === "confirmed" || b.status === "declined") && (
+                  {showKebab && (
                     <div className="absolute top-3 right-3 z-10">
                       <button
                         onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
@@ -1460,27 +1479,28 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                     </div>
                   )}
                   {/* Session label */}
-                  <div className="px-5 pt-4 pb-3 border-b border-[#f0ece4] pr-10">
-                    <div className="mb-4">
+                  <div className={`px-5 pt-4 pb-3 border-b border-[#f0ece4] ${showKebab ? "pr-10" : ""}`}>
+                    <div className="flex items-center justify-between gap-2 flex-wrap mb-4">
                       {b.cancelled
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
                         : <StatusBadge status={b.status} />
                       }
+                      {/* Pending: inline confirm/decline, top-right, aligned with the badge */}
+                      {(!b.cancelled && (!b.status || b.status === "pending")) && (
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <button onClick={() => act(b.id, "confirmed")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50">
+                            ✓ Confirm
+                          </button>
+                          <button onClick={() => act(b.id, "declined")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50">
+                            ✗ Decline
+                          </button>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <p className="text-[0.6875rem] font-semibold text-[#006644] tracking-[0.2em] uppercase mb-1.5">{b.sessionName}</p>
                       <p className="text-xs text-[#6b7280]">{b.sessionDate}{b.sessionTime ? ` · ${b.sessionTime}` : ""}{b.sessionPrice != null ? ` · $${b.sessionPrice}/person` : ""}</p>
                     </div>
-                    {(!b.cancelled && (!b.status || b.status === "pending")) && (
-                      <div className="flex items-center gap-2 flex-wrap mt-3">
-                        <button onClick={() => act(b.id, "confirmed")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-[#006644] text-white rounded-full hover:bg-[#004d33] transition-colors disabled:opacity-50">
-                          ✓ Confirm
-                        </button>
-                        <button onClick={() => act(b.id, "declined")} disabled={acting === b.id} className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-medium bg-white text-[#6b7280] border border-[#e4dfd5] rounded-full hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50">
-                          ✗ Decline
-                        </button>
-                      </div>
-                    )}
                   </div>
 
                   {/* Booking details */}
@@ -1506,15 +1526,6 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                           {b.counts?.youngAdult > 0 && <p>Young Adult: {b.counts.youngAdult}</p>}
                           {b.counts?.adult > 0 && <p>Adult: {b.counts.adult}</p>}
                         </div>
-                        {addOnsTotal(b.addOns) > 0 && (
-                          <div className="text-[#1a1a1a] text-xs mt-2 space-y-0.5">
-                            <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Add-ons</p>
-                            {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => {
-                              const qty = b.addOns?.[key] ?? 0;
-                              return qty > 0 ? <p key={key}>{ADD_ONS[key].label} × {qty}</p> : null;
-                            })}
-                          </div>
-                        )}
                       </div>
                       <div>
                         <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Payment</p>
@@ -1544,10 +1555,22 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                           </div>
                         </div>
                       )}
+                      {addOnsTotal(b.addOns) > 0 && (
+                        <div className="col-span-2 sm:col-span-4 mt-3">
+                          <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Add-ons</p>
+                          <div className="space-y-0.5">
+                            {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => {
+                              const qty = b.addOns?.[key] ?? 0;
+                              return qty > 0 ? <p key={key} className="text-[#1a1a1a] text-xs">{ADD_ONS[key].label} × {qty}</p> : null;
+                            })}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -1668,7 +1691,7 @@ function InterestsView({ token, onBack, onAllBookings, onManageClasses, onEmailT
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
+            <MoreMenu onDashboard={onBack} onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={() => {}} onEmailTemplates={onEmailTemplates} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -2053,7 +2076,7 @@ function EmailTemplatesView({ token, onBack, onAllBookings, onInterests, onManag
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
+            <MoreMenu onDashboard={onBack} onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={() => {}} onSettings={onSettings} onGallery={onGallery} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -2330,7 +2353,7 @@ function SettingsView({ token, onBack, onAllBookings, onInterests, onManageClass
             </h1>
           </div>
           <div className="flex items-center gap-4 pb-1 mt-12">
-            <MoreMenu onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onGallery={onGallery} onLogout={onLogout} />
+            <MoreMenu onDashboard={onBack} onManageClasses={onManageClasses} onAllBookings={onAllBookings} onInterests={onInterests} onEmailTemplates={onEmailTemplates} onSettings={() => {}} onGallery={onGallery} onLogout={onLogout} />
           </div>
         </div>
       </section>
@@ -2646,7 +2669,7 @@ export default function AdminPage() {
   const [dashMoveError, setDashMoveError] = useState<string>("");
   const [dashMoving, setDashMoving] = useState(false);
   const [addBookingTarget, setAddBookingTarget] = useState<ClassSession | null>(null);
-  const [addBookingForm, setAddBookingForm] = useState({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 });
+  const [addBookingForm, setAddBookingForm] = useState({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0, cakeContainer: 0 });
   const [addBookingError, setAddBookingError] = useState<string>("");
   const [addBookingFieldErrors, setAddBookingFieldErrors] = useState<{ name?: string; email?: string; attendees?: string; payment?: string }>({});
   const [addBookingSaving, setAddBookingSaving] = useState(false);
@@ -3091,7 +3114,7 @@ export default function AdminPage() {
               <button onClick={() => setAddingClass(true)} className="btn-primary group">
                 New class <span>+</span>
               </button>
-              <MoreMenu onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onGallery={() => setView("gallery")} onLogout={logout} />
+              <MoreMenu onDashboard={tryGoBack} onManageClasses={() => {}} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onGallery={() => setView("gallery")} onLogout={logout} />
             </div>
           </div>
         </section>
@@ -3275,7 +3298,7 @@ export default function AdminPage() {
 
   async function submitAddBooking() {
     if (!addBookingTarget) return;
-    const { name, email, phone, notes, paymentStatus, paymentOther, child, youngAdult, adult } = addBookingForm;
+    const { name, email, phone, notes, paymentStatus, paymentOther, child, youngAdult, adult, cakeContainer } = addBookingForm;
     const totalPeople = child + youngAdult + adult;
     const fieldErrs: { name?: string; email?: string; attendees?: string; payment?: string } = {};
     if (!name.trim()) fieldErrs.name = "Name is required";
@@ -3292,7 +3315,7 @@ export default function AdminPage() {
         sessionId: addBookingTarget.id,
         name: name.trim(), email: email.trim(), phone: phone.trim(),
         counts: { child, youngAdult, adult },
-        totalPeople, paymentStatus, paymentOther, notes,
+        totalPeople, addOns: { cakeContainer }, paymentStatus, paymentOther, notes,
         status: "confirmed",
       }),
     });
@@ -3302,7 +3325,7 @@ export default function AdminPage() {
       setAddBookingSaving(false); return;
     }
     setAddBookingTarget(null);
-    setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 });
+    setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0, cakeContainer: 0 });
     setAddBookingSaving(false);
     await loadSessions();
   }
@@ -3506,7 +3529,7 @@ export default function AdminPage() {
                             <div className="fixed inset-0 z-10" onClick={() => setSessionKebabOpen(null)} />
                             <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
                               <button
-                                onClick={() => { setSessionKebabOpen(null); setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0 }); setAddBookingError(""); setAddBookingFieldErrors({}); }}
+                                onClick={() => { setSessionKebabOpen(null); setAddBookingTarget(s); setAddBookingForm({ name: "", email: "", phone: "", notes: "", paymentStatus: "", paymentOther: "", child: 0, youngAdult: 0, adult: 0, cakeContainer: 0 }); setAddBookingError(""); setAddBookingFieldErrors({}); }}
                                 className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
                               >
                                 Add booking
@@ -3694,6 +3717,22 @@ export default function AdminPage() {
                   ))}
                 </div>
                 {addBookingFieldErrors.attendees && <p className="text-xs text-red-500 mt-1">{addBookingFieldErrors.attendees}</p>}
+              </div>
+              {/* Optional add-ons */}
+              <div>
+                <label className="block text-xs font-medium text-[#1a1a1a] mb-1.5">Add-ons (optional)</label>
+                <div className="flex flex-col gap-2">
+                  {(Object.keys(ADD_ONS) as (keyof typeof ADD_ONS)[]).map((key) => (
+                    <div key={key} className="flex flex-col min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between gap-2 border border-[#e4dfd5] rounded-lg px-4 py-3">
+                      <span className="text-sm text-[#1a1a1a] whitespace-nowrap">{ADD_ONS[key].label} <span className="text-[#6b7280]">(${ADD_ONS[key].price} each)</span></span>
+                      <div className="flex items-center gap-3">
+                        <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: Math.max(0, f[key] - 1) }))} className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-sm font-bold hover:bg-[#e4dfd5] transition-colors">−</button>
+                        <span className="text-sm font-semibold w-5 text-center">{addBookingForm[key]}</span>
+                        <button type="button" onClick={() => setAddBookingForm((f) => ({ ...f, [key]: f[key] + 1 }))} className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0ece4] text-[#1a1a1a] text-sm font-bold hover:bg-[#e4dfd5] transition-colors">+</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               {/* Payment */}
               <div>
