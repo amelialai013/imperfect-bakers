@@ -612,6 +612,10 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
                 )}
               </div>
             </div>
+            <div>
+              <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Consent</p>
+              <p className="text-[#1a1a1a] text-xs">{b.photoConsent ? "Yes" : "No"}</p>
+            </div>
             {b.notes && (
               <div className="col-span-2 sm:col-span-4 mt-3">
                 <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Notes</p>
@@ -1538,6 +1542,10 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                             <p className="italic">{b.paymentOther}</p>
                           )}
                         </div>
+                      </div>
+                      <div>
+                        <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Consent</p>
+                        <p className="text-[#1a1a1a] text-xs">{b.photoConsent ? "Yes" : "No"}</p>
                       </div>
                       {b.notes && (
                         <div className="col-span-2 sm:col-span-4 mt-3">
