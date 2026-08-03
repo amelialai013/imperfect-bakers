@@ -523,9 +523,9 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
         const showKebab = (b.status === "confirmed" && !isPast) || b.status === "declined";
         return (
         <div key={b.id} className="relative bg-white border border-[#e8e2d9] rounded-xl">
-          {/* Kebab — always top-right */}
+          {/* Kebab — always top-right, vertically centered on the badge */}
           {showKebab && (
-            <div className="absolute top-3 right-3 z-10">
+            <div className="absolute top-[19px] right-3 z-10">
               <button onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
                   <circle cx="8" cy="2.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/>
@@ -561,8 +561,8 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
             </div>
           )}
           {/* Header — badge, actions */}
-          <div className={`px-5 pt-4 pb-3 border-b border-[#f0ece4] ${showKebab ? "pr-10" : ""}`}>
-            <div className="flex items-center justify-between gap-2 flex-wrap">
+          <div className={`px-5 pt-3 pb-3 border-b border-[#f0ece4] ${showKebab ? "pr-10" : ""}`}>
+            <div className="flex items-center justify-between gap-2 flex-wrap min-h-[42px]">
               <StatusBadge status={b.status} />
               {/* Pending: inline confirm/decline, top-right, aligned with the badge */}
               {(!b.status || b.status === "pending") && (
@@ -1431,9 +1431,9 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                 const showKebab = b.cancelled || b.status === "confirmed" || b.status === "declined";
                 return (
                 <div key={b.id} className="relative bg-white border border-[#e8e2d9] rounded-xl">
-                  {/* Kebab — always top-right */}
+                  {/* Kebab — always top-right, vertically centered on the badge */}
                   {showKebab && (
-                    <div className="absolute top-3 right-3 z-10">
+                    <div className="absolute top-[19px] right-3 z-10">
                       <button
                         onClick={() => setKebabOpen(kebabOpen === b.id ? null : b.id)}
                         className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#f0ece4] text-[#6b7280] transition-colors cursor-pointer"
@@ -1483,8 +1483,8 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                     </div>
                   )}
                   {/* Session label */}
-                  <div className={`px-5 pt-4 pb-3 border-b border-[#f0ece4] ${showKebab ? "pr-10" : ""}`}>
-                    <div className="flex items-center justify-between gap-2 flex-wrap mb-4">
+                  <div className={`px-5 pt-3 pb-3 border-b border-[#f0ece4] ${showKebab ? "pr-10" : ""}`}>
+                    <div className="flex items-center justify-between gap-2 flex-wrap mb-3 min-h-[42px]">
                       {b.cancelled
                         ? <span className="text-[0.6rem] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#f5f2ed] text-[#6b7280] border border-[#e4dfd5]">Cancelled</span>
                         : <StatusBadge status={b.status} />

@@ -108,6 +108,30 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── IN THE KITCHEN (VIDEO) ──────────────────────────── */}
+      <section className="py-24 bg-[#faf9f6]">
+        <div className="max-w-5xl mx-auto px-8 text-center">
+          <span className="section-label">See it in action</span>
+          <h2
+            className="text-3xl md:text-4xl text-[#006644] mt-4 mb-10 leading-snug"
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+          >
+            A peek inside the kitchen
+          </h2>
+          <div className="rounded-2xl overflow-hidden border border-[#e8e2d9] shadow-sm">
+            <video
+              className="w-full aspect-video bg-black"
+              controls
+              preload="none"
+              playsInline
+              poster="https://pub-e37b1491bb474f5aaba716ccfa0e2c04.r2.dev/video/about-poster.jpg"
+            >
+              <source src="https://pub-e37b1491bb474f5aaba716ccfa0e2c04.r2.dev/video/about.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="py-16 bg-[#006644]">
         <div className="max-w-4xl mx-auto px-8 text-center">
