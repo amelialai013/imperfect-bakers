@@ -26,24 +26,43 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  if (await isRateLimited("bookings", req, 10, 60 * 60)) {
+  const isAdmin = checkAdminToken(req);
+
+  // The admin's own "add booking" flow shouldn't be throttled by the same
+  // per-IP limit meant to stop public spam/abuse.
+  if (!isAdmin && (await isRateLimited("bookings", req, 10, 60 * 60))) {
     return NextResponse.json({ error: "Too many booking requests. Please try again later." }, { status: 429 });
   }
 
   const body = await req.json();
-  const { sessionId, name, email, phone, counts, totalPeople, addOns, paymentStatus, paymentOther, notes, participants, photoConsent } = body;
+  const { sessionId, name, email, phone, counts, totalPeople, addOns, paymentStatus, paymentOther, notes, participants, photoConsent, status } = body;
 
-  if (!sessionId || !name || !email || totalPeople < 1) {
+  if (!sessionId || !name || !email || !phone || !paymentStatus || totalPeople < 1) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
   }
+  if (typeof counts !== "object" || counts === null) {
+    return NextResponse.json({ error: "Missing attendee breakdown." }, { status: 400 });
+  }
 
-  const result = await createBooking({ sessionId, name, email, phone, counts, totalPeople, addOns, paymentStatus, paymentOther, notes, participants, photoConsent });
+  // Only an authenticated admin may create a booking pre-confirmed (e.g. the
+  // "add booking" modal, for walk-ins already paid) — anyone else always
+  // lands as pending, regardless of what they send.
+  const initialStatus = isAdmin && status === "confirmed" ? "confirmed" : undefined;
+
+  const result = await createBooking({ sessionId, name, email, phone, counts, totalPeople, addOns, paymentStatus, paymentOther, notes, participants, photoConsent, status: initialStatus });
 
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: 409 });
   }
 
   const { booking, session } = result;
+
+  // A booking created already-confirmed (admin-recorded) isn't a "request" —
+  // sending the request-received/new-request-with-confirm-links emails for
+  // it would be actively misleading, so skip both in that case.
+  if (booking.status === "confirmed") {
+    return NextResponse.json({ id: booking.id, emailErrors: { admin: null, customer: null } }, { status: 201 });
+  }
 
   // Send emails — awaited so serverless function doesn't terminate before they fire
   const [admin, customer] = await Promise.allSettled([

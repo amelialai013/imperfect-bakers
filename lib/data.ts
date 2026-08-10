@@ -92,8 +92,19 @@ export async function updateSession(
 ): Promise<ClassSession | null> {
   const existing = await getSession(id);
   if (!existing) return null;
-  const updated = { ...existing, ...data };
-  // Enforce 0 <= spotsLeft <= maxSpots regardless of what the caller computed —
+  // spotsLeft is never taken from the caller — the admin edit form computes
+  // its own delta off a snapshot that can go stale while the form sits open
+  // (bookings keep consuming spots in the meantime), which would silently
+  // overwrite the true count. Derive it here instead, off the just-read
+  // (fresh) existing.spotsLeft, so an editing admin can only ever adjust
+  // capacity by the maxSpots delta, never clobber concurrent bookings.
+  const rest = { ...data };
+  delete rest.spotsLeft;
+  const updated = { ...existing, ...rest };
+  if (typeof data.maxSpots === "number" && data.maxSpots !== existing.maxSpots) {
+    updated.spotsLeft = existing.spotsLeft + (data.maxSpots - existing.maxSpots);
+  }
+  // Enforce 0 <= spotsLeft <= maxSpots regardless of what the above computed —
   // e.g. an admin reducing maxSpots below the current booked count shouldn't be
   // able to push spotsLeft negative.
   updated.spotsLeft = Math.min(Math.max(updated.spotsLeft, 0), updated.maxSpots);
@@ -172,7 +183,7 @@ export async function createBooking(
     ...data,
     id,
     actionToken: crypto.randomUUID(),
-    status: "pending",
+    status: data.status ?? "pending",
     createdAt: new Date().toISOString(),
     cancelled: false,
   };
@@ -204,7 +215,7 @@ const CANCEL_BOOKING_SCRIPT = `
 local braw = redis.call('GET', KEYS[1])
 if not braw then return cjson.encode({ok = false, reason = 'not_found'}) end
 local booking = cjson.decode(braw)
-if booking.cancelled then return cjson.encode({ok = true, alreadyCancelled = true}) end
+if booking.cancelled or booking.status == 'declined' then return cjson.encode({ok = true, alreadyCancelled = true}) end
 booking.cancelled = true
 redis.call('SET', KEYS[1], cjson.encode(booking))
 
@@ -220,14 +231,61 @@ end
 return cjson.encode({ok = true})
 `;
 
-export async function cancelBooking(id: string): Promise<void> {
+type CancelResult = { ok: true; alreadyCancelled?: boolean } | { ok: false; reason: "not_found" };
+
+export async function cancelBooking(id: string): Promise<CancelResult> {
   const booking = await kv.get<Booking>(`booking:${id}`);
-  if (!booking) return;
-  await kv.eval(
+  if (!booking) return { ok: false, reason: "not_found" };
+  const result = await kv.eval(
     CANCEL_BOOKING_SCRIPT,
     [`booking:${id}`, `session:${booking.sessionId}`],
     [booking.totalPeople]
   );
+  return result as CancelResult;
+}
+
+// Declining is its own atomic operation rather than "cancelBooking() then flip
+// cancelled back to false" — that composition briefly sets cancelled=true and
+// then false again, which defeats CANCEL_BOOKING_SCRIPT's own idempotency
+// guard for any later/concurrent decline call on the same booking (it only
+// checks `cancelled`, which this always resets). Doing the status flip and
+// the spot refund in one script, guarded by *either* cancelled or an
+// already-'declined' status, closes that window the same way the other
+// booking scripts above do.
+const DECLINE_BOOKING_SCRIPT = `
+local braw = redis.call('GET', KEYS[1])
+if not braw then return cjson.encode({ok = false, reason = 'not_found'}) end
+local booking = cjson.decode(braw)
+if booking.cancelled or booking.status == 'declined' then return cjson.encode({ok = true, alreadyDeclined = true}) end
+booking.status = 'declined'
+booking.cancelled = false
+booking.actionedAt = ARGV[1]
+redis.call('SET', KEYS[1], cjson.encode(booking))
+
+local sraw = redis.call('GET', KEYS[2])
+if sraw then
+  local session = cjson.decode(sraw)
+  local newSpots = session.spotsLeft + booking.totalPeople
+  if newSpots > session.maxSpots then newSpots = session.maxSpots end
+  session.spotsLeft = newSpots
+  redis.call('SET', KEYS[2], cjson.encode(session))
+end
+return cjson.encode({ok = true})
+`;
+
+type DeclineResult =
+  | { ok: true; alreadyDeclined?: boolean }
+  | { ok: false; reason: "not_found" };
+
+export async function declineBooking(id: string): Promise<DeclineResult> {
+  const booking = await kv.get<Booking>(`booking:${id}`);
+  if (!booking) return { ok: false, reason: "not_found" };
+  const result = await kv.eval(
+    DECLINE_BOOKING_SCRIPT,
+    [`booking:${id}`, `session:${booking.sessionId}`],
+    [new Date().toISOString()]
+  );
+  return result as DeclineResult;
 }
 
 // Same read-then-write race as DECREMENT_SPOTS_SCRIPT above, but for

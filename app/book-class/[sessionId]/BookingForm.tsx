@@ -6,8 +6,15 @@ import type { ClassSession } from "@/lib/types";
 import { ADD_ONS, addOnsTotal, type AddOns } from "@/lib/addOns";
 
 type Counts = { child: number; youngAdult: number; adult: number };
-type Participant = { name: string; level: string };
+type AttendeeType = keyof Counts;
+type Participant = { name: string; level: string; type: AttendeeType };
 type ExperienceLevel = { value: string; label: string };
+
+const ATTENDEE_TYPE_LABELS: Record<AttendeeType, string> = {
+  child: "Child",
+  youngAdult: "Young Adult",
+  adult: "Adult",
+};
 
 const DEFAULT_LEVELS: ExperienceLevel[] = [
   { value: "beginner", label: "New to cooking — please guide me through everything" },
@@ -77,6 +84,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const [photoConsent, setPhotoConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{
     name?: string; email?: string; phone?: string;
     attendees?: string; participants?: string[]; participantLevels?: string[]; payment?: string; paymentOther?: string; notes?: string;
@@ -86,6 +94,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
+  const submitSectionRef = useRef<HTMLDivElement>(null);
   const notesRef = useRef<HTMLTextAreaElement>(null);
   const paymentOtherRef = useRef<HTMLInputElement>(null);
 
@@ -108,23 +117,25 @@ export default function BookingForm({ session }: { session: ClassSession }) {
       .catch(() => {});
   }, []);
 
-  // Keep participants array in sync with totalPeople
+  // Keep participants array in sync with attendee counts, grouped by type so
+  // that editing one counter never reassigns an already-typed name to a
+  // different attendee type — each participant carries its own `type`,
+  // reconciled per-type against its own existing entries (not sliced/appended
+  // against the flat list, which let unrelated counter edits shift names
+  // under the wrong type label).
   useEffect(() => {
     setParticipants((prev) => {
-      if (totalPeople > prev.length) {
-        return [...prev, ...Array(totalPeople - prev.length).fill(null).map(() => ({ name: "", level: "" }))];
-      }
-      return prev.slice(0, totalPeople);
+      const next: Participant[] = [];
+      (Object.keys(counts) as AttendeeType[]).forEach((type) => {
+        const existingForType = prev.filter((p) => p.type === type);
+        for (let i = 0; i < counts[type]; i++) {
+          next.push(existingForType[i] ?? { name: "", level: "", type });
+        }
+      });
+      return next;
     });
-  }, [totalPeople]);
+  }, [counts]);
   const isFull = session.spotsLeft === 0;
-
-  // Build an ordered list of attendee type labels matching the participants array
-  const participantTypes: string[] = [
-    ...Array(counts.child).fill("Child"),
-    ...Array(counts.youngAdult).fill("Young Adult"),
-    ...Array(counts.adult).fill("Adult"),
-  ];
 
   function setCount(key: keyof Counts, value: number) {
     const otherTotal = Object.entries(counts)
@@ -183,6 +194,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     }
 
     setFieldErrors({});
+    setSubmitError("");
     setSubmitting(true);
     const res = await fetch("/api/bookings", {
       method: "POST",
@@ -195,7 +207,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
         counts,
         totalPeople,
         addOns,
-        participants,
+        participants: participants.map(({ name, level }) => ({ name, level })),
         paymentStatus,
         paymentOther: paymentStatus === "other" ? paymentOther : "",
         notes,
@@ -204,8 +216,12 @@ export default function BookingForm({ session }: { session: ClassSession }) {
     });
     setSubmitting(false);
     if (!res.ok) {
-      const data = await res.json();
-      setFieldErrors({ name: data.error ?? "Something went wrong. Please try again." });
+      const data = await res.json().catch(() => ({}));
+      setSubmitError(data.error ?? "Something went wrong. Please try again.");
+      requestAnimationFrame(() => {
+        const top = submitSectionRef.current?.getBoundingClientRect().top;
+        if (top !== undefined) window.scrollTo({ top: top + window.scrollY - 120, behavior: "smooth" });
+      });
       return;
     }
     setSubmitted(true);
@@ -405,9 +421,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
                 return (
                   <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:items-start">
                     <div>
-                      {participantTypes[i] && (
-                        <p className="text-sm text-[#1a1a1a] mb-1">{participantTypes[i]}</p>
-                      )}
+                      <p className="text-sm text-[#1a1a1a] mb-1">{ATTENDEE_TYPE_LABELS[p.type]}</p>
                       <input
                         type="text"
                         placeholder={`Participant ${i + 1} name`}
@@ -487,7 +501,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
           </label>
         </div>
 
-        <div className="mt-8 pt-2 flex flex-col gap-6">
+        <div className="mt-8 pt-2 flex flex-col gap-6" ref={submitSectionRef}>
           <button
             type="button"
             onClick={() => { if (!submitting) handleSubmit(); }}
@@ -502,6 +516,7 @@ export default function BookingForm({ session }: { session: ClassSession }) {
               </svg>
             )}
           </button>
+          {submitError && <p className="text-sm text-red-500 -mt-2">{submitError}</p>}
 
           {/* Confirmation notice */}
           <div className="flex gap-3 rounded-xl border border-[#006644]/20 bg-[#006644]/6 px-5 py-4">

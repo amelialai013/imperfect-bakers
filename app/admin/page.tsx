@@ -187,6 +187,7 @@ function SessionForm({
   onSave,
   onCancel,
   saving,
+  saveError,
 }: {
   initial: FormState;
   initialAttendeeTypes: Array<"child" | "youngAdult" | "adult">;
@@ -194,6 +195,7 @@ function SessionForm({
   onSave: (data: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">, skills: string[]) => void;
   onCancel: () => void;
   saving: boolean;
+  saveError?: string;
 }) {
   const [form, setForm] = useState(initial);
   const [attendeeTypes, setAttendeeTypes] = useState(initialAttendeeTypes);
@@ -415,6 +417,7 @@ function SessionForm({
       </div>
 
       {/* ── Actions ──────────────────────────────────────── */}
+      {saveError && <p className="text-sm text-red-500 mb-3">{saveError}</p>}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <button type="submit" disabled={saving} className="btn-primary">
           {saving ? "Saving…" : "Save session"}
@@ -427,7 +430,7 @@ function SessionForm({
   );
 }
 
-function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, onChangeClass }: { sessionId: string; sessionName?: string; sessionPrice?: number; token: string; isPast?: boolean; onChangeClass?: (b: Booking & { sessionName: string }) => void }) {
+function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, onChangeClass, onActioned }: { sessionId: string; sessionName?: string; sessionPrice?: number; token: string; isPast?: boolean; onChangeClass?: (b: Booking & { sessionName: string }) => void; onActioned?: () => void }) {
   const [bookings, setBookings] = useState<Booking[] | null>(null);
   const [acting, setActing] = useState<string | null>(null);
   const [levelMap, setLevelMap] = useState<Record<string, string>>({});
@@ -464,8 +467,14 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
     const verb = status === "confirmed" ? "confirm" : "decline";
     if (!confirm(`${verb.charAt(0).toUpperCase() + verb.slice(1)} this booking?${status === "declined" ? " The spot will be returned." : ""}`)) return;
     setActing(id);
-    setBookings((prev) => prev ? prev.map((b) => b.id === id ? { ...b, status } : b) : prev);
-    await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status }) });
+    const res = await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status }) });
+    if (res.ok) {
+      setBookings((prev) => prev ? prev.map((b) => b.id === id ? { ...b, status } : b) : prev);
+      onActioned?.();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error ?? `Couldn't ${verb} this booking — please try again.`);
+    }
     setActing(null);
   }
 
@@ -474,14 +483,19 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
     setActing(id);
     await authFetch(`/api/bookings/${id}`, token, { method: "DELETE" });
     await load();
+    onActioned?.();
     setActing(null);
   }
 
   async function deleteRecord(id: string) {
     if (!confirm("Permanently delete this booking record?")) return;
     setActing(id);
-    setBookings((prev) => prev ? prev.filter((b) => b.id !== id) : prev);
-    await authFetch(`/api/bookings/${id}`, token, { method: "DELETE" });
+    const res = await authFetch(`/api/bookings/${id}?permanent=true`, token, { method: "DELETE" });
+    if (res.ok) {
+      setBookings((prev) => prev ? prev.filter((b) => b.id !== id) : prev);
+    } else {
+      alert("Couldn't delete this booking — please try again.");
+    }
     setActing(null);
   }
 
@@ -489,7 +503,8 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
     setActing(id);
     const res = await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status: "pending" }) });
     if (res.ok) {
-      setBookings((prev) => prev ? prev.map((b) => b.id === id ? { ...b, status: "pending" } : b) : prev);
+      setBookings((prev) => prev ? prev.map((b) => b.id === id ? { ...b, status: "pending", cancelled: false } : b) : prev);
+      onActioned?.();
     } else {
       const data = await res.json().catch(() => ({}));
       alert(data.error ?? "Couldn't reinstate this booking — please try again.");
@@ -595,9 +610,9 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
               <p className="text-[0.6875rem] font-semibold tracking-[0.2em] uppercase text-[#006644] mb-0.5">Attendees</p>
               <p className="text-[#1a1a1a] font-medium text-xs">{b.totalPeople} total</p>
               <div className="text-[#1a1a1a] text-xs mt-0.5 space-y-0.5">
-                {b.counts.child > 0 && <p>Child (7–17): {b.counts.child}</p>}
-                {b.counts.youngAdult > 0 && <p>Young Adult (18–34): {b.counts.youngAdult}</p>}
-                {b.counts.adult > 0 && <p>Adult (35+): {b.counts.adult}</p>}
+                {b.counts?.child > 0 && <p>Child (7–17): {b.counts.child}</p>}
+                {b.counts?.youngAdult > 0 && <p>Young Adult (18–34): {b.counts.youngAdult}</p>}
+                {b.counts?.adult > 0 && <p>Adult (35+): {b.counts.adult}</p>}
               </div>
             </div>
             <div>
@@ -669,6 +684,10 @@ function BookingsPanel({ sessionId, sessionName, sessionPrice, token, isPast, on
                       <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
                         <button onClick={() => { setKebabOpen(null); setUndeclinePanelTarget(b.id); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
                           Reinstate booking
+                        </button>
+                        <div className="h-px bg-[#e8e2d9]" />
+                        <button onClick={() => { setKebabOpen(null); deleteRecord(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                          Delete record
                         </button>
                       </div>
                     </>
@@ -818,7 +837,7 @@ function GalleryView({ token, onBack, onAllBookings, onInterests, onManageClasse
         if (!res.ok) {
           errors.push(`${file.name}: ${data.error ?? `upload failed (${res.status})`}`);
         } else if (data?.url) {
-          setPhotos((prev) => [{ id: data.id, url: data.url, createdAt: data.createdAt }, ...prev]);
+          setPhotos((prev) => [{ id: data.id, url: data.url, createdAt: data.createdAt, width: data.width, height: data.height, blurDataURL: data.blurDataURL, thumbUrl: data.thumbUrl }, ...prev]);
         }
       } catch (e) {
         errors.push(`${file.name}: ${String(e)}`);
@@ -1180,8 +1199,13 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
     const verb = status === "confirmed" ? "Confirm" : "Decline";
     if (!confirm(`${verb} this booking?${status === "declined" ? " The spot will be returned." : ""}`)) return;
     setActing(id);
-    setRows((prev) => prev.map((b) => b.id === id ? { ...b, status } : b));
-    await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status }) });
+    const res = await authFetch(`/api/bookings/${id}`, token, { method: "PATCH", body: JSON.stringify({ status }) });
+    if (res.ok) {
+      setRows((prev) => prev.map((b) => b.id === id ? { ...b, status } : b));
+    } else {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error ?? `Couldn't ${verb.toLowerCase()} this booking — please try again.`);
+    }
     setActing(null);
   }
 
@@ -1429,6 +1453,8 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
             <div className="space-y-3">
               {filtered.map((b) => {
                 const showKebab = b.cancelled || b.status === "confirmed" || b.status === "declined";
+                const bookingDate = parseSessionDate(b.sessionDate);
+                const isPast = bookingDate !== null && !isNaN(bookingDate.getTime()) && bookingDate < today;
                 return (
                 <div key={b.id} className="relative bg-white border border-[#e8e2d9] rounded-xl">
                   {/* Kebab — always top-right, vertically centered on the badge */}
@@ -1446,7 +1472,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                         <>
                           <div className="fixed inset-0 z-[90]" onClick={() => setKebabOpen(null)} />
                           <div className="absolute right-0 top-full mt-1 z-[100] bg-white border border-[#e8e2d9] rounded-xl shadow-lg overflow-hidden min-w-[160px]">
-                            {(!b.cancelled && b.status !== "declined") && (
+                            {(!b.cancelled && b.status !== "declined" && !isPast) && (
                               <>
                                 <button onClick={() => { setKebabOpen(null); setMoveTarget(b); setMoveSessionId(""); setMoveError(""); }} className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors">
                                   Change class
@@ -1454,7 +1480,7 @@ function AllBookingsView({ token, onBack, onManageClasses, onInterests, onEmailT
                                 <div className="h-px bg-[#e8e2d9]" />
                               </>
                             )}
-                            {(!b.cancelled && b.status === "confirmed") && (<>
+                            {(!b.cancelled && b.status === "confirmed" && !isPast) && (<>
                               <button onClick={() => { setKebabOpen(null); cancel(b.id); }} className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                                 Cancel booking
                               </button>
@@ -2653,6 +2679,7 @@ export default function AdminPage() {
   const [sessions, setSessions] = useState<ClassSession[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [editTarget, setEditTarget] = useState<ClassSession | null>(null);
   const [expandedBookings, setExpandedBookings] = useState<Set<string>>(new Set());
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -2775,6 +2802,7 @@ export default function AdminPage() {
 
   async function saveSession(form: FormState, attendeeTypes: Array<"child" | "youngAdult" | "adult">, skills: string[]) {
     setSaving(true);
+    setSaveError("");
     const payload = {
       classLabel: form.classLabel,
       sessionName: form.sessionName,
@@ -2787,18 +2815,26 @@ export default function AdminPage() {
       skills,
     };
 
-    if (view === "edit" && editTarget) {
-      // When editing, adjust spotsLeft by the delta in maxSpots
-      const delta = payload.maxSpots - editTarget.maxSpots;
-      await authFetch(`/api/sessions/${editTarget.id}`, token, {
-        method: "PUT",
-        body: JSON.stringify({ ...payload, spotsLeft: editTarget.spotsLeft + delta }),
-      });
-    } else {
-      await authFetch("/api/sessions", token, {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+    try {
+      // spotsLeft is deliberately not sent — the server derives it from the
+      // maxSpots delta against its own current record, so a stale client
+      // snapshot (this form left open while bookings come in) can't clobber
+      // concurrent bookings' effect on capacity.
+      const res =
+        view === "edit" && editTarget
+          ? await authFetch(`/api/sessions/${editTarget.id}`, token, { method: "PUT", body: JSON.stringify(payload) })
+          : await authFetch("/api/sessions", token, { method: "POST", body: JSON.stringify(payload) });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setSaveError(data.error ?? "Couldn't save this session — please try again.");
+        setSaving(false);
+        return;
+      }
+    } catch {
+      setSaveError("Connection error — please try again.");
+      setSaving(false);
+      return;
     }
 
     setSaving(false);
@@ -2981,8 +3017,9 @@ export default function AdminPage() {
               initialAttendeeTypes={editTarget?.attendeeTypes ?? ["child", "youngAdult", "adult"]}
               initialSkills={editTarget?.skills ?? []}
               onSave={saveSession}
-              onCancel={() => { setView("dashboard"); setEditTarget(null); }}
+              onCancel={() => { setView("dashboard"); setEditTarget(null); setSaveError(""); }}
               saving={saving}
+              saveError={saveError}
             />
           </div>
         </section>
@@ -3317,9 +3354,8 @@ export default function AdminPage() {
     if (Object.keys(fieldErrs).length > 0) { setAddBookingFieldErrors(fieldErrs); return; }
     setAddBookingFieldErrors({});
     setAddBookingSaving(true); setAddBookingError("");
-    const res = await fetch("/api/bookings", {
+    const res = await authFetch("/api/bookings", token, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         sessionId: addBookingTarget.id,
         name: name.trim(), email: email.trim(), phone: phone.trim(),
@@ -3363,7 +3399,7 @@ export default function AdminPage() {
             Admin <em className="not-italic text-[#006644]">dashboard</em>
           </h1>
           <div className="flex flex-wrap items-center gap-4 pb-1 mt-6 lg:mt-0 lg:ml-auto">
-            <button onClick={() => setView("add")} className="btn-primary group">
+            <button onClick={() => { setSaveError(""); setView("add"); }} className="btn-primary group">
               Add session <span>+</span>
             </button>
             <MoreMenu onManageClasses={() => setView("classes")} onAllBookings={() => setView("bookings")} onInterests={() => setView("interests")} onEmailTemplates={() => setView("emailTemplates")} onSettings={() => setView("settings")} onGallery={() => setView("gallery")} onLogout={logout} />
@@ -3466,7 +3502,7 @@ export default function AdminPage() {
           ) : sessions.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-[#6b7280] mb-6">No sessions yet. Add your first one to get started.</p>
-              <button onClick={() => setView("add")} className="btn-primary">Add session +</button>
+              <button onClick={() => { setSaveError(""); setView("add"); }} className="btn-primary">Add session +</button>
             </div>
           ) : (
             <div className="space-y-3">
@@ -3545,7 +3581,7 @@ export default function AdminPage() {
                               </button>
                               <div className="h-px bg-[#e8e2d9]" />
                               <button
-                                onClick={() => { setSessionKebabOpen(null); setEditTarget(s); setView("edit"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                onClick={() => { setSessionKebabOpen(null); setEditTarget(s); setSaveError(""); setView("edit"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                                 className="w-full text-left px-4 py-3 text-sm text-[#1a1a1a] hover:bg-[#faf9f6] transition-colors"
                               >
                                 Edit class
@@ -3591,6 +3627,7 @@ export default function AdminPage() {
                           token={token}
                           isPast={dashTimeFilter === "past"}
                           onChangeClass={(b) => { setDashMoveTarget(b); setDashMoveSessionId(""); setDashMoveError(""); }}
+                          onActioned={loadPendingCount}
                         />
                       </div>
                     )}

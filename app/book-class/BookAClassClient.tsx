@@ -27,7 +27,20 @@ function parseDisplayDate(dateStr: string | undefined): Date {
 }
 
 export default function BookAClassClient({ sessions, initialClass }: { sessions: ClassSession[]; initialClass?: string }) {
-  const [activeClass, setActiveClass] = useState<string>(initialClass ?? "All");
+  // Validate the incoming ?class= param against classes that actually have
+  // upcoming sessions (the same set the <select> below renders as options) —
+  // an unmatched value (a stale marketing link, a class fully booked into
+  // the past) would leave the <select> silently falling back to displaying
+  // "All classes" while the page is still filtered to that invisible class.
+  const [activeClass, setActiveClass] = useState<string>(() => {
+    if (!initialClass || initialClass === "All") return "All";
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const hasUpcoming = sessions.some(
+      (s) => s.classLabel === initialClass && s.date && parseDisplayDate(s.date) >= today
+    );
+    return hasUpcoming ? initialClass : "All";
+  });
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "popular">("asc");
   const [view, setView] = useState<"grid" | "list">("grid");
 

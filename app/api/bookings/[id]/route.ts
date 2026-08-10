@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cancelBooking, updateBookingStatus, getSession, permanentlyDeleteBooking, reinstateBooking, moveBooking } from "@/lib/data";
+import { cancelBooking, updateBookingStatus, declineBooking, getSession, permanentlyDeleteBooking, reinstateBooking, moveBooking } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
 import { kv } from "@vercel/kv";
 import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
@@ -20,9 +20,11 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   // Grab booking + session before cancelling so we can email the customer
   const booking = await kv.get<Booking>(`booking:${id}`);
-  await cancelBooking(id);
+  const result = await cancelBooking(id);
 
-  if (booking) {
+  // Only email on the call that actually cancelled it — a double-click or
+  // retry on an already-cancelled booking is a no-op, not a second notice.
+  if (booking && result.ok && !result.alreadyCancelled) {
     const session = await getSession(booking.sessionId);
     const customerName = escapeHtml(booking.name);
     const sessionName = escapeHtml(session?.sessionName ?? "your class");
@@ -97,13 +99,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ ok: true, status: "pending" });
   }
 
-  await updateBookingStatus(id, status);
-
-  // If declining, return spots to session
   if (status === "declined") {
-    await cancelBooking(id);
-    const updated = await kv.get<Booking>(`booking:${id}`);
-    if (updated) await kv.set(`booking:${id}`, { ...updated, status: "declined", cancelled: false });
+    // Atomic: flips status and refunds the spot in one step, guarded against
+    // a duplicate/racing decline call double-refunding.
+    const result = await declineBooking(id);
+    if (!result.ok) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  } else {
+    await updateBookingStatus(id, status);
   }
 
   const session = await getSession(booking.sessionId);

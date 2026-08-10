@@ -1,5 +1,5 @@
 import { kv } from "@vercel/kv";
-import { updateBookingStatus, getSession, cancelBooking } from "@/lib/data";
+import { updateBookingStatus, getSession, declineBooking } from "@/lib/data";
 import { escapeHtml } from "@/lib/email-templates";
 import type { Booking } from "@/lib/types";
 
@@ -51,15 +51,16 @@ export async function GET(req: Request) {
     );
   }
 
-  const newStatus = action === "confirm" ? "confirmed" : "declined";
-  await updateBookingStatus(id, newStatus);
-
-  // If declining, return spots to session
-  if (action === "decline") {
-    await cancelBooking(id);
-    // cancelBooking sets cancelled:true — restore status so it shows as declined not cancelled
-    const updated = await kv.get<Booking>(`booking:${id}`);
-    if (updated) await kv.set(`booking:${id}`, { ...updated, status: "declined", cancelled: false });
+  if (action === "confirm") {
+    await updateBookingStatus(id, "confirmed");
+  } else {
+    // Atomic: flips status and refunds the spot in one step, guarded against
+    // a duplicate/racing decline click (e.g. an email link-scanner prefetch)
+    // double-refunding.
+    const result = await declineBooking(id);
+    if (result.ok && result.alreadyDeclined) {
+      return htmlPage("Already actioned", "❌", "Already declined", "This booking has already been declined. No further action is needed.", "#6b7280");
+    }
   }
 
   const session = await getSession(booking.sessionId);
