@@ -37,7 +37,11 @@ export async function POST(req: Request) {
   const body = await req.json();
   const { sessionId, name, email, phone, counts, totalPeople, addOns, paymentStatus, paymentOther, notes, participants, photoConsent, status } = body;
 
-  if (!sessionId || !name || !email || !phone || !paymentStatus || totalPeople < 1) {
+  // Phone is genuinely optional (the admin's "add booking" modal treats it
+  // as such) — only guard against it being entirely absent (undefined),
+  // which is what would crash email rendering downstream, not against it
+  // being blank.
+  if (!sessionId || !name || !email || phone === undefined || !paymentStatus || totalPeople < 1) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
   }
   if (typeof counts !== "object" || counts === null) {
