@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { checkAdminToken } from "@/lib/auth";
+import { isRateLimited } from "@/lib/rateLimit";
 import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
 import { getSettings } from "@/app/api/settings/route";
 
@@ -23,6 +24,10 @@ export async function GET(req: Request) {
 // ── POST: new registration ────────────────────────────────────────────────────
 
 export async function POST(req: Request) {
+  if (await isRateLimited("interest", req, 10, 60 * 60)) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
   try {
     const body = await req.json();
     const id = crypto.randomUUID();

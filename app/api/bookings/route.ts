@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createBooking, getSessionBookings } from "@/lib/data";
 import { checkAdminToken } from "@/lib/auth";
+import { isRateLimited } from "@/lib/rateLimit";
 import { kv } from "@vercel/kv";
 import { getTemplates, sub, escapeHtml } from "@/lib/email-templates";
 import { ADD_ONS } from "@/lib/addOns";
@@ -25,6 +26,10 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  if (await isRateLimited("bookings", req, 10, 60 * 60)) {
+    return NextResponse.json({ error: "Too many booking requests. Please try again later." }, { status: 429 });
+  }
+
   const body = await req.json();
   const { sessionId, name, email, phone, counts, totalPeople, addOns, paymentStatus, paymentOther, notes, participants, photoConsent } = body;
 

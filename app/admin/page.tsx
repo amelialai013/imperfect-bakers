@@ -2747,7 +2747,8 @@ export default function AdminPage() {
         body: JSON.stringify({ password }),
       });
       if (!res.ok) {
-        setLoginError("Incorrect password");
+        const data = await res.json().catch(() => ({}));
+        setLoginError(res.status === 429 ? data.error ?? "Too many attempts. Try again later." : "Incorrect password");
         return;
       }
       const { token: t } = await res.json();
