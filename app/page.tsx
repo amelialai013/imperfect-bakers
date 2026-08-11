@@ -56,7 +56,7 @@ export default function Home() {
 
           {/* Section header */}
           <span className="section-label block">Our philosophy</span>
-          <div className="mt-3 2xl:mt-14 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12" style={{ alignItems: "last baseline" }}>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12 md:[align-items:last_baseline] 2xl:items-start">
             <h2
               className="text-4xl md:text-5xl text-[#006644] leading-tight"
               style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
