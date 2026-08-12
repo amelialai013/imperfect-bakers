@@ -63,7 +63,7 @@ export default function Home() {
             >
               Why <span className="text-[#1a1a1a]">Imperfect</span> Bakers?
             </h2>
-            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto">
+            <p className="text-[#6b7280] text-base leading-relaxed max-w-sm md:ml-auto md:pt-1">
               We believe the kitchen should be a place of joy, not stress. Here&apos;s what makes us different from every other cooking school.
             </p>
           </div>
